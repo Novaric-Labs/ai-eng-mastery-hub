@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineering Mastery Hub — 2026 Edition</title>
+<style>
+:root{
+  --bg:#0d1117; --bg2:#161b22; --bg3:#1c2330; --border:#2d333b; --text:#e6edf3;
+  --dim:#9aa4af; --dim2:#b6bfc9; --accent:#58a6ff; --accent2:#bc8cff; --green:#3fb950; --amber:#d29922;
+  --red:#f85149; --teal:#39c5cf; --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;line-height:1.55;font-size:15.5px;-webkit-font-smoothing:antialiased;letter-spacing:.005em}
+#app{display:flex;min-height:100vh}
+#side{width:300px;background:var(--bg2);border-right:1px solid var(--border);padding:22px 16px;position:fixed;top:0;bottom:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+#side::-webkit-scrollbar{width:8px}#side::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+#side h1{font-size:16px;margin-bottom:2px;color:var(--text)}
+#side .sub{font-size:11.5px;color:var(--dim);margin-bottom:10px}
+.sideprog{margin:0 2px 12px;font-size:11px;color:var(--dim)}
+.navbtn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:none;color:var(--text);padding:8px 12px;border-radius:8px;cursor:pointer;font-size:13.5px;margin-bottom:2px;transition:background .15s}
+.navbtn:hover{background:var(--bg3)}
+.navbtn.active{background:var(--bg3);color:var(--accent);font-weight:600}
+.blockhead{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:14px 6px 5px;display:flex;justify-content:space-between;align-items:center}
+.blockhead .bm{font-size:10px;padding:1px 7px;border-radius:9px;border:1px solid var(--border)}
+.bm.done{color:var(--green);border-color:var(--green)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.dot.read{background:var(--amber)}
+.dot.mastered{background:var(--green)}
+#main{margin-left:300px;flex:1;padding:38px 50px;max-width:1000px}
+.page{animation:fadein .25s ease;max-width:820px}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h2{font-size:26px;margin-bottom:4px;letter-spacing:-.02em;background:linear-gradient(90deg,var(--text),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:inline-block}
+h3{font-size:17px;margin:22px 0 8px;color:var(--accent)}
+h4{font-size:14.5px;margin:14px 0 6px;color:var(--accent2)}
+p{margin-bottom:10px;color:var(--text)}
+.tagline{color:var(--dim);font-size:14px;margin-bottom:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;transition:border-color .2s}
+.card:hover{border-color:#3d444d}
+.mental{border-left:3px solid var(--accent2);background:linear-gradient(90deg,rgba(188,140,255,.07),transparent);padding:12px 16px;border-radius:0 12px 12px 0;margin:12px 0;font-size:14.5px}
+.worked{border-left:3px solid var(--teal);background:linear-gradient(90deg,rgba(57,197,207,.06),transparent);padding:14px 18px;border-radius:0 12px 12px 0;margin:12px 0;font-size:14.5px;color:var(--text)}
+.buildbox{border:1px dashed var(--amber);border-radius:12px;padding:14px 18px;margin:12px 0;font-size:14.5px}
+.buildbox b{color:var(--amber)}
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:10px;margin-right:6px;border:1px solid var(--border);color:var(--dim)}
+.pill.new{color:var(--teal);border-color:var(--teal)}
+.pill.upd{color:var(--amber);border-color:var(--amber)}
+.term{margin-bottom:9px}
+.term b{color:var(--text)}
+.term span{color:var(--dim)}
+ul.flat{list-style:none}
+ul.flat li{padding:5px 0 5px 22px;position:relative;color:var(--dim);font-size:14px}
+ul.flat li:before{content:"›";position:absolute;left:6px;color:var(--accent)}
+ul.flags li:before{content:"⚑";color:var(--red);font-size:12px}
+ul.checks li:before{content:"✓";color:var(--green)}
+.btn{background:var(--accent);color:#0d1117;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin:4px 6px 4px 0;transition:filter .15s,transform .1s}
+.btn:hover{filter:brightness(1.12)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--bg3);color:var(--text);border:1px solid var(--border)}
+.btn.green{background:var(--green)}
+.btn.amber{background:var(--amber)}
+.btn.red{background:var(--red);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.opt:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin:16px 0 18px;flex-wrap:wrap}
+.tab{padding:9px 18px;border:none;background:none;color:var(--dim);cursor:pointer;font-size:14px;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.opt{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:12px 15px;border-radius:10px;margin-bottom:8px;cursor:pointer;font-size:14px;line-height:1.45;transition:border-color .15s,background .15s,transform .1s}
+.opt:hover{border-color:var(--accent)}
+.opt:hover:not(.right):not(.wrong){transform:translateX(2px)}
+.opt.sel{border-color:var(--accent);background:rgba(88,166,255,.12)}
+.opt.right{border-color:var(--green);background:rgba(63,185,80,.13)}
+.opt.wrong{border-color:var(--red);background:rgba(248,81,73,.12)}
+.chip{flex-shrink:0;width:24px;height:24px;border-radius:7px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--dim)}
+.opt.right .chip{background:var(--green);color:#0d1117;border-color:var(--green)}
+.opt.wrong .chip{background:var(--red);color:#fff;border-color:var(--red)}
+.opt.sel .chip{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+.exp{font-size:13.5px;color:var(--dim);background:var(--bg3);border-radius:8px;padding:10px 14px;margin:8px 0 16px;border-left:3px solid var(--accent)}
+.qnum{font-size:12px;color:var(--dim);margin-bottom:4px}
+.qtext{font-size:15px;font-weight:600;margin-bottom:10px}
+.bar{height:8px;background:var(--bg3);border-radius:5px;overflow:hidden;margin:6px 0 2px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:5px;transition:width .4s}
+.bar i.g{background:var(--green)}
+.statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat .big{font-size:26px;font-weight:700;color:var(--accent)}
+.stat .lbl{font-size:12px;color:var(--dim)}
+.flipwrap{perspective:1400px;margin-bottom:16px;cursor:pointer}
+.flipinner{position:relative;width:100%;min-height:230px;transition:transform .5s cubic-bezier(.4,.1,.2,1);transform-style:preserve-3d}
+.flipwrap.flipped .flipinner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px 34px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;font-size:17px;line-height:1.5}
+.face.front{border-color:#3d444d}
+.face.back{transform:rotateY(180deg);color:var(--teal);font-size:15px;border-color:var(--teal)}
+.kbd{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:0 7px;font-size:11.5px;font-family:ui-monospace,monospace;color:var(--dim)}
+.boxtag{font-size:11px;color:var(--dim)}
+.scenario-sit{background:var(--bg3);border-radius:8px;padding:13px 16px;margin-bottom:10px;font-size:14.5px}
+.model-ans{border-left:3px solid var(--green);background:rgba(63,185,80,.06);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}
+.badge{display:inline-block;padding:2px 10px;border-radius:10px;font-size:11.5px;font-weight:600;margin-left:8px}
+.badge.pass{background:rgba(63,185,80,.15);color:var(--green);border:1px solid var(--green)}
+.badge.fail{background:rgba(248,81,73,.12);color:var(--red);border:1px solid var(--red)}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13.5px}
+th,td{border:1px solid var(--border);padding:7px 10px;text-align:left}
+th{background:var(--bg3);color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+code{background:var(--bg3);padding:1px 6px;border-radius:5px;font-size:13px;color:var(--teal);font-family:ui-monospace,Menlo,Consolas,monospace}
+.res-item{display:block;padding:13px 16px;border:1px solid var(--border);border-radius:11px;margin-bottom:10px;background:var(--bg2);transition:border-color .2s}
+.res-item:hover{border-color:var(--accent)}
+.res-item a{color:var(--accent);text-decoration:none;font-weight:600;font-size:14.5px}
+.res-item a:hover{text-decoration:underline}
+.when{display:block;color:var(--dim);font-size:13px;margin-top:3px}
+.when b{color:var(--accent2);font-weight:600}
+.topbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.actionbar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 35%);padding:18px 0 10px;display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+@media(max-width:860px){#side{position:static;width:100%;height:auto}#app{flex-direction:column}#main{margin-left:0;padding:18px}}
+</style>
+<style>
+#bootcover{position:fixed;inset:0;z-index:1000;background:var(--bg,#0d1117);display:flex;align-items:center;justify-content:center;padding:24px}
+#bootcover .bc-card{background:var(--bg2,#161b22);border:1px solid var(--border,#2d333b);border-radius:16px;padding:30px 28px;max-width:380px;width:100%;text-align:center}
+#bootcover .bc-logo{font-size:18px;font-weight:700;margin-bottom:6px}
+#bootcover .bc-sub{color:var(--dim,#9aa4af);font-size:13.5px;margin-bottom:16px}
+#bootcover .bc-msg{background:var(--bg3,#1c2330);border-radius:8px;padding:10px 12px;font-size:13px;margin-bottom:14px;color:var(--text,#e6edf3)}
+#bootcover input{width:100%;padding:11px 14px;border-radius:9px;border:1px solid var(--border,#2d333b);background:var(--bg3,#1c2330);color:var(--text,#e6edf3);font-size:14px;margin-bottom:10px;outline:none}
+#bootcover .bc-btn{width:100%;padding:11px 14px;border:none;border-radius:9px;background:var(--accent,#58a6ff);color:#0d1117;font-weight:600;font-size:14px;cursor:pointer;margin-bottom:8px}
+#bootcover .bc-ghost{background:var(--bg3,#1c2330);color:var(--text,#e6edf3);border:1px solid var(--border,#2d333b)}
+#bootcover .bc-or{color:var(--dim,#9aa4af);font-size:12px;margin:6px 0}
+#bootcover .bc-spin{width:34px;height:34px;border:3px solid var(--border,#2d333b);border-top-color:var(--accent,#58a6ff);border-radius:50%;animation:bcspin .8s linear infinite;margin:0 auto}
+@keyframes bcspin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav id="side"></nav>
+  <main id="main"></main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+/* ================= DATA ================= */
+let BLOCKS=[];
+let MODULES=[];
+let QUIZ={};
+let CARDS=[];
+let SCENARIOS=[];
+let DEEP={};
+/* ================= STATE ================= */
+const KEY="aihub_v2026";
+let S=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||init()}catch(e){return init()}}
+function init(){return {read:{},quiz:{},exams:{},cards:{},scen:{},visits:[]}}
+function save(){localStorage.setItem(KEY,JSON.stringify(S))}
+function today(){return new Date().toISOString().slice(0,10)}
+S.visits=S.visits||[];if(!S.visits.includes(today())){S.visits.push(today());save()}
+
+const PASS_QUIZ=80, PASS_EXAM=85;
+function modQuizBest(id){return (S.quiz[id]&&S.quiz[id].best)||0}
+function modMastered(id){return S.read[id]&&modQuizBest(id)>=PASS_QUIZ}
+function blockMods(b){return MODULES.filter(m=>m.block===b)}
+function blockMastered(b){return blockMods(b).every(m=>modMastered(m.id))&&S.exams[b]&&S.exams[b].passed}
+
+/* ================= ROUTER ================= */
+let route={page:"dash",tab:"learn"};
+function go(page,arg){route={page,arg,tab:"learn"};render();window.scrollTo(0,0)}
+function goTab(t){route.tab=t;render()}
+
+/* ================= SIDEBAR ================= */
+function renderSide(){
+  const side=document.getElementById("side");
+  const mTot=MODULES.length, mDone=MODULES.filter(x=>modMastered(x.id)).length;
+  let h=`<h1>⚡ AI Engineering Mastery Hub</h1><div class="sub">2026 Edition · updated June 2026</div>
+  <div class="sideprog"><div class="bar"><i class="${mDone===mTot?'g':''}" style="width:${100*mDone/mTot}%"></i></div>${mDone}/${mTot} modules mastered</div>`;
+  h+=`<button class="navbtn ${route.page==='dash'?'active':''}" onclick="go('dash')">📊 Dashboard</button>`;
+  h+=`<button class="navbtn ${route.page==='cards'?'active':''}" onclick="go('cards')">🃏 Flashcards <span class="boxtag">(${dueCards().length} due)</span></button>`;
+  h+=`<button class="navbtn ${route.page==='scen'?'active':''}" onclick="go('scen')">🧩 Scenarios</button>`;
+  for(const b of BLOCKS){
+    const done=blockMastered(b.id);
+    h+=`<div class="blockhead">${b.name}<span class="bm ${done?'done':''}">${done?'MASTERED':''}</span></div>`;
+    for(const m of blockMods(b.id)){
+      const dot=modMastered(m.id)?'mastered':(S.read[m.id]?'read':'');
+      const active=route.page==='mod'&&route.arg===m.id?'active':'';
+      h+=`<button class="navbtn ${active}" onclick="go('mod','${m.id}')"><span class="dot ${dot}"></span>${m.title}${m.isNew?' <span class="pill new">NEW</span>':''}${m.isUpd?' <span class="pill upd">2026</span>':''}</button>`;
+    }
+    h+=`<button class="navbtn ${route.page==='exam'&&route.arg===b.id?'active':''}" onclick="go('exam','${b.id}')"><span class="dot ${S.exams[b.id]&&S.exams[b.id].passed?'mastered':''}"></span>🎓 Mastery Exam</button>`;
+  }
+  side.innerHTML=h;
+}
+
+/* ================= DASHBOARD ================= */
+function renderDash(){
+  const total=MODULES.length, mastered=MODULES.filter(m=>modMastered(m.id)).length,
+        read=MODULES.filter(m=>S.read[m.id]).length,
+        examsPassed=BLOCKS.filter(b=>S.exams[b.id]&&S.exams[b.id].passed).length,
+        unlockedTotal=CARDS.filter(c=>S.read[c.m]).length,
+        cardsKnown=CARDS.filter((c,i)=>(S.read[c.m]&&S.cards[i]&&S.cards[i].box>=3)).length,
+        scenDone=Object.keys(S.scen).length;
+  const pct=Math.round(100*mastered/total);
+  let h=`<h2>Your Mastery Dashboard</h2><p class="tagline">Mastery = read the module + score ≥${PASS_QUIZ}% on its quiz. Block mastery adds the exam at ≥${PASS_EXAM}%.</p>
+  <div class="card"><b>Overall mastery</b><div class="bar"><i class="${pct===100?'g':''}" style="width:${pct}%"></i></div><span class="boxtag">${mastered}/${total} modules mastered · ${read}/${total} read</span></div>
+  <div class="statgrid">
+   <div class="stat"><div class="big">${examsPassed}/${BLOCKS.length}</div><div class="lbl">Mastery exams passed</div></div>
+   <div class="stat"><div class="big">${cardsKnown}/${unlockedTotal}</div><div class="lbl">Mastered flashcards (unlocked)</div></div>
+   <div class="stat"><div class="big">${scenDone}/${SCENARIOS.length}</div><div class="lbl">Scenarios completed</div></div>
+   <div class="stat"><div class="big">${S.visits.length}</div><div class="lbl">Study days logged</div></div>
+  </div>`;
+  const weak=MODULES.filter(m=>S.quiz[m.id]&&S.quiz[m.id].best<PASS_QUIZ).map(m=>m.title);
+  if(weak.length)h+=`<div class="card"><b style="color:var(--amber)">Needs review:</b> <span style="color:var(--dim)">${weak.join(" · ")}</span></div>`;
+  h+=`<h3>Blocks</h3>`;
+  for(const b of BLOCKS){
+    const mods=blockMods(b.id), bm=mods.filter(m=>modMastered(m.id)).length;
+    const ex=S.exams[b.id];
+    h+=`<div class="card"><b>${b.name}</b> ${blockMastered(b.id)?'<span class="badge pass">BLOCK MASTERED</span>':''}
+    <div class="bar"><i class="${bm===mods.length?'g':''}" style="width:${100*bm/mods.length}%"></i></div>
+    <span class="boxtag">${bm}/${mods.length} modules · exam: ${ex?(ex.passed?`passed (${ex.best}%)`:`best ${ex.best}%`):'not attempted'}</span><br>
+    <button class="btn ghost" onclick="go('mod','${mods[0].id}')">Study</button>
+    <button class="btn ghost" onclick="go('exam','${b.id}')">Take exam</button></div>`;
+  }
+  h+=`<div class="card" style="border-color:var(--accent2)"><b>How to use this hub</b>
+  <ul class="flat">
+  <li><b>Read</b> each module's three tabs — <b>Learn</b> (concepts), <b>Apply</b> (worked example, production checklist, build exercise), <b>Resources</b> (curated, with when-to-use) — then take its <b>quiz</b> (≥${PASS_QUIZ}% to master). Work block by block.</li>
+  <li>Do the <b>Build it</b> exercise for each module. Quizzes verify understanding; building creates it. The portfolio that results is also your credibility artifact.</li>
+  <li>Run <b>flashcards daily</b> — spaced repetition (Leitner boxes) schedules each card at expanding intervals as you get it right.</li>
+  <li>Do the <b>scenarios</b> once a block's modules are mastered — they test production judgment, the senior-level skill.</li>
+  <li>Pass the <b>mastery exam</b> (20 questions sampled across the block, ≥${PASS_EXAM}%) to lock in the block.</li>
+  <li>Progress saves automatically in this browser. <button class="btn red" style="font-size:11px;padding:4px 10px" onclick="if(confirm('Reset ALL progress?')){localStorage.removeItem(KEY);S=init();render()}">Reset progress</button></li>
+  </ul></div>`;
+  return h;
+}
+
+/* ================= MODULE PAGE ================= */
+function renderMod(id){
+  const m=MODULES.find(x=>x.id===id), d=DEEP[id];
+  const idx=MODULES.indexOf(m), next=MODULES[idx+1];
+  const tab=route.tab||"learn";
+  let h=`<h2>${m.title}</h2> ${m.isNew?'<span class="pill new">NEW IN 2026 EDITION</span>':''}${m.isUpd?'<span class="pill upd">UPDATED FOR 2026</span>':''}${modMastered(id)?'<span class="badge pass">MASTERED</span>':''}
+  <p class="tagline">${m.tag}</p>
+  <div class="tabs">
+  <button class="tab ${tab==='learn'?'active':''}" onclick="goTab('learn')">📖 Learn</button>
+  <button class="tab ${tab==='apply'?'active':''}" onclick="goTab('apply')">🔧 Apply</button>
+  <button class="tab ${tab==='res'?'active':''}" onclick="goTab('res')">📚 Resources</button>
+  </div>`;
+  if(tab==='learn'){
+    h+=`<div class="card"><b>Why this matters</b><p style="margin-top:6px;color:var(--dim)">${m.why}</p></div>
+    <div class="mental"><b>Mental model — </b>${m.mental}</div>
+    <h3>Core concepts</h3><div class="card">${m.concepts.map(c=>`<div class="term"><b>${c[0]}.</b> <span>${c[1]}</span></div>`).join("")}</div>
+    <h3>Common mistakes</h3><div class="card"><ul class="flat">${m.mistakes.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Red flags in the wild</h3><div class="card"><ul class="flat flags">${m.flags.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Questions to ask your engineers</h3><div class="card"><ul class="flat">${m.ask.map(x=>`<li>"${x}"</li>`).join("")}</ul></div>`;
+  }else if(tab==='apply'&&d){
+    h+=`<h3>Worked example</h3><div class="worked">${d.worked}</div>
+    <h3>What good looks like in production</h3><div class="card"><ul class="flat checks">${d.good.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Build it</h3><div class="buildbox"><b>Hands-on exercise — </b>${d.build}</div>
+    <p style="color:var(--dim);font-size:13.5px">Building is where concepts become intuition. A pipeline you struggled with teaches more than one you read about three times.</p>`;
+  }else if(tab==='res'&&d){
+    h+=`<h3>Curated resources</h3><p style="color:var(--dim);font-size:13.5px;margin-bottom:14px">Each entry says when to reach for it — don't read these front-to-back; pull them at the moment of need.</p>
+    ${d.res.map(r=>`<div class="res-item">${r[1]==='#'?`<b style="color:var(--accent)">${r[0]}</b>`:`<a href="${r[1]}" target="_blank" rel="noopener">${r[0]} ↗</a>`}<span class="when"><b>Use when:</b> ${r[2]}</span></div>`).join("")}`;
+  }
+  h+=`<div class="actionbar">
+  ${S.read[id]?`<button class="btn green" disabled>✓ Read</button>`:`<button class="btn green" onclick="S.read['${id}']=true;save();render()">Mark as read</button>`}
+  <button class="btn" onclick="startQuiz('${id}')">Take quiz ${modQuizBest(id)?`(best: ${modQuizBest(id)}%)`:''}</button>
+  ${next?`<button class="btn ghost" onclick="go('mod','${next.id}')">Next: ${next.title} →</button>`:''}
+  </div>`;
+  return h;
+}
+
+/* ================= QUIZ ENGINE ================= */
+let Q=null;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function startQuiz(id){
+  Q={mode:'quiz',id,items:shuffle(QUIZ[id]).map(q=>({...q,sel:null})),i:0,done:false};
+  go('quiz');
+}
+function startExam(bid){
+  let pool=[];blockMods(bid).forEach(m=>QUIZ[m.id].forEach(q=>pool.push({...q,sel:null})));
+  Q={mode:'exam',id:bid,items:shuffle(pool).slice(0,20),i:0,done:false};
+  go('quiz');
+}
+function pick(n){
+  const it=Q.items[Q.i];
+  if(it.sel!==null)return;
+  it.sel=n;render();
+}
+function nextQ(){
+  if(Q.i<Q.items.length-1){Q.i++;render();window.scrollTo(0,0)}
+  else{
+    Q.done=true;
+    const score=Math.round(100*Q.items.filter(x=>x.sel===x.a).length/Q.items.length);
+    if(Q.mode==='quiz'){
+      S.quiz[Q.id]=S.quiz[Q.id]||{best:0,attempts:0};
+      S.quiz[Q.id].attempts++;
+      S.quiz[Q.id].best=Math.max(S.quiz[Q.id].best,score);
+    }else{
+      S.exams[Q.id]=S.exams[Q.id]||{best:0,passed:false,attempts:0};
+      S.exams[Q.id].attempts++;
+      S.exams[Q.id].best=Math.max(S.exams[Q.id].best,score);
+      if(score>=PASS_EXAM)S.exams[Q.id].passed=true;
+    }
+    save();render();window.scrollTo(0,0);
+  }
+}
+function renderQuiz(){
+  if(!Q)return renderDash();
+  const title=Q.mode==='quiz'?MODULES.find(m=>m.id===Q.id).title+" — Quiz":BLOCKS.find(b=>b.id===Q.id).name+" — Mastery Exam";
+  if(Q.done){
+    const correct=Q.items.filter(x=>x.sel===x.a).length, score=Math.round(100*correct/Q.items.length);
+    const pass=Q.mode==='quiz'?score>=PASS_QUIZ:score>=PASS_EXAM;
+    let h=`<h2>${title}</h2><div class="card" style="text-align:center;padding:28px">
+    <div style="font-size:42px;font-weight:700;color:${pass?'var(--green)':'var(--red)'}">${score}%</div>
+    <p>${correct}/${Q.items.length} correct ${pass?'<span class="badge pass">'+(Q.mode==='quiz'?'QUIZ PASSED':'EXAM PASSED — BLOCK LOCKED IN')+'</span>':'<span class="badge fail">BELOW '+(Q.mode==='quiz'?PASS_QUIZ:PASS_EXAM)+'% — REVIEW & RETRY</span>'}</p>
+    <button class="btn" onclick="${Q.mode==='quiz'?`startQuiz('${Q.id}')`:`startExam('${Q.id}')`}">Retake</button>
+    ${Q.mode==='quiz'?`<button class="btn ghost" onclick="go('mod','${Q.id}')">Back to module</button>`:''}
+    <button class="btn ghost" onclick="go('dash')">Dashboard</button></div>`;
+    const missed=Q.items.filter(x=>x.sel!==x.a);
+    if(missed.length){
+      h+=`<h3>Review missed questions</h3>`;
+      Q.items.forEach((it,n)=>{
+        if(it.sel!==it.a)h+=`<div class="card"><div class="qtext">${n+1}. ${it.q}</div>
+        <p style="color:var(--red);font-size:13.5px">Your answer: ${it.o[it.sel]}</p>
+        <p style="color:var(--green);font-size:13.5px">Correct: ${it.o[it.a]}</p>
+        <div class="exp">${it.exp}</div></div>`;
+      });
+    }
+    return h;
+  }
+  const it=Q.items[Q.i], answered=it.sel!==null;
+  let h=`<h2>${title}</h2><div class="qnum">Question ${Q.i+1} of ${Q.items.length}</div>
+  <div class="bar"><i style="width:${100*Q.i/Q.items.length}%"></i></div>
+  <div class="card" style="margin-top:14px"><div class="qtext">${it.q}</div>`;
+  it.o.forEach((o,n)=>{
+    let cls="opt";
+    if(answered){if(n===it.a)cls+=" right";else if(n===it.sel)cls+=" wrong"}
+    h+=`<button class="${cls}" onclick="pick(${n})"><span class="chip">${String.fromCharCode(65+n)}</span><span>${o}</span></button>`;
+  });
+  if(answered)h+=`<div class="exp">${it.sel===it.a?'✓ Correct. ':'✗ '}${it.exp}</div><button class="btn" onclick="nextQ()">${Q.i===Q.items.length-1?'Finish':'Next →'}</button>`;
+  h+=`</div>`;
+  return h;
+}
+
+/* ================= EXAM PAGE ================= */
+function renderExam(bid){
+  const b=BLOCKS.find(x=>x.id===bid), mods=blockMods(bid);
+  const ready=mods.every(m=>modMastered(m.id)); const ex=S.exams[bid];
+  let h=`<h2>${b.name} — Mastery Exam</h2><p class="tagline">20 questions sampled across all ${mods.length} modules. Pass at ≥${PASS_EXAM}% to lock in the block.</p>
+  <div class="card"><b>Modules covered</b><ul class="flat">${mods.map(m=>`<li>${m.title} ${modMastered(m.id)?'<span style="color:var(--green)">✓ mastered</span>':'<span style="color:var(--amber)">not yet mastered</span>'}</li>`).join("")}</ul></div>`;
+  if(ex)h+=`<div class="card">Best score: <b style="color:${ex.passed?'var(--green)':'var(--amber)'}">${ex.best}%</b> over ${ex.attempts} attempt(s) ${ex.passed?'<span class="badge pass">PASSED</span>':''}</div>`;
+  if(!ready)h+=`<div class="card" style="border-color:var(--amber)"><b style="color:var(--amber)">Recommended:</b> master all ${mods.length} modules first (read + quiz ≥${PASS_QUIZ}%). You can attempt the exam anyway — it's your study system.</div>`;
+  h+=`<button class="btn" onclick="startExam('${bid}')">Start exam</button>`;
+  return h;
+}
+
+/* ================= FLASHCARDS (Leitner) ================= */
+const INTERVALS=[0,1,3,7];
+function cardState(i){return S.cards[i]||{box:0,due:today()}}
+function unlockedCards(){return CARDS.filter(c=>S.read[c.m]);}
+function lockedCount(){return CARDS.filter(c=>!S.read[c.m]).length;}
+function modTitle(modId){const m=MODULES.find(m=>m.id===modId);return m?m.title:modId;}
+function dueCards(){return CARDS.map((c,i)=>({c,i})).filter(({c,i})=>S.read[c.m]&&cardState(i).due<=today());}
+function gradeCardAt(idx,grade){
+  const cur=F.queue[0];
+  if(!cur||cur.i!==idx)return;
+  const st=cardState(cur.i);
+  const box=grade===0?0:grade===1?Math.max(0,st.box):grade===2?Math.min(st.box+1,3):3;
+  const d=new Date();d.setDate(d.getDate()+INTERVALS[box]);
+  S.cards[cur.i]={box,due:d.toISOString().slice(0,10)};
+  save();F.queue.shift();F.flipped=false;render();
+}
+let F={queue:[],flipped:false};
+function startCards(){F.queue=shuffle(dueCards());F.flipped=false;render()}
+function flipCard(){
+  F.flipped=!F.flipped;
+  const w=document.querySelector&&document.querySelector(".flipwrap");
+  if(w)w.classList.toggle("flipped",F.flipped);
+  const g=document.getElementById("gradebtns");
+  if(g)g.style.visibility=F.flipped?"visible":"hidden";
+}
+function renderCards(){
+  const due=dueCards();
+  const unlocked=unlockedCards();
+  const locked=lockedCount();
+  const totalMods=MODULES.length;
+  const readMods=Object.keys(S.read).filter(k=>S.read[k]).length;
+  const boxes=[0,0,0,0];
+  unlocked.forEach(c=>{const gi=CARDS.indexOf(c);boxes[(S.cards[gi]||{box:0}).box]++;});
+  const pct=Math.round((readMods/totalMods)*100);
+  let h=`<h2>Flashcards</h2>
+  <div style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:13.5px">
+      <span style="font-weight:600">Unlock progress</span>
+      <span style="color:var(--dim)">${readMods}/${totalMods} modules read · ${unlocked.length} cards unlocked${locked>0?` · <span style="color:var(--amber)">🔒 ${locked} locked</span>`:''}</span>
+    </div>
+    <div style="background:var(--border);border-radius:4px;height:6px"><div style="background:var(--green);border-radius:4px;height:6px;width:${pct}%;transition:width .3s"></div></div>
+  </div>`;
+  h+=`<div class="statgrid">${boxes.map((n,b)=>`<div class="stat"><div class="big">${n}</div><div class="lbl">Box ${b+1}${b===3?' (mastered)':''}</div></div>`).join("")}</div>`;
+  if(!F.queue.length){
+    if(unlocked.length===0){
+      h+=`<div class="card"><b>No cards unlocked yet.</b><br><span style="color:var(--dim)">Mark a module as read on its Learn tab to unlock its flashcards.</span></div>`;
+    } else if(due.length){
+      h+=`<div class="card">${due.length} card(s) due for review.</div><button class="btn" onclick="startCards()">Start session</button>`;
+    } else {
+      h+=`<div class="card" style="border-color:var(--green)"><b style="color:var(--green)">All caught up.</b> No cards due today — come back tomorrow. Spacing is the point: recall is strengthened by the gap.</div>`;
+    }
+    if(locked>0){
+      const lm=MODULES.filter(m=>!S.read[m.id]);
+      h+=`<div class="card" style="margin-top:12px;padding:12px 14px"><div style="font-weight:600;margin-bottom:8px">🔒 Locked modules — read to unlock cards</div>${lm.map(m=>`<button class="btn" style="margin:3px 4px;padding:4px 12px;font-size:12px" onclick="go('mod','${m.id}')">${m.title}</button>`).join('')}</div>`;
+    }
+    return h;
+  }
+  const cur=F.queue[0],st=cardState(cur.i),mod=MODULES.find(m=>m.id===cur.c.m);
+  h+=`<div class="qnum">${F.queue.length} remaining · ${mod?mod.title:cur.c.m} · box ${st.box+1}</div>
+  <div class="flipwrap ${F.flipped?'flipped':''}" onclick="flipCard()">
+    <div class="flipinner">
+      <div class="face front"><div>${cur.c.f}<br><span class="boxtag">click or press <span class="kbd">Space</span> to flip</span></div></div>
+      <div class="face back"><div>${cur.c.b}</div></div>
+    </div>
+  </div>
+  <div id="gradebtns" style="visibility:${F.flipped?'visible':'hidden'}">
+    <button class="btn red" onclick="gradeCardAt(${cur.i},0)">Again <span class="kbd">1</span></button>
+    <button class="btn" style="background:var(--amber);color:#000" onclick="gradeCardAt(${cur.i},1)">Hard <span class="kbd">2</span></button>
+    <button class="btn green" onclick="gradeCardAt(${cur.i},2)">Good <span class="kbd">3</span></button>
+    <button class="btn" style="background:#6464f0;color:#fff" onclick="gradeCardAt(${cur.i},3)">Easy <span class="kbd">4</span></button>
+  </div>`;
+  return h;
+}
+if(document.addEventListener)document.addEventListener("keydown",e=>{
+  if(route.page!=="cards"||!F.queue.length)return;
+  if(e.code==="Space"||e.key==="Enter"){e.preventDefault();flipCard()}
+  else if(e.key==="1"&&F.flipped)gradeCardAt(F.queue[0].i,0);
+  else if(e.key==="2"&&F.flipped)gradeCardAt(F.queue[0].i,1);
+  else if((e.key==="3"||e.key==="g"||e.key==="G")&&F.flipped)gradeCardAt(F.queue[0].i,2);
+  else if((e.key==="4"||e.key==="e"||e.key==="E")&&F.flipped)gradeCardAt(F.queue[0].i,3);
+});
+
+/* ================= SCENARIOS ================= */
+let SC={open:null,revealed:false};
+function renderScen(){
+  let h=`<h2>Scenario Challenges</h2><p class="tagline">Production judgment under realistic conditions. Write or speak your answer BEFORE revealing the model answer — retrieval practice is where mastery forms. Then self-grade honestly against the key points.</p>`;
+  for(const b of BLOCKS){
+    h+=`<h3>${b.name}</h3>`;
+    for(const s of SCENARIOS.filter(x=>x.block===b.id)){
+      const g=S.scen[s.id];
+      if(SC.open!==s.id){
+        h+=`<div class="card"><b>${s.title}</b> ${g?`<span class="badge ${g==='nailed'?'pass':'fail'}">${g==='nailed'?'NAILED IT':g==='partial'?'PARTIAL':'MISSED'}</span>`:''}
+        <p style="color:var(--dim);font-size:13.5px;margin:6px 0">${s.sit.slice(0,140)}…</p>
+        <button class="btn ghost" onclick="SC={open:'${s.id}',revealed:false};render()">Open scenario</button></div>`;
+      }else{
+        h+=`<div class="card" style="border-color:var(--accent)"><b>${s.title}</b>
+        <div class="scenario-sit" style="margin-top:8px">${s.sit}</div>
+        <p><b style="color:var(--accent2)">Your task:</b> ${s.task}</p>
+        <p style="color:var(--dim);font-size:13px">Think it through (out loud or on paper) as if you're in the room. Then reveal.</p>`;
+        if(!SC.revealed){
+          h+=`<button class="btn" onclick="SC.revealed=true;render()">Reveal model answer</button>
+          <button class="btn ghost" onclick="SC={open:null};render()">Close</button>`;
+        }else{
+          h+=`<div class="model-ans"><b>Model answer:</b><br>${s.model}</div>
+          <p><b>Key points to have hit:</b></p><ul class="flat">${s.pts.map(p=>`<li>${p}</li>`).join("")}</ul>
+          <p style="margin-top:10px"><b>Self-grade:</b></p>
+          <button class="btn green" onclick="S.scen['${s.id}']='nailed';save();SC={open:null};render()">Nailed it</button>
+          <button class="btn amber" onclick="S.scen['${s.id}']='partial';save();SC={open:null};render()">Partial</button>
+          <button class="btn red" onclick="S.scen['${s.id}']='missed';save();SC={open:null};render()">Missed it</button>`;
+        }
+        h+=`</div>`;
+      }
+    }
+  }
+  return h;
+}
+
+/* ================= RENDER ================= */
+function render(){
+  renderSide();
+  const main=document.getElementById("main");
+  let h="";
+  switch(route.page){
+    case "dash":h=renderDash();break;
+    case "mod":h=renderMod(route.arg);break;
+    case "quiz":h=renderQuiz();break;
+    case "exam":h=renderExam(route.arg);break;
+    case "cards":h=renderCards();break;
+    case "scen":h=renderScen();break;
+  }
+  main.innerHTML=`<div class="page">${h}</div>`;
+}
+render();
+let DEPTH={};
+
+/* render override: staff-depth Learn tab */
+function renderMod(id){
+  const m=MODULES.find(x=>x.id===id), d=DEEP[id], dp=DEPTH[id];
+  const idx=MODULES.indexOf(m), next=MODULES[idx+1];
+  const tab=route.tab||"learn";
+  let h=`<h2>${m.title}</h2> ${m.isNew?'<span class="pill new">NEW IN 2026 EDITION</span>':''}${m.isUpd?'<span class="pill upd">UPDATED FOR 2026</span>':''}${modMastered(id)?'<span class="badge pass">MASTERED</span>':''}
+  <p class="tagline">${m.tag}</p>
+  <div class="tabs">
+  <button class="tab ${tab==='learn'?'active':''}" onclick="goTab('learn')">📖 Learn</button>
+  <button class="tab ${tab==='apply'?'active':''}" onclick="goTab('apply')">🔧 Apply</button>
+  <button class="tab ${tab==='res'?'active':''}" onclick="goTab('res')">📚 Resources</button>
+  </div>`;
+  if(tab==='learn'){
+    h+=`<div class="card"><b>Why this matters</b><p style="margin-top:6px;color:var(--dim)">${m.why}</p></div>
+    <div class="mental"><b>Mental model — </b>${m.mental}</div>`;
+    if(dp)h+=`<h3>How it actually works</h3><div class="card mech">${dp.mech}</div>`;
+    h+=`<h3>Core concepts</h3><div class="card">${m.concepts.map(c=>`<div class="term"><b>${c[0]}.</b> <span>${c[1]}</span></div>`).join("")}</div>`;
+    if(dp)h+=`<h3>Architectural tradeoffs</h3><div class="card" style="padding:10px 14px"><table><tr><th>Decision</th><th>The lever</th><th>Cost of getting it wrong</th></tr>${dp.trade.map(t=>`<tr><td><b>${t[0]}</b></td><td>${t[1]}</td><td style="color:var(--dim)">${t[2]}</td></tr>`).join("")}</table></div>
+    <details class="deep"><summary>⚡ Scale, cost & latency notes</summary><ul class="flat">${dp.scale.map(x=>`<li>${x}</li>`).join("")}</ul></details>
+    <details class="deep"><summary>🔒 Security & governance notes</summary><ul class="flat">${dp.sec.map(x=>`<li>${x}</li>`).join("")}</ul></details>`;
+    h+=`<h3>Common mistakes</h3><div class="card"><ul class="flat">${m.mistakes.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Red flags in the wild</h3><div class="card"><ul class="flat flags">${m.flags.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Questions to ask your engineers</h3><div class="card"><ul class="flat">${m.ask.map(x=>`<li>"${x}"</li>`).join("")}</ul></div>`;
+    if(PATTERNS[id])h+=`<div style="font-size:13px;color:var(--dim);margin:16px 0 4px">💻 This module has implementation code in the <b style="color:var(--accent2)">Patterns</b> tab — runnable patterns, load-bearing line explanations, and a debugging guide.</div>`;
+    if(dp)h+=`<h3>Say it like a staff engineer</h3><div class="worked" style="border-left-color:var(--accent2);background:linear-gradient(90deg,rgba(188,140,255,.06),transparent)"><b>The two-minute articulation — </b>${dp.interview}</div>
+    <p style="color:var(--dim);font-size:13px">Practice saying this out loud, unscripted, in your own words. The articulation under pressure — in a design review, an interview, an incident call — is the staff-level skill the reading builds toward.</p>`;
+  }else if(tab==='apply'&&d){
+    h+=`<h3>Worked example</h3><div class="worked">${d.worked}</div>
+    <h3>What good looks like in production</h3><div class="card"><ul class="flat checks">${d.good.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    <h3>Build it</h3><div class="buildbox"><b>Hands-on exercise — </b>${d.build}</div>
+    <p style="color:var(--dim);font-size:13.5px">Building is where concepts become intuition. A pipeline you struggled with teaches more than one you read about three times.</p>`;
+  }else if(tab==='res'&&d){
+    h+=`<h3>Curated resources</h3><p style="color:var(--dim);font-size:13.5px;margin-bottom:14px">Each entry says when to reach for it — don't read these front-to-back; pull them at the moment of need.</p>
+    ${d.res.map(r=>`<div class="res-item">${r[1]==='#'?`<b style="color:var(--accent)">${r[0]}</b>`:`<a href="${r[1]}" target="_blank" rel="noopener">${r[0]} ↗</a>`}<span class="when"><b>Use when:</b> ${r[2]}</span></div>`).join("")}`;
+  }
+  h+=`<div class="actionbar">
+  ${S.read[id]?`<button class="btn green" disabled>✓ Read</button>`:`<button class="btn green" onclick="S.read['${id}']=true;save();render()">Mark as read</button>`}
+  <button class="btn" onclick="startQuiz('${id}')">Take quiz ${modQuizBest(id)?`(best: ${modQuizBest(id)}%)`:''}</button>
+  ${next?`<button class="btn ghost" onclick="go('mod','${next.id}')">Next: ${next.title} →</button>`:''}
+  </div>`;
+  return h;
+}
+/* depth styles */
+if(document.createElement&&document.head){
+  const st=document.createElement("style");
+  st.textContent=".mech{font-size:14.5px;line-height:1.65}.mech b{color:var(--teal)}details.deep{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin-bottom:12px}details.deep summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--amber);list-style:none}details.deep summary::-webkit-details-marker{display:none}details.deep summary:before{content:'▸ ';transition:transform .2s}details.deep[open] summary:before{content:'▾ '}details.deep ul{margin-top:8px}";
+  document.head.appendChild(st);
+}
+render();
+/* ===== Beginner layer: plain-English intros, Start Here, Glossary ===== */
+let PLAIN={};
+let GLOSSARY=[];
+function renderStart(){
+  let h=`<h2>Start Here</h2><p class="tagline">No AI background needed. Fifteen minutes of orientation, then the curriculum will make sense.</p>
+  <div class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">What this field actually is</b>
+  <p style="margin-top:6px">Companies like Anthropic, OpenAI, and Google spend months and billions training <b>large language models</b> — programs that predict the next word so well they can write, reason, and code. You will never train one. <b>AI engineering is building products on top of finished models</b>: you send them text over the internet, get text back, and everything else — making answers accurate, fast, affordable, safe, and connected to your data — is your job. That 'everything else' is exactly what the 21 modules here teach.</p></div>
+  <h3>The one interaction that underlies everything</h3>
+  <div class="card"><p>Every AI feature you've ever used reduces to this exchange, repeated:</p>
+  <p style="background:var(--bg3);border-radius:8px;padding:12px 16px;font-family:ui-monospace,monospace;font-size:13px">YOU SEND → "You are a helpful support agent for Acme Corp. [rules…] Customer asks: Where is my order #4521?"<br><br>MODEL RETURNS → "Let me help you track order #4521…"</p>
+  <p>That's it. No memory between calls (you re-send the conversation every time), no internet access (unless you build it), no actions (unless you wire them up). The model is a brilliant text-completion engine, and the product is everything you construct around it.</p>
+  <ul class="flat">
+  <li><b>Tokens</b> — the model reads and writes in word-chunks (~¾ of a word each). You pay per token, limits are in tokens, speed is in tokens/second. It's the metric of everything.</li>
+  <li><b>The context window</b> — the maximum text per call: the model's desk. If it's not on the desk right now, the model doesn't know it.</li>
+  <li><b>Probabilistic</b> — the same question can get different answers. This breaks normal testing, which is why this field invented its own (evals).</li>
+  </ul></div>
+  <h3>The cast of characters</h3>
+  <div class="card"><ul class="flat">
+  <li><b>Products vs models:</b> ChatGPT, Claude.ai, and Gemini are apps. Underneath are models (GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro) that you can also call directly via API — that's what you'll do.</li>
+  <li><b>Model tiers:</b> every provider sells a cheap-fast model, a mid workhorse, and an expensive flagship. Picking the right tier per task is a core skill (and a 10–50× cost lever).</li>
+  <li><b>Open weights:</b> some models (Llama, DeepSeek, Qwen) are downloadable to run on your own hardware. Cheaper at huge scale, much more work.</li>
+  <li><b>The big shifts of 2025–26:</b> models became commodities that leapfrog quarterly; the differentiators moved to the scaffolding — context management, agents, harnesses, evals. That's why this curriculum spends most of its time there.</li>
+  </ul></div>
+  <h3>Your path through this hub</h3>
+  <div class="card"><ul class="flat checks">
+  <li><b>Block 1 (Foundations)</b> teaches the model itself: tokens and cost, writing instructions, managing the window, choosing models. Everything else builds on it.</li>
+  <li><b>Block 2 (RAG & Knowledge)</b> connects models to YOUR data — the most common real-world AI product.</li>
+  <li><b>Block 3 (Agents & Harnesses)</b> gives models the ability to act, and the machinery that keeps them reliable.</li>
+  <li><b>Block 4 (Production & Leadership)</b> is shipping for real: testing, safety, architecture, judgment.</li>
+  </ul>
+  <p style="color:var(--dim);font-size:13.5px">Each module starts with an <b style="color:var(--teal)">In plain English</b> box — read just those across all 21 modules first if you want a fast aerial view. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a 'How it actually works' section feels deep on a first pass, skip it and return after the quiz — the layers are designed for multiple passes.</p>
+  <p style="color:var(--dim);font-size:13.5px">Helpful background: basic programming (any language) and what an API is. Not needed: machine learning, math, or any prior AI experience.</p></div>
+  <div class="actionbar"><button class="btn" onclick="go('mod','llm')">Begin Block 1: LLM Fundamentals →</button><button class="btn ghost" onclick="go('gloss')">Browse the glossary</button></div>`;
+  return h;
+}
+function renderGloss(){
+  let h=`<h2>Glossary</h2><p class="tagline">${GLOSSARY.length} terms in plain English. Click a term's module to see it in depth.</p>
+  <input id="glsearch" placeholder="Type to filter… (e.g. 'token', 'agent', 'rag')" oninput="filterGloss(this.value)" style="width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:14.5px;margin-bottom:16px;outline:none">
+  <div id="gllist">${glossList("")}</div>`;
+  return h;
+}
+function glossList(f){
+  f=(f||"").toLowerCase();
+  const hits=GLOSSARY.filter(g=>!f||g[0].toLowerCase().includes(f)||g[1].toLowerCase().includes(f));
+  if(!hits.length)return `<div class="card" style="color:var(--dim)">No matches — try a shorter fragment.</div>`;
+  return hits.map(g=>{
+    const m=MODULES.find(x=>x.id===g[2]);
+    return `<div class="res-item"><b style="color:var(--text)">${g[0]}</b><span class="when">${g[1]}${m?` <a href="#" onclick="go('mod','${g[2]}');return false" style="color:var(--accent)">→ ${m.title}</a>`:""}</span></div>`;
+  }).join("");
+}
+function filterGloss(v){
+  const el=document.getElementById("gllist");
+  if(el)el.innerHTML=glossList(v);
+}
+/* wrap module page: plain-English opener on Learn tab */
+const __renderMod=renderMod;
+renderMod=function(id){
+  let h=__renderMod(id);
+  if((route.tab||"learn")==="learn"&&PLAIN[id]){
+    h=h.replace('<div class="card"><b>Why this matters',
+      `<div class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">In plain English</b><p style="margin-top:6px">${PLAIN[id]}</p></div><div class="card"><b>Why this matters`);
+  }
+  return h;
+};
+/* wrap sidebar: Start Here + Glossary nav */
+const __renderSide=renderSide;
+renderSide=function(){
+  __renderSide();
+  const side=document.getElementById("side");
+  const startBtn=`<button class="navbtn ${route.page==='start'?'active':''}" onclick="go('start')">🚀 Start Here</button><button class="navbtn ${route.page==='gloss'?'active':''}" onclick="go('gloss')">🔤 Glossary</button>`;
+  side.innerHTML=side.innerHTML.replace('<button class="navbtn',startBtn+'<button class="navbtn');
+};
+/* wrap dashboard: newcomer banner */
+const __renderDash=renderDash;
+renderDash=function(){
+  const anyRead=Object.keys(S.read).length>0;
+  let banner=anyRead?"":`<div class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">New to AI?</b> <span style="color:var(--dim)">This hub assumes only basic programming knowledge. Take 15 minutes on</span> <a href="#" onclick="go('start');return false" style="color:var(--accent);font-weight:600">Start Here</a> <span style="color:var(--dim)">first — it gives you the mental model everything else builds on, and every module opens with a plain-English intro.</span></div>`;
+  return banner+__renderDash();
+};
+/* wrap router for new pages */
+const __render=render;
+render=function(){
+  if(route.page==="start"||route.page==="gloss"){
+    renderSide();
+    const main=document.getElementById("main");
+    main.innerHTML=`<div class="page">${route.page==="start"?renderStart():renderGloss()}</div>`;
+  }else __render();
+};
+render();
+/* ===== Patterns tab: implementation code + debugging guides ===== */
+let PATTERNS={};
+/* quiz engine: shuffle options at render so position carries no signal */
+function prepItems(pool){
+  return pool.map(q=>{
+    const ord=shuffle([0,1,2,3]);
+    return {q:q.q,o:ord.map(i=>q.o[i]),a:ord.indexOf(q.a),exp:q.exp,sel:null};
+  });
+}
+startQuiz=function(id){
+  Q={mode:'quiz',id,items:prepItems(shuffle(QUIZ[id])),i:0,done:false};
+  go('quiz');
+};
+startExam=function(bid){
+  let pool=[];blockMods(bid).forEach(m=>QUIZ[m.id].forEach(q=>pool.push(q)));
+  Q={mode:'exam',id:bid,items:prepItems(shuffle(pool).slice(0,20)),i:0,done:false};
+  go('quiz');
+};
+/* add Patterns tab */
+const __rm9=renderMod;
+renderMod=function(id){
+  let h=__rm9(id);
+  h=h.replace(`onclick="goTab('res')">📚 Resources</button>`,
+    `onclick="goTab('res')">📚 Resources</button><button class="tab ${route.tab==='code'?'active':''}" onclick="goTab('code')" ${!PATTERNS[id]?'disabled style="opacity:.4;cursor:not-allowed"':''}>💻 Patterns${!PATTERNS[id]?' 🔒':''}</button>`);
+  if(route.tab==='code'&&PATTERNS[id]){
+    const p=PATTERNS[id];
+    const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    const content=`<h3>Implementation pattern</h3><p style="color:var(--dim);font-size:13.5px">${p.intro}</p>
+    <pre class="codeblock">${esc(p.code)}</pre>
+    <h3>Why these lines are load-bearing</h3><div class="card"><ul class="flat">${p.notes.map(n=>`<li>${n}</li>`).join("")}</ul></div>
+    <h3>Debugging guide</h3><div class="card" style="padding:10px 14px"><table><tr><th>Symptom</th><th>Likely cause</th><th>Check</th></tr>${p.debug.map(d=>`<tr><td><b>${d[0]}</b></td><td>${d[1]}</td><td style="color:var(--dim)">${d[2]}</td></tr>`).join("")}</table></div>
+    <p style="color:var(--dim);font-size:13px">Pseudocode-level Python: adapt names/SDKs to your stack. Type it out rather than copy it — the friction is the learning.</p>`;
+    h=h.replace('<div class="actionbar">',content+'<div class="actionbar">');
+  }
+  else if(route.tab==='code'&&!PATTERNS[id]){h+=`<div class="card" style="border-color:var(--amber);margin-top:18px"><b style="color:var(--amber)">Implementation patterns not yet available</b><p style="color:var(--dim);margin-top:6px">This module's code patterns are in development. Use the <b>Apply</b> tab for worked examples and build exercises.</p></div>`;}
+  return h;
+};
+if(document.createElement&&document.head){
+  const st2=document.createElement("style");
+  st2.textContent=".codeblock{background:#0a0e14;border:1px solid var(--border);border-radius:12px;padding:16px 18px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.55;color:#c9d1d9;overflow-x:auto;white-space:pre;margin:10px 0}";
+  const st3=document.createElement("style");
+  st3.textContent=".boxtag{font-size:11px;color:var(--dim);display:block;margin-top:8px}.kbd{display:inline-block;background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:10px;font-family:ui-monospace,monospace}#gradebtns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}";
+  document.head.appendChild(st3);
+  document.head.appendChild(st2);
+}
+render();
+
+/* ===== WAYFINDING RAIL — Prompt 6 / audit 2.3 ===== */
+(function(){
+const RSECS=[
+  {id:'sec-why',      label:'Why'},
+  {id:'sec-mental',   label:'Mental model'},
+  {id:'sec-mech',     label:'How it works'},
+  {id:'sec-concepts', label:'Concepts'},
+  {id:'sec-tradeoffs',label:'Tradeoffs'},
+  {id:'sec-mistakes', label:'Mistakes'},
+  {id:'sec-flags',    label:'Red flags'},
+  {id:'sec-ask',      label:'Ask'},
+  {id:'sec-artic',    label:'Articulation'},
+];
+
+/* 1 — inject anchor ids into learn-tab html */
+const __rmR=renderMod;
+renderMod=function(id){
+  let h=__rmR(id);
+  if((route.tab||'learn')==='learn'){
+    const TM='<div class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">In plain English</b>';
+    if(h.indexOf(TM)!==-1)
+      h=h.replace(TM,'<div id="sec-why" class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">In plain English</b>');
+    else
+      h=h.replace('<div class="card"><b>Why this matters','<div id="sec-why" class="card"><b>Why this matters');
+    h=h
+      .replace('<div class="mental">','<div id="sec-mental" class="mental">')
+      .replace('<h3>How it actually works</h3>','<h3 id="sec-mech">How it actually works</h3>')
+      .replace('<h3>Core concepts</h3>','<h3 id="sec-concepts">Core concepts</h3>')
+      .replace('<h3>Architectural tradeoffs</h3>','<h3 id="sec-tradeoffs">Architectural tradeoffs</h3>')
+      .replace('<h3>Common mistakes</h3>','<h3 id="sec-mistakes">Common mistakes</h3>')
+      .replace('<h3>Red flags in the wild</h3>','<h3 id="sec-flags">Red flags in the wild</h3>')
+      .replace('<h3>Questions to ask your engineers</h3>','<h3 id="sec-ask">Questions to ask your engineers</h3>')
+      .replace('<h3>Say it like a staff engineer</h3>','<h3 id="sec-artic">Say it like a staff engineer</h3>');
+  }
+  return h;
+};
+
+/* 2 — cleanup state */
+let _spy=null,_raf=null;
+function teardown(){
+  if(_spy){window.removeEventListener('scroll',_spy);_spy=null;}
+  if(_raf){cancelAnimationFrame(_raf);_raf=null;}
+  const wrap=document.getElementById('mlw');
+  if(wrap){const pg=wrap.querySelector('.page');if(pg)wrap.parentNode.insertBefore(pg,wrap);wrap.remove();}
+}
+
+function build(){
+  teardown();
+  if(route.page!=='mod'||(route.tab||'learn')!=='learn')return;
+  const main=document.getElementById('main'),pg=main&&main.querySelector('.page');
+  if(!pg)return;
+  const secs=RSECS.filter(s=>!!document.getElementById(s.id));
+  if(secs.length<2)return;
+
+  /* wrap .page in layout div */
+  const wrap=document.createElement('div');
+  wrap.id='mlw';wrap.className='mlw';
+  pg.parentNode.insertBefore(wrap,pg);wrap.appendChild(pg);
+
+  /* build nav */
+  const rail=document.createElement('nav');
+  rail.id='sec-rail';rail.className='sec-rail';
+  rail.setAttribute('aria-label','Module sections');
+  secs.forEach(s=>{
+    const a=document.createElement('a');
+    a.className='sr-item';a.href='#'+s.id;a.dataset.target=s.id;a.textContent=s.label;
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const el=document.getElementById(s.id);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    rail.appendChild(a);
+  });
+  wrap.appendChild(rail);
+
+  /* scroll-spy */
+  const items=rail.querySelectorAll('.sr-item');
+  function setActive(id){items.forEach(a=>a.classList.toggle('sr-active',a.dataset.target===id));}
+  function spy(){
+    const ht=window.innerHeight*0.33;
+    let cur=secs[0].id;
+    secs.forEach(s=>{const el=document.getElementById(s.id);if(el&&el.getBoundingClientRect().top<=ht)cur=s.id;});
+    setActive(cur);
+  }
+  _spy=()=>{if(_raf)return;_raf=requestAnimationFrame(()=>{spy();_raf=null;});};
+  window.addEventListener('scroll',_spy,{passive:true});
+  spy();
+}
+
+/* 3 — wrap render */
+const __rnR=render;
+render=function(){__rnR();build();};
+
+/* 4 — styles */
+const _st=document.createElement('style');
+_st.textContent=
+  '.mlw{display:flex;align-items:flex-start;gap:16px}'+
+  '.mlw>.page{flex:1;min-width:0;max-width:820px}'+
+  '.sec-rail{width:148px;flex-shrink:0;position:sticky;top:32px;max-height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:2px;padding-top:2px}'+
+  '.sec-rail::-webkit-scrollbar{display:none}'+
+  '.sr-item{display:block;padding:5px 10px;border-radius:6px;border:1px solid transparent;font-size:11.5px;color:var(--dim);text-decoration:none;line-height:1.35;transition:color .15s,background .15s,border-color .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+  '.sr-item:hover{color:var(--text);background:var(--bg3)}'+
+  '.sr-item.sr-active{color:var(--accent);background:rgba(88,166,255,.10);border-color:rgba(88,166,255,.25);font-weight:600}'+
+  '@media(max-width:1060px){.sec-rail{width:116px}.sr-item{font-size:11px;padding:4px 7px}}'+
+  '@media(max-width:860px){'+
+    '.mlw{flex-direction:column;gap:0}'+
+    '.sec-rail{position:static;width:100%;max-height:none;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding:8px 0;gap:6px;border-bottom:1px solid var(--border);margin-bottom:4px}'+
+    '.sr-item{flex-shrink:0;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;overflow:visible;text-overflow:clip}'+
+    '.sr-item.sr-active{border-color:var(--accent)}'+
+  '}';
+document.head.appendChild(_st);
+
+render();
+})();
+
+/* ===== PATH PAGE — Prompt 7 / audit 2.4 ===== */
+(function(){
+
+function renderPath(){
+  const total=MODULES.length,nM=MODULES.filter(m=>modMastered(m.id)).length;
+  const pct=Math.round(100*nM/total);
+
+  /* derive next recommended action */
+  let next=null;
+  for(const b of BLOCKS){
+    let found=false;
+    for(const m of blockMods(b.id)){
+      if(!S.read[m.id]){next={type:'read',m,b};found=true;break;}
+      if(!modMastered(m.id)){next={type:'quiz',m,b};found=true;break;}
+    }
+    if(!found){
+      const ex=S.exams[b.id];
+      if(!ex||!ex.passed){next={type:'exam',b};found=true;}
+    }
+    if(found)break;
+  }
+  if(!next)next={type:'done'};
+
+  const nB=BLOCKS.filter(b=>blockMastered(b.id)).length;
+  let h=`<h2>Learning Path</h2>
+  <p class="tagline">${nM}/${total} modules mastered · ${nB}/${BLOCKS.length} blocks complete</p>
+  <div class="bar" style="height:10px;margin:4px 0 22px"><i class="${pct===100?'g':''}" style="width:${pct}%"></i></div>`;
+
+  /* next action card */
+  if(next.type==='done'){
+    h+=`<div class="card" style="border-color:var(--green);padding:14px 18px;margin-bottom:24px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:6px;font-weight:600">Complete</div>
+      <p style="margin-bottom:12px">All modules and exams finished. Keep the flashcards in rotation.</p>
+      <button class="btn green" onclick="go('cards')">Review flashcards →</button></div>`;
+  }else{
+    let msg='',btn='';
+    if(next.type==='read'){
+      msg=`Read <b>${next.m.title}</b>`;
+      btn=`<button class="btn" onclick="go('mod','${next.m.id}')">Open module →</button>`;
+    }else if(next.type==='quiz'){
+      const best=modQuizBest(next.m.id);
+      msg=`Take the <b>${next.m.title}</b> quiz${best?` — best so far: ${best}%`:''}`;
+      btn=`<button class="btn" onclick="startQuiz('${next.m.id}')">Start quiz →</button>`;
+    }else{
+      msg=`Take the <b>${next.b.name}</b> mastery exam — all modules done`;
+      btn=`<button class="btn" onclick="go('exam','${next.b.id}')">Start exam →</button>`;
+    }
+    h+=`<div class="card" style="border-color:var(--accent);padding:14px 18px;margin-bottom:24px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px;font-weight:600">Next</div>
+      <p style="margin-bottom:12px">${msg}</p>${btn}</div>`;
+  }
+
+  /* block arc */
+  for(const b of BLOCKS){
+    const mods=blockMods(b.id),nDone=mods.filter(m=>modMastered(m.id)).length;
+    const bPct=Math.round(100*nDone/mods.length),bM=blockMastered(b.id);
+    const ex=S.exams[b.id];
+    const isCur=next&&((next.m&&next.m.block===b.id)||(next.b&&next.b.id===b.id));
+
+    h+=`<div class="pblock ${bM?'pb-done':isCur?'pb-cur':''}">
+      <div class="pb-head">
+        <span class="pb-name">${b.name}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--dim)">${nDone}/${mods.length}</span>
+          ${bM?'<span class="pb-chip pb-chip-g">MASTERED</span>':isCur?'<span class="pb-chip pb-chip-a">IN PROGRESS</span>':''}
+        </span>
+      </div>
+      <div class="bar" style="margin-bottom:10px"><i class="${bPct===100?'g':''}" style="width:${bPct}%"></i></div>
+      <div class="pb-rows">`;
+
+    for(const m of mods){
+      const mM=modMastered(m.id),mR=S.read[m.id],isCurM=next&&next.m&&next.m.id===m.id;
+      const best=modQuizBest(m.id);
+      let stat='';
+      if(!mM&&mR) stat=`<span class="pb-stat pb-stat-a">${best?`quiz: ${best}%`:'quiz needed'}</span>`;
+      else if(!mM&&!mR) stat='<span class="pb-stat">not started</span>';
+      h+=`<div class="pb-row ${isCurM?'pb-row-cur':''}">
+        <span class="dot ${mM?'mastered':mR?'read':''}"></span>
+        <button class="pb-btn" onclick="go('mod','${m.id}')">${m.title}</button>
+        ${stat}
+      </div>`;
+    }
+
+    /* exam row */
+    const eP=ex&&ex.passed,eA=ex&&ex.attempts>0,allM=mods.every(m=>modMastered(m.id));
+    h+=`<div class="pb-row pb-exam">
+      <span class="dot ${eP?'mastered':''}"></span>
+      <button class="pb-btn" onclick="go('exam','${b.id}')">Mastery Exam</button>
+      <span class="pb-stat ${eP?'pb-stat-g':eA?'pb-stat-a':''}">${eP?`passed · ${ex.best}%`:eA?`best: ${ex.best}%`:allM?'ready':'pending'}</span>
+    </div>`;
+
+    h+=`</div></div>`;
+  }
+  return h;
+}
+
+/* sidebar: insert Path before Flashcards via DOM (avoids emoji string matching) */
+const __rsPath=renderSide;
+renderSide=function(){
+  __rsPath();
+  const side=document.getElementById('side');
+  const btns=side.querySelectorAll('.navbtn');
+  for(let i=0;i<btns.length;i++){
+    if((btns[i].getAttribute('onclick')||'').includes("'cards'")){
+      const b=document.createElement('button');
+      b.className='navbtn'+(route.page==='path'?' active':'');
+      b.setAttribute('onclick',"go('path')");
+      b.textContent='Path';
+      side.insertBefore(b,btns[i]);
+      break;
+    }
+  }
+};
+
+/* render: handle path route before passing to previous wrapper */
+const __rnPath=render;
+render=function(){
+  if(route.page==='path'){
+    renderSide();
+    document.getElementById('main').innerHTML=`<div class="page">${renderPath()}</div>`;
+  }else{
+    __rnPath();
+  }
+};
+
+/* styles */
+const _st=document.createElement('style');
+_st.textContent=
+  '.pblock{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;transition:border-color .2s}'+
+  '.pb-done{border-color:rgba(63,185,80,.35)}'+
+  '.pb-cur{border-color:var(--accent)}'+
+  '.pb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}'+
+  '.pb-name{font-size:15px;font-weight:600}'+
+  '.pb-chip{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:8px;border:1px solid;vertical-align:middle}'+
+  '.pb-chip-g{color:var(--green);border-color:var(--green)}'+
+  '.pb-chip-a{color:var(--accent);border-color:var(--accent)}'+
+  '.pb-rows{display:flex;flex-direction:column}'+
+  '.pb-row{display:flex;align-items:center;gap:10px;padding:4px 6px;border-radius:6px;min-height:28px}'+
+  '.pb-row-cur{background:rgba(88,166,255,.08);margin:0 -6px;padding:4px 12px}'+
+  '.pb-exam{border-top:1px solid var(--border);margin-top:4px;padding-top:8px}'+
+  '.pb-btn{flex:1;text-align:left;background:none;border:none;cursor:pointer;font-size:13.5px;color:var(--text);padding:0;line-height:1.3}'+
+  '.pb-btn:hover{color:var(--accent)}'+
+  '.pb-stat{font-size:11.5px;color:var(--dim);flex-shrink:0;white-space:nowrap}'+
+  '.pb-stat-g{color:var(--green)}'+
+  '.pb-stat-a{color:var(--amber)}';
+document.head.appendChild(_st);
+
+render();
+})();
+
+/* ===== TIME ESTIMATES — Prompt 8 / audit 2.5 ===== */
+(function(){
+
+/* seed estMin on each module object (metadata, not content) */
+var EST={
+  llm:35,prompt:30,context:30,landscape:25,
+  rag:40,embed:30,vecdb:30,memory:30,
+  agents:35,tools:30,harness:40,multi:30,
+  design:40,evals:40,halluc:35,lead:35,
+  finetune:50,aisec:45,mlops:45,dataeng:45,multimodal:40
+};
+MODULES.forEach(function(m){if(!m.estMin)m.estMin=EST[m.id]||30;});
+
+function fmtMin(min){
+  if(min<60)return '~'+min+' min';
+  var h=Math.floor(min/60),m=min%60;
+  return m?'~'+h+'h '+m+'m':'~'+h+'h';
+}
+function blockRemaining(b){
+  return blockMods(b.id).filter(function(m){return !modMastered(m.id);}).reduce(function(s,m){return s+(m.estMin||30);},0);
+}
+
+/* module page: time estimate between tagline and tabs */
+var __rmEst=renderMod;
+renderMod=function(id){
+  var h=__rmEst(id);
+  var m=MODULES.find(function(x){return x.id===id;});
+  if(m&&m.estMin){
+    var cls='est-meta'+(modMastered(id)?' est-meta-done':'');
+    h=h.replace('<div class="tabs">','<span class="'+cls+'">'+fmtMin(m.estMin)+'</span><div class="tabs">');
+  }
+  return h;
+};
+
+/* dashboard: remaining time per block card */
+var __rdEst=renderDash;
+renderDash=function(){
+  var h=__rdEst();
+  BLOCKS.forEach(function(b){
+    var rem=blockRemaining(b);
+    if(rem>0){
+      h=h.replace('<b>'+b.name+'</b>',
+        '<b>'+b.name+'</b><span class="est-block">'+fmtMin(rem)+' left</span>');
+    }
+  });
+  return h;
+};
+
+var _stE=document.createElement('style');
+_stE.textContent=
+  '.est-meta{display:block;font-size:11.5px;color:var(--dim);margin:-2px 0 12px;font-weight:400}'+
+  '.est-meta-done{color:var(--green)}'+
+  '.est-block{font-size:12px;color:var(--dim);font-weight:400;margin-left:10px;vertical-align:baseline}';
+document.head.appendChild(_stE);
+
+render();
+})();
+
+/* ===== APP SHELL — mobile topbar + slide-in drawer (audit 3.1) ===== */
+(function(){
+  const app=document.getElementById('app');
+  if(!app)return;
+  const bar=document.createElement('header');
+  bar.id='topbar';
+  bar.innerHTML='<button id="navtoggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="side">☰</button><span class="tb-title">⚡ AI Engineering Mastery Hub</span>';
+  app.parentNode.insertBefore(bar,app);
+  const scrim=document.createElement('div'); scrim.id='scrim';
+  document.body.appendChild(scrim);
+  const side=document.getElementById('side');
+  function setDrawer(open){
+    side.classList.toggle('drawer-open',open);
+    scrim.classList.toggle('show',open);
+    const t=document.getElementById('navtoggle');
+    if(t)t.setAttribute('aria-expanded',open?'true':'false');
+  }
+  bar.querySelector('#navtoggle').addEventListener('click',()=>setDrawer(!side.classList.contains('drawer-open')));
+  scrim.addEventListener('click',()=>setDrawer(false));
+  side.addEventListener('click',e=>{ if(e.target.closest('.navbtn'))setDrawer(false); });
+  window.addEventListener('keydown',e=>{ if(e.key==='Escape')setDrawer(false); });
+  const st=document.createElement('style');
+  st.textContent=
+    '#topbar{display:none}'+
+    '@media(max-width:860px){'+
+      '#topbar{display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:40;background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 14px}'+
+      '#navtoggle{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;line-height:1;padding:5px 12px;border-radius:8px;cursor:pointer}'+
+      '#topbar .tb-title{font-size:14px;font-weight:600}'+
+      '#side{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:84vw;height:auto;z-index:60;transform:translateX(-100%);transition:transform .25s ease;border-right:1px solid var(--border)}'+
+      '#side.drawer-open{transform:none}'+
+      '#scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}'+
+      '#scrim.show{opacity:1;pointer-events:auto}'+
+      '#app{flex-direction:column}#main{margin-left:0;padding:18px}'+
+    '}';
+  document.head.appendChild(st);
+})();
+
+/* ===== PROGRESS — streak, XP, level, daily goal (audit 3.2) ===== */
+(function(){
+  function ymd(d){return d.toISOString().slice(0,10);}
+  function currentStreak(){
+    const set=new Set(S.visits||[]);
+    const d=new Date();
+    if(!set.has(ymd(d)))return 0;
+    let n=0;
+    while(set.has(ymd(d))){ n++; d.setDate(d.getDate()-1); }
+    return n;
+  }
+  window.currentStreak=currentStreak;
+  /* record genuine study actions: every save() AFTER load is a user action
+     (the load-time visit save already ran with the original save). */
+  S.act=S.act||[];
+  const __save=save;
+  save=function(){ const t=today(); if(!(S.act||(S.act=[])).includes(t))S.act.push(t); __save(); };
+  function studiedToday(){ return (S.act||[]).includes(today()); }
+  const XP={read:10,quiz:25,exam:50,card:5,nailed:15,partial:8};
+  function xp(){
+    let x=0;
+    MODULES.forEach(m=>{ if(S.read[m.id])x+=XP.read; if(modQuizBest(m.id)>=PASS_QUIZ)x+=XP.quiz; });
+    BLOCKS.forEach(b=>{ if(S.exams[b.id]&&S.exams[b.id].passed)x+=XP.exam; });
+    CARDS.forEach((c,i)=>{ if(S.read[c.m]&&S.cards[i]&&S.cards[i].box>=3)x+=XP.card; });
+    Object.values(S.scen||{}).forEach(g=>{ if(g==='nailed')x+=XP.nailed; else if(g==='partial')x+=XP.partial; });
+    return x;
+  }
+  function levelInfo(){
+    const total=xp(); let lvl=1,need=120,acc=0;
+    while(total>=acc+need){ acc+=need; lvl++; need=Math.round(need*1.35); }
+    return {lvl,total,into:total-acc,need,pct:Math.round(100*(total-acc)/need)};
+  }
+  window.xpInfo=levelInfo;
+  /* sidebar: streak + level + xp track under the progress line */
+  const __rs=renderSide;
+  renderSide=function(){
+    __rs();
+    const side=document.getElementById('side');
+    const sp=side.querySelector('.sideprog');
+    if(!sp)return;
+    const li=levelInfo(), st=currentStreak();
+    const div=document.createElement('div');
+    div.className='xpbar';
+    div.innerHTML='<span class="streak" title="Day streak">🔥 '+st+'</span>'+
+      '<span class="lvl">Lv '+li.lvl+'</span>'+
+      '<div class="xptrack"><i style="width:'+li.pct+'%"></i></div>'+
+      '<span class="xptxt">'+li.into+' / '+li.need+' XP</span>';
+    sp.parentNode.insertBefore(div, sp.nextSibling);
+  };
+  /* dashboard: hero strip after the tagline */
+  const __rd=renderDash;
+  renderDash=function(){
+    let h=__rd();
+    const li=levelInfo(), st=currentStreak();
+    const goal=studiedToday()
+      ? '<span class="goalpill done">✓ Studied today</span>'
+      : '<span class="goalpill">Goal: study today</span>';
+    const hero='<div class="card herostat">'+
+      '<div class="hs-cell"><div class="hs-big">🔥 '+st+'</div><div class="hs-lbl">day streak</div></div>'+
+      '<div class="hs-cell"><div class="hs-big">Lv '+li.lvl+'</div><div class="hs-lbl">'+li.total+' XP total</div></div>'+
+      '<div class="hs-cell hs-grow"><div class="hs-lbl" style="margin-bottom:4px">'+li.into+' / '+li.need+' XP to next level</div>'+
+        '<div class="bar"><i style="width:'+li.pct+'%"></i></div>'+
+        '<div style="margin-top:8px">'+goal+'</div></div>'+
+    '</div>';
+    return h.replace('</p>','</p>'+hero);
+  };
+  const st=document.createElement('style');
+  st.textContent=
+    '.xpbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 2px 14px;font-size:11.5px;color:var(--dim)}'+
+    '.xpbar .streak{color:var(--amber);font-weight:600}'+
+    '.xpbar .lvl{color:var(--accent2);font-weight:600}'+
+    '.xpbar .xptrack{flex:1 1 60px;min-width:60px;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden}'+
+    '.xpbar .xptrack i{display:block;height:100%;background:var(--accent2);border-radius:4px;transition:width .4s}'+
+    '.xpbar .xptxt{width:100%;color:var(--dim)}'+
+    '.herostat{display:flex;gap:18px;align-items:center;flex-wrap:wrap}'+
+    '.herostat .hs-cell{min-width:80px}'+
+    '.herostat .hs-grow{flex:1 1 220px}'+
+    '.herostat .hs-big{font-size:24px;font-weight:700;color:var(--accent)}'+
+    '.herostat .hs-cell:first-child .hs-big{color:var(--amber)}'+
+    '.herostat .hs-lbl{font-size:12px;color:var(--dim)}'+
+    '.goalpill{display:inline-block;font-size:12px;padding:3px 12px;border-radius:12px;border:1px solid var(--border);color:var(--dim)}'+
+    '.goalpill.done{color:var(--green);border-color:var(--green)}';
+  document.head.appendChild(st);
+})();
+
+/* ===== CELEBRATE — confetti + toast on wins (audit 3.3) ===== */
+(function(){
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function toast(msg){
+    const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg;
+    document.body.appendChild(t);
+    requestAnimationFrame(()=>t.classList.add('show'));
+    setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },2800);
+  }
+  function confetti(){
+    if(reduce)return;
+    const box=document.createElement('div'); box.className='confetti';
+    const cols=['#58a6ff','#bc8cff','#3fb950','#d29922','#39c5cf','#f85149'];
+    for(let i=0;i<90;i++){ const p=document.createElement('i');
+      p.style.left=(Math.random()*100)+'vw';
+      p.style.background=cols[i%cols.length];
+      p.style.animationDelay=(Math.random()*0.25)+'s';
+      p.style.animationDuration=(1.6+Math.random()*1.1)+'s';
+      box.appendChild(p);
+    }
+    document.body.appendChild(box);
+    setTimeout(()=>box.remove(),3200);
+  }
+  window.celebrate=function(msg,big){ toast(msg); confetti(); if(big)setTimeout(confetti,180); };
+  const __nextQ=nextQ;
+  nextQ=function(){
+    const wasLast = Q && !Q.done && Q.i===Q.items.length-1;
+    const mode=Q&&Q.mode, id=Q&&Q.id;
+    __nextQ();
+    if(wasLast && Q && Q.done){
+      const correct=Q.items.filter(x=>x.sel===x.a).length, score=Math.round(100*correct/Q.items.length);
+      if(mode==='quiz' && score>=PASS_QUIZ) celebrate('Quiz passed — '+score+'% 🎉');
+      else if(mode==='exam' && score>=PASS_EXAM){
+        const blk=blockMastered(id);
+        celebrate(blk?'Block mastered! 🏆':'Exam passed — '+score+'%', blk);
+      }
+    }
+  };
+  const st=document.createElement('style');
+  st.textContent=
+    '.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:var(--bg2);border:1px solid var(--green);color:var(--text);padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:90;opacity:0;transition:opacity .25s,transform .25s;box-shadow:0 8px 30px rgba(0,0,0,.4);max-width:90vw;text-align:center}'+
+    '.toast.show{opacity:1;transform:translate(-50%,0)}'+
+    '.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden}'+
+    '.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;animation:conffall linear forwards}'+
+    '@keyframes conffall{0%{transform:translateY(-10px) rotate(0);opacity:1}100%{transform:translateY(105vh) rotate(720deg);opacity:.9}}'+
+    '@media(prefers-reduced-motion:reduce){.confetti{display:none}}';
+  document.head.appendChild(st);
+})();
+
+/* ===== INPUT & A11Y — quiz keyboard, flip semantics, session summary (audit 3.4) ===== */
+(function(){
+  /* quiz keyboard: A-D / 1-4 to answer, Enter to advance */
+  document.addEventListener('keydown',function(e){
+    if(route.page!=='quiz'||!Q||Q.done)return;
+    if(e.target&&/^(INPUT|TEXTAREA)$/.test(e.target.tagName))return;
+    const it=Q.items[Q.i]; if(!it)return;
+    let n=-1;
+    if(/^[1-9]$/.test(e.key)) n=+e.key-1;
+    else if(/^[a-z]$/i.test(e.key)) n=e.key.toLowerCase().charCodeAt(0)-97;
+    if(n>=0 && n<it.o.length && it.sel===null){ e.preventDefault(); pick(n); return; }
+    if((e.key==='Enter'||e.key===' ') && it.sel!==null){ e.preventDefault(); nextQ(); }
+  });
+  /* quiz: key hints + running correct count */
+  const __rq=renderQuiz;
+  renderQuiz=function(){
+    let h=__rq();
+    if(Q && !Q.done){
+      const corr=Q.items.filter((x,idx)=>idx<=Q.i && x.sel===x.a).length;
+      const hint='<div class="qhint">Keys <span class="kbd">A</span>–<span class="kbd">D</span> or <span class="kbd">1</span>–<span class="kbd">4</span> to answer · <span class="kbd">Enter</span> next · <b style="color:var(--green)">✓ '+corr+'</b> correct so far</div>';
+      h=h.replace('<div class="card" style="margin-top:14px">', hint+'<div class="card" style="margin-top:14px">');
+    }
+    return h;
+  };
+  /* flashcard flip: make the flip target a real, focusable control */
+  const __rc=renderCards;
+  renderCards=function(){
+    let h=__rc.call(this);
+    return h.replace('<div class="flipwrap','<div role="button" tabindex="0" aria-label="Flip flashcard (Space or Enter)" class="flipwrap');
+  };
+  /* flashcard session summary */
+  let _sess=null;
+  const __sc=startCards;
+  startCards=function(){ _sess={again:0,hard:0,good:0,easy:0,n:0,done:false}; __sc(); };
+  const __gc=gradeCardAt;
+  gradeCardAt=function(idx,grade){
+    const cur=F.queue[0];
+    if(_sess && cur && cur.i===idx){
+      _sess.n++; _sess[['again','hard','good','easy'][grade]]++;
+      if(F.queue.length===1)_sess.done=true;
+    }
+    __gc(idx,grade);
+  };
+  const __rc2=renderCards;
+  renderCards=function(){
+    if(_sess && _sess.done && !F.queue.length){
+      const s=_sess;
+      const tile=(n,l,c)=>'<div class="stat"><div class="big" style="color:'+c+'">'+n+'</div><div class="lbl">'+l+'</div></div>';
+      const more=dueCards().length;
+      return '<h2>Flashcards</h2><div class="card" style="border-color:var(--green);text-align:center;padding:26px">'+
+        '<div style="font-size:34px;line-height:1">✅</div>'+
+        '<b style="font-size:18px;display:block;margin-top:6px">Session complete</b>'+
+        '<p style="color:var(--dim)">Reviewed '+s.n+' card'+(s.n!==1?'s':'')+'</p>'+
+        '<div class="statgrid" style="margin:12px 0">'+
+          tile(s.again,'Again','var(--red)')+tile(s.hard,'Hard','var(--amber)')+
+          tile(s.good,'Good','var(--green)')+tile(s.easy,'Easy','#6464f0')+
+        '</div>'+
+        '<button class="btn ghost" onclick="window.__sessDone()">Done</button>'+
+        (more?'<button class="btn green" onclick="window.__sessDone(true)">Review '+more+' more</button>':'')+
+      '</div>';
+    }
+    return __rc2.call(this);
+  };
+  window.__sessDone=function(more){ _sess=null; if(more){startCards();} else {render();} };
+  const st=document.createElement('style');
+  st.textContent=
+    '.qhint{font-size:12px;color:var(--dim);margin:10px 0 2px}'+
+    '.flipwrap:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:16px}';
+  document.head.appendChild(st);
+})();
+
+/* ===== SCENARIO ANSWER BOX — commit before reveal (audit 3.5) ===== */
+(function(){
+  window.__scenNote=function(v){ if(SC.open){ S.scennote=S.scennote||{}; S.scennote[SC.open]=v; save(); } };
+  const __rsc=renderScen;
+  renderScen=function(){
+    let h=__rsc();
+    if(SC.open && !SC.revealed){
+      const val=((S.scennote||{})[SC.open]||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      const box='<textarea class="scen-note" placeholder="Write your answer here first — retrieval practice is where mastery forms…" oninput="window.__scenNote(this.value)">'+val+'</textarea>';
+      h=h.replace('<button class="btn" onclick="SC.revealed=true;render()">Reveal model answer</button>',
+        box+'<button class="btn" onclick="SC.revealed=true;render()">Reveal model answer</button>');
+    }
+    if(SC.open && SC.revealed){
+      const raw=(S.scennote||{})[SC.open]||'';
+      if(raw.trim()){
+        const safe=raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
+        h=h.replace('<div class="model-ans">','<div class="your-ans"><b>Your answer:</b><br>'+safe+'</div><div class="model-ans">');
+      }
+    }
+    return h;
+  };
+  const st=document.createElement('style');
+  st.textContent=
+    '.scen-note{display:block;width:100%;min-height:96px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;line-height:1.5;padding:12px 14px;margin:6px 0 12px;resize:vertical;font-family:inherit;outline:none}'+
+    '.scen-note:focus{border-color:var(--accent)}'+
+    '.your-ans{border-left:3px solid var(--accent);background:rgba(88,166,255,.06);padding:12px 16px;border-radius:0 8px 8px 0;margin:10px 0;font-size:14px}';
+  document.head.appendChild(st);
+})();
+
+/* ===== THEME — light/dark toggle (audit 3.6) ===== */
+(function(){
+  const TKEY='aihub_theme';
+  function apply(t){ document.documentElement.setAttribute('data-theme',t); }
+  let cur=localStorage.getItem(TKEY)||'dark'; apply(cur);
+  const __rs=renderSide;
+  renderSide=function(){
+    __rs();
+    const side=document.getElementById('side');
+    const anchor=side.querySelector('.xpbar')||side.querySelector('.sideprog');
+    if(!anchor)return;
+    const b=document.createElement('button');
+    b.className='themebtn'; b.type='button';
+    b.textContent=cur==='dark'?'☀️ Light mode':'🌙 Dark mode';
+    b.addEventListener('click',()=>{ cur=cur==='dark'?'light':'dark'; localStorage.setItem(TKEY,cur); apply(cur); render(); });
+    anchor.parentNode.insertBefore(b, anchor.nextSibling);
+  };
+  const st=document.createElement('style');
+  st.textContent=
+    ':root[data-theme="light"]{--bg:#ffffff;--bg2:#f6f8fa;--bg3:#eaeef2;--border:#d0d7de;--text:#1f2328;--dim:#5a636d;--dim2:#3d444c;--accent:#0969da;--accent2:#8250df;--green:#1a7f37;--amber:#9a6700;--red:#cf222e;--teal:#0a7ea4;}'+
+    '.themebtn{display:block;margin:2px 2px 12px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:12px;padding:5px 12px;border-radius:8px;cursor:pointer}';
+  document.head.appendChild(st);
+  render();
+})();
+
+/* ===== HASH ROUTER — deep-link, back/forward, resume (audit 3.7) ===== */
+(function(){
+  const VALID=['dash','mod','quiz','exam','cards','scen','start','gloss','path'];
+  function hashFor(r){
+    if(!r||!r.page)return '#/dash';
+    if(r.page==='mod')return '#/mod/'+r.arg+((r.tab&&r.tab!=='learn')?'/'+r.tab:'');
+    if(r.page==='exam')return '#/exam/'+r.arg;
+    return '#/'+r.page;
+  }
+  function parseHash(){
+    const raw=(location.hash||'').replace(/^#\/?/,'');
+    if(!raw)return {page:'dash',tab:'learn'};
+    const p=raw.split('/');
+    if(VALID.indexOf(p[0])===-1)return {page:'dash',tab:'learn'};
+    if(p[0]==='mod'){ if(!MODULES.some(m=>m.id===p[1]))return {page:'dash',tab:'learn'}; return {page:'mod',arg:p[1],tab:p[2]||'learn'}; }
+    if(p[0]==='exam'){ if(!BLOCKS.some(b=>b.id===p[1]))return {page:'dash',tab:'learn'}; return {page:'exam',arg:p[1],tab:'learn'}; }
+    return {page:p[0],tab:'learn'};
+  }
+  let _syncing=false;
+  function syncHash(){ const want=hashFor(route); if(location.hash!==want){ _syncing=true; location.hash=want; } }
+  const __go=go; go=function(page,arg){ __go(page,arg); syncHash(); };
+  const __goTab=goTab; goTab=function(t){ __goTab(t); syncHash(); };
+  window.addEventListener('hashchange',function(){
+    if(_syncing){ _syncing=false; return; }
+    route=parseHash(); render(); window.scrollTo(0,0);
+  });
+  /* restore on load (quiz needs an in-memory Q, so it falls back to dashboard) */
+  const init=parseHash();
+  if(init.page!=='quiz') route=init;
+  render(); syncHash();
+})();
+
+</script>
+<script>
+/* boot.js — turns the static study app into a gated product.
+   Runs AFTER the rendering engine. Responsibilities:
+   1. Cover the app immediately (no empty-state flash).
+   2. Supabase auth: magic link + Google.
+   3. Fetch content (RLS returns public + paid-if-entitled), hydrate the engine's
+      data globals, gate locked modules behind a paywall.
+   4. Sync progress to the DB instead of localStorage.
+   Reads window.APP_CONFIG (from config.js) and the engine globals (BLOCKS,
+   MODULES, QUIZ, DEEP, DEPTH, PLAIN, GLOSSARY, CARDS, SCENARIOS, S, render…),
+   which are visible across classic <script> tags. */
+(function () {
+  var cfg = window.APP_CONFIG || {};
+  var sb = null;          // supabase client
+  var ENTITLED = false;   // does the current user have access?
+  var USER = null;
+
+  // ---------- overlay ----------
+  function cover(html) {
+    var el = document.getElementById("bootcover");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "bootcover";
+      document.body.appendChild(el);
+    }
+    el.innerHTML = html || '<div class="bc-spin"></div>';
+    el.style.display = "flex";
+  }
+  function uncover() {
+    var el = document.getElementById("bootcover");
+    if (el) el.style.display = "none";
+  }
+
+  // ---------- auth screens ----------
+  function authScreen(msg) {
+    cover(
+      '<div class="bc-card">' +
+        '<div class="bc-logo">⚡ AI Engineering Mastery Hub</div>' +
+        '<p class="bc-sub">Sign in to start. New here? The same step creates your account.</p>' +
+        (msg ? '<div class="bc-msg">' + msg + "</div>" : "") +
+        '<input id="bc-email" type="email" placeholder="you@email.com" autocomplete="email">' +
+        '<button id="bc-magic" class="bc-btn">Email me a sign-in link</button>' +
+        '<div class="bc-or">or</div>' +
+        '<button id="bc-google" class="bc-btn bc-ghost">Continue with Google</button>' +
+      "</div>"
+    );
+    document.getElementById("bc-magic").onclick = function () {
+      var email = document.getElementById("bc-email").value.trim();
+      if (!email) return;
+      this.disabled = true; this.textContent = "Sending…";
+      sb.auth.signInWithOtp({
+        email: email,
+        options: { emailRedirectTo: window.location.origin + window.location.pathname },
+      }).then(function (r) {
+        authScreen(r.error ? "Error: " + r.error.message
+          : "Check your email for a sign-in link to <b>" + email + "</b>.");
+      });
+    };
+    document.getElementById("bc-google").onclick = function () {
+      sb.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin + window.location.pathname },
+      });
+    };
+  }
+
+  // ---------- content hydration ----------
+  function hydrate(rows) {
+    var byId = {};
+    rows.forEach(function (r) { byId[r.id] = r.data; });
+
+    BLOCKS = byId["meta:blocks"] || [];
+    PLAIN = byId["plain"] || {};
+    GLOSSARY = byId["glossary"] || [];
+    CARDS = byId["cards"] || [];
+    SCENARIOS = byId["scenarios"] || [];
+    QUIZ = {}; DEEP = {}; DEPTH = {}; PATTERNS = {};
+
+    // MODULES: start from the public catalog (all modules, light), then upgrade
+    // each one we actually received a full body for. Missing body => locked.
+    var catalog = byId["meta:catalog"] || [];
+    MODULES = catalog.map(function (c) {
+      var full = byId["module:" + c.id];
+      if (full && full.mod) {
+        if (full.deep) DEEP[c.id] = full.deep;
+        if (full.depth) DEPTH[c.id] = full.depth;
+        if (full.patterns) PATTERNS[c.id] = full.patterns;
+        if (byId["quiz:" + c.id]) QUIZ[c.id] = byId["quiz:" + c.id];
+        var m = full.mod;
+        if (m.estMin == null) m.estMin = c.estMin;
+        return m;
+      }
+      c.__locked = true; // catalog-only: title/tag/why for the upsell, no body
+      return c;
+    });
+  }
+
+  function isLocked(id) {
+    var m = MODULES.find(function (x) { return x.id === id; });
+    return !!(m && m.__locked);
+  }
+
+  // ---------- paywall ----------
+  function buy() {
+    cover('<div class="bc-card"><div class="bc-spin"></div><p class="bc-sub">Opening secure checkout…</p></div>');
+    sb.auth.getSession().then(function (s) {
+      var token = s.data.session && s.data.session.access_token;
+      return fetch(cfg.FUNCTIONS_BASE + "/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
+      });
+    }).then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (d.url) window.location.href = d.url;
+        else { uncover(); alert("Could not start checkout: " + (d.error || "unknown")); }
+      })
+      .catch(function (e) { uncover(); alert("Checkout error: " + e); });
+  }
+
+  window.__redeemCode = function (code) {
+    if (!code) return;
+    sb.rpc("redeem_access_code", { p_code: code.trim() }).then(function (r) {
+      var v = r.data;
+      if (v === "ok") { cover(); reloadEntitled(); }
+      else alert({
+        invalid: "That code isn't valid.",
+        expired: "That code has expired.",
+        exhausted: "That code has been fully used.",
+        not_authenticated: "Please sign in first.",
+      }[v] || ("Could not redeem: " + (r.error ? r.error.message : v)));
+    });
+  };
+  window.__buy = buy;
+
+  function paywallCard(title, blurb) {
+    return (
+      '<div class="card" style="border-color:var(--accent2)">' +
+      '<b style="color:var(--accent2)">🔒 ' + (title || "Full course") + "</b>" +
+      '<p style="color:var(--dim);margin:6px 0 12px">' + (blurb ||
+        "This is part of the full curriculum. Unlock lifetime access to all 21 modules, quizzes, flashcards, scenarios, and code patterns.") + "</p>" +
+      '<button class="btn" onclick="window.__buy()">Unlock full access</button>' +
+      '<button class="btn ghost" onclick="var c=prompt(\'Enter your access code\');if(c)window.__redeemCode(c)">I have a code</button>' +
+      "</div>"
+    );
+  }
+
+  // Wrap the engine's renderers to enforce the paywall for non-entitled users.
+  function installGates() {
+    var __rm = renderMod;
+    renderMod = function (id) {
+      if (!ENTITLED && isLocked(id)) {
+        var m = MODULES.find(function (x) { return x.id === id; }) || {};
+        return '<h2>' + (m.title || "Module") + "</h2>" +
+          '<p class="tagline">' + (m.tag || "") + "</p>" +
+          (m.why ? '<div class="card"><b>Why this matters</b><p style="margin-top:6px;color:var(--dim)">' + m.why + "</p></div>" : "") +
+          paywallCard("Unlock " + (m.title || "this module"),
+            "You're viewing the free preview. Get this module plus the full course.");
+      }
+      return __rm(id);
+    };
+    if (!ENTITLED) {
+      var __rcards = renderCards;
+      renderCards = function () {
+        if (!CARDS.length) return "<h2>Flashcards</h2>" + paywallCard("Flashcards",
+          "Spaced-repetition flashcards unlock with full access.");
+        return __rcards();
+      };
+      var __rscen = renderScen;
+      renderScen = function () {
+        if (!SCENARIOS.length) return "<h2>Scenario Challenges</h2>" + paywallCard("Scenarios",
+          "Production-judgment scenarios unlock with full access.");
+        return __rscen();
+      };
+      // upsell button in the sidebar
+      var __rs = renderSide;
+      renderSide = function () {
+        __rs();
+        var side = document.getElementById("side");
+        var b = document.createElement("button");
+        b.className = "navbtn"; b.style.cssText = "color:var(--accent2);font-weight:600";
+        b.textContent = "🔓 Unlock full access";
+        b.onclick = buy;
+        side.insertBefore(b, side.firstChild);
+      };
+    }
+  }
+
+  // ---------- progress sync (replaces localStorage) ----------
+  function installProgressSync() {
+    var saveTimer = null;
+    var __save = save;
+    save = function () {
+      __save(); // keep localStorage as an offline cache
+      if (!USER) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(function () {
+        sb.from("progress").upsert({ user_id: USER.id, state: S, updated_at: new Date().toISOString() }).then(function () {});
+      }, 800);
+    };
+  }
+
+  // ---------- session lifecycle ----------
+  function reloadEntitled() { if (USER) onAuthed(USER); }
+
+  function onAuthed(user) {
+    USER = user;
+    cover();
+    Promise.all([
+      sb.from("content").select("id,tier,data"),
+      sb.from("entitlements").select("active").maybeSingle(),
+      sb.from("progress").select("state").maybeSingle(),
+    ]).then(function (res) {
+      var content = res[0].data || [];
+      ENTITLED = !!(res[1].data && res[1].data.active);
+      hydrate(content);
+      if (res[2].data && res[2].data.state) {
+        try { S = Object.assign(S, res[2].data.state); } catch (e) {}
+      }
+      installGates();
+      installProgressSync();
+      window.__READY = true;
+      uncover();
+      // the engine's hash router already parsed the initial route from the URL
+      // into the global `route` at load; just render it now that data is ready.
+      if (!route || !route.page) route = { page: "dash", tab: "learn" };
+      render();
+    });
+  }
+
+  function start() {
+    if (!cfg.SUPABASE_URL || !window.supabase) {
+      cover('<div class="bc-card"><b>Setup needed</b><p class="bc-sub">config.js / Supabase not loaded. See docs/DEPLOY.md.</p></div>');
+      return;
+    }
+    sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    window.__sb = sb;
+    sb.auth.getSession().then(function (s) {
+      var user = s.data.session && s.data.session.user;
+      if (user) onAuthed(user);
+      else authScreen("");
+    });
+    sb.auth.onAuthStateChange(function (_e, session) {
+      var u = session && session.user;
+      if (u && (!USER || USER.id !== u.id)) onAuthed(u);
+      if (!u && USER) { USER = null; ENTITLED = false; window.__READY = false; authScreen(""); }
+    });
+  }
+
+  // cover instantly to hide the engine's empty load-time render, then boot.
+  cover();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
+
+</script>
+</body>
+</html>
