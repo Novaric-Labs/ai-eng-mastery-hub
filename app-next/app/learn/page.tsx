@@ -11,16 +11,19 @@ export const dynamic = "force-dynamic";
 export default async function LearnPage() {
   const supabase = await supabaseServer();
 
-  const [{ data: content }, { data: ent }, { data: prog }] = await Promise.all([
-    supabase.from("content").select("id,tier,data"),
-    supabase.from("entitlements").select("active").maybeSingle(),
-    supabase.from("progress").select("state").maybeSingle(),
-  ]);
+  const [{ data: { user } }, { data: content }, { data: ent }, { data: prog }] =
+    await Promise.all([
+      supabase.auth.getUser(),
+      supabase.from("content").select("id,tier,data"),
+      supabase.from("entitlements").select("active").maybeSingle(),
+      supabase.from("progress").select("state").maybeSingle(),
+    ]);
 
   return (
     <LearnApp
       content={(content ?? []) as ContentRow[]}
       entitled={!!ent?.active}
+      userId={user?.id ?? ""}
       initialProgress={(prog?.state ?? {}) as ProgressState}
     />
   );

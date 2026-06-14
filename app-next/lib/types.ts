@@ -6,7 +6,8 @@ export type ProgressState = {
   quiz?: Record<string, { best: number; attempts: number }>;
   exams?: Record<string, { best: number; passed: boolean; attempts: number }>;
   cards?: Record<number, { box: number; due: string }>;
-  scen?: Record<string, string>;
+  scen?: Record<string, "nailed" | "partial" | "missed">;
+  scennote?: Record<string, string>;
   visits?: string[];
   act?: string[];
   [k: string]: unknown;

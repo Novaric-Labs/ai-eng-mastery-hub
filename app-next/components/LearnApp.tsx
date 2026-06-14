@@ -1,106 +1,170 @@
 "use client";
 
-import { useState } from "react";
-import { supabaseBrowser } from "@/lib/supabase/client";
+import { useEffect, useMemo, useState } from "react";
+import { buildCourse } from "@/lib/course";
 import type { ContentRow, ProgressState } from "@/lib/types";
+import { type Page, type Route, type Tab } from "@/lib/store";
+import { StoreProvider, useCourseStore } from "./learn/StoreProvider";
+import Sidebar from "./learn/Sidebar";
+import Dashboard from "./learn/Dashboard";
+import ModuleView from "./learn/ModuleView";
+import Quiz from "./learn/Quiz";
+import ExamPage from "./learn/ExamPage";
+import Flashcards from "./learn/Flashcards";
+import Scenarios from "./learn/Scenarios";
+import Glossary from "./learn/Glossary";
+import LearningPath from "./learn/LearningPath";
+import StartHere from "./learn/StartHere";
+import Celebrate from "./learn/Celebrate";
 
-// P0 shell: proves the server-side gate end-to-end (entitled users receive paid
-// rows; non-entitled receive preview only), plus buy / redeem / sign-out.
-// In P1 this becomes the full ported course UI; the props it receives won't change.
+const VALID: Page[] = ["dash", "mod", "quiz", "exam", "cards", "scen", "start", "gloss", "path"];
+
 export default function LearnApp({
   content,
   entitled,
+  userId,
+  initialProgress,
 }: {
   content: ContentRow[];
   entitled: boolean;
+  userId: string;
   initialProgress: ProgressState;
 }) {
-  const supabase = supabaseBrowser();
-  const [busy, setBusy] = useState(false);
-  const paid = content.filter((c) => c.tier === "paid").length;
-  const pub = content.filter((c) => c.tier === "public").length;
+  const course = useMemo(() => buildCourse(content), [content]);
+  const init = useMemo(
+    () => ({
+      course,
+      entitled,
+      userId,
+      initialProgress,
+      initialRoute: { page: "dash", tab: "learn" } as Route,
+      theme: "dark" as const,
+    }),
+    [course, entitled, userId, initialProgress],
+  );
 
-  async function buy() {
-    setBusy(true);
-    const res = await fetch("/api/checkout", { method: "POST" });
-    const d = await res.json();
-    if (d.url) location.href = d.url;
-    else {
-      setBusy(false);
-      alert("Checkout error: " + (d.error ?? "unknown"));
+  return (
+    <StoreProvider init={init}>
+      <Shell />
+      <Celebrate />
+    </StoreProvider>
+  );
+}
+
+function hashFor(r: Route): string {
+  if (r.page === "mod") return "#/mod/" + r.arg + (r.tab && r.tab !== "learn" ? "/" + r.tab : "");
+  if (r.page === "exam") return "#/exam/" + r.arg;
+  return "#/" + r.page;
+}
+
+function Shell() {
+  const { course, route, setRoute, Q } = useCourseStore((s) => ({
+    course: s.course,
+    route: s.route,
+    setRoute: s.setRoute,
+    Q: s.Q,
+  }));
+  const [mounted, setMounted] = useState(false);
+  const [drawer, setDrawer] = useState(false);
+
+  // parse hash on mount + react to back/forward
+  useEffect(() => {
+    function parseHash(): Route | null {
+      const raw = (location.hash || "").replace(/^#\/?/, "");
+      if (!raw) return { page: "dash", tab: "learn" };
+      const p = raw.split("/");
+      if (!VALID.includes(p[0] as Page)) return { page: "dash", tab: "learn" };
+      if (p[0] === "mod") {
+        if (!course.catalog.some((m) => m.id === p[1])) return { page: "dash", tab: "learn" };
+        return { page: "mod", arg: p[1], tab: (p[2] as Tab) || "learn" };
+      }
+      if (p[0] === "exam") {
+        if (!course.blocks.some((b) => b.id === p[1])) return { page: "dash", tab: "learn" };
+        return { page: "exam", arg: p[1], tab: "learn" };
+      }
+      if (p[0] === "quiz") return null; // no in-memory run → fall back
+      return { page: p[0] as Page, tab: "learn" };
     }
+    const initRoute = parseHash();
+    if (initRoute) setRoute(initRoute);
+    setMounted(true);
+
+    function onHash() {
+      const r = parseHash();
+      if (r) {
+        setRoute(r);
+        window.scrollTo(0, 0);
+      }
+    }
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // keep the URL hash in sync with the active route. Assigning location.hash (vs
+  // replaceState) records a history entry so the browser back/forward buttons walk
+  // through in-app views; the resulting hashchange is a no-op (route already matches).
+  useEffect(() => {
+    if (!mounted) return;
+    const want = hashFor(route);
+    if (location.hash !== want) location.hash = want;
+    window.scrollTo(0, 0);
+  }, [route, mounted]);
+
+  // close the mobile drawer whenever the route changes
+  useEffect(() => setDrawer(false), [route]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setDrawer(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", paddingTop: 120 }}>
+        <div className="spinner" />
+      </div>
+    );
   }
 
-  async function redeem() {
-    const code = prompt("Enter your access code");
-    if (!code) return;
-    const { data, error } = await supabase.rpc("redeem_access_code", {
-      p_code: code.trim(),
-    });
-    if (error) return alert("Error: " + error.message);
-    if (data === "ok") location.reload();
-    else
-      alert(
-        ({
-          invalid: "That code isn't valid.",
-          expired: "That code has expired.",
-          exhausted: "That code has been fully used.",
-          not_authenticated: "Please sign in first.",
-        } as Record<string, string>)[data as string] ?? "Could not redeem.",
-      );
-  }
-
-  async function signOut() {
-    await supabase.auth.signOut();
-    location.href = "/";
+  let view: React.ReactNode;
+  switch (route.page) {
+    case "mod": view = <ModuleView id={route.arg!} />; break;
+    case "quiz": view = Q ? <Quiz /> : <Dashboard />; break;
+    case "exam": view = <ExamPage bid={route.arg!} />; break;
+    case "cards": view = <Flashcards />; break;
+    case "scen": view = <Scenarios />; break;
+    case "start": view = <StartHere />; break;
+    case "gloss": view = <Glossary />; break;
+    case "path": view = <LearningPath />; break;
+    default: view = <Dashboard />;
   }
 
   return (
-    <div style={{ maxWidth: 760, margin: "40px auto", padding: "0 20px" }}>
-      <h1 style={{ fontSize: 26 }}>Your course</h1>
-      <p style={{ color: "var(--dim)" }}>
-        Server gate received <b>{content.length}</b> content rows ({pub} public,{" "}
-        <b>{paid}</b> paid). Access:{" "}
-        <b style={{ color: entitled ? "var(--green)" : "var(--amber)" }}>
-          {entitled ? "FULL" : "PREVIEW"}
-        </b>
-        .
-      </p>
-
-      {!entitled && (
-        <div
-          style={{
-            border: "1px solid var(--accent2)",
-            borderRadius: 12,
-            padding: 18,
-            margin: "16px 0",
-          }}
+    <>
+      <header id="course-topbar">
+        <button
+          id="navtoggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-expanded={drawer}
+          aria-controls="side"
+          onClick={() => setDrawer((d) => !d)}
         >
-          <b style={{ color: "var(--accent2)" }}>🔒 Unlock full access</b>
-          <p style={{ color: "var(--dim)", margin: "6px 0 12px" }}>
-            Lifetime access to all 21 modules, quizzes, flashcards, scenarios,
-            and code patterns.
-          </p>
-          <button className="btn" disabled={busy} onClick={buy}>
-            {busy ? "Opening checkout…" : "Buy lifetime access"}
-          </button>{" "}
-          <button className="btn ghost" onClick={redeem}>
-            I have a code
-          </button>
-        </div>
-      )}
-
-      {entitled && (
-        <p style={{ color: "var(--green)" }}>
-          ✓ Full access. (P1 renders the full course UI here.)
-        </p>
-      )}
-
-      <p style={{ marginTop: 28 }}>
-        <button className="btn ghost" onClick={signOut}>
-          Sign out
+          ☰
         </button>
-      </p>
-    </div>
+        <span className="tb-title">⚡ AI Engineering Mastery Hub</span>
+      </header>
+      <div id="app">
+        <nav id="side" className={drawer ? "drawer-open" : ""}>
+          <Sidebar />
+        </nav>
+        <main id="main">{view}</main>
+      </div>
+      <div id="scrim" className={drawer ? "show" : ""} onClick={() => setDrawer(false)} />
+    </>
   );
 }
