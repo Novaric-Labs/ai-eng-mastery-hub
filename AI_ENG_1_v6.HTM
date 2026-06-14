@@ -3506,6 +3506,329 @@ if(document.createElement&&document.head){
 }
 render();
 
+/* ===== WAYFINDING RAIL — Prompt 6 / audit 2.3 ===== */
+(function(){
+const RSECS=[
+  {id:'sec-why',      label:'Why'},
+  {id:'sec-mental',   label:'Mental model'},
+  {id:'sec-mech',     label:'How it works'},
+  {id:'sec-concepts', label:'Concepts'},
+  {id:'sec-tradeoffs',label:'Tradeoffs'},
+  {id:'sec-mistakes', label:'Mistakes'},
+  {id:'sec-flags',    label:'Red flags'},
+  {id:'sec-ask',      label:'Ask'},
+  {id:'sec-artic',    label:'Articulation'},
+];
+
+/* 1 — inject anchor ids into learn-tab html */
+const __rmR=renderMod;
+renderMod=function(id){
+  let h=__rmR(id);
+  if((route.tab||'learn')==='learn'){
+    const TM='<div class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">In plain English</b>';
+    if(h.indexOf(TM)!==-1)
+      h=h.replace(TM,'<div id="sec-why" class="card" style="border-color:var(--teal)"><b style="color:var(--teal)">In plain English</b>');
+    else
+      h=h.replace('<div class="card"><b>Why this matters','<div id="sec-why" class="card"><b>Why this matters');
+    h=h
+      .replace('<div class="mental">','<div id="sec-mental" class="mental">')
+      .replace('<h3>How it actually works</h3>','<h3 id="sec-mech">How it actually works</h3>')
+      .replace('<h3>Core concepts</h3>','<h3 id="sec-concepts">Core concepts</h3>')
+      .replace('<h3>Architectural tradeoffs</h3>','<h3 id="sec-tradeoffs">Architectural tradeoffs</h3>')
+      .replace('<h3>Common mistakes</h3>','<h3 id="sec-mistakes">Common mistakes</h3>')
+      .replace('<h3>Red flags in the wild</h3>','<h3 id="sec-flags">Red flags in the wild</h3>')
+      .replace('<h3>Questions to ask your engineers</h3>','<h3 id="sec-ask">Questions to ask your engineers</h3>')
+      .replace('<h3>Say it like a staff engineer</h3>','<h3 id="sec-artic">Say it like a staff engineer</h3>');
+  }
+  return h;
+};
+
+/* 2 — cleanup state */
+let _spy=null,_raf=null;
+function teardown(){
+  if(_spy){window.removeEventListener('scroll',_spy);_spy=null;}
+  if(_raf){cancelAnimationFrame(_raf);_raf=null;}
+  const wrap=document.getElementById('mlw');
+  if(wrap){const pg=wrap.querySelector('.page');if(pg)wrap.parentNode.insertBefore(pg,wrap);wrap.remove();}
+}
+
+function build(){
+  teardown();
+  if(route.page!=='mod'||(route.tab||'learn')!=='learn')return;
+  const main=document.getElementById('main'),pg=main&&main.querySelector('.page');
+  if(!pg)return;
+  const secs=RSECS.filter(s=>!!document.getElementById(s.id));
+  if(secs.length<2)return;
+
+  /* wrap .page in layout div */
+  const wrap=document.createElement('div');
+  wrap.id='mlw';wrap.className='mlw';
+  pg.parentNode.insertBefore(wrap,pg);wrap.appendChild(pg);
+
+  /* build nav */
+  const rail=document.createElement('nav');
+  rail.id='sec-rail';rail.className='sec-rail';
+  rail.setAttribute('aria-label','Module sections');
+  secs.forEach(s=>{
+    const a=document.createElement('a');
+    a.className='sr-item';a.href='#'+s.id;a.dataset.target=s.id;a.textContent=s.label;
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const el=document.getElementById(s.id);
+      if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    rail.appendChild(a);
+  });
+  wrap.appendChild(rail);
+
+  /* scroll-spy */
+  const items=rail.querySelectorAll('.sr-item');
+  function setActive(id){items.forEach(a=>a.classList.toggle('sr-active',a.dataset.target===id));}
+  function spy(){
+    const ht=window.innerHeight*0.33;
+    let cur=secs[0].id;
+    secs.forEach(s=>{const el=document.getElementById(s.id);if(el&&el.getBoundingClientRect().top<=ht)cur=s.id;});
+    setActive(cur);
+  }
+  _spy=()=>{if(_raf)return;_raf=requestAnimationFrame(()=>{spy();_raf=null;});};
+  window.addEventListener('scroll',_spy,{passive:true});
+  spy();
+}
+
+/* 3 — wrap render */
+const __rnR=render;
+render=function(){__rnR();build();};
+
+/* 4 — styles */
+const _st=document.createElement('style');
+_st.textContent=
+  '.mlw{display:flex;align-items:flex-start;gap:16px}'+
+  '.mlw>.page{flex:1;min-width:0;max-width:820px}'+
+  '.sec-rail{width:148px;flex-shrink:0;position:sticky;top:32px;max-height:calc(100vh - 64px);overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:2px;padding-top:2px}'+
+  '.sec-rail::-webkit-scrollbar{display:none}'+
+  '.sr-item{display:block;padding:5px 10px;border-radius:6px;border:1px solid transparent;font-size:11.5px;color:var(--dim);text-decoration:none;line-height:1.35;transition:color .15s,background .15s,border-color .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'+
+  '.sr-item:hover{color:var(--text);background:var(--bg3)}'+
+  '.sr-item.sr-active{color:var(--accent);background:rgba(88,166,255,.10);border-color:rgba(88,166,255,.25);font-weight:600}'+
+  '@media(max-width:1060px){.sec-rail{width:116px}.sr-item{font-size:11px;padding:4px 7px}}'+
+  '@media(max-width:860px){'+
+    '.mlw{flex-direction:column;gap:0}'+
+    '.sec-rail{position:static;width:100%;max-height:none;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;padding:8px 0;gap:6px;border-bottom:1px solid var(--border);margin-bottom:4px}'+
+    '.sr-item{flex-shrink:0;border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;overflow:visible;text-overflow:clip}'+
+    '.sr-item.sr-active{border-color:var(--accent)}'+
+  '}';
+document.head.appendChild(_st);
+
+render();
+})();
+
+/* ===== PATH PAGE — Prompt 7 / audit 2.4 ===== */
+(function(){
+
+function renderPath(){
+  const total=MODULES.length,nM=MODULES.filter(m=>modMastered(m.id)).length;
+  const pct=Math.round(100*nM/total);
+
+  /* derive next recommended action */
+  let next=null;
+  for(const b of BLOCKS){
+    let found=false;
+    for(const m of blockMods(b.id)){
+      if(!S.read[m.id]){next={type:'read',m,b};found=true;break;}
+      if(!modMastered(m.id)){next={type:'quiz',m,b};found=true;break;}
+    }
+    if(!found){
+      const ex=S.exams[b.id];
+      if(!ex||!ex.passed){next={type:'exam',b};found=true;}
+    }
+    if(found)break;
+  }
+  if(!next)next={type:'done'};
+
+  const nB=BLOCKS.filter(b=>blockMastered(b.id)).length;
+  let h=`<h2>Learning Path</h2>
+  <p class="tagline">${nM}/${total} modules mastered · ${nB}/${BLOCKS.length} blocks complete</p>
+  <div class="bar" style="height:10px;margin:4px 0 22px"><i class="${pct===100?'g':''}" style="width:${pct}%"></i></div>`;
+
+  /* next action card */
+  if(next.type==='done'){
+    h+=`<div class="card" style="border-color:var(--green);padding:14px 18px;margin-bottom:24px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:6px;font-weight:600">Complete</div>
+      <p style="margin-bottom:12px">All modules and exams finished. Keep the flashcards in rotation.</p>
+      <button class="btn green" onclick="go('cards')">Review flashcards →</button></div>`;
+  }else{
+    let msg='',btn='';
+    if(next.type==='read'){
+      msg=`Read <b>${next.m.title}</b>`;
+      btn=`<button class="btn" onclick="go('mod','${next.m.id}')">Open module →</button>`;
+    }else if(next.type==='quiz'){
+      const best=modQuizBest(next.m.id);
+      msg=`Take the <b>${next.m.title}</b> quiz${best?` — best so far: ${best}%`:''}`;
+      btn=`<button class="btn" onclick="startQuiz('${next.m.id}')">Start quiz →</button>`;
+    }else{
+      msg=`Take the <b>${next.b.name}</b> mastery exam — all modules done`;
+      btn=`<button class="btn" onclick="go('exam','${next.b.id}')">Start exam →</button>`;
+    }
+    h+=`<div class="card" style="border-color:var(--accent);padding:14px 18px;margin-bottom:24px">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:6px;font-weight:600">Next</div>
+      <p style="margin-bottom:12px">${msg}</p>${btn}</div>`;
+  }
+
+  /* block arc */
+  for(const b of BLOCKS){
+    const mods=blockMods(b.id),nDone=mods.filter(m=>modMastered(m.id)).length;
+    const bPct=Math.round(100*nDone/mods.length),bM=blockMastered(b.id);
+    const ex=S.exams[b.id];
+    const isCur=next&&((next.m&&next.m.block===b.id)||(next.b&&next.b.id===b.id));
+
+    h+=`<div class="pblock ${bM?'pb-done':isCur?'pb-cur':''}">
+      <div class="pb-head">
+        <span class="pb-name">${b.name}</span>
+        <span style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--dim)">${nDone}/${mods.length}</span>
+          ${bM?'<span class="pb-chip pb-chip-g">MASTERED</span>':isCur?'<span class="pb-chip pb-chip-a">IN PROGRESS</span>':''}
+        </span>
+      </div>
+      <div class="bar" style="margin-bottom:10px"><i class="${bPct===100?'g':''}" style="width:${bPct}%"></i></div>
+      <div class="pb-rows">`;
+
+    for(const m of mods){
+      const mM=modMastered(m.id),mR=S.read[m.id],isCurM=next&&next.m&&next.m.id===m.id;
+      const best=modQuizBest(m.id);
+      let stat='';
+      if(!mM&&mR) stat=`<span class="pb-stat pb-stat-a">${best?`quiz: ${best}%`:'quiz needed'}</span>`;
+      else if(!mM&&!mR) stat='<span class="pb-stat">not started</span>';
+      h+=`<div class="pb-row ${isCurM?'pb-row-cur':''}">
+        <span class="dot ${mM?'mastered':mR?'read':''}"></span>
+        <button class="pb-btn" onclick="go('mod','${m.id}')">${m.title}</button>
+        ${stat}
+      </div>`;
+    }
+
+    /* exam row */
+    const eP=ex&&ex.passed,eA=ex&&ex.attempts>0,allM=mods.every(m=>modMastered(m.id));
+    h+=`<div class="pb-row pb-exam">
+      <span class="dot ${eP?'mastered':''}"></span>
+      <button class="pb-btn" onclick="go('exam','${b.id}')">Mastery Exam</button>
+      <span class="pb-stat ${eP?'pb-stat-g':eA?'pb-stat-a':''}">${eP?`passed · ${ex.best}%`:eA?`best: ${ex.best}%`:allM?'ready':'pending'}</span>
+    </div>`;
+
+    h+=`</div></div>`;
+  }
+  return h;
+}
+
+/* sidebar: insert Path before Flashcards via DOM (avoids emoji string matching) */
+const __rsPath=renderSide;
+renderSide=function(){
+  __rsPath();
+  const side=document.getElementById('side');
+  const btns=side.querySelectorAll('.navbtn');
+  for(let i=0;i<btns.length;i++){
+    if((btns[i].getAttribute('onclick')||'').includes("'cards'")){
+      const b=document.createElement('button');
+      b.className='navbtn'+(route.page==='path'?' active':'');
+      b.setAttribute('onclick',"go('path')");
+      b.textContent='Path';
+      side.insertBefore(b,btns[i]);
+      break;
+    }
+  }
+};
+
+/* render: handle path route before passing to previous wrapper */
+const __rnPath=render;
+render=function(){
+  if(route.page==='path'){
+    renderSide();
+    document.getElementById('main').innerHTML=`<div class="page">${renderPath()}</div>`;
+  }else{
+    __rnPath();
+  }
+};
+
+/* styles */
+const _st=document.createElement('style');
+_st.textContent=
+  '.pblock{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;transition:border-color .2s}'+
+  '.pb-done{border-color:rgba(63,185,80,.35)}'+
+  '.pb-cur{border-color:var(--accent)}'+
+  '.pb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}'+
+  '.pb-name{font-size:15px;font-weight:600}'+
+  '.pb-chip{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:8px;border:1px solid;vertical-align:middle}'+
+  '.pb-chip-g{color:var(--green);border-color:var(--green)}'+
+  '.pb-chip-a{color:var(--accent);border-color:var(--accent)}'+
+  '.pb-rows{display:flex;flex-direction:column}'+
+  '.pb-row{display:flex;align-items:center;gap:10px;padding:4px 6px;border-radius:6px;min-height:28px}'+
+  '.pb-row-cur{background:rgba(88,166,255,.08);margin:0 -6px;padding:4px 12px}'+
+  '.pb-exam{border-top:1px solid var(--border);margin-top:4px;padding-top:8px}'+
+  '.pb-btn{flex:1;text-align:left;background:none;border:none;cursor:pointer;font-size:13.5px;color:var(--text);padding:0;line-height:1.3}'+
+  '.pb-btn:hover{color:var(--accent)}'+
+  '.pb-stat{font-size:11.5px;color:var(--dim);flex-shrink:0;white-space:nowrap}'+
+  '.pb-stat-g{color:var(--green)}'+
+  '.pb-stat-a{color:var(--amber)}';
+document.head.appendChild(_st);
+
+render();
+})();
+
+/* ===== TIME ESTIMATES — Prompt 8 / audit 2.5 ===== */
+(function(){
+
+/* seed estMin on each module object (metadata, not content) */
+var EST={
+  llm:35,prompt:30,context:30,landscape:25,
+  rag:40,embed:30,vecdb:30,memory:30,
+  agents:35,tools:30,harness:40,multi:30,
+  design:40,evals:40,halluc:35,lead:35,
+  finetune:50,aisec:45,mlops:45,dataeng:45,multimodal:40
+};
+MODULES.forEach(function(m){if(!m.estMin)m.estMin=EST[m.id]||30;});
+
+function fmtMin(min){
+  if(min<60)return '~'+min+' min';
+  var h=Math.floor(min/60),m=min%60;
+  return m?'~'+h+'h '+m+'m':'~'+h+'h';
+}
+function blockRemaining(b){
+  return blockMods(b.id).filter(function(m){return !modMastered(m.id);}).reduce(function(s,m){return s+(m.estMin||30);},0);
+}
+
+/* module page: time estimate between tagline and tabs */
+var __rmEst=renderMod;
+renderMod=function(id){
+  var h=__rmEst(id);
+  var m=MODULES.find(function(x){return x.id===id;});
+  if(m&&m.estMin){
+    var cls='est-meta'+(modMastered(id)?' est-meta-done':'');
+    h=h.replace('<div class="tabs">','<span class="'+cls+'">'+fmtMin(m.estMin)+'</span><div class="tabs">');
+  }
+  return h;
+};
+
+/* dashboard: remaining time per block card */
+var __rdEst=renderDash;
+renderDash=function(){
+  var h=__rdEst();
+  BLOCKS.forEach(function(b){
+    var rem=blockRemaining(b);
+    if(rem>0){
+      h=h.replace('<b>'+b.name+'</b>',
+        '<b>'+b.name+'</b><span class="est-block">'+fmtMin(rem)+' left</span>');
+    }
+  });
+  return h;
+};
+
+var _stE=document.createElement('style');
+_stE.textContent=
+  '.est-meta{display:block;font-size:11.5px;color:var(--dim);margin:-2px 0 12px;font-weight:400}'+
+  '.est-meta-done{color:var(--green)}'+
+  '.est-block{font-size:12px;color:var(--dim);font-weight:400;margin-left:10px;vertical-align:baseline}';
+document.head.appendChild(_stE);
+
+render();
+})();
+
 </script>
 </body>
 </html>
