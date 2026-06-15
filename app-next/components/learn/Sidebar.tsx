@@ -18,6 +18,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
+import RedeemDialog from "./RedeemDialog";
 import { useCourseStore } from "./StoreProvider";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import {
@@ -48,15 +49,6 @@ export default function Sidebar() {
     const d = await res.json();
     if (d.url) location.href = d.url;
     else { setBusy(false); alert("Checkout error: " + (d.error ?? "unknown")); }
-  }
-  async function redeem() {
-    const code = prompt("Enter your access code");
-    if (!code) return;
-    const supabase = supabaseBrowser();
-    const { data, error } = await supabase.rpc("redeem_access_code", { p_code: code.trim() });
-    if (error) return alert("Error: " + error.message);
-    if (data === "ok") location.reload();
-    else alert("Could not redeem that code.");
   }
   async function signOut() {
     await supabaseBrowser().auth.signOut();
@@ -186,9 +178,7 @@ export default function Sidebar() {
             <button className="btn" style={{ width: "100%", justifyContent: "center" }} disabled={busy} onClick={buy}>
               {busy ? "Opening checkout…" : <><Unlock size={15} strokeWidth={1.75} /> Unlock full access</>}
             </button>
-            <button className="btn ghost" style={{ width: "100%", marginTop: 6 }} onClick={redeem}>
-              I have a code
-            </button>
+            <RedeemDialog className="btn ghost" style={{ width: "100%", marginTop: 6 }} />
           </>
         )}
         <button className="navbtn" style={{ marginTop: 6 }} onClick={signOut}>

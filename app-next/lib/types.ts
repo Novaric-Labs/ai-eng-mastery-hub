@@ -10,5 +10,6 @@ export type ProgressState = {
   scennote?: Record<string, string>;
   visits?: string[];
   act?: string[];
+  toured?: boolean;
   [k: string]: unknown;
 };

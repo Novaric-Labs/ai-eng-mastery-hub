@@ -389,6 +389,11 @@ button.blockhead:hover { color: var(--dim2); }
 .legal a { color: var(--accent); }
 .legal strong { color: var(--text); font-weight: 600; }
 
+/* modal (access-code redemption) */
+.modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadein .15s ease; }
+.modal { width: 100%; max-width: 400px; background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r-lg); padding: 22px 24px; box-shadow: var(--shadow-2); }
+.modal h3 { color: var(--text); font-size: 17px; }
+
 /* pricing card price */
 .price-row { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 2px; }
 .price-amt { font-size: 40px; font-weight: 700; letter-spacing: -.03em; color: var(--text); }
