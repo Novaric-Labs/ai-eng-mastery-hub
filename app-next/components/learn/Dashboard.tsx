@@ -68,7 +68,7 @@ export default function Dashboard() {
         Mastery = read the module + score ≥{PASS_QUIZ}% on its quiz. Block mastery adds the exam at ≥{PASS_EXAM}%.
       </p>
 
-      <div className="card herostat">
+      <div className="card herostat" data-tour="dash-hero">
         <div className="hs-cell">
           <div className="hs-big" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Flame size={22} strokeWidth={1.75} /> {streak}</div>
           <div className="hs-lbl">day streak</div>
@@ -94,7 +94,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card" data-tour="dash-overall">
         <b>Overall mastery</b>
         <div className="bar">
           <i className={pct === 100 ? "g" : ""} style={{ width: `${pct}%` }} />
@@ -130,7 +130,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <h3>Blocks</h3>
+      <h3 data-tour="dash-blocks">Blocks</h3>
       {course.blocks.map((b) => {
         const mods = blockMods(course, b.id);
         const bm = mods.filter((m) => modMastered(S, m.id)).length;

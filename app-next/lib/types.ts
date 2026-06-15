@@ -10,7 +10,8 @@ export type ProgressState = {
   scennote?: Record<string, string>;
   visits?: string[];
   act?: string[];
-  toured?: boolean;
+  toured?: boolean; // legacy single-tour flag (superseded by `tours`)
+  tours?: Record<string, boolean>; // per-area tours already shown, keyed by page id
   name?: string;
   nameAsked?: boolean;
   [k: string]: unknown;
