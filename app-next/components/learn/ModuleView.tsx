@@ -2,7 +2,7 @@
 
 import { BookOpen, Wrench, Library, Code, Lock, Zap, ArrowRight, Check } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
-import Html from "./Html";
+import HtmlRaw from "./Html";
 import Paywall from "./Paywall";
 import SectionRail from "./SectionRail";
 import {
@@ -12,6 +12,29 @@ import {
   moduleUnlocked,
 } from "@/lib/course";
 import type { Tab } from "@/lib/store";
+
+const TAB_OF: Record<string, Tab> = {
+  learn: "learn",
+  apply: "apply",
+  resources: "res",
+  patterns: "code",
+};
+
+// Turn textual "<Tab> tab" mentions in authored content into clickable buttons
+// that jump to that tab (handled by delegation in ModuleView). We wrap only the
+// tab name so the surrounding sentence is untouched.
+function linkifyTabs(html: string): string {
+  return html.replace(
+    /\b(Learn|Apply|Resources|Patterns)(?=\s+tab\b)/g,
+    (name) => `<button type="button" class="tablink" data-tab="${TAB_OF[name.toLowerCase()]}">${name}</button>`,
+  );
+}
+
+// All authored HTML in this view flows through here, so tab mentions become
+// clickable everywhere without touching each call site.
+function Html(props: React.ComponentProps<typeof HtmlRaw>) {
+  return <HtmlRaw {...props} html={linkifyTabs(props.html)} />;
+}
 
 export default function ModuleView({ id }: { id: string }) {
   const { course, S, tab, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
@@ -23,6 +46,13 @@ export default function ModuleView({ id }: { id: string }) {
     startQuiz: s.startQuiz,
     markRead: s.markRead,
   }));
+
+  // Delegated handler: a click on any linkified tab mention jumps to that tab.
+  const onContentClick = (e: React.MouseEvent) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>("button.tablink[data-tab]");
+    const t = el?.dataset.tab as Tab | undefined;
+    if (t) goTab(t);
+  };
 
   const meta = course.catalog.find((m) => m.id === id);
   if (!meta) return <div className="page"><h2>Module not found</h2></div>;
@@ -116,10 +146,11 @@ export default function ModuleView({ id }: { id: string }) {
       )}
 
       <h3 id="sec-concepts">Core concepts</h3>
-      <div className="card">
+      <div className="card concepts">
         {m.concepts.map((c, i) => (
-          <div className="term" key={i}>
-            <b>{c[0]}.</b> <Html as="span" html={c[1]} />
+          <div className="concept" key={i}>
+            <span className="concept-term">{c[0]}</span>
+            <Html as="p" className="concept-def" html={c[1]} />
           </div>
         ))}
       </div>
@@ -176,7 +207,7 @@ export default function ModuleView({ id }: { id: string }) {
       {p && (
         <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--dim)", margin: "16px 0 4px" }}>
           <Code size={15} strokeWidth={1.75} /> This module has implementation code in the{" "}
-          <b style={{ color: "var(--accent2)" }}>Patterns</b> tab — runnable patterns, load-bearing line explanations, and a debugging guide.
+          <button type="button" className="tablink" data-tab="code">Patterns</button> tab — runnable patterns, load-bearing line explanations, and a debugging guide.
         </div>
       )}
 
@@ -272,7 +303,7 @@ export default function ModuleView({ id }: { id: string }) {
     tab === "apply" ? apply : tab === "res" ? res : tab === "code" ? code : learn;
 
   const inner = (
-    <div className="page">
+    <div className="page" onClick={onContentClick}>
       {header}
       <span className={`est-meta${mastered ? " est-meta-done" : ""}`}>
         {meta.estMin ? fmtMin(meta.estMin) : ""}
