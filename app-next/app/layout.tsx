@@ -1,17 +1,37 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "AI Engineering Mastery Hub — 2026 Edition",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "AI Engineering Mastery Hub — 2026 Edition",
+    template: "%s · AI Engineering Mastery Hub",
+  },
   description:
     "A self-paced course to master production AI engineering: RAG, agents, harnesses, evals, and the judgment to ship. 21 modules, quizzes, flashcards, and real-world scenarios.",
+  applicationName: "AI Engineering Mastery Hub",
   openGraph: {
     title: "AI Engineering Mastery Hub",
     description:
       "Master production AI engineering — RAG, agents, evals, and the judgment to ship.",
     type: "website",
+    url: SITE_URL,
+    siteName: "AI Engineering Mastery Hub",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Engineering Mastery Hub",
+    description:
+      "Master production AI engineering — RAG, agents, evals, and the judgment to ship.",
   },
 };
+
+// Apply the saved theme before first paint to avoid a dark→light flash.
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('aihub_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -20,7 +40,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

@@ -1,6 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata = { title: "Pricing — AI Engineering Mastery Hub" };
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "One price, lifetime access to all 21 modules, quizzes, flashcards, scenarios, and code patterns — including updates as the field moves.",
+  alternates: { canonical: "/pricing" },
+  openGraph: {
+    title: "Pricing — AI Engineering Mastery Hub",
+    description: "One price. Lifetime access. Updates included.",
+    url: "/pricing",
+  },
+};
 
 // Pricing — Server Component (SEO). The actual price lives in Stripe; this is copy.
 export default function Pricing() {

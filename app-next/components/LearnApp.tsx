@@ -38,10 +38,28 @@ export default function LearnApp({
       userId,
       initialProgress,
       initialRoute: { page: "dash", tab: "learn" } as Route,
-      theme: "dark" as const,
+      theme:
+        typeof window !== "undefined" && localStorage.getItem("aihub_theme") === "light"
+          ? ("light" as const)
+          : ("dark" as const),
     }),
     [course, entitled, userId, initialProgress],
   );
+
+  // No catalog rows → the content table hasn't been seeded (or RLS returned
+  // nothing). Show a clear message instead of an empty, broken shell.
+  if (!course.catalog.length) {
+    return (
+      <main className="wrap" style={{ paddingTop: 96, paddingBottom: 96, maxWidth: 520, textAlign: "center" }}>
+        <div style={{ fontSize: 40 }}>📚</div>
+        <h1 style={{ fontSize: 24, margin: "10px 0 8px" }}>No course content yet</h1>
+        <p style={{ color: "var(--dim)" }}>
+          Your account is signed in, but the course catalog came back empty. If you&apos;re the
+          operator, seed the <code>content</code> table; otherwise please try again shortly.
+        </p>
+      </main>
+    );
+  }
 
   return (
     <StoreProvider init={init}>
