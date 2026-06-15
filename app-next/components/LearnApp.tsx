@@ -20,6 +20,7 @@ import StartHere from "./learn/StartHere";
 import Celebrate from "./learn/Celebrate";
 import Tour from "./learn/Tour";
 import TutorBot from "./learn/TutorBot";
+import NameModal from "./learn/NameModal";
 
 const VALID: Page[] = ["dash", "mod", "quiz", "exam", "cards", "scen", "start", "gloss", "path"];
 
@@ -190,6 +191,7 @@ function Shell() {
         <main id="main">{view}</main>
       </div>
       <div id="scrim" className={drawer ? "show" : ""} onClick={() => setDrawer(false)} />
+      <NameModal />
       <Tour />
       <TutorBot />
     </>

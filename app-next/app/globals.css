@@ -416,7 +416,7 @@ button.blockhead:hover { color: var(--dim2); }
 .driver-popover.nova-tour .driver-popover-arrow-side-bottom { border-bottom-color: var(--bg2); }
 
 /* AI tutor floating widget */
-.tutor-fab { position: fixed; right: 22px; bottom: 22px; z-index: 70; width: 52px; height: 52px; border-radius: 50%; background: var(--accent); color: #08080a; border: none; cursor: pointer; box-shadow: var(--shadow-2); display: flex; align-items: center; justify-content: center; transition: filter .15s, transform .1s; }
+.tutor-fab { position: fixed; right: 22px; bottom: 22px; z-index: 70; display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px; background: var(--accent); color: #08080a; border: none; cursor: pointer; box-shadow: var(--shadow-2); font-weight: 600; font-size: 14px; transition: filter .15s, transform .1s; }
 .tutor-fab:hover { filter: brightness(1.1); }
 .tutor-fab:active { transform: scale(.96); }
 .tutor-panel { position: fixed; right: 22px; bottom: 22px; z-index: 70; width: 380px; max-width: calc(100vw - 32px); height: 540px; max-height: calc(100vh - 44px); background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--r-lg); box-shadow: var(--shadow-2); display: flex; flex-direction: column; overflow: hidden; }

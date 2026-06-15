@@ -46,7 +46,8 @@ export default function TutorBot() {
   if (!open) {
     return (
       <button className="tutor-fab" onClick={() => setOpen(true)} aria-label="Ask the AI tutor">
-        <Sparkles size={22} strokeWidth={2} />
+        <Sparkles size={18} strokeWidth={2} />
+        <span>Ask AI Tutor</span>
       </button>
     );
   }

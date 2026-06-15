@@ -10,10 +10,11 @@ import { useCourseStore } from "./StoreProvider";
 // highlighted), plus every sidebar tool. Mobile gets a centered descriptive
 // version. Theme-aware via CSS. Skippable, runs once (persisted as S.toured).
 export default function Tour() {
-  const { toured, page, sampleId, go, goTab, markToured } = useCourseStore((s) => ({
+  const { toured, page, sampleId, nameHandled, go, goTab, markToured } = useCourseStore((s) => ({
     toured: !!s.S.toured,
     page: s.route.page,
     sampleId: s.course.modules["llm"] ? "llm" : Object.keys(s.course.modules)[0],
+    nameHandled: !!(s.S.name || s.S.nameAsked),
     go: s.go,
     goTab: s.goTab,
     markToured: s.markToured,
@@ -21,7 +22,8 @@ export default function Tour() {
   const started = useRef(false);
 
   useEffect(() => {
-    if (toured || started.current || page !== "dash") return;
+    // Wait for the name prompt to be handled so the two modals don't collide.
+    if (toured || started.current || page !== "dash" || !nameHandled) return;
     started.current = true;
     let cancelled = false;
     let poll: ReturnType<typeof setInterval> | undefined;
@@ -111,7 +113,7 @@ export default function Tour() {
       if (timer) clearTimeout(timer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toured, sampleId, go, goTab, markToured]);
+  }, [toured, sampleId, nameHandled, go, goTab, markToured]);
 
   return null;
 }

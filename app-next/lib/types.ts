@@ -11,5 +11,7 @@ export type ProgressState = {
   visits?: string[];
   act?: string[];
   toured?: boolean;
+  name?: string;
+  nameAsked?: boolean;
   [k: string]: unknown;
 };

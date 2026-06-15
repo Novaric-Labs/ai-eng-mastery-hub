@@ -111,7 +111,7 @@ export default function Scenarios() {
                     <b style={{ color: "var(--accent2)" }}>Your task:</b> <Html as="span" html={s.task} />
                   </p>
                   <p style={{ color: "var(--dim)", fontSize: 13 }}>
-                    Think it through (out loud or on paper) as if you&apos;re in the room. Then reveal.
+                    Think it through and write your answer first — then grade it to reveal the model answer and AI feedback.
                   </p>
                   {!revealed ? (
                     <>
@@ -121,8 +121,22 @@ export default function Scenarios() {
                         value={note}
                         onChange={(e) => setScenNote(s.id, e.target.value)}
                       />
-                      <button className="btn" onClick={() => setRevealed(true)}>Reveal model answer</button>
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          setRevealed(true);
+                          const a = note.trim();
+                          if (a) gradeAI(s.id, a);
+                        }}
+                      >
+                        ✨ Grade my answer &amp; reveal
+                      </button>
                       <button className="btn ghost" onClick={() => { setOpen(null); setRevealed(false); resetAi(); }}>Close</button>
+                      {!note.trim() && (
+                        <p style={{ color: "var(--faint)", fontSize: 12.5, marginTop: 6 }}>
+                          Tip: write an answer to get an AI score — or grade to just reveal the model answer.
+                        </p>
+                      )}
                     </>
                   ) : (
                     <>
@@ -135,23 +149,12 @@ export default function Scenarios() {
                           ))}
                         </div>
                       )}
-                      <div className="model-ans">
-                        <b>Model answer:</b>
-                        <br />
-                        <Html as="span" html={s.model} />
-                      </div>
-                      <p><b>Key points to have hit:</b></p>
-                      <ul className="flat">
-                        {s.pts.map((p, i) => <li key={i}><Html as="span" html={p} /></li>)}
-                      </ul>
                       {note.trim() && (
-                        <div style={{ margin: "14px 0" }}>
-                          <button className="btn" disabled={grading} onClick={() => gradeAI(s.id, note)}>
-                            {grading ? "Grading…" : "✨ Grade my answer with AI"}
-                          </button>
-                          {aiErr && <p style={{ color: "var(--amber)", marginTop: 8, fontSize: 13.5 }}>{aiErr}</p>}
+                        <div style={{ margin: "12px 0" }}>
+                          {grading && <p style={{ color: "var(--dim)" }}>✨ Grading your answer…</p>}
+                          {aiErr && <p style={{ color: "var(--amber)", fontSize: 13.5 }}>{aiErr}</p>}
                           {ai && (
-                            <div className="card" style={{ marginTop: 10, borderColor: "var(--accent2)" }}>
+                            <div className="card" style={{ borderColor: "var(--accent2)" }}>
                               <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
                                 <span style={{ fontSize: 30, fontWeight: 700, color: ai.score >= 8 ? "var(--green)" : ai.score >= 5 ? "var(--amber)" : "var(--red)" }}>
                                   {ai.score}/10
@@ -175,6 +178,15 @@ export default function Scenarios() {
                           )}
                         </div>
                       )}
+                      <div className="model-ans">
+                        <b>Model answer:</b>
+                        <br />
+                        <Html as="span" html={s.model} />
+                      </div>
+                      <p><b>Key points to have hit:</b></p>
+                      <ul className="flat">
+                        {s.pts.map((p, i) => <li key={i}><Html as="span" html={p} /></li>)}
+                      </ul>
                       <p style={{ marginTop: 10 }}><b>Self-grade:</b></p>
                       <button className="btn green" onClick={() => grade(s.id, "nailed")}>Nailed it</button>
                       <button className="btn amber" onClick={() => grade(s.id, "partial")}>Partial</button>

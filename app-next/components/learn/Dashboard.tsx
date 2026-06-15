@@ -63,7 +63,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <h2>Your Mastery Dashboard</h2>
+      <h2>{S.name ? `Welcome back, ${S.name}` : "Your Mastery Dashboard"}</h2>
       <p className="tagline">
         Mastery = read the module + score ≥{PASS_QUIZ}% on its quiz. Block mastery adds the exam at ≥{PASS_EXAM}%.
       </p>

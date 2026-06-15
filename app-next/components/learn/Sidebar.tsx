@@ -16,6 +16,7 @@ import {
   Flame,
   Unlock,
   ChevronDown,
+  Pencil,
 } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
 import RedeemDialog from "./RedeemDialog";
@@ -181,7 +182,15 @@ export default function Sidebar() {
             <RedeemDialog className="btn ghost" style={{ width: "100%", marginTop: 6 }} />
           </>
         )}
-        <button className="navbtn" style={{ marginTop: 6 }} onClick={signOut}>
+        <button
+          className="navbtn"
+          style={{ fontSize: 12.5, color: "var(--dim)" }}
+          onClick={() => window.dispatchEvent(new Event("aihub:edit-name"))}
+          title="Edit your name"
+        >
+          <Pencil size={13} strokeWidth={1.75} /> {S.name ? S.name : "Set your name"}
+        </button>
+        <button className="navbtn" style={{ marginTop: 2 }} onClick={signOut}>
           <LogOut size={16} strokeWidth={1.75} /> Sign out
         </button>
       </div>

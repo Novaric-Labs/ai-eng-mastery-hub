@@ -16,8 +16,10 @@ const SYSTEM =
   `Only answer questions about the course's subjects: ${SCOPE} ` +
   "If a question is clearly outside these AI-engineering topics (e.g. personal advice, unrelated coding, current " +
   "events, math homework), politely decline in one sentence and steer them back to the course material. " +
-  "Be concise and practical — explain like a staff engineer mentoring a colleague. Use short paragraphs or tight " +
-  "bullet points. Prefer concrete examples over fluff. Do not invent course features or claim to access their progress.";
+  "Keep answers SHORT by default: directly answer the question in 1–3 sentences (or a few tight bullets), in plain " +
+  "language. Do NOT add background, caveats, examples, or step-by-step depth unless the user explicitly asks for " +
+  "more (e.g. 'explain more', 'give an example', 'go deeper'). Answer like a staff engineer giving a colleague a " +
+  "quick, direct answer. Do not invent course features or claim to access their progress.";
 
 type Turn = { role: "user" | "assistant"; content: string };
 
@@ -51,7 +53,7 @@ export async function POST(req: Request) {
   try {
     const message = await client.messages.create({
       model: HAIKU,
-      max_tokens: 700,
+      max_tokens: 450,
       system: SYSTEM,
       messages,
     });
