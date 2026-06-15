@@ -39,7 +39,7 @@ export default function Dashboard() {
   const pct = Math.round((100 * mastered) / total);
   const weak = course.catalog
     .filter((m) => S.quiz?.[m.id] && (S.quiz[m.id].best as number) < PASS_QUIZ)
-    .map((m) => m.title);
+    .map((m) => `${m.title} (${S.quiz![m.id].best}%)`);
   const anyRead = Object.keys(S.read ?? {}).length > 0;
 
   const li = levelInfo(course, S);

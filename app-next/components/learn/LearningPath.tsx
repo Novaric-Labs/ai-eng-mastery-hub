@@ -124,12 +124,11 @@ export default function LearningPath() {
                 const isCurM = (next.type === "read" || next.type === "quiz") && next.m.id === m.id;
                 return (
                   <div className={`pb-row ${isCurM ? "pb-row-cur" : ""}`} key={m.id}>
-                    <span className={`dot ${mM ? "mastered" : mR ? "read" : ""}`} />
+                    <span className={`dot ${mM ? "mastered" : mR || best ? "read" : ""}`} />
                     <button className="pb-btn" onClick={() => go("mod", m.id)}>{m.title}</button>
-                    {!mM && mR && (
-                      <span className="pb-stat pb-stat-a">{best ? `quiz: ${best}%` : "quiz needed"}</span>
-                    )}
-                    {!mM && !mR && <span className="pb-stat">not started</span>}
+                    {!mM && best > 0 && <span className="pb-stat pb-stat-a">quiz: {best}%</span>}
+                    {!mM && !best && mR && <span className="pb-stat pb-stat-a">quiz needed</span>}
+                    {!mM && !best && !mR && <span className="pb-stat">not started</span>}
                   </div>
                 );
               })}
