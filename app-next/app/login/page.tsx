@@ -22,10 +22,16 @@ export default function LoginPage() {
   }
 
   async function google() {
-    await supabase.auth.signInWithOAuth({
+    setBusy(true);
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${location.origin}/auth/callback` },
     });
+    // On success the browser redirects to Google; we only get here on error.
+    if (error) {
+      setBusy(false);
+      setMsg(error.message);
+    }
   }
 
   return (
@@ -60,7 +66,7 @@ export default function LoginPage() {
             or
             <span style={{ flex: 1, height: 1, background: "var(--border)" }} />
           </div>
-          <button className="btn ghost" style={{ width: "100%", justifyContent: "center", margin: 0 }} onClick={google}>
+          <button className="btn ghost" style={{ width: "100%", justifyContent: "center", margin: 0 }} disabled={busy} onClick={google}>
             <GoogleMark /> Continue with Google
           </button>
         </div>
