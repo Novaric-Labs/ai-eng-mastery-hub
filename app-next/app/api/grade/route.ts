@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
+import { hasFullAccess } from "@/lib/entitlement";
 import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
 import type { Scenario } from "@/lib/course";
 
@@ -12,8 +13,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
 
-  const { data: ent } = await supabase.from("entitlements").select("active").maybeSingle();
-  if (!ent?.active) return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
+  if (!(await hasFullAccess(supabase, user)))
+    return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
 
   if (tooSoon(user.id)) return NextResponse.json({ error: "Slow down a moment and try again." }, { status: 429 });
 
