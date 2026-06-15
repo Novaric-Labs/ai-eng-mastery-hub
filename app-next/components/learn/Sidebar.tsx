@@ -112,22 +112,22 @@ export default function Sidebar() {
         {theme === "dark" ? "Light mode" : "Dark mode"}
       </button>
 
-      <button className={navP("start")} onClick={() => go("start")}><Sparkles size={16} strokeWidth={1.75} /> Start Here</button>
-      <button className={navP("gloss")} onClick={() => go("gloss")}><BookA size={16} strokeWidth={1.75} /> Glossary</button>
-      <button className={navP("dash")} onClick={() => go("dash")}><LayoutDashboard size={16} strokeWidth={1.75} /> Dashboard</button>
-      <button className={navP("path")} onClick={() => go("path")}><Route size={16} strokeWidth={1.75} /> Path</button>
-      <button className={navP("cards")} onClick={() => go("cards")}>
+      <button data-tour="start" className={navP("start")} onClick={() => go("start")}><Sparkles size={16} strokeWidth={1.75} /> Start Here</button>
+      <button data-tour="gloss" className={navP("gloss")} onClick={() => go("gloss")}><BookA size={16} strokeWidth={1.75} /> Glossary</button>
+      <button data-tour="dash" className={navP("dash")} onClick={() => go("dash")}><LayoutDashboard size={16} strokeWidth={1.75} /> Dashboard</button>
+      <button data-tour="path" className={navP("path")} onClick={() => go("path")}><Route size={16} strokeWidth={1.75} /> Path</button>
+      <button data-tour="cards" className={navP("cards")} onClick={() => go("cards")}>
         <Layers size={16} strokeWidth={1.75} /> Flashcards <span className="boxtag" style={{ display: "inline", margin: "0 0 0 auto" }}>({due} due)</span>
       </button>
-      <button className={navP("scen")} onClick={() => go("scen")}><Puzzle size={16} strokeWidth={1.75} /> Scenarios</button>
+      <button data-tour="scen" className={navP("scen")} onClick={() => go("scen")}><Puzzle size={16} strokeWidth={1.75} /> Scenarios</button>
 
-      {course.blocks.map((b) => {
+      {course.blocks.map((b, bi) => {
         const done = blockMastered(course, S, b.id);
         const bmods = blockMods(course, b.id);
         const bdone = bmods.filter((m) => modMastered(S, m.id)).length;
         const isCollapsed = collapsed.has(b.id);
         return (
-          <div key={b.id}>
+          <div key={b.id} data-tour={bi === 0 ? "modules" : undefined}>
             <button
               type="button"
               className="blockhead"
@@ -162,7 +162,7 @@ export default function Sidebar() {
                     </button>
                   );
                 })}
-                <button className={nav("exam", b.id)} onClick={() => go("exam", b.id)}>
+                <button data-tour={bi === 0 ? "exam" : undefined} className={nav("exam", b.id)} onClick={() => go("exam", b.id)}>
                   <span className={`dot ${S.exams?.[b.id]?.passed ? "mastered" : ""}`} />
                   <GraduationCap size={16} strokeWidth={1.75} /> Mastery Exam
                 </button>

@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { driver } from "driver.js";
+import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useCourseStore } from "./StoreProvider";
 
-// First-login guided tour. Runs once (persisted via S.toured), only on the
-// dashboard, after the shell has rendered. Skippable; never repeats.
+// First-login guided tour. Walks through every tool (Start Here, Dashboard, Path,
+// modules + their tabs, exams, flashcards, scenarios, glossary, progress).
+// Theme-aware via CSS (popover uses our --vars). Skippable, runs once.
 export default function Tour() {
   const { toured, page, markToured } = useCourseStore((s) => ({
     toured: !!s.S.toured,
@@ -20,60 +21,56 @@ export default function Tour() {
     started.current = true;
 
     const isMobile = window.matchMedia("(max-width: 860px)").matches;
-    const sideSteps = isMobile
-      ? []
-      : [
-          {
-            element: "#side",
-            popover: {
-              title: "Your navigation",
-              description:
-                "Start Here for orientation, then work through 21 modules across 5 blocks. Flashcards & Scenarios live here too.",
-              side: "right" as const,
-            },
-          },
-          {
-            element: ".sideprog",
-            popover: {
-              title: "Track your mastery",
-              description:
-                "A module is mastered when you read it and score ≥80% on its quiz. This bar shows overall progress.",
-              side: "right" as const,
-            },
-          },
-        ];
+
+    const welcome: DriveStep = {
+      popover: {
+        title: "Welcome to Novacademy 👋",
+        description:
+          "A 60-second tour of the tools and how to use them. Skip anytime — it won't show again.",
+      },
+    };
+    const closing: DriveStep = {
+      popover: {
+        title: "You're all set 🚀",
+        description:
+          "Have an access code? Use “I have a code” at the bottom of the sidebar to unlock everything. Then start with Block 1. Happy learning!",
+      },
+    };
+
+    let steps: DriveStep[];
+
+    if (isMobile) {
+      // Sidebar is in a slide-in drawer on mobile, so describe the tools centered.
+      steps = [
+        welcome,
+        { popover: { title: "Your menu", description: "Tap ☰ (top-left) to open navigation: Start Here, Dashboard, Path, all 21 modules by block, Flashcards, Scenarios, and the Glossary." } },
+        { popover: { title: "Inside each module", description: "Four tabs: <b>Learn</b> (concepts + how it works), <b>Apply</b> (worked example + a build exercise), <b>Resources</b> (curated links), and <b>Patterns</b> (runnable code). Read them, then take the <b>quiz</b> — score ≥80% to master the module." } },
+        { popover: { title: "Lock in each block", description: "Once a block's modules are mastered, pass its <b>Mastery Exam</b> (≥85%). Keep <b>Flashcards</b> in daily rotation, and test judgment with <b>Scenarios</b>." } },
+        closing,
+      ];
+    } else {
+      const anchored = ([
+        { element: '[data-tour="start"]', popover: { title: "Start Here", description: "New to AI engineering? A 15-minute orientation that makes everything else click.", side: "right", align: "start" } },
+        { element: '[data-tour="dash"]', popover: { title: "Dashboard", description: "Your home base — streak, XP/level, and overall mastery across the course.", side: "right", align: "start" } },
+        { element: '[data-tour="path"]', popover: { title: "Path", description: "Not sure what's next? Path always points you to the single best next action.", side: "right", align: "start" } },
+        { element: '[data-tour="modules"]', popover: { title: "Modules & their tabs", description: "21 modules across 5 blocks. Each module has <b>Learn</b> (concepts + how it works), <b>Apply</b> (worked example + build exercise), <b>Resources</b>, and <b>Patterns</b> (runnable code). Read them, then take the <b>quiz</b> — ≥80% masters it.", side: "right", align: "start" } },
+        { element: '[data-tour="exam"]', popover: { title: "Mastery Exam", description: "After a block's modules are mastered, pass its exam (≥85%) to lock the block in.", side: "right", align: "start" } },
+        { element: '[data-tour="cards"]', popover: { title: "Flashcards", description: "Spaced-repetition (Leitner) cards — a few minutes daily cements what you learn.", side: "right", align: "start" } },
+        { element: '[data-tour="scen"]', popover: { title: "Scenarios", description: "Real-world production dilemmas with model answers — this is where senior judgment forms.", side: "right", align: "start" } },
+        { element: '[data-tour="gloss"]', popover: { title: "Glossary", description: "Every term in plain English — search it anytime you hit an unfamiliar word.", side: "right", align: "start" } },
+        { element: ".sideprog", popover: { title: "Your progress", description: "Overall mastery lives here, with your streak, level, and XP just below.", side: "right", align: "start" } },
+      ] as DriveStep[]).filter((s) => !s.element || document.querySelector(s.element as string));
+
+      steps = [welcome, ...anchored, closing];
+    }
 
     const d = driver({
       showProgress: true,
+      popoverClass: "nova-tour",
       nextBtnText: "Next →",
       prevBtnText: "← Back",
       doneBtnText: "Start learning",
-      steps: [
-        {
-          popover: {
-            title: "Welcome to Novacademy 👋",
-            description:
-              "Quick 30-second tour of how the course works. You can skip anytime — it won't show again.",
-          },
-        },
-        ...sideSteps,
-        {
-          element: "#main",
-          popover: {
-            title: "Where you learn",
-            description:
-              "Each module has Learn / Apply / Resources / Patterns tabs. Read them, then take the quiz to lock in mastery.",
-            side: isMobile ? ("bottom" as const) : ("left" as const),
-          },
-        },
-        {
-          popover: {
-            title: "You're set 🚀",
-            description:
-              "Have an access code? Use “I have a code” at the bottom of the sidebar to unlock everything. Happy learning!",
-          },
-        },
-      ],
+      steps,
       onDestroyed: () => markToured(),
     });
 
