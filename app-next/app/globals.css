@@ -380,6 +380,15 @@ button.blockhead { width: 100%; background: none; border: none; cursor: pointer;
 button.blockhead:hover { color: var(--dim2); }
 .bh-chev { transition: transform .15s ease; opacity: .55; flex-shrink: 0; }
 
+/* legal / prose pages (terms, privacy, refund) */
+.legal h2 { font-size: 18px; font-weight: 600; margin: 26px 0 8px; color: var(--text); letter-spacing: -.01em; }
+.legal p, .legal li { color: var(--dim2); font-size: 15px; line-height: 1.62; }
+.legal p { margin-bottom: 12px; }
+.legal ul { margin: 0 0 12px 20px; }
+.legal li { margin-bottom: 6px; }
+.legal a { color: var(--accent); }
+.legal strong { color: var(--text); font-weight: 600; }
+
 /* pricing card price */
 .price-row { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 2px; }
 .price-amt { font-size: 40px; font-weight: 700; letter-spacing: -.03em; color: var(--text); }

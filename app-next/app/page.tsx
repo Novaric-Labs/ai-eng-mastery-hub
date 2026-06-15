@@ -96,9 +96,12 @@ export default function Home() {
         </section>
 
         <footer style={{ borderTop: "1px solid var(--border)", padding: "24px 20px", textAlign: "center", color: "var(--dim)", fontSize: 13 }}>
-          <div className="wrap" style={{ display: "flex", gap: 16, justifyContent: "center" }}>
+          <div className="wrap" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <Link href="/pricing">Pricing</Link>
             <Link href="/login">Sign in</Link>
+            <Link href="/terms">Terms</Link>
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/refund">Refund</Link>
           </div>
           <p style={{ marginTop: 10, color: "var(--faint)" }}>© 2026 Novacademy · AI Engineering Mastery Hub</p>
         </footer>

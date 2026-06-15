@@ -65,6 +65,10 @@ export default function Pricing() {
         <p style={{ color: "var(--dim)", fontSize: 13.5, marginTop: 20, textAlign: "center" }}>
           Have an access code? Sign in and enter it on the course page.
         </p>
+        <p style={{ color: "var(--faint)", fontSize: 12.5, marginTop: 10, textAlign: "center" }}>
+          14-day money-back guarantee. By purchasing you agree to our{" "}
+          <Link href="/terms">Terms</Link> and <Link href="/refund">Refund Policy</Link>.
+        </p>
       </main>
     </>
   );
