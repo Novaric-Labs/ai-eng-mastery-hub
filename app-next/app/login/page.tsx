@@ -3,17 +3,26 @@
 import { useState } from "react";
 import NovaMark from "@/components/NovaMark";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { REMEMBER_COOKIE, REMEMBER_PREF_MAX_AGE } from "@/lib/supabase/remember";
+
+// Persist the trusted-device choice before sign-in so the callback + middleware
+// know whether to make the session cookies persistent or session-scoped.
+function saveTrustedPref(trusted: boolean) {
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `${REMEMBER_COOKIE}=${trusted ? "1" : "0"}; Path=/; Max-Age=${REMEMBER_PREF_MAX_AGE}; SameSite=Lax${secure}`;
+}
 
 export default function LoginPage() {
-  const supabase = supabaseBrowser();
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  const [trusted, setTrusted] = useState(true);
 
   async function magic() {
     if (!email) return;
+    saveTrustedPref(trusted);
     setBusy(true);
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabaseBrowser().auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${location.origin}/auth/callback` },
     });
@@ -22,8 +31,9 @@ export default function LoginPage() {
   }
 
   async function google() {
+    saveTrustedPref(trusted);
     setBusy(true);
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabaseBrowser().auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${location.origin}/auth/callback` },
     });
@@ -58,6 +68,15 @@ export default function LoginPage() {
             placeholder="you@email.com"
             style={{ marginBottom: 10 }}
           />
+          <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: "var(--dim2)", margin: "2px 2px 12px", cursor: "pointer", userSelect: "none" }}>
+            <input
+              type="checkbox"
+              checked={trusted}
+              onChange={(e) => setTrusted(e.target.checked)}
+              style={{ accentColor: "var(--accent)", width: 15, height: 15, flexShrink: 0 }}
+            />
+            Trusted device — keep me signed in
+          </label>
           <button className="btn" style={{ width: "100%", justifyContent: "center", margin: 0 }} disabled={busy} onClick={magic}>
             {busy ? "Sending…" : "Email me a sign-in link"}
           </button>

@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { REMEMBER_COOKIE, isRemembered, applyRemember } from "./remember";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
@@ -17,6 +18,7 @@ export async function updateSession(request: NextRequest) {
   // Belt-and-suspenders: the auth-cookie refresh must NEVER take the whole site
   // down. Any failure here (client construction, runtime quirk, network) just
   // skips the refresh — Server Components re-check the session themselves.
+  const remember = isRemembered(request.cookies.get(REMEMBER_COOKIE)?.value);
   try {
     const supabase = createServerClient(url, anonKey, {
       cookies: {
@@ -29,7 +31,7 @@ export async function updateSession(request: NextRequest) {
           );
           response = NextResponse.next({ request });
           cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
+            response.cookies.set(name, value, applyRemember(options, remember)),
           );
         },
       },
