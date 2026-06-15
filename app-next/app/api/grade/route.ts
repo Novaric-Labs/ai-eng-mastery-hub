@@ -1,0 +1,72 @@
+import { NextResponse } from "next/server";
+import { supabaseServer } from "@/lib/supabase/server";
+import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
+import type { Scenario } from "@/lib/course";
+
+export const runtime = "nodejs";
+
+// AI grading of a scenario response: returns a 0–10 score with what the learner
+// got right and where to improve. Entitled-users-only; tight token cap.
+export async function POST(req: Request) {
+  const supabase = await supabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
+
+  const { data: ent } = await supabase.from("entitlements").select("active").maybeSingle();
+  if (!ent?.active) return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
+
+  if (tooSoon(user.id)) return NextResponse.json({ error: "Slow down a moment and try again." }, { status: 429 });
+
+  const client = anthropic();
+  if (!client) return NextResponse.json({ error: "AI grading isn't configured yet." }, { status: 503 });
+
+  const body = await req.json().catch(() => ({}));
+  const scenarioId = String(body.scenarioId ?? "");
+  const answer = String(body.answer ?? "").slice(0, 4000).trim(); // cap input
+  if (!scenarioId || !answer) return NextResponse.json({ error: "Missing scenario or answer." }, { status: 400 });
+
+  // Fetch the scenario server-side (don't trust the client for the model answer).
+  const { data: row } = await supabase.from("content").select("data").eq("id", "scenarios").maybeSingle();
+  const scenarios = (row?.data as Scenario[] | undefined) ?? [];
+  const sc = scenarios.find((s) => s.id === scenarioId);
+  if (!sc) return NextResponse.json({ error: "Scenario not found." }, { status: 404 });
+
+  const system =
+    "You are a senior AI-engineering instructor grading a learner's answer to a production scenario. " +
+    "Grade ONLY against the situation, the model answer, and the key points provided. Be fair but rigorous. " +
+    "Reply with ONLY a JSON object, no prose, no markdown fences, in exactly this shape: " +
+    '{"score": <integer 0-10>, "summary": "<one or two sentences>", "strengths": ["..."], "improvements": ["..."]}. ' +
+    "score 0-10 reflects how well the answer covers the key points and production judgment. " +
+    "strengths = what they got right (specific). improvements = what they missed or should add (specific, actionable).";
+
+  const prompt =
+    `SITUATION:\n${sc.sit}\n\nTASK:\n${sc.task}\n\n` +
+    `MODEL ANSWER:\n${sc.model}\n\nKEY POINTS THEY SHOULD HIT:\n${sc.pts.map((p) => `- ${p}`).join("\n")}\n\n` +
+    `LEARNER'S ANSWER:\n${answer}`;
+
+  try {
+    const message = await client.messages.create({
+      model: HAIKU,
+      max_tokens: 600,
+      system,
+      messages: [{ role: "user", content: prompt }],
+    });
+    const raw = textOf(message);
+    const json = raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1);
+    const parsed = JSON.parse(json) as {
+      score: number;
+      summary: string;
+      strengths: string[];
+      improvements: string[];
+    };
+    const score = Math.max(0, Math.min(10, Math.round(Number(parsed.score) || 0)));
+    return NextResponse.json({
+      score,
+      summary: String(parsed.summary ?? ""),
+      strengths: Array.isArray(parsed.strengths) ? parsed.strengths.slice(0, 6).map(String) : [],
+      improvements: Array.isArray(parsed.improvements) ? parsed.improvements.slice(0, 6).map(String) : [],
+    });
+  } catch {
+    return NextResponse.json({ error: "Couldn't grade that right now — try again." }, { status: 502 });
+  }
+}

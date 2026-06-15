@@ -19,6 +19,7 @@ import LearningPath from "./learn/LearningPath";
 import StartHere from "./learn/StartHere";
 import Celebrate from "./learn/Celebrate";
 import Tour from "./learn/Tour";
+import TutorBot from "./learn/TutorBot";
 
 const VALID: Page[] = ["dash", "mod", "quiz", "exam", "cards", "scen", "start", "gloss", "path"];
 
@@ -190,6 +191,7 @@ function Shell() {
       </div>
       <div id="scrim" className={drawer ? "show" : ""} onClick={() => setDrawer(false)} />
       <Tour />
+      <TutorBot />
     </>
   );
 }

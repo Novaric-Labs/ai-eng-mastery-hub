@@ -15,6 +15,35 @@ export default function Scenarios() {
 
   const [open, setOpen] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(false);
+  const [grading, setGrading] = useState(false);
+  const [aiErr, setAiErr] = useState<string | null>(null);
+  const [ai, setAi] = useState<{ score: number; summary: string; strengths: string[]; improvements: string[] } | null>(null);
+
+  function resetAi() {
+    setAi(null);
+    setAiErr(null);
+    setGrading(false);
+  }
+
+  async function gradeAI(id: string, answer: string) {
+    setGrading(true);
+    setAi(null);
+    setAiErr(null);
+    try {
+      const res = await fetch("/api/grade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scenarioId: id, answer }),
+      });
+      const d = await res.json();
+      if (!res.ok) setAiErr(d.error || "Couldn't grade that.");
+      else setAi(d);
+    } catch {
+      setAiErr("Network error — try again.");
+    } finally {
+      setGrading(false);
+    }
+  }
 
   if (!course.scenarios) {
     return (
@@ -30,6 +59,7 @@ export default function Scenarios() {
     setScen(id, g);
     setOpen(null);
     setRevealed(false);
+    resetAi();
   };
 
   return (
@@ -64,6 +94,7 @@ export default function Scenarios() {
                       onClick={() => {
                         setOpen(s.id);
                         setRevealed(false);
+                        resetAi();
                       }}
                     >
                       Open scenario
@@ -91,7 +122,7 @@ export default function Scenarios() {
                         onChange={(e) => setScenNote(s.id, e.target.value)}
                       />
                       <button className="btn" onClick={() => setRevealed(true)}>Reveal model answer</button>
-                      <button className="btn ghost" onClick={() => { setOpen(null); setRevealed(false); }}>Close</button>
+                      <button className="btn ghost" onClick={() => { setOpen(null); setRevealed(false); resetAi(); }}>Close</button>
                     </>
                   ) : (
                     <>
@@ -113,6 +144,37 @@ export default function Scenarios() {
                       <ul className="flat">
                         {s.pts.map((p, i) => <li key={i}><Html as="span" html={p} /></li>)}
                       </ul>
+                      {note.trim() && (
+                        <div style={{ margin: "14px 0" }}>
+                          <button className="btn" disabled={grading} onClick={() => gradeAI(s.id, note)}>
+                            {grading ? "Grading…" : "✨ Grade my answer with AI"}
+                          </button>
+                          {aiErr && <p style={{ color: "var(--amber)", marginTop: 8, fontSize: 13.5 }}>{aiErr}</p>}
+                          {ai && (
+                            <div className="card" style={{ marginTop: 10, borderColor: "var(--accent2)" }}>
+                              <div style={{ display: "flex", alignItems: "baseline", gap: 10, flexWrap: "wrap" }}>
+                                <span style={{ fontSize: 30, fontWeight: 700, color: ai.score >= 8 ? "var(--green)" : ai.score >= 5 ? "var(--amber)" : "var(--red)" }}>
+                                  {ai.score}/10
+                                </span>
+                                <span style={{ color: "var(--dim2)" }}>{ai.summary}</span>
+                              </div>
+                              {ai.strengths.length > 0 && (
+                                <>
+                                  <h4>What you got right</h4>
+                                  <ul className="flat checks">{ai.strengths.map((x, i) => <li key={i}>{x}</li>)}</ul>
+                                </>
+                              )}
+                              {ai.improvements.length > 0 && (
+                                <>
+                                  <h4>Where to improve</h4>
+                                  <ul className="flat">{ai.improvements.map((x, i) => <li key={i}>{x}</li>)}</ul>
+                                </>
+                              )}
+                              <p style={{ color: "var(--faint)", fontSize: 12, marginTop: 8 }}>AI-generated feedback — use your own judgment too.</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
                       <p style={{ marginTop: 10 }}><b>Self-grade:</b></p>
                       <button className="btn green" onClick={() => grade(s.id, "nailed")}>Nailed it</button>
                       <button className="btn amber" onClick={() => grade(s.id, "partial")}>Partial</button>
