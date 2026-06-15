@@ -9,6 +9,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/login" },
 };
 
+// The login page builds a Supabase browser client at render, which requires the
+// public env vars. Render it dynamically (per-request) instead of prerendering at
+// build time, so the build never depends on env being present. It's an interactive
+// auth page with no SEO value anyway (also noindex above).
+export const dynamic = "force-dynamic";
+
 export default function LoginLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
