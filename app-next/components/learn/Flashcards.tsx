@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Lock } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
@@ -15,11 +14,19 @@ import {
 type QItem = { c: { m: string; f: string; b: string }; i: number };
 type Sess = { again: number; hard: number; good: number; easy: number; n: number; done: boolean };
 
+// Leitner boxes 1–4. Each box reviews on a wider interval (see INTERVALS in
+// lib/course): new cards start in Box 1 and climb to Box 4 as you get them right.
+const BOX_META = [
+  { label: "New", color: "var(--red)", note: "seen daily" },
+  { label: "Learning", color: "var(--amber)", note: "~1 day apart" },
+  { label: "Familiar", color: "var(--teal)", note: "~3 days apart" },
+  { label: "Mastered", color: "var(--green)", note: "~7 days apart" },
+];
+
 export default function Flashcards() {
-  const { course, S, go, gradeCard } = useCourseStore((s) => ({
+  const { course, S, gradeCard } = useCourseStore((s) => ({
     course: s.course,
     S: s.S,
-    go: s.go,
     gradeCard: s.gradeCard,
   }));
 
@@ -135,25 +142,31 @@ export default function Flashcards() {
   const header = (
     <>
       <h2>Flashcards</h2>
-      <div style={{ marginBottom: 16 }}>
+      <div data-tour="cards-progress" style={{ marginBottom: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontSize: 13.5 }}>
-          <span style={{ fontWeight: 600 }}>Unlock progress</span>
+          <span style={{ fontWeight: 600 }}>Your deck</span>
           <span style={{ color: "var(--dim)" }}>
-            {readMods}/{totalMods} modules read · {unlocked.length} cards unlocked
-            {locked > 0 && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "var(--amber)" }}> · <Lock size={12} strokeWidth={1.75} /> {locked} locked</span>}
+            {unlocked.length} card{unlocked.length === 1 ? "" : "s"} in rotation
+            {locked > 0 && <> · {locked} more added as you progress</>}
           </span>
         </div>
         <div style={{ background: "var(--border)", borderRadius: 4, height: 6 }}>
           <div style={{ background: "var(--green)", borderRadius: 4, height: 6, width: `${pct}%`, transition: "width .3s" }} />
         </div>
       </div>
-      <div className="statgrid">
-        {boxes.map((n, b) => (
-          <div className="stat" key={b}>
-            <div className="big">{n}</div>
-            <div className="lbl">Box {b + 1}{b === 3 ? " (mastered)" : ""}</div>
-          </div>
-        ))}
+      <div className="statgrid" data-tour="cards-boxes">
+        {boxes.map((n, b) => {
+          const meta = BOX_META[b];
+          return (
+            <div className="stat" key={b} style={{ borderLeft: `3px solid ${meta.color}` }}>
+              <div className="big" style={{ color: meta.color }}>{n}</div>
+              <div className="lbl" style={{ fontWeight: 600, color: "var(--dim2)" }}>
+                Box {b + 1} · {meta.label}
+              </div>
+              <div className="lbl">{meta.note}</div>
+            </div>
+          );
+        })}
       </div>
     </>
   );
@@ -164,10 +177,11 @@ export default function Flashcards() {
         {header}
         {unlocked.length === 0 ? (
           <div className="card">
-            <b>No cards unlocked yet.</b>
+            <b>No cards in your deck yet.</b>
             <br />
             <span style={{ color: "var(--dim)" }}>
-              Mark a module as read on its Learn tab to unlock its flashcards.
+              Read a module and mark it read on its Learn tab — its flashcards are
+              added to your deck automatically.
             </span>
           </div>
         ) : due.length ? (
@@ -182,20 +196,10 @@ export default function Flashcards() {
           </div>
         )}
         {locked > 0 && (
-          <div className="card" style={{ marginTop: 12, padding: "12px 14px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 7, fontWeight: 600, marginBottom: 8 }}><Lock size={15} strokeWidth={1.75} /> Locked modules — read to unlock cards</div>
-            {course.catalog
-              .filter((m) => !S.read?.[m.id])
-              .map((m) => (
-                <button
-                  key={m.id}
-                  className="btn"
-                  style={{ margin: "3px 4px", padding: "4px 12px", fontSize: 12 }}
-                  onClick={() => go("mod", m.id)}
-                >
-                  {m.title}
-                </button>
-              ))}
+          <div className="card" style={{ marginTop: 12, padding: "12px 14px", color: "var(--dim)", fontSize: 13.5 }}>
+            <b style={{ color: "var(--text)" }}>Your deck keeps growing.</b> As you
+            progress through the course, more flashcards are added automatically —
+            and cards rotate back in periodically to keep testing your recall over time.
           </div>
         )}
       </div>

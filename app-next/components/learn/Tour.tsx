@@ -5,115 +5,283 @@ import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useCourseStore } from "./StoreProvider";
 
-// First-login guided tour. On desktop it navigates into the sample module and
-// walks the Learn/Apply/Resources/Patterns tabs live (switching each as it's
-// highlighted), plus every sidebar tool. Mobile gets a centered descriptive
-// version. Theme-aware via CSS. Skippable, runs once (persisted as S.toured).
+// Per-area guided tours. Rather than one long walkthrough on first login, each
+// major page shows its own short tour the first time the user lands on it
+// (persisted per-area in S.tours, keyed by page id). The dashboard tour runs
+// first since dash is the landing page; the rest fire as the user navigates.
+// Tours anchor to in-page content so they work on mobile too (the sidebar is
+// behind a drawer there). Theme-aware via CSS, skippable, each runs once.
+
+type TourDef = {
+  // Selector that must be in the DOM before we start (page content mounted).
+  // Omitted for tours made entirely of centered (element-less) steps.
+  anchor?: string;
+  steps: (isMobile: boolean) => DriveStep[];
+  // Optional cleanup after the tour ends (e.g. reset a module's active tab).
+  onEnd?: (goTab: (t: "learn" | "apply" | "res" | "code") => void) => void;
+};
+
+const TOURS: Record<string, TourDef> = {
+  dash: {
+    anchor: '[data-tour="dash-hero"]',
+    steps: (isMobile) => [
+      {
+        popover: {
+          title: "Welcome to Novacademy 👋",
+          description:
+            "This is your dashboard — your home base. Each area shows a quick guide the first time you open it, so you'll learn the tools as you go. Skip anytime.",
+        },
+      },
+      {
+        element: '[data-tour="dash-hero"]',
+        popover: {
+          title: "Your momentum",
+          description:
+            "Daily streak, level, and XP. Studying anything each day keeps the streak alive — small and consistent beats cramming.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="dash-overall"]',
+        popover: {
+          title: "Overall mastery",
+          description:
+            "A module counts as <b>mastered</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="dash-blocks"]',
+        popover: {
+          title: "21 modules, 5 blocks",
+          description: isMobile
+            ? "The course is grouped into 5 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
+            : "The course is grouped into 5 blocks. Hit <b>Study</b> on a block to dive in, or use the menu on the left to jump anywhere.",
+          side: "top",
+          align: "start",
+        },
+      },
+      {
+        popover: {
+          title: "You're all set 🚀",
+          description:
+            "Tip: open <b>Path</b> anytime for the single best next step. Have an access code? Use “I have a code” in the sidebar to unlock everything.",
+        },
+      },
+    ],
+  },
+
+  mod: {
+    anchor: '[data-tour="tab-learn"]',
+    onEnd: (goTab) => goTab("learn"),
+    steps: () => [
+      {
+        element: '[data-tour="tab-learn"]',
+        popover: {
+          title: "Learn tab",
+          description:
+            "The concept, the mental model, and how the topic actually works under the hood.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="tab-apply"]',
+        popover: {
+          title: "Apply tab",
+          description:
+            "A worked example, a production checklist, and a hands-on build exercise.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="tab-res"]',
+        popover: {
+          title: "Resources tab",
+          description: "Curated links, each with a note on when to reach for it.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="tab-code"]',
+        popover: {
+          title: "Patterns tab",
+          description: "Runnable code patterns plus a debugging guide (where available).",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="quiz"]',
+        popover: {
+          title: "Read it, then prove it",
+          description:
+            "When you've worked through the tabs, mark the module read and take its quiz — score ≥80% to master it.",
+          side: "top",
+          align: "start",
+        },
+      },
+    ],
+  },
+
+  cards: {
+    anchor: '[data-tour="cards-boxes"]',
+    steps: () => [
+      {
+        element: '[data-tour="cards-boxes"]',
+        popover: {
+          title: "How the boxes work",
+          description:
+            "This is a spaced-repetition system (Leitner boxes). Every card lives in one box — <b>Box 1 (New)</b> through <b>Box 4 (Mastered)</b> — and each number/colour shows how many of your cards are at that stage.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="cards-boxes"]',
+        popover: {
+          title: "Cards move as you grade them",
+          description:
+            "Grade a card <b>Good</b> and it moves up a box, so it returns less often (1 → 3 → 7 days). Miss it (<b>Again</b>) and it drops back to Box 1. The growing gap between reviews is exactly what cements recall.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        element: '[data-tour="cards-progress"]',
+        popover: {
+          title: "Your deck grows with you",
+          description:
+            "As you read more modules, their flashcards are added to your deck automatically — and cards rotate back in periodically to keep testing your recall over time.",
+          side: "bottom",
+          align: "start",
+        },
+      },
+      {
+        popover: {
+          title: "A few minutes daily",
+          description:
+            "That's all it takes. Press <span class=\"kbd\">Space</span> to flip a card, then <span class=\"kbd\">1</span>–<span class=\"kbd\">4</span> to grade how well you knew it.",
+        },
+      },
+    ],
+  },
+
+  path: {
+    steps: () => [
+      {
+        popover: {
+          title: "Your next best move",
+          description:
+            "Path always points to the single best next action — the next module to read, the quiz to take, or the exam to pass. Whenever you're not sure what's next, come here.",
+        },
+      },
+    ],
+  },
+
+  scen: {
+    steps: () => [
+      {
+        popover: {
+          title: "Scenario challenges",
+          description:
+            "Real production dilemmas. Write (or speak) your own answer <b>first</b>, then reveal the model answer and get AI feedback — retrieval practice is where senior judgment forms.",
+        },
+      },
+    ],
+  },
+
+  exam: {
+    steps: () => [
+      {
+        popover: {
+          title: "Mastery exam",
+          description:
+            "An exam samples ~20 questions from across the whole block. Master the block's modules first, then pass at ≥85% to lock the block in.",
+        },
+      },
+    ],
+  },
+
+  start: {
+    steps: () => [
+      {
+        popover: {
+          title: "Start Here",
+          description:
+            "A ~15-minute orientation that gives you the mental model the rest of the course builds on. Worth doing first if you're newer to AI engineering.",
+        },
+      },
+    ],
+  },
+};
+
 export default function Tour() {
-  const { toured, page, sampleId, nameHandled, go, goTab, markToured } = useCourseStore((s) => ({
-    toured: !!s.S.toured,
+  const { tours, page, nameHandled, goTab, markTour } = useCourseStore((s) => ({
+    tours: s.S.tours,
     page: s.route.page,
-    sampleId: s.course.modules["llm"] ? "llm" : Object.keys(s.course.modules)[0],
     nameHandled: !!(s.S.name || s.S.nameAsked),
-    go: s.go,
     goTab: s.goTab,
-    markToured: s.markToured,
+    markTour: s.markTour,
   }));
-  const started = useRef(false);
+  // Keys we've already kicked off this mount — guards against the run firing
+  // twice before persistence (and React StrictMode's double-invoked effects).
+  const started = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    // Wait for the name prompt to be handled so the two modals don't collide.
-    if (toured || started.current || page !== "dash" || !nameHandled) return;
-    started.current = true;
-    let cancelled = false;
-    let poll: ReturnType<typeof setInterval> | undefined;
-    let timer: ReturnType<typeof setTimeout> | undefined;
+    // The dashboard tour waits for the name prompt so the two modals don't collide.
+    if (page === "dash" && !nameHandled) return;
 
+    const key = page;
+    const def = TOURS[key];
+    if (!def || tours?.[key] || started.current.has(key)) return;
+
+    let cancelled = false;
     const isMobile = window.matchMedia("(max-width: 860px)").matches;
 
-    const welcome: DriveStep = {
-      popover: {
-        title: "Welcome to Novacademy 👋",
-        description: "A quick tour of the tools and how to use them. Skip anytime — it won't show again.",
-      },
-    };
-    const closing: DriveStep = {
-      popover: {
-        title: "You're all set 🚀",
-        description:
-          "Have an access code? Use “I have a code” at the bottom of the sidebar to unlock everything, then start with Block 1. Happy learning!",
-      },
-    };
-
-    function desktopSteps(): DriveStep[] {
-      const mid = [
-        { element: '[data-tour="start"]', popover: { title: "Start Here", description: "New to AI engineering? A 15-minute orientation that makes everything else click.", side: "right", align: "start" } },
-        { element: '[data-tour="dash"]', popover: { title: "Dashboard", description: "Your home base — streak, XP/level, and overall mastery across the course.", side: "right", align: "start" } },
-        { element: '[data-tour="path"]', popover: { title: "Path", description: "Not sure what's next? Path always points to the single best next action.", side: "right", align: "start" } },
-        { element: '[data-tour="modules"]', popover: { title: "21 modules, 5 blocks", description: "Each module teaches one topic in depth. Let's look inside the first one →", side: "right", align: "start" } },
-        { element: '[data-tour="tab-learn"]', onHighlightStarted: () => goTab("learn"), popover: { title: "Learn tab", description: "Concepts, the mental model, and how the topic actually works under the hood.", side: "bottom", align: "start" } },
-        { element: '[data-tour="tab-apply"]', onHighlightStarted: () => goTab("apply"), popover: { title: "Apply tab", description: "A worked example, a production checklist, and a hands-on build exercise.", side: "bottom", align: "start" } },
-        { element: '[data-tour="tab-res"]', onHighlightStarted: () => goTab("res"), popover: { title: "Resources tab", description: "Curated links, each with a note on when to reach for it.", side: "bottom", align: "start" } },
-        { element: '[data-tour="tab-code"]', onHighlightStarted: () => goTab("code"), popover: { title: "Patterns tab", description: "Runnable code patterns plus a debugging guide for the topic.", side: "bottom", align: "start" } },
-        { element: '[data-tour="quiz"]', onHighlightStarted: () => goTab("learn"), popover: { title: "Take the quiz", description: "Once you've read the module, take its quiz — score ≥80% to master it.", side: "top", align: "start" } },
-        { element: '[data-tour="exam"]', popover: { title: "Mastery Exam", description: "After a block's modules are mastered, pass its exam (≥85%) to lock the block in.", side: "right", align: "start" } },
-        { element: '[data-tour="cards"]', popover: { title: "Flashcards", description: "Spaced-repetition cards — a few minutes daily cements what you learn.", side: "right", align: "start" } },
-        { element: '[data-tour="scen"]', popover: { title: "Scenarios", description: "Real production dilemmas with model answers — where senior judgment forms.", side: "right", align: "start" } },
-        { element: '[data-tour="gloss"]', popover: { title: "Glossary", description: "Every term in plain English — search it anytime.", side: "right", align: "start" } },
-        { element: ".sideprog", popover: { title: "Your progress", description: "Overall mastery, streak, level, and XP live here.", side: "right", align: "start" } },
-      ] as DriveStep[];
-      return [welcome, ...mid.filter((s) => !s.element || document.querySelector(s.element as string)), closing];
-    }
-
-    function mobileSteps(): DriveStep[] {
-      return [
-        welcome,
-        { popover: { title: "Your menu", description: "Tap ☰ (top-left) for navigation: Start Here, Dashboard, Path, all 21 modules by block, Flashcards, Scenarios, and the Glossary." } },
-        { popover: { title: "Inside each module", description: "Four tabs — <b>Learn</b> (concepts + how it works), <b>Apply</b> (worked example + build exercise), <b>Resources</b> (curated links), and <b>Patterns</b> (runnable code). Read them, then take the <b>quiz</b> (≥80% to master)." } },
-        { popover: { title: "Lock in each block", description: "Master a block's modules, then pass its <b>Mastery Exam</b> (≥85%). Keep <b>Flashcards</b> in daily rotation and test judgment with <b>Scenarios</b>." } },
-        closing,
-      ];
-    }
-
     function begin() {
-      if (cancelled) return;
+      if (cancelled || started.current.has(key)) return;
+      const steps = def.steps(isMobile).filter(
+        (s) => !s.element || document.querySelector(s.element as string),
+      );
+      // No anchored steps in the DOM yet (e.g. a locked module with no tabs) —
+      // don't mark it seen; let it run next time the page mounts properly.
+      if (!steps.length) return;
+      started.current.add(key);
       const d = driver({
-        showProgress: true,
+        showProgress: steps.length > 1,
         popoverClass: "nova-tour",
         nextBtnText: "Next →",
         prevBtnText: "← Back",
-        doneBtnText: "Start learning",
-        steps: isMobile ? mobileSteps() : desktopSteps(),
+        doneBtnText: "Got it",
+        steps,
         onDestroyed: () => {
-          goTab("learn");
-          markToured();
+          def.onEnd?.(goTab);
+          markTour(key);
         },
       });
       d.drive();
     }
 
-    if (!isMobile && sampleId) {
-      // Open the sample module so its tabs are in the DOM, then start once ready.
-      go("mod", sampleId);
-      let tries = 0;
-      poll = setInterval(() => {
-        if (cancelled) return clearInterval(poll);
-        if (document.querySelector('[data-tour="tab-learn"]') || ++tries > 40) {
-          clearInterval(poll);
-          begin();
-        }
-      }, 100);
-    } else {
-      timer = setTimeout(begin, 300);
-    }
+    // Wait for the page's anchor to mount, then start.
+    let tries = 0;
+    const poll = setInterval(() => {
+      if (cancelled) return clearInterval(poll);
+      if (!def.anchor || document.querySelector(def.anchor) || ++tries > 40) {
+        clearInterval(poll);
+        begin();
+      }
+    }, 80);
 
     return () => {
       cancelled = true;
-      if (poll) clearInterval(poll);
-      if (timer) clearTimeout(timer);
+      clearInterval(poll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [toured, sampleId, nameHandled, go, goTab, markToured]);
+  }, [page, tours, nameHandled, goTab, markTour]);
 
   return null;
 }
