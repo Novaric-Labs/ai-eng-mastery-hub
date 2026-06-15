@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
+import { hasFullAccess } from "@/lib/entitlement";
 import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
 
 export const runtime = "nodejs";
@@ -29,8 +30,8 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
 
-  const { data: ent } = await supabase.from("entitlements").select("active").maybeSingle();
-  if (!ent?.active) return NextResponse.json({ error: "The tutor is part of the full course." }, { status: 403 });
+  if (!(await hasFullAccess(supabase, user)))
+    return NextResponse.json({ error: "The tutor is part of the full course." }, { status: 403 });
 
   if (tooSoon(user.id)) return NextResponse.json({ error: "One moment — try again in a sec." }, { status: 429 });
 
