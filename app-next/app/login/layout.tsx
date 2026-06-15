@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { supabaseServer } from "@/lib/supabase/server";
 
 // login/page.tsx is a Client Component and can't export metadata itself, so the
 // title + noindex live here. The sign-in page has no SEO value.
@@ -15,6 +17,12 @@ export const metadata: Metadata = {
 // auth page with no SEO value anyway (also noindex above).
 export const dynamic = "force-dynamic";
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+export default async function LoginLayout({ children }: { children: React.ReactNode }) {
+  // Already signed in (a remembered session is still valid)? Skip the form and
+  // go straight to the course — no need to request another sign-in link.
+  const supabase = await supabaseServer();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) redirect("/learn");
+
   return <>{children}</>;
 }
