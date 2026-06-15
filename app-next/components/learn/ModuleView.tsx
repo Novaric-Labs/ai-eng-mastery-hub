@@ -71,6 +71,7 @@ export default function ModuleView({ id }: { id: string }) {
 
   const tabBtn = (t: Tab, label: React.ReactNode, disabled = false) => (
     <button
+      data-tour={`tab-${t}`}
       className={`tab${tab === t ? " active" : ""}`}
       onClick={() => !disabled && goTab(t)}
       disabled={disabled}
@@ -293,7 +294,7 @@ export default function ModuleView({ id }: { id: string }) {
         ) : (
           <button className="btn green" onClick={() => markRead(id)}>Mark as read</button>
         )}
-        <button className="btn" onClick={() => startQuiz(id)}>
+        <button data-tour="quiz" className="btn" onClick={() => startQuiz(id)}>
           Take quiz {best ? `(best: ${best}%)` : ""}
         </button>
         {next && (
