@@ -129,26 +129,13 @@ const TOURS: Record<string, TourDef> = {
   },
 
   cards: {
-    anchor: '[data-tour="cards-boxes"]',
+    anchor: '[data-tour="cards-progress"]',
     steps: () => [
       {
-        element: '[data-tour="cards-boxes"]',
         popover: {
-          title: "How the boxes work",
+          title: "How flashcards work",
           description:
-            "This is a spaced-repetition system (Leitner boxes). Every card lives in one box — <b>Box 1 (New)</b> through <b>Box 4 (Mastered)</b> — and each number/colour shows how many of your cards are at that stage.",
-          side: "bottom",
-          align: "start",
-        },
-      },
-      {
-        element: '[data-tour="cards-boxes"]',
-        popover: {
-          title: "Cards move as you grade them",
-          description:
-            "Grade a card <b>Good</b> and it moves up a box, so it returns less often (1 → 3 → 7 days). Miss it (<b>Again</b>) and it drops back to Box 1. The growing gap between reviews is exactly what cements recall.",
-          side: "bottom",
-          align: "start",
+            "Flip each card, then say whether you <b>knew it</b> or <b>didn't</b> — that's the only call you make. Cards you know come back less often; ones you miss come back soon. The spacing schedule runs automatically in the background.",
         },
       },
       {
@@ -165,7 +152,7 @@ const TOURS: Record<string, TourDef> = {
         popover: {
           title: "A few minutes daily",
           description:
-            "That's all it takes. Press <span class=\"kbd\">Space</span> to flip a card, then <span class=\"kbd\">1</span>–<span class=\"kbd\">4</span> to grade how well you knew it.",
+            "That's all it takes. Press <span class=\"kbd\">Space</span> to flip, then <span class=\"kbd\">1</span> (didn't know) or <span class=\"kbd\">2</span> (knew it).",
         },
       },
     ],
