@@ -10,23 +10,23 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "AI Engineering Mastery Hub — 2026 Edition",
-    template: "%s · AI Engineering Mastery Hub",
+    default: "Novacademy — AI Engineering Mastery Hub (2026 Edition)",
+    template: "%s · Novacademy",
   },
   description:
-    "A self-paced course to master production AI engineering: RAG, agents, harnesses, evals, and the judgment to ship. 21 modules, quizzes, flashcards, and real-world scenarios.",
-  applicationName: "AI Engineering Mastery Hub",
+    "Novacademy's self-paced course to master production AI engineering: RAG, agents, harnesses, evals, and the judgment to ship. 21 modules, quizzes, flashcards, and real-world scenarios.",
+  applicationName: "Novacademy",
   openGraph: {
-    title: "AI Engineering Mastery Hub",
+    title: "Novacademy — AI Engineering Mastery Hub",
     description:
       "Master production AI engineering — RAG, agents, evals, and the judgment to ship.",
     type: "website",
     url: SITE_URL,
-    siteName: "AI Engineering Mastery Hub",
+    siteName: "Novacademy",
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Engineering Mastery Hub",
+    title: "Novacademy — AI Engineering Mastery Hub",
     description:
       "Master production AI engineering — RAG, agents, evals, and the judgment to ship.",
   },

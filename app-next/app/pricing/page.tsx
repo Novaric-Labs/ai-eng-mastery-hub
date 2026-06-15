@@ -34,6 +34,15 @@ export default function Pricing() {
             <b style={{ fontSize: 16 }}>Full access</b>
             <span className="pill" style={{ color: "var(--accent)", borderColor: "rgba(91,140,255,.4)" }}>Lifetime</span>
           </div>
+          <div style={{ margin: "10px 0 16px" }}>
+            <div className="price-row">
+              <span className="price-amt">$149</span>
+              <span style={{ textDecoration: "line-through", color: "var(--faint)", fontSize: 20, fontWeight: 600 }}>$199</span>
+              <span className="pill" style={{ color: "var(--accent)", borderColor: "rgba(91,140,255,.4)", alignSelf: "center" }}>Launch price</span>
+            </div>
+            <div className="price-unit">one-time · lifetime access</div>
+            <p className="price-note">Updates included · promo codes honored at checkout</p>
+          </div>
           <ul className="checklist">
             {[
               "All 21 modules across 5 blocks",

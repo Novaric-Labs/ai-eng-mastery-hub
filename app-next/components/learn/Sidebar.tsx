@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import {
-  Zap,
   Sparkles,
   BookA,
   LayoutDashboard,
@@ -16,7 +15,9 @@ import {
   LogOut,
   Flame,
   Unlock,
+  ChevronDown,
 } from "lucide-react";
+import NovaMark from "@/components/NovaMark";
 import { useCourseStore } from "./StoreProvider";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import {
@@ -74,19 +75,33 @@ export default function Sidebar() {
   const navP = (page: typeof route.page) =>
     `navbtn${route.page === page ? " active" : ""}`;
 
+  // Collapsible sidebar blocks (default expanded; collapse state is per-session).
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const toggleBlock = (id: string) =>
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+
   return (
     <>
-      <h1>
-        <Zap size={17} strokeWidth={1.75} fill="currentColor" />
-        AI Engineering Mastery Hub
+      <h1 className="brand">
+        <NovaMark size={19} className="brand-mark" />
+        <span className="brand-word">Novacademy</span>
       </h1>
-      <div className="sub">2026 Edition · updated June 2026</div>
+      <div className="sub">AI Engineering · 2026 Edition</div>
 
       <div className="sideprog">
-        <div className="bar">
-          <i className={mDone === mTot ? "g" : ""} style={{ width: `${(100 * mDone) / mTot}%` }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div className="bar" style={{ flex: 1, margin: 0 }}>
+            <i className={mDone === mTot ? "g" : ""} style={{ width: `${Math.round((100 * mDone) / mTot)}%` }} />
+          </div>
+          <span style={{ fontWeight: 600, color: mDone === mTot ? "var(--green)" : "var(--dim2)", fontVariantNumeric: "tabular-nums" }}>
+            {Math.round((100 * mDone) / mTot)}%
+          </span>
         </div>
-        {mDone}/{mTot} modules mastered
+        <div style={{ marginTop: 4 }}>{mDone}/{mTot} modules mastered</div>
       </div>
 
       <div className="xpbar">
@@ -116,29 +131,51 @@ export default function Sidebar() {
 
       {course.blocks.map((b) => {
         const done = blockMastered(course, S, b.id);
+        const bmods = blockMods(course, b.id);
+        const bdone = bmods.filter((m) => modMastered(S, m.id)).length;
+        const isCollapsed = collapsed.has(b.id);
         return (
           <div key={b.id}>
-            <div className="blockhead">
-              {b.name}
-              <span className={`bm ${done ? "done" : ""}`}>{done ? "MASTERED" : ""}</span>
-            </div>
-            {blockMods(course, b.id).map((m) => {
-              const dot = modMastered(S, m.id) ? "mastered" : S.read?.[m.id] ? "read" : "";
-              const locked = !moduleUnlocked(course, m.id);
-              return (
-                <button key={m.id} className={nav("mod", m.id)} onClick={() => go("mod", m.id)}>
-                  <span className={`dot ${dot}`} />
-                  {m.title}
-                  {m.isNew && <span className="pill new" style={{ marginLeft: 6 }}>NEW</span>}
-                  {m.isUpd && <span className="pill upd" style={{ marginLeft: 6 }}>2026</span>}
-                  {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", opacity: 0.6 }} />}
-                </button>
-              );
-            })}
-            <button className={nav("exam", b.id)} onClick={() => go("exam", b.id)}>
-              <span className={`dot ${S.exams?.[b.id]?.passed ? "mastered" : ""}`} />
-              <GraduationCap size={16} strokeWidth={1.75} /> Mastery Exam
+            <button
+              type="button"
+              className="blockhead"
+              aria-expanded={!isCollapsed}
+              onClick={() => toggleBlock(b.id)}
+            >
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+                <ChevronDown
+                  size={13}
+                  strokeWidth={2.25}
+                  className="bh-chev"
+                  style={{ transform: isCollapsed ? "rotate(-90deg)" : "none" }}
+                />
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{b.name}</span>
+              </span>
+              <span className={`bm ${done ? "done" : ""}`} title={done ? "Block mastered" : `${bdone} of ${bmods.length} modules mastered`}>
+                {done ? "MASTERED" : `${bdone}/${bmods.length}`}
+              </span>
             </button>
+            {!isCollapsed && (
+              <>
+                {blockMods(course, b.id).map((m) => {
+                  const dot = modMastered(S, m.id) ? "mastered" : S.read?.[m.id] ? "read" : "";
+                  const locked = !moduleUnlocked(course, m.id);
+                  return (
+                    <button key={m.id} className={nav("mod", m.id)} onClick={() => go("mod", m.id)}>
+                      <span className={`dot ${dot}`} />
+                      {m.title}
+                      {m.isNew && <span className="pill new" style={{ marginLeft: 6 }}>NEW</span>}
+                      {m.isUpd && <span className="pill upd" style={{ marginLeft: 6 }}>2026</span>}
+                      {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", opacity: 0.6 }} />}
+                    </button>
+                  );
+                })}
+                <button className={nav("exam", b.id)} onClick={() => go("exam", b.id)}>
+                  <span className={`dot ${S.exams?.[b.id]?.passed ? "mastered" : ""}`} />
+                  <GraduationCap size={16} strokeWidth={1.75} /> Mastery Exam
+                </button>
+              </>
+            )}
           </div>
         );
       })}

@@ -66,7 +66,7 @@ export default function Home() {
         {/* curriculum */}
         <section className="wrap" style={{ paddingTop: 16, paddingBottom: 12 }}>
           <h2 style={{ fontSize: 22, textAlign: "center", margin: "16px 0 20px" }}>What&apos;s inside</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 14 }}>
+          <div className="grid-2">
             {BLOCKS.map(([Icon, h, b]) => (
               <div className="card" key={h} style={{ marginBottom: 0 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
@@ -100,7 +100,7 @@ export default function Home() {
             <Link href="/pricing">Pricing</Link>
             <Link href="/login">Sign in</Link>
           </div>
-          <p style={{ marginTop: 10, color: "var(--faint)" }}>© 2026 AI Engineering Mastery Hub</p>
+          <p style={{ marginTop: 10, color: "var(--faint)" }}>© 2026 Novacademy · AI Engineering Mastery Hub</p>
         </footer>
       </main>
     </>

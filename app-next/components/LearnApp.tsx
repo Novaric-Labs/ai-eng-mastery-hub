@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Menu, Zap, BookOpen } from "lucide-react";
+import { Menu, BookOpen } from "lucide-react";
+import NovaMark from "@/components/NovaMark";
 import { buildCourse } from "@/lib/course";
 import type { ContentRow, ProgressState } from "@/lib/types";
 import { type Page, type Route, type Tab } from "@/lib/store";
@@ -175,8 +176,9 @@ function Shell() {
         >
           <Menu size={18} strokeWidth={1.75} />
         </button>
-        <span className="tb-title">
-          <Zap size={15} strokeWidth={1.75} fill="currentColor" /> AI Engineering Mastery Hub
+        <span className="tb-title brand">
+          <NovaMark size={16} className="brand-mark" />
+          <span className="brand-word">Novacademy</span>
         </span>
       </header>
       <div id="app">

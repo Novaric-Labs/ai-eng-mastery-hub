@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Zap } from "lucide-react";
+import NovaMark from "@/components/NovaMark";
 import { supabaseBrowser } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -31,12 +31,12 @@ export default function LoginPage() {
   return (
     <div className="hero-bg" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div style={{ width: "100%", maxWidth: 380 }}>
-        <div className="brandmark" style={{ fontSize: 16, justifyContent: "center", marginBottom: 6 }}>
-          <Zap size={18} strokeWidth={1.75} fill="currentColor" />
-          AI Engineering Mastery Hub
+        <div className="brandmark brand" style={{ fontSize: 18, justifyContent: "center", marginBottom: 6 }}>
+          <NovaMark size={22} className="brand-mark" />
+          <span className="brand-word">Novacademy</span>
         </div>
         <p style={{ color: "var(--dim)", fontSize: 13.5, marginBottom: 18, textAlign: "center" }}>
-          Sign in to start. New here? This also creates your account.
+          Sign in to continue to your AI Engineering course. New here? This also creates your account.
         </p>
         <div className="authcard">
           {msg && (

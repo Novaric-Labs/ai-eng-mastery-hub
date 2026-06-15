@@ -134,6 +134,7 @@ export default function Dashboard() {
       {course.blocks.map((b) => {
         const mods = blockMods(course, b.id);
         const bm = mods.filter((m) => modMastered(S, m.id)).length;
+        const pct = Math.round((100 * bm) / mods.length);
         const ex = S.exams?.[b.id];
         const rem = blockRemaining(course, S, b.id);
         return (
@@ -141,11 +142,25 @@ export default function Dashboard() {
             <b>{b.name}</b>
             {rem > 0 && <span className="est-block">{fmtMin(rem)} left</span>}{" "}
             {blockMastered(course, S, b.id) && <span className="badge pass">BLOCK MASTERED</span>}
-            <div className="bar">
-              <i className={bm === mods.length ? "g" : ""} style={{ width: `${(100 * bm) / mods.length}%` }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "6px 0 2px" }}>
+              <div className="bar" style={{ flex: 1, margin: 0 }}>
+                <i className={bm === mods.length ? "g" : ""} style={{ width: `${pct}%` }} />
+              </div>
+              <span
+                style={{
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  color: bm === mods.length ? "var(--green)" : "var(--dim2)",
+                  fontVariantNumeric: "tabular-nums",
+                  minWidth: 34,
+                  textAlign: "right",
+                }}
+              >
+                {pct}%
+              </span>
             </div>
             <span className="boxtag">
-              {bm}/{mods.length} modules · exam:{" "}
+              {bm}/{mods.length} modules mastered · exam:{" "}
               {ex ? (ex.passed ? `passed (${ex.best}%)` : `best ${ex.best}%`) : "not attempted"}
             </span>
             <br />
