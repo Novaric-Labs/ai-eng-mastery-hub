@@ -121,11 +121,6 @@ export default function Sidebar() {
         <Layers size={16} strokeWidth={1.75} /> Flashcards <span className="boxtag" style={{ display: "inline", margin: "0 0 0 auto" }}>({due} due)</span>
       </button>
       <button data-tour="scen" className={navP("scen")} onClick={() => go("scen")}><Puzzle size={16} strokeWidth={1.75} /> Scenarios</button>
-      {entitled && (
-        <button className="navbtn tutor-nav" onClick={() => window.dispatchEvent(new Event("aihub:open-tutor"))}>
-          <Sparkles size={16} strokeWidth={1.75} /> Ask AI Tutor
-        </button>
-      )}
 
       {course.blocks.map((b, bi) => {
         const done = blockMastered(course, S, b.id);
