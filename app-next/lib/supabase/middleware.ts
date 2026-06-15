@@ -14,28 +14,29 @@ export async function updateSession(request: NextRequest) {
   // (The /learn server gate still redirects unauthenticated users to /login.)
   if (!url || !anonKey) return response;
 
-  const supabase = createServerClient(url, anonKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet: CookieToSet[]) {
-        cookiesToSet.forEach(({ name, value }) =>
-          request.cookies.set(name, value),
-        );
-        response = NextResponse.next({ request });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, options),
-        );
-      },
-    },
-  });
-
+  // Belt-and-suspenders: the auth-cookie refresh must NEVER take the whole site
+  // down. Any failure here (client construction, runtime quirk, network) just
+  // skips the refresh — Server Components re-check the session themselves.
   try {
+    const supabase = createServerClient(url, anonKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet: CookieToSet[]) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value),
+          );
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          );
+        },
+      },
+    });
     await supabase.auth.getUser();
   } catch {
-    // A transient auth/network error refreshing the session must not 500 the
-    // whole request — Server Components re-check the session themselves.
+    // swallow — never 500 from middleware
   }
   return response;
 }
