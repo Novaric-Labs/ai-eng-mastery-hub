@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Lock } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
@@ -83,7 +84,7 @@ export default function Flashcards() {
       <div className="page">
         <h2>Flashcards</h2>
         <p className="tagline">Spaced-repetition flashcards across all 21 modules.</p>
-        <Paywall heading="🔒 Flashcards are part of the full course" />
+        <Paywall heading="Flashcards are part of the full course" />
       </div>
     );
   }
@@ -139,7 +140,7 @@ export default function Flashcards() {
           <span style={{ fontWeight: 600 }}>Unlock progress</span>
           <span style={{ color: "var(--dim)" }}>
             {readMods}/{totalMods} modules read · {unlocked.length} cards unlocked
-            {locked > 0 && <span style={{ color: "var(--amber)" }}> · 🔒 {locked} locked</span>}
+            {locked > 0 && <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "var(--amber)" }}> · <Lock size={12} strokeWidth={1.75} /> {locked} locked</span>}
           </span>
         </div>
         <div style={{ background: "var(--border)", borderRadius: 4, height: 6 }}>
@@ -182,7 +183,7 @@ export default function Flashcards() {
         )}
         {locked > 0 && (
           <div className="card" style={{ marginTop: 12, padding: "12px 14px" }}>
-            <div style={{ fontWeight: 600, marginBottom: 8 }}>🔒 Locked modules — read to unlock cards</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 7, fontWeight: 600, marginBottom: 8 }}><Lock size={15} strokeWidth={1.75} /> Locked modules — read to unlock cards</div>
             {course.catalog
               .filter((m) => !S.read?.[m.id])
               .map((m) => (

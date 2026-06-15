@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, Flame } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import {
@@ -69,7 +70,7 @@ export default function Dashboard() {
 
       <div className="card herostat">
         <div className="hs-cell">
-          <div className="hs-big">🔥 {streak}</div>
+          <div className="hs-big" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Flame size={22} strokeWidth={1.75} /> {streak}</div>
           <div className="hs-lbl">day streak</div>
         </div>
         <div className="hs-cell">
@@ -85,7 +86,7 @@ export default function Dashboard() {
           </div>
           <div style={{ marginTop: 8 }}>
             {studiedToday ? (
-              <span className="goalpill done">✓ Studied today</span>
+              <span className="goalpill done"><Check size={13} strokeWidth={2} /> Studied today</span>
             ) : (
               <span className="goalpill">Goal: study today</span>
             )}

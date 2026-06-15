@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Direction mockup — sleek dev-tool dark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* surfaces */
+    --bg: #0a0a0b; --bg2: #111114; --bg3: #17171a; --bg-hover: #1d1d21;
+    --border: #232327; --border2: #2e2e34;
+    /* text */
+    --text: #ededee; --dim2: #c4c4cc; --dim: #a1a1aa; --faint: #71717a;
+    /* accent (one, restrained, cool) */
+    --accent: #5b8cff; --accent-press: #4575f0; --accent-soft: rgba(91,140,255,.12);
+    /* quiet secondary + semantic (desaturated for the dark base) */
+    --accent2: #a78bfa; --green: #3fb27f; --amber: #d6a23e; --red: #e5635f; --teal: #45b3c0;
+    /* type */
+    --font-sans: "Geist", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, Menlo, Consolas, monospace;
+    --fs-xs: 11.5px; --fs-sm: 13px; --fs-base: 15px; --fs-lg: 17px;
+    --fs-xl: 22px; --fs-2xl: 28px; --fs-3xl: 40px;
+    /* radii */
+    --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-xl: 20px;
+    /* spacing */
+    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+    /* elevation */
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.28);
+    --shadow-2: 0 8px 30px rgba(0,0,0,.45);
+    --hairline: inset 0 1px 0 rgba(255,255,255,.04);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(1100px 600px at 70% -10%, rgba(91,140,255,.10), transparent 60%),
+      var(--bg);
+    color: var(--text); font-family: var(--font-sans);
+    font-size: var(--fs-base); line-height: 1.55; -webkit-font-smoothing: antialiased;
+    letter-spacing: .005em; padding: 40px;
+  }
+  .grid { max-width: 1180px; margin: 0 auto; display: grid; gap: var(--sp-6); }
+  .label { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: .12em; color: var(--faint); margin-bottom: var(--sp-3); font-weight: 600; }
+  .panel { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--sp-6); box-shadow: var(--shadow-1), var(--hairline); }
+  h1,h2,h3 { letter-spacing: -.02em; }
+
+  /* hero */
+  .hero { text-align: center; padding: 28px 0 8px; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: var(--fs-sm); letter-spacing: .04em; }
+  .hero h1 { font-size: var(--fs-3xl); font-weight: 600; line-height: 1.08; margin: 12px auto 14px; max-width: 720px; }
+  .hero p { color: var(--dim2); font-size: var(--fs-lg); max-width: 600px; margin: 0 auto; }
+  .row { display: flex; gap: var(--sp-3); flex-wrap: wrap; align-items: center; }
+  .center { justify-content: center; }
+
+  /* buttons */
+  .btn { background: var(--accent); color: #08080a; border: none; padding: 10px 18px; border-radius: var(--r-md);
+    font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow-1);
+    transition: transform .12s, background .15s, box-shadow .15s; }
+  .btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); }
+  .btn:active { transform: translateY(0); background: var(--accent-press); }
+  .btn.ghost { background: var(--bg3); color: var(--text); border: 1px solid var(--border2); box-shadow: var(--hairline); }
+  .btn.ghost:hover { background: var(--bg-hover); border-color: #3a3a42; }
+  .btn.green { background: var(--green); } .btn.amber { background: var(--amber); } .btn.red { background: var(--red); color: #fff; }
+  .btn.sm { padding: 6px 12px; font-size: 13px; }
+
+  /* cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: var(--sp-4); }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px 20px;
+    box-shadow: var(--shadow-1), var(--hairline); transition: border-color .2s, transform .15s; }
+  .card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .card b { font-size: 15px; } .card p { color: var(--dim); font-size: 13.5px; margin-top: 6px; }
+
+  /* input */
+  .input { width: 100%; padding: 11px 14px; border-radius: var(--r-md); border: 1px solid var(--border2);
+    background: var(--bg3); color: var(--text); font-family: inherit; font-size: 14px; box-shadow: var(--hairline); outline: none; }
+  .input.focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+
+  /* stat */
+  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; box-shadow: var(--hairline); }
+  .stat .big { font-size: var(--fs-2xl); font-weight: 700; color: var(--accent); letter-spacing: -.02em; }
+  .stat .lbl { font-size: 12px; color: var(--dim); }
+
+  /* sidebar nav */
+  .side { width: 280px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; box-shadow: var(--hairline); }
+  .side .brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .side .brand svg { color: var(--accent); }
+  .side .sub { font-size: 11.5px; color: var(--faint); margin-bottom: 14px; }
+  .blockhead { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); margin: 14px 6px 6px; }
+  .navbtn { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: none; border: none;
+    color: var(--dim2); padding: 8px 12px; border-radius: var(--r-sm); cursor: pointer; font-family: inherit; font-size: 13.5px;
+    margin-bottom: 2px; position: relative; transition: background .15s, color .15s; }
+  .navbtn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .navbtn:hover { background: var(--bg3); color: var(--text); }
+  .navbtn.active { background: var(--accent-soft); color: var(--text); font-weight: 600; }
+  .navbtn.active::before { content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 2.5px; border-radius: 2px; background: var(--accent); }
+
+  /* quiz options */
+  .opt { display: flex; align-items: flex-start; gap: 11px; width: 100%; text-align: left; background: var(--bg3);
+    border: 1px solid var(--border2); color: var(--text); padding: 12px 15px; border-radius: var(--r-md); margin-bottom: 8px;
+    cursor: pointer; font-size: 14px; box-shadow: var(--hairline); transition: border-color .15s, background .15s, transform .1s; }
+  .opt:hover { border-color: var(--accent); transform: translateX(2px); }
+  .opt.right { border-color: var(--green); background: rgba(63,178,127,.13); }
+  .chip { flex-shrink: 0; width: 24px; height: 24px; border-radius: 7px; background: var(--bg); border: 1px solid var(--border2);
+    display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--dim); }
+  .opt.right .chip { background: var(--green); color: #08080a; border-color: var(--green); }
+
+  /* swatches */
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+  .sw { width: 76px; }
+  .sw .chipc { height: 46px; border-radius: var(--r-md); border: 1px solid var(--border2); box-shadow: var(--hairline); }
+  .sw .nm { font-size: 10.5px; color: var(--faint); margin-top: 5px; font-family: var(--font-mono); }
+
+  .mono { font-family: var(--font-mono); }
+  .codeblock { background: #08080a; border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px;
+    font-family: var(--font-mono); font-size: 12.5px; line-height: 1.6; color: #c9d1d9; box-shadow: var(--hairline); }
+  .type-spec { display: grid; gap: 6px; }
+  .type-spec > div { display: flex; align-items: baseline; gap: 14px; }
+  .type-spec .t { color: var(--faint); font-family: var(--font-mono); font-size: 11px; width: 56px; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 9px; font-size: 11px; font-weight: 600; border: 1px solid var(--green); color: var(--green); background: rgba(63,178,127,.12); }
+  .pill { display:inline-block; font-size: 11px; padding: 2px 9px; border-radius: 9px; border: 1px solid var(--border2); color: var(--faint); }
+</style>
+</head>
+<body>
+<div class="grid">
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="eyebrow">2026 EDITION · DIRECTION MOCKUP</p>
+    <h1>Master production AI engineering.</h1>
+    <p>Sleek dev-tool dark — near-black, one restrained accent, soft depth, thin line icons.</p>
+    <div class="row center" style="margin:24px 0 6px">
+      <button class="btn">Start free preview &rarr;</button>
+      <button class="btn ghost">See pricing</button>
+    </div>
+  </section>
+
+  <!-- COLOR -->
+  <section class="panel">
+    <div class="label">Color tokens — dark</div>
+    <div class="swatches">
+      <div class="sw"><div class="chipc" style="background:#0a0a0b"></div><div class="nm">--bg</div></div>
+      <div class="sw"><div class="chipc" style="background:#111114"></div><div class="nm">--bg2</div></div>
+      <div class="sw"><div class="chipc" style="background:#17171a"></div><div class="nm">--bg3</div></div>
+      <div class="sw"><div class="chipc" style="background:#1d1d21"></div><div class="nm">--bg-hover</div></div>
+      <div class="sw"><div class="chipc" style="background:#232327"></div><div class="nm">--border</div></div>
+      <div class="sw"><div class="chipc" style="background:#5b8cff"></div><div class="nm">--accent</div></div>
+      <div class="sw"><div class="chipc" style="background:#a78bfa"></div><div class="nm">--accent2</div></div>
+      <div class="sw"><div class="chipc" style="background:#3fb27f"></div><div class="nm">--green</div></div>
+      <div class="sw"><div class="chipc" style="background:#d6a23e"></div><div class="nm">--amber</div></div>
+      <div class="sw"><div class="chipc" style="background:#e5635f"></div><div class="nm">--red</div></div>
+      <div class="sw"><div class="chipc" style="background:#45b3c0"></div><div class="nm">--teal</div></div>
+    </div>
+  </section>
+
+  <!-- TYPE + BUTTONS -->
+  <div class="cards" style="grid-template-columns: 1.2fr 1fr;">
+    <section class="panel">
+      <div class="label">Typography — Geist</div>
+      <div class="type-spec">
+        <div><span class="t">3xl/600</span><span style="font-size:var(--fs-3xl);font-weight:600">Display heading</span></div>
+        <div><span class="t">xl/600</span><span style="font-size:var(--fs-xl);font-weight:600">Section heading</span></div>
+        <div><span class="t">lg/500</span><span style="font-size:var(--fs-lg);font-weight:500">Subheading lead</span></div>
+        <div><span class="t">base</span><span>Body copy at 15px — readable, calm, tight tracking.</span></div>
+        <div><span class="t">dim</span><span style="color:var(--dim)">Secondary / supporting text</span></div>
+        <div><span class="t">mono</span><span class="mono" style="color:var(--teal)">GeistMono · code & kbd</span></div>
+      </div>
+    </section>
+    <section class="panel">
+      <div class="label">Buttons</div>
+      <div class="row" style="margin-bottom:12px"><button class="btn">Primary</button><button class="btn ghost">Ghost</button><button class="btn sm">Small</button></div>
+      <div class="row" style="margin-bottom:16px"><button class="btn green">Green</button><button class="btn amber">Amber</button><button class="btn red">Red</button></div>
+      <div class="label">Input — focus ring</div>
+      <input class="input focus" value="you@email.com" />
+    </section>
+  </div>
+
+  <!-- CARDS + STATS -->
+  <section>
+    <div class="cards">
+      <div class="card"><b>Foundations</b><p>LLMs, prompting, context engineering, the 2026 model landscape.</p></div>
+      <div class="card"><b>RAG &amp; Knowledge</b><p>Pipelines, embeddings, vector DBs, memory, data engineering.</p></div>
+      <div class="stat"><div class="big">21</div><div class="lbl">modules</div></div>
+      <div class="stat"><div class="big">78</div><div class="lbl">flashcards</div></div>
+    </div>
+  </section>
+
+  <!-- SIDEBAR NAV + QUIZ -->
+  <div class="cards" style="grid-template-columns: 280px 1fr; align-items:start;">
+    <nav class="side">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        AI Engineering Hub
+      </div>
+      <div class="sub">2026 Edition · updated June 2026</div>
+      <button class="navbtn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</button>
+      <button class="navbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>Path</button>
+      <button class="navbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.84Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>Flashcards <span class="pill" style="margin-left:auto">6 due</span></button>
+      <button class="navbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></svg>Scenarios</button>
+      <div class="blockhead">Foundations</div>
+      <button class="navbtn">LLM Fundamentals</button>
+      <button class="navbtn">Prompting</button>
+    </nav>
+
+    <section class="panel">
+      <div class="row" style="justify-content:space-between;margin-bottom:14px">
+        <div class="label" style="margin:0">Quiz — question 3 of 10</div>
+        <span class="badge">8 correct</span>
+      </div>
+      <div style="font-weight:600;margin-bottom:12px;font-size:15px">Which retrieval step most reduces hallucination in a RAG pipeline?</div>
+      <button class="opt"><span class="chip">A</span> Increase the model temperature for variety.</button>
+      <button class="opt right"><span class="chip">B</span> Ground answers in retrieved, cited source chunks.</button>
+      <button class="opt"><span class="chip">C</span> Remove the system prompt entirely.</button>
+      <div class="codeblock" style="margin-top:12px">retriever.search(query, k=5)  <span style="color:var(--faint)"># top-k grounded context</span></div>
+    </section>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Check, ArrowRight } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -16,36 +18,45 @@ export const metadata: Metadata = {
 // Pricing — Server Component (SEO). The actual price lives in Stripe; this is copy.
 export default function Pricing() {
   return (
-    <main className="wrap" style={{ paddingTop: 64, paddingBottom: 64, maxWidth: 560 }}>
-      <h1 style={{ fontSize: 30, marginBottom: 8 }}>One price. Lifetime access.</h1>
-      <p style={{ color: "var(--dim2)", marginBottom: 24 }}>
-        Buy once, keep it forever — including updates as the field moves.
-      </p>
+    <>
+      <SiteHeader />
+      <main className="wrap" style={{ paddingTop: 56, paddingBottom: 64, maxWidth: 560 }}>
+        <p className="eyebrow" style={{ textAlign: "center" }}>PRICING</p>
+        <h1 style={{ fontSize: 32, fontWeight: 600, letterSpacing: "-.02em", margin: "10px 0 8px", textAlign: "center" }}>
+          One price. Lifetime access.
+        </h1>
+        <p style={{ color: "var(--dim2)", marginBottom: 28, textAlign: "center" }}>
+          Buy once, keep it forever — including updates as the field moves.
+        </p>
 
-      <div className="card" style={{ borderColor: "var(--accent2)", padding: 24 }}>
-        <b style={{ color: "var(--accent2)" }}>Full access</b>
-        <ul style={{ listStyle: "none", margin: "12px 0" }}>
-          {[
-            "All 21 modules across 5 blocks",
-            "Quizzes + block mastery exams",
-            "Spaced-repetition flashcards",
-            "Production scenarios with model answers",
-            "Runnable code patterns + debugging guides",
-            "Progress synced across your devices",
-          ].map((f) => (
-            <li key={f} style={{ padding: "5px 0", color: "var(--dim2)" }}>
-              ✓ {f}
-            </li>
-          ))}
-        </ul>
-        <Link href="/login" className="btn" style={{ display: "inline-block" }}>
-          Get access →
-        </Link>
-      </div>
+        <div className="card" style={{ padding: 28, boxShadow: "var(--shadow-2), var(--hairline)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 4 }}>
+            <b style={{ fontSize: 16 }}>Full access</b>
+            <span className="pill" style={{ color: "var(--accent)", borderColor: "rgba(91,140,255,.4)" }}>Lifetime</span>
+          </div>
+          <ul className="checklist">
+            {[
+              "All 21 modules across 5 blocks",
+              "Quizzes + block mastery exams",
+              "Spaced-repetition flashcards",
+              "Production scenarios with model answers",
+              "Runnable code patterns + debugging guides",
+              "Progress synced across your devices",
+            ].map((f) => (
+              <li key={f}>
+                <Check size={16} strokeWidth={2} /> {f}
+              </li>
+            ))}
+          </ul>
+          <Link href="/login" className="btn" style={{ marginTop: 8 }}>
+            Get access <ArrowRight size={16} strokeWidth={1.75} />
+          </Link>
+        </div>
 
-      <p style={{ color: "var(--dim)", fontSize: 13.5, marginTop: 20 }}>
-        Have an access code? Sign in and enter it on the course page.
-      </p>
-    </main>
+        <p style={{ color: "var(--dim)", fontSize: 13.5, marginTop: 20, textAlign: "center" }}>
+          Have an access code? Sign in and enter it on the course page.
+        </p>
+      </main>
+    </>
   );
 }

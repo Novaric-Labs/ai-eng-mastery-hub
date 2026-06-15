@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Paywall from "./Paywall";
 import { PASS_EXAM, PASS_QUIZ, blockMods, modMastered } from "@/lib/course";
@@ -32,7 +33,7 @@ export default function ExamPage({ bid }: { bid: string }) {
             <li key={m.id}>
               {m.title}{" "}
               {modMastered(S, m.id) ? (
-                <span style={{ color: "var(--green)" }}>✓ mastered</span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "var(--green)" }}><Check size={13} strokeWidth={2} /> mastered</span>
               ) : (
                 <span style={{ color: "var(--amber)" }}>not yet mastered</span>
               )}
@@ -49,7 +50,7 @@ export default function ExamPage({ bid }: { bid: string }) {
         </div>
       )}
       {!unlocked ? (
-        <Paywall heading="🔒 The mastery exam is part of the full course" />
+        <Paywall heading="The mastery exam is part of the full course" />
       ) : (
         <>
           {!ready && (

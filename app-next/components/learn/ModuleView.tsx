@@ -1,5 +1,6 @@
 "use client";
 
+import { BookOpen, Wrench, Library, Code, Lock, Zap, ArrowRight, Check } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
@@ -56,7 +57,7 @@ export default function ModuleView({ id }: { id: string }) {
           <b>Why this matters</b>
           <Html style={{ marginTop: 6, color: "var(--dim)" }} html={meta.why} />
         </div>
-        <Paywall heading={`🔒 “${meta.title}” is part of the full course`} />
+        <Paywall heading={`“${meta.title}” is part of the full course`} />
       </div>
     );
   }
@@ -68,7 +69,7 @@ export default function ModuleView({ id }: { id: string }) {
   const p = bundle.patterns;
   const best = modQuizBest(S, id);
 
-  const tabBtn = (t: Tab, label: string, disabled = false) => (
+  const tabBtn = (t: Tab, label: React.ReactNode, disabled = false) => (
     <button
       className={`tab${tab === t ? " active" : ""}`}
       onClick={() => !disabled && goTab(t)}
@@ -146,13 +147,13 @@ export default function ModuleView({ id }: { id: string }) {
             </table>
           </div>
           <details className="deep">
-            <summary>⚡ Scale, cost &amp; latency notes</summary>
+            <summary><Zap size={15} strokeWidth={1.75} /> Scale, cost &amp; latency notes</summary>
             <ul className="flat">
               {dp.scale.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}
             </ul>
           </details>
           <details className="deep">
-            <summary>🔒 Security &amp; governance notes</summary>
+            <summary><Lock size={15} strokeWidth={1.75} /> Security &amp; governance notes</summary>
             <ul className="flat">
               {dp.sec.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}
             </ul>
@@ -174,8 +175,8 @@ export default function ModuleView({ id }: { id: string }) {
       </div>
 
       {p && (
-        <div style={{ fontSize: 13, color: "var(--dim)", margin: "16px 0 4px" }}>
-          💻 This module has implementation code in the{" "}
+        <div style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: "var(--dim)", margin: "16px 0 4px" }}>
+          <Code size={15} strokeWidth={1.75} /> This module has implementation code in the{" "}
           <b style={{ color: "var(--accent2)" }}>Patterns</b> tab — runnable patterns, load-bearing line explanations, and a debugging guide.
         </div>
       )}
@@ -278,15 +279,17 @@ export default function ModuleView({ id }: { id: string }) {
         {meta.estMin ? fmtMin(meta.estMin) : ""}
       </span>
       <div className="tabs">
-        {tabBtn("learn", "📖 Learn")}
-        {tabBtn("apply", "🔧 Apply")}
-        {tabBtn("res", "📚 Resources")}
-        {tabBtn("code", p ? "💻 Patterns" : "💻 Patterns 🔒", !p)}
+        {tabBtn("learn", <><BookOpen size={15} strokeWidth={1.75} /> Learn</>)}
+        {tabBtn("apply", <><Wrench size={15} strokeWidth={1.75} /> Apply</>)}
+        {tabBtn("res", <><Library size={15} strokeWidth={1.75} /> Resources</>)}
+        {tabBtn("code", p
+          ? <><Code size={15} strokeWidth={1.75} /> Patterns</>
+          : <><Code size={15} strokeWidth={1.75} /> Patterns <Lock size={13} strokeWidth={1.75} /></>, !p)}
       </div>
       {body}
       <div className="actionbar">
         {S.read?.[id] ? (
-          <button className="btn green" disabled>✓ Read</button>
+          <button className="btn green" disabled><Check size={15} strokeWidth={2} /> Read</button>
         ) : (
           <button className="btn green" onClick={() => markRead(id)}>Mark as read</button>
         )}
@@ -295,7 +298,7 @@ export default function ModuleView({ id }: { id: string }) {
         </button>
         {next && (
           <button className="btn ghost" onClick={() => go("mod", next.id)}>
-            Next: {next.title} →
+            Next: {next.title} <ArrowRight size={15} strokeWidth={1.75} />
           </button>
         )}
       </div>

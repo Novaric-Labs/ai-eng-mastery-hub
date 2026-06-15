@@ -1,6 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Zap,
+  Sparkles,
+  BookA,
+  LayoutDashboard,
+  Route,
+  Layers,
+  Puzzle,
+  GraduationCap,
+  Lock,
+  Sun,
+  Moon,
+  LogOut,
+  Flame,
+  Unlock,
+} from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import {
@@ -60,7 +76,10 @@ export default function Sidebar() {
 
   return (
     <>
-      <h1>⚡ AI Engineering Mastery Hub</h1>
+      <h1>
+        <Zap size={17} strokeWidth={1.75} fill="currentColor" />
+        AI Engineering Mastery Hub
+      </h1>
       <div className="sub">2026 Edition · updated June 2026</div>
 
       <div className="sideprog">
@@ -71,7 +90,7 @@ export default function Sidebar() {
       </div>
 
       <div className="xpbar">
-        <span className="streak" title="Day streak">🔥 {streak}</span>
+        <span className="streak" title="Day streak"><Flame size={13} strokeWidth={1.75} /> {streak}</span>
         <span className="lvl">Lv {li.lvl}</span>
         <div className="xptrack">
           <i style={{ width: `${li.pct}%` }} />
@@ -82,17 +101,18 @@ export default function Sidebar() {
       </div>
 
       <button className="themebtn" type="button" onClick={toggleTheme}>
-        {theme === "dark" ? "☀️ Light mode" : "🌙 Dark mode"}
+        {theme === "dark" ? <Sun size={14} strokeWidth={1.75} /> : <Moon size={14} strokeWidth={1.75} />}
+        {theme === "dark" ? "Light mode" : "Dark mode"}
       </button>
 
-      <button className={navP("start")} onClick={() => go("start")}>🚀 Start Here</button>
-      <button className={navP("gloss")} onClick={() => go("gloss")}>🔤 Glossary</button>
-      <button className={navP("dash")} onClick={() => go("dash")}>📊 Dashboard</button>
-      <button className={navP("path")} onClick={() => go("path")}>🧭 Path</button>
+      <button className={navP("start")} onClick={() => go("start")}><Sparkles size={16} strokeWidth={1.75} /> Start Here</button>
+      <button className={navP("gloss")} onClick={() => go("gloss")}><BookA size={16} strokeWidth={1.75} /> Glossary</button>
+      <button className={navP("dash")} onClick={() => go("dash")}><LayoutDashboard size={16} strokeWidth={1.75} /> Dashboard</button>
+      <button className={navP("path")} onClick={() => go("path")}><Route size={16} strokeWidth={1.75} /> Path</button>
       <button className={navP("cards")} onClick={() => go("cards")}>
-        🃏 Flashcards <span className="boxtag" style={{ display: "inline", margin: 0 }}>({due} due)</span>
+        <Layers size={16} strokeWidth={1.75} /> Flashcards <span className="boxtag" style={{ display: "inline", margin: "0 0 0 auto" }}>({due} due)</span>
       </button>
-      <button className={navP("scen")} onClick={() => go("scen")}>🧩 Scenarios</button>
+      <button className={navP("scen")} onClick={() => go("scen")}><Puzzle size={16} strokeWidth={1.75} /> Scenarios</button>
 
       {course.blocks.map((b) => {
         const done = blockMastered(course, S, b.id);
@@ -111,13 +131,13 @@ export default function Sidebar() {
                   {m.title}
                   {m.isNew && <span className="pill new" style={{ marginLeft: 6 }}>NEW</span>}
                   {m.isUpd && <span className="pill upd" style={{ marginLeft: 6 }}>2026</span>}
-                  {locked && <span style={{ marginLeft: 6 }}>🔒</span>}
+                  {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", opacity: 0.6 }} />}
                 </button>
               );
             })}
             <button className={nav("exam", b.id)} onClick={() => go("exam", b.id)}>
               <span className={`dot ${S.exams?.[b.id]?.passed ? "mastered" : ""}`} />
-              🎓 Mastery Exam
+              <GraduationCap size={16} strokeWidth={1.75} /> Mastery Exam
             </button>
           </div>
         );
@@ -126,8 +146,8 @@ export default function Sidebar() {
       <div style={{ borderTop: "1px solid var(--border)", marginTop: 14, paddingTop: 12 }}>
         {!entitled && (
           <>
-            <button className="btn" style={{ width: "100%" }} disabled={busy} onClick={buy}>
-              {busy ? "Opening checkout…" : "🔓 Unlock full access"}
+            <button className="btn" style={{ width: "100%", justifyContent: "center" }} disabled={busy} onClick={buy}>
+              {busy ? "Opening checkout…" : <><Unlock size={15} strokeWidth={1.75} /> Unlock full access</>}
             </button>
             <button className="btn ghost" style={{ width: "100%", marginTop: 6 }} onClick={redeem}>
               I have a code
@@ -135,7 +155,7 @@ export default function Sidebar() {
           </>
         )}
         <button className="navbtn" style={{ marginTop: 6 }} onClick={signOut}>
-          ⏻ Sign out
+          <LogOut size={16} strokeWidth={1.75} /> Sign out
         </button>
       </div>
     </>

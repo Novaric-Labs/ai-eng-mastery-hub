@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Menu, Zap, BookOpen } from "lucide-react";
 import { buildCourse } from "@/lib/course";
 import type { ContentRow, ProgressState } from "@/lib/types";
 import { type Page, type Route, type Tab } from "@/lib/store";
@@ -51,7 +52,7 @@ export default function LearnApp({
   if (!course.catalog.length) {
     return (
       <main className="wrap" style={{ paddingTop: 96, paddingBottom: 96, maxWidth: 520, textAlign: "center" }}>
-        <div style={{ fontSize: 40 }}>📚</div>
+        <BookOpen size={40} strokeWidth={1.25} style={{ color: "var(--dim)" }} />
         <h1 style={{ fontSize: 24, margin: "10px 0 8px" }}>No course content yet</h1>
         <p style={{ color: "var(--dim)" }}>
           Your account is signed in, but the course catalog came back empty. If you&apos;re the
@@ -172,9 +173,11 @@ function Shell() {
           aria-controls="side"
           onClick={() => setDrawer((d) => !d)}
         >
-          ☰
+          <Menu size={18} strokeWidth={1.75} />
         </button>
-        <span className="tb-title">⚡ AI Engineering Mastery Hub</span>
+        <span className="tb-title">
+          <Zap size={15} strokeWidth={1.75} fill="currentColor" /> AI Engineering Mastery Hub
+        </span>
       </header>
       <div id="app">
         <nav id="side" className={drawer ? "drawer-open" : ""}>

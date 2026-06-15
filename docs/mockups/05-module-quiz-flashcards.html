@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Course — module · quiz · flashcards · paywall</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../app-next/app/globals.css" />
+<style>
+  :root { --font-geist-sans: "Geist"; --font-geist-mono: "Geist Mono"; }
+  body { padding: 38px 50px; max-width: 900px; margin: 0 auto; }
+  .mock-sep { margin: 34px 0 10px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+</style>
+</head>
+<body>
+
+  <div class="mock-sep">Module — Learn view</div>
+  <div class="page">
+    <h2>Retrieval Pipelines</h2>
+    <span class="est-meta">~ 35 min read</span>
+    <div class="tabs">
+      <button class="tab active"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg> Learn</button>
+      <button class="tab"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></svg> Apply</button>
+      <button class="tab"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg> Resources</button>
+      <button class="tab"><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg> Patterns</button>
+    </div>
+
+    <p>A RAG pipeline turns a user question into a grounded answer by retrieving relevant context before generation. The retrieval step is where most quality — and most bugs — live.</p>
+
+    <div class="mental"><b>Mental model:</b> retrieval is search with a budget. You have a token budget for context; spend it on the chunks most likely to contain the answer, ranked and de-duplicated.</div>
+
+    <h3>How it works</h3>
+    <div class="worked"><b>Worked example:</b> embed the query, search the vector index for the top-k nearest chunks, re-rank them, then pass the survivors plus the question to the model with a citation instruction.</div>
+
+    <details class="deep" open>
+      <summary><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Scale, cost &amp; latency notes</summary>
+      <ul class="flat">
+        <li>Re-ranking adds a model call per query — cache aggressively at the query level.</li>
+        <li>Top-k too high burns context budget and dilutes the signal; start at k=5.</li>
+      </ul>
+    </details>
+
+    <h3 id="sec-mistakes">Common mistakes</h3>
+    <div class="card">
+      <ul class="flat">
+        <li>Indexing whole documents instead of semantically-sized chunks.</li>
+        <li>Skipping de-duplication, so three near-identical chunks crowd out coverage.</li>
+      </ul>
+    </div>
+
+    <div class="actionbar">
+      <button class="btn green" disabled><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Read</button>
+      <button class="btn">Take quiz (best: 80%)</button>
+      <button class="btn ghost">Next: Embeddings &amp; Vectors <svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+    </div>
+  </div>
+
+  <div class="mock-sep">Quiz</div>
+  <div class="page">
+    <div class="qnum">Question 3 of 10</div>
+    <div class="bar"><i style="width:30%"></i></div>
+    <div class="qhint">Keys <span class="kbd">A</span>–<span class="kbd">D</span> or <span class="kbd">1</span>–<span class="kbd">4</span> to answer · <span class="kbd">Enter</span> next · <b style="color:var(--green)">✓ 2</b> correct so far</div>
+    <div class="card" style="margin-top:14px">
+      <div class="qtext">Which retrieval step most reduces hallucination in a RAG pipeline?</div>
+      <button class="opt"><span class="chip">A</span> Increase the model temperature for variety.</button>
+      <button class="opt right"><span class="chip">B</span> Ground answers in retrieved, cited source chunks.</button>
+      <button class="opt wrong"><span class="chip">C</span> Remove the system prompt entirely.</button>
+      <button class="opt"><span class="chip">D</span> Raise top-k until the context window is full.</button>
+      <div class="exp">✓ Correct. Grounding the answer in retrieved, cited chunks is what keeps generation faithful to sources.</div>
+      <button class="btn">Next →</button>
+    </div>
+  </div>
+
+  <div class="mock-sep">Flashcards</div>
+  <div class="page">
+    <div class="statgrid">
+      <div class="stat"><div class="big">12</div><div class="lbl">Box 1</div></div>
+      <div class="stat"><div class="big">9</div><div class="lbl">Box 2</div></div>
+      <div class="stat"><div class="big">6</div><div class="lbl">Box 3</div></div>
+      <div class="stat"><div class="big">7</div><div class="lbl">Box 4 (mastered)</div></div>
+    </div>
+    <div class="flipwrap"><div class="flipinner"><div class="face front">What is the purpose of a re-ranker in a RAG pipeline?</div></div></div>
+    <div id="gradebtns">
+      <button class="btn red">Again</button>
+      <button class="btn amber">Hard</button>
+      <button class="btn green">Good</button>
+      <button class="btn">Easy</button>
+    </div>
+  </div>
+
+  <div class="mock-sep">Paywall (non-entitled)</div>
+  <div class="page">
+    <div class="lockcard">
+      <h3><svg class="lucide" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> “Memory Systems” is part of the full course</h3>
+      <p style="color:var(--dim);margin-bottom:14px">Lifetime access unlocks all 21 modules, quizzes, flashcards, scenarios, and code patterns.</p>
+      <button class="btn">Buy lifetime access</button>
+      <button class="btn ghost">I have a code</button>
+    </div>
+  </div>
+
+</body>
+</html>

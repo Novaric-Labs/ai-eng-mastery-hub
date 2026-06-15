@@ -21,7 +21,7 @@ export default function Scenarios() {
       <div className="page">
         <h2>Scenario Challenges</h2>
         <p className="tagline">Production-judgment challenges across all five blocks.</p>
-        <Paywall heading="🔒 Scenarios are part of the full course" />
+        <Paywall heading="Scenarios are part of the full course" />
       </div>
     );
   }

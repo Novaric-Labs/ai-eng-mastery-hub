@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { Lock } from "lucide-react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 
 // Shown wherever paid content is requested by a non-entitled user (locked
 // module, flashcards, scenarios). Buy → Stripe Checkout; redeem → access code.
 export default function Paywall({
-  heading = "🔒 This is part of the full course",
+  heading = "This is part of the full course",
   blurb = "Lifetime access unlocks all 21 modules, quizzes, flashcards, scenarios, and code patterns.",
 }: {
   heading?: string;
@@ -54,7 +55,7 @@ export default function Paywall({
 
   return (
     <div className="lockcard">
-      <h3>{heading}</h3>
+      <h3><Lock size={18} strokeWidth={1.75} /> {heading}</h3>
       <p style={{ color: "var(--dim)", marginBottom: 14 }}>{blurb}</p>
       <button className="btn" disabled={busy} onClick={buy}>
         {busy ? "Opening checkout…" : "Buy lifetime access"}
