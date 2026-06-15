@@ -16,7 +16,7 @@ const STATS = [
 ];
 
 const BLOCKS = [
-  [Boxes, "Foundations", "LLMs, prompting, context engineering, the 2026 model landscape"],
+  [Boxes, "Foundations", "LLMs, prompting, context engineering, the current model landscape"],
   [Database, "RAG & Knowledge", "Pipelines, embeddings, vector DBs, memory, data engineering"],
   [Bot, "Agents & Harnesses", "Tools, loops, multi-agent, and the harness that makes them reliable"],
   [Rocket, "Production & Leadership", "Evals, guardrails, architecture, and build/buy/wait judgment"],
@@ -24,7 +24,7 @@ const BLOCKS = [
 
 const FAQ = [
   ["Do I need an ML background?", "No — just basic programming and what an API is. No math or model training."],
-  ["Is it up to date?", "It's the 2026 edition, updated for the current model landscape — and updates are included."],
+  ["Is it up to date?", "Yes — it's built for today's model landscape, and updates are included as the field moves."],
   ["What do I actually get?", "Concepts, mechanics, worked examples, runnable code patterns, quizzes, spaced-repetition flashcards, and production scenarios for all 21 modules."],
   ["Can I try before buying?", "Yes — sign in to read the orientation, glossary, and a full sample module free."],
 ];
@@ -37,7 +37,7 @@ export default function Home() {
         {/* hero */}
         <section className="hero-bg">
           <div className="wrap" style={{ paddingTop: 72, paddingBottom: 16, textAlign: "center" }}>
-            <p className="eyebrow">2026 EDITION · UPDATED JUNE 2026</p>
+            <p className="eyebrow">MASTER THE REAL JOB</p>
             <h1 style={{ fontSize: "clamp(34px, 6vw, 52px)", fontWeight: 600, lineHeight: 1.05, letterSpacing: "-.025em", margin: "14px auto 16px", maxWidth: 720 }}>
               Master production AI engineering.
             </h1>

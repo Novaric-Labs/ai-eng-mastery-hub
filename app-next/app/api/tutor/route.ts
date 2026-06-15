@@ -5,7 +5,7 @@ import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
 export const runtime = "nodejs";
 
 const SCOPE =
-  "LLM fundamentals (tokens, context, sampling, cost/latency), prompt & context engineering, the 2026 model " +
+  "LLM fundamentals (tokens, context, sampling, cost/latency), prompt & context engineering, the current model " +
   "landscape, RAG, embeddings, vector databases, memory systems, agents, tool/function calling, harnesses, " +
   "multi-agent systems, production design (gateways, caching, fallbacks), evals & LLM-as-judge, hallucination & " +
   "guardrails, prompt injection / AI security, MLOps & observability, data engineering for retrieval, multimodal, " +

@@ -83,7 +83,7 @@ export default function Sidebar() {
         <NovaMark size={19} className="brand-mark" />
         <span className="brand-word">Novacademy</span>
       </h1>
-      <div className="sub">AI Engineering · 2026 Edition</div>
+      <div className="sub">AI Engineering Mastery</div>
 
       <div className="sideprog">
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -121,6 +121,11 @@ export default function Sidebar() {
         <Layers size={16} strokeWidth={1.75} /> Flashcards <span className="boxtag" style={{ display: "inline", margin: "0 0 0 auto" }}>({due} due)</span>
       </button>
       <button data-tour="scen" className={navP("scen")} onClick={() => go("scen")}><Puzzle size={16} strokeWidth={1.75} /> Scenarios</button>
+      {entitled && (
+        <button className="navbtn tutor-nav" onClick={() => window.dispatchEvent(new Event("aihub:open-tutor"))}>
+          <Sparkles size={16} strokeWidth={1.75} /> Ask AI Tutor
+        </button>
+      )}
 
       {course.blocks.map((b, bi) => {
         const done = blockMastered(course, S, b.id);
@@ -157,8 +162,6 @@ export default function Sidebar() {
                     <button key={m.id} className={nav("mod", m.id)} onClick={() => go("mod", m.id)}>
                       <span className={`dot ${dot}`} />
                       {m.title}
-                      {m.isNew && <span className="pill new" style={{ marginLeft: 6 }}>NEW</span>}
-                      {m.isUpd && <span className="pill upd" style={{ marginLeft: 6 }}>2026</span>}
                       {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", opacity: 0.6 }} />}
                     </button>
                   );

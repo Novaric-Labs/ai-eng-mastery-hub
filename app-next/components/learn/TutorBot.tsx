@@ -19,6 +19,13 @@ export default function TutorBot() {
     bodyRef.current?.scrollTo(0, bodyRef.current.scrollHeight);
   }, [turns, busy, open]);
 
+  // Allow opening from elsewhere (e.g. the sidebar "Ask AI Tutor" button).
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    window.addEventListener("aihub:open-tutor", onOpen);
+    return () => window.removeEventListener("aihub:open-tutor", onOpen);
+  }, []);
+
   if (!entitled) return null;
 
   async function send() {

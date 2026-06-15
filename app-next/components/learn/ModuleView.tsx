@@ -35,8 +35,6 @@ export default function ModuleView({ id }: { id: string }) {
   const header = (
     <>
       <h2>{meta.title}</h2>{" "}
-      {meta.isNew && <span className="pill new">NEW IN 2026 EDITION</span>}
-      {meta.isUpd && <span className="pill upd">UPDATED FOR 2026</span>}
       {mastered && <span className="badge pass">MASTERED</span>}
       <p className="tagline">{meta.tag}</p>
     </>

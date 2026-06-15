@@ -10,7 +10,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Novacademy — AI Engineering Mastery Hub (2026 Edition)",
+    default: "Novacademy — AI Engineering Mastery Hub",
     template: "%s · Novacademy",
   },
   description:
