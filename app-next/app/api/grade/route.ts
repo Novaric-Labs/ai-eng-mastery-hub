@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { hasFullAccess } from "@/lib/entitlement";
 import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
 import type { Scenario } from "@/lib/course";
@@ -30,7 +31,11 @@ export async function POST(req: Request) {
   if (!scenarioId || !answer) return NextResponse.json({ error: "Missing scenario or answer." }, { status: 400 });
 
   // Fetch the scenario server-side (don't trust the client for the model answer).
-  const { data: row } = await supabase.from("content").select("data").eq("course_id", course).eq("id", "scenarios").maybeSingle();
+  // Read via the service role: access is already authorized by hasFullAccess
+  // above, and the row's tier RLS would otherwise hide a course the user can use
+  // but isn't DB-entitled to (e.g. an admin/owner, who is app-level not row-level
+  // entitled). The model answer is used only to grade and never returned.
+  const { data: row } = await supabaseAdmin().from("content").select("data").eq("course_id", course).eq("id", "scenarios").maybeSingle();
   const scenarios = (row?.data as Scenario[] | undefined) ?? [];
   const sc = scenarios.find((s) => s.id === scenarioId);
   if (!sc) return NextResponse.json({ error: "Scenario not found." }, { status: 404 });
