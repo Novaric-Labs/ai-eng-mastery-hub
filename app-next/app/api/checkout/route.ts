@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { supabaseServer } from "@/lib/supabase/server";
+import { planById } from "@/lib/plans";
 
 export const runtime = "nodejs";
 
+// Starts a Stripe Checkout session for a membership plan (recurring). One
+// membership unlocks the whole platform, so checkout is plan-based, not
+// course-based.
 export async function POST(request: Request) {
   const supabase = await supabaseServer();
   const {
@@ -14,36 +18,36 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({}));
-  const course = String(body.course ?? "ai-eng");
-
-  // The course must exist and be live; pull its Stripe price (flagship falls
-  // back to the legacy STRIPE_PRICE_ID env so existing config keeps working).
-  const { data: c } = await supabase
-    .from("courses")
-    .select("status, stripe_price_id")
-    .eq("slug", course)
-    .maybeSingle();
-  if (!c || c.status !== "live") {
-    return NextResponse.json({ error: "course_unavailable" }, { status: 400 });
+  const plan = planById(String(body.plan ?? "monthly"));
+  if (!plan) {
+    return NextResponse.json({ error: "unknown_plan" }, { status: 400 });
   }
-  const price =
-    c.stripe_price_id ||
-    (course === "ai-eng" ? process.env.STRIPE_PRICE_ID : undefined);
+  const price = process.env[plan.priceEnv];
   if (!price) {
     return NextResponse.json({ error: "price_not_configured" }, { status: 400 });
   }
+
+  // Reuse an existing Stripe customer if we already have one for this user, so
+  // a re-subscribe doesn't create duplicates.
+  const { data: sub } = await supabase
+    .from("subscriptions")
+    .select("stripe_customer_id")
+    .maybeSingle();
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const site = process.env.NEXT_PUBLIC_SITE_URL!;
 
   const session = await stripe.checkout.sessions.create({
-    mode: "payment", // one-time lifetime access
+    mode: "subscription",
     line_items: [{ price, quantity: 1 }],
     allow_promotion_codes: true,
     client_reference_id: user.id,
-    customer_email: user.email ?? undefined,
-    metadata: { course },
-    success_url: `${site}/learn/${course}?checkout=success`,
+    ...(sub?.stripe_customer_id
+      ? { customer: sub.stripe_customer_id }
+      : { customer_email: user.email ?? undefined }),
+    metadata: { user_id: user.id, plan: plan.id },
+    subscription_data: { metadata: { user_id: user.id, plan: plan.id } },
+    success_url: `${site}/courses?subscribed=1`,
     cancel_url: `${site}/pricing?checkout=cancel`,
   });
 

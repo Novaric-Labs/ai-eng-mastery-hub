@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Check, Clock, BarChart3, Layers, Lock } from "lucide-react";
+import { ArrowRight, Check, Clock, BarChart3, Layers, Lock, Sparkles } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
 import SignOutLink from "@/components/SignOutLink";
+import ManageMembership from "@/components/ManageMembership";
 import { supabaseServer } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
+import { hasActiveMembership } from "@/lib/entitlement";
 import { COURSES, type CourseMeta } from "@/lib/courses";
 
 // Behind auth; never index the signed-in catalog.
@@ -18,34 +20,66 @@ export default async function CoursesPage() {
   if (!user) redirect("/login");
   const admin = isAdmin(user.email);
 
-  const { data: ents } = await supabase
-    .from("entitlements")
-    .select("course_id, active");
-  const owned = new Set(
+  const [{ data: ents }, member] = await Promise.all([
+    supabase.from("entitlements").select("course_id, active"),
+    hasActiveMembership(supabase),
+  ]);
+  const granted = new Set(
     (ents ?? []).filter((e) => e.active).map((e) => e.course_id as string),
   );
+  // Active membership unlocks everything; admins always; codes/comps per course.
+  const hasAccess = (slug: string) => admin || member || granted.has(slug);
+  const isMember = admin || member;
 
   return (
     <>
-      <CatalogHeaderServer email={user.email ?? ""} />
+      <CatalogHeader email={user.email ?? ""} member={member} />
       <main className="wrap" style={{ paddingTop: 40, paddingBottom: 72, maxWidth: 880 }}>
         <p className="eyebrow">YOUR LIBRARY</p>
         <h1 style={{ fontSize: "clamp(26px, 4vw, 34px)", fontWeight: 600, letterSpacing: "-.02em", margin: "8px 0 6px" }}>
           Course catalog
         </h1>
-        <p style={{ color: "var(--dim2)", fontSize: 16, marginBottom: 28, maxWidth: 560 }}>
-          Pick a course to start learning. New courses are on the way — owned courses
-          stay yours for life.
+        <p style={{ color: "var(--dim2)", fontSize: 16, marginBottom: 24, maxWidth: 560 }}>
+          {isMember
+            ? "Your membership unlocks every course below. New courses are added over time — they're included."
+            : "Pick a course to preview free. A membership unlocks every course, current and future."}
         </p>
+
+        {!isMember && (
+          <div
+            className="card"
+            style={{
+              marginBottom: 24,
+              padding: 20,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 16,
+              flexWrap: "wrap",
+              border: "1px solid var(--accent)",
+              boxShadow: "0 0 0 1px var(--accent), var(--shadow-2)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+              <span style={{ display: "inline-flex", padding: 9, borderRadius: 10, background: "var(--accent-soft)", color: "var(--accent)", flexShrink: 0 }}>
+                <Sparkles size={18} strokeWidth={1.75} />
+              </span>
+              <div style={{ minWidth: 0 }}>
+                <b style={{ fontSize: 15 }}>Unlock every course</b>
+                <p style={{ color: "var(--dim2)", fontSize: 13.5, margin: "2px 0 0" }}>
+                  Membership from $21/mo. Cancel anytime.
+                </p>
+              </div>
+            </div>
+            <Link href="/pricing" className="btn" style={{ margin: 0, flexShrink: 0 }}>
+              See plans <ArrowRight size={16} strokeWidth={1.75} />
+            </Link>
+          </div>
+        )}
 
         <div style={{ display: "grid", gap: 18 }}>
           {COURSES.map((c) => (
-            <CourseCard
-              key={c.slug}
-              course={c}
-              owned={admin || owned.has(c.slug)}
-              admin={admin}
-            />
+            <CourseCard key={c.slug} course={c} access={hasAccess(c.slug)} member={isMember} />
           ))}
         </div>
       </main>
@@ -55,15 +89,15 @@ export default async function CoursesPage() {
 
 function CourseCard({
   course: c,
-  owned,
-  admin,
+  access,
+  member,
 }: {
   course: CourseMeta;
-  owned: boolean;
-  admin: boolean;
+  access: boolean;
+  member: boolean;
 }) {
   const live = c.status === "live";
-  const accessible = live || admin;
+  const accessible = live; // any signed-in user can open a live course (preview)
 
   return (
     <div
@@ -79,10 +113,13 @@ function CourseCard({
         <div style={{ minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <h2 style={{ fontSize: 19, fontWeight: 600, margin: 0 }}>{c.title}</h2>
-            {owned && live && (
+            {live && access && (
               <span className="pill" style={{ color: "var(--green)", borderColor: "rgba(52,199,89,.4)" }}>
-                <Check size={12} strokeWidth={2.5} style={{ marginRight: 3 }} /> Owned
+                <Check size={12} strokeWidth={2.5} style={{ marginRight: 3 }} /> Unlocked
               </span>
+            )}
+            {live && !access && member === false && (
+              <span className="pill" style={{ color: "var(--dim)" }}>Free preview</span>
             )}
             {!live && (
               <span className="pill" style={{ color: "var(--dim)" }}>
@@ -94,12 +131,6 @@ function CourseCard({
             {c.subtitle}
           </p>
         </div>
-        {live && !owned && c.price && (
-          <div style={{ textAlign: "right", flexShrink: 0 }}>
-            <div style={{ fontSize: 22, fontWeight: 700, color: "var(--accent)", letterSpacing: "-.02em" }}>{c.price}</div>
-            <div style={{ fontSize: 11.5, color: "var(--faint)" }}>one-time</div>
-          </div>
-        )}
       </div>
 
       <p style={{ color: "var(--dim)", fontSize: 13.5, lineHeight: 1.5, margin: "12px 0 14px" }}>
@@ -124,11 +155,7 @@ function CourseCard({
         </div>
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {c.bestFor.map((b) => (
-            <span
-              key={b}
-              className="pill"
-              style={{ fontSize: 12, color: "var(--dim2)", borderColor: "var(--border2)" }}
-            >
+            <span key={b} className="pill" style={{ fontSize: 12, color: "var(--dim2)", borderColor: "var(--border2)" }}>
               {b}
             </span>
           ))}
@@ -137,7 +164,7 @@ function CourseCard({
 
       {accessible ? (
         <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0 }}>
-          {owned ? "Continue" : "Start free preview"}{" "}
+          {access ? "Continue" : "Start free preview"}{" "}
           <ArrowRight size={16} strokeWidth={1.75} />
         </Link>
       ) : (
@@ -149,9 +176,8 @@ function CourseCard({
   );
 }
 
-// Header for the catalog page — brand + sign out. Kept inline-server with a
-// small client island for the sign-out action.
-function CatalogHeaderServer({ email }: { email: string }) {
+// Catalog header — brand, membership management, sign out.
+function CatalogHeader({ email, member }: { email: string; member: boolean }) {
   return (
     <header className="siteheader-bar">
       <div className="siteheader">
@@ -161,6 +187,7 @@ function CatalogHeaderServer({ email }: { email: string }) {
         </Link>
         <nav className="sh-nav" style={{ alignItems: "center", gap: 14 }}>
           {email && <span style={{ color: "var(--faint)", fontSize: 12.5 }}>{email}</span>}
+          {member && <ManageMembership />}
           <SignOutLink />
         </nav>
       </div>

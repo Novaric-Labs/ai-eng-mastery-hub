@@ -30,8 +30,8 @@ export default function Home() {
             </h1>
             <p style={{ color: "var(--dim2)", fontSize: 18, maxWidth: 600, margin: "0 auto", lineHeight: 1.5 }}>
               Focused, hands-on courses on the real job — not prompt tricks. RAG,
-              agents, harnesses, evals, and the judgment to ship. Start free, own it
-              for life.
+              agents, harnesses, evals, and the judgment to ship. One membership
+              unlocks every course — from $21/mo, cancel anytime.
             </p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", margin: "30px 0 12px", flexWrap: "wrap" }}>
               <Link href="/login" className="btn">Start free preview <ArrowRight size={16} strokeWidth={1.75} /></Link>
@@ -45,7 +45,7 @@ export default function Home() {
         <section id="courses" className="wrap" style={{ paddingTop: 28, paddingBottom: 8 }}>
           <h2 style={{ fontSize: 22, textAlign: "center", margin: "16px 0 6px" }}>Courses</h2>
           <p style={{ textAlign: "center", color: "var(--dim)", fontSize: 14, marginBottom: 22 }}>
-            One academy, growing library. Buy a course once and keep it for life.
+            One academy, growing library. A single membership unlocks all of it.
           </p>
           <div style={{ display: "grid", gap: 16, maxWidth: 760, margin: "0 auto" }}>
             {COURSES.map((c) => {
@@ -64,12 +64,6 @@ export default function Home() {
                       </div>
                       <p style={{ color: "var(--dim2)", fontSize: 14, margin: "6px 0 0", lineHeight: 1.45 }}>{c.subtitle}</p>
                     </div>
-                    {live && c.price && (
-                      <div style={{ textAlign: "right", flexShrink: 0 }}>
-                        <div style={{ fontSize: 20, fontWeight: 700, color: "var(--accent)", letterSpacing: "-.02em" }}>{c.price}</div>
-                        <div style={{ fontSize: 11, color: "var(--faint)" }}>one-time</div>
-                      </div>
-                    )}
                   </div>
 
                   <div style={{ display: "flex", gap: 16, flexWrap: "wrap", margin: "14px 0 0", color: "var(--dim)", fontSize: 12.5 }}>

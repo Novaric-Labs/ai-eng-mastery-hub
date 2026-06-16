@@ -18,10 +18,6 @@ export type CourseMeta = {
   level: string;
   estHours: string;
   moduleCount: number;
-  /** Display price, e.g. "$149" (omit for coming-soon). */
-  price?: string;
-  /** Struck-through anchor price, e.g. "$199". */
-  compareAt?: string;
   status: "live" | "coming_soon";
   /** CSS accent (currently informational; cards use the global accent). */
   accent: string;
@@ -42,8 +38,6 @@ export const COURSES: CourseMeta[] = [
     level: "Intermediate",
     estHours: "20–30 hrs",
     moduleCount: 21,
-    price: "$149",
-    compareAt: "$199",
     status: "live",
     accent: "#5b8cff",
   },

@@ -1,14 +1,30 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isAdmin } from "./admin";
 
-// Full access = a paid entitlement OR an admin/owner (who always has access).
-// Used by server features that gate on payment (tutor, grading, the course gate).
+// True if the signed-in user has an active, non-expired membership.
+export async function hasActiveMembership(
+  supabase: SupabaseClient,
+): Promise<boolean> {
+  const { data } = await supabase
+    .from("subscriptions")
+    .select("status, current_period_end")
+    .maybeSingle();
+  if (!data) return false;
+  const paying = data.status === "active" || data.status === "trialing";
+  const live =
+    !data.current_period_end || new Date(data.current_period_end) > new Date();
+  return paying && live;
+}
+
+// Full access = an active membership, a per-course grant (access code/comp), OR
+// an admin/owner. Used by server features that gate on payment (tutor, grading).
 export async function hasFullAccess(
   supabase: SupabaseClient,
   user: { email?: string | null } | null,
 ): Promise<boolean> {
   if (!user) return false;
   if (isAdmin(user.email)) return true;
+  if (await hasActiveMembership(supabase)) return true;
   const { data } = await supabase
     .from("entitlements")
     .select("active")

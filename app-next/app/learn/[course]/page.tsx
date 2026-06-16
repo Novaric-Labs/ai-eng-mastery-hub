@@ -35,17 +35,25 @@ export default async function LearnCoursePage({
   // query is scoped to this course's rows.
   const contentClient = admin ? supabaseAdmin() : supabase;
 
-  const [{ data: content }, { data: ent }, { data: prog }] = await Promise.all([
+  const [{ data: content }, { data: ent }, { data: sub }, { data: prog }] = await Promise.all([
     contentClient.from("content").select("id,tier,data").eq("course_id", slug),
     supabase.from("entitlements").select("active").eq("course_id", slug).maybeSingle(),
+    supabase.from("subscriptions").select("status, current_period_end").maybeSingle(),
     supabase.from("progress").select("state").maybeSingle(),
   ]);
+
+  // Access this course = active membership (unlocks everything) OR a per-course
+  // grant (access code / comp) OR admin. Mirrors the is_entitled() RLS gate.
+  const member =
+    !!sub &&
+    (sub.status === "active" || sub.status === "trialing") &&
+    (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
 
   return (
     <LearnApp
       content={(content ?? []) as ContentRow[]}
       courseSlug={slug}
-      entitled={admin || !!ent?.active}
+      entitled={admin || member || !!ent?.active}
       admin={admin}
       userId={user?.id ?? ""}
       initialProgress={(prog?.state ?? {}) as ProgressState}

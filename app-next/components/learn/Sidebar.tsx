@@ -21,6 +21,7 @@ import {
   Pencil,
 } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
+import ManageMembership from "@/components/ManageMembership";
 import RedeemDialog from "./RedeemDialog";
 import { useCourseStore } from "./StoreProvider";
 import { courseBySlug } from "@/lib/courses";
@@ -46,20 +47,8 @@ export default function Sidebar() {
     theme: s.theme,
     toggleTheme: s.toggleTheme,
   }));
-  const [busy, setBusy] = useState(false);
   const courseTitle = courseBySlug(courseSlug)?.title ?? "AI Engineering Mastery";
 
-  async function buy() {
-    setBusy(true);
-    const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ course: courseSlug }),
-    });
-    const d = await res.json();
-    if (d.url) location.href = d.url;
-    else { setBusy(false); alert("Checkout error: " + (d.error ?? "unknown")); }
-  }
   async function signOut() {
     await supabaseBrowser().auth.signOut();
     location.href = "/";
@@ -188,13 +177,22 @@ export default function Sidebar() {
       })}
 
       <div style={{ borderTop: "1px solid var(--border)", marginTop: 14, paddingTop: 12 }}>
-        {!entitled && (
+        {!entitled ? (
           <>
-            <button className="btn" style={{ width: "100%", justifyContent: "center" }} disabled={busy} onClick={buy}>
-              {busy ? "Opening checkout…" : <><Unlock size={15} strokeWidth={1.75} /> Unlock full access</>}
-            </button>
+            <Link
+              href="/pricing"
+              className="btn"
+              style={{ width: "100%", justifyContent: "center" }}
+            >
+              <Unlock size={15} strokeWidth={1.75} /> Unlock full access
+            </Link>
             <RedeemDialog className="btn ghost" style={{ width: "100%", marginTop: 6 }} />
           </>
+        ) : (
+          <ManageMembership
+            className="navbtn"
+            label="Manage membership"
+          />
         )}
         <button
           className="navbtn"
