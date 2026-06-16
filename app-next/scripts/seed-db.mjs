@@ -24,10 +24,19 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL("../../content/" + fil
 
 // One descriptor per course (mirrors content/seed.mjs). `sample` = the single
 // module offered free; every other module is paid.
-const COURSES = [
+const ALL_COURSES = [
   { course: "ai-eng", json: "content.json", sample: "llm", videos: AI_ENG_VIDEOS },
   { course: "ai-foundations", json: "ai-foundations.json", sample: "whatai", videos: AI_FOUNDATIONS_VIDEOS },
 ];
+
+// Optional: SEED_COURSE=<slug> limits the payload to a single course, so you can
+// upsert just one course's rows without touching the others. Unset = both.
+const only = process.env.SEED_COURSE;
+const COURSES = only ? ALL_COURSES.filter((c) => c.course === only) : ALL_COURSES;
+if (only && COURSES.length === 0) {
+  console.error(`✗ SEED_COURSE='${only}' matched no course (known: ${ALL_COURSES.map((c) => c.course).join(", ")}).`);
+  process.exit(1);
+}
 
 function buildRows({ course, json, sample, videos }) {
   const d = read(json);
