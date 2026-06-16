@@ -3,12 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Sparkles, X, Send } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
+import { learnLabelsFor } from "@/lib/learn-labels";
 
 type Turn = { role: "user" | "assistant"; content: string };
 
 // Floating, course-scoped AI tutor. Entitled-only (also enforced server-side).
 export default function TutorBot() {
-  const entitled = useCourseStore((s) => s.entitled);
+  const { entitled, courseSlug } = useCourseStore((s) => ({
+    entitled: s.entitled,
+    courseSlug: s.courseSlug,
+  }));
+  const L = learnLabelsFor(courseSlug);
   const [open, setOpen] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);
   const [input, setInput] = useState("");
@@ -67,10 +72,7 @@ export default function TutorBot() {
       </div>
       <div className="tutor-body" ref={bodyRef}>
         {turns.length === 0 && (
-          <p className="tutor-hint">
-            Ask anything about the course — LLMs, RAG, agents, evals, production engineering… I only answer
-            on course topics.
-          </p>
+          <p className="tutor-hint">{L.tutorHint}</p>
         )}
         {turns.map((t, i) => (
           <div key={i} className={`tutor-msg ${t.role}`}>{t.content}</div>

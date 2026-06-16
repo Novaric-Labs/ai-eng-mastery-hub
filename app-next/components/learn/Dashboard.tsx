@@ -3,6 +3,7 @@
 import { Check, Flame } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
+import { learnLabelsFor } from "@/lib/learn-labels";
 import {
   PASS_EXAM,
   PASS_QUIZ,
@@ -18,12 +19,14 @@ import {
 } from "@/lib/course";
 
 export default function Dashboard() {
-  const { course, S, go, resetProgress } = useCourseStore((s) => ({
+  const { course, courseSlug, S, go, resetProgress } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     go: s.go,
     resetProgress: s.resetProgress,
   }));
+  const L = learnLabelsFor(courseSlug);
 
   const today = new Date().toISOString().slice(0, 10);
   const total = course.catalog.length;
@@ -52,21 +55,19 @@ export default function Dashboard() {
         <div className="card" style={{ borderColor: "var(--teal)" }}>
           <b style={{ color: "var(--teal)" }}>New to AI?</b>{" "}
           <span style={{ color: "var(--dim)" }}>
-            This hub assumes only basic programming knowledge. Take 15 minutes on
+            {L.dashNewBefore}
           </span>{" "}
           <a href="#" onClick={(e) => { e.preventDefault(); go("start"); }} style={{ color: "var(--accent)", fontWeight: 600 }}>
             Start Here
           </a>{" "}
           <span style={{ color: "var(--dim)" }}>
-            first — it gives you the mental model everything else builds on, and every module opens with a plain-English intro.
+            {L.dashNewAfter}
           </span>
         </div>
       )}
 
-      <h2>{S.name ? `Welcome back, ${S.name}` : "Your Mastery Dashboard"}</h2>
-      <p className="tagline">
-        Mastery = read the module + score ≥{PASS_QUIZ}% on its quiz. Block mastery adds the exam at ≥{PASS_EXAM}%.
-      </p>
+      <h2>{S.name ? `Welcome back, ${S.name}` : L.dashTitle}</h2>
+      <Html as="p" className="tagline" html={L.dashTagline(PASS_QUIZ, PASS_EXAM)} />
 
       <div className="card herostat" data-tour="dash-hero">
         <div className="hs-cell">
@@ -95,7 +96,7 @@ export default function Dashboard() {
       </div>
 
       <div className="card" data-tour="dash-overall">
-        <b>Overall mastery</b>
+        <b>{L.dashOverall}</b>
         <div className="bar">
           <i className={pct === 100 ? "g" : ""} style={{ width: `${pct}%` }} />
         </div>
@@ -107,7 +108,7 @@ export default function Dashboard() {
       <div className="statgrid">
         <div className="stat">
           <div className="big">{examsPassed}/{course.blocks.length}</div>
-          <div className="lbl">Mastery exams passed</div>
+          <div className="lbl">{L.dashExamsStat}</div>
         </div>
         <div className="stat">
           <div className="big">{cardsKnown}/{unlockedTotal}</div>
@@ -171,15 +172,15 @@ export default function Dashboard() {
       })}
 
       <div className="card" style={{ borderColor: "var(--accent2)" }}>
-        <b>How to use this hub</b>
+        <b>{L.dashHowTitle}</b>
         <ul className="flat">
           <li>
-            <Html as="span" html={`<b>Read</b> each module's three tabs — <b>Learn</b> (concepts), <b>Apply</b> (worked example, production checklist, build exercise), <b>Resources</b> (curated, with when-to-use) — then take its <b>quiz</b> (≥${PASS_QUIZ}% to master). Work block by block.`} />
+            <Html as="span" html={L.dashHowRead(PASS_QUIZ)} />
           </li>
-          <li>Do the <b>Build it</b> exercise for each module. Quizzes verify understanding; building creates it. The portfolio that results is also your credibility artifact.</li>
+          <li><Html as="span" html={L.dashHowBuild} /></li>
           <li>Run <b>flashcards daily</b> — spaced repetition (Leitner boxes) schedules each card at expanding intervals as you get it right.</li>
-          <li>Do the <b>scenarios</b> once a block&apos;s modules are mastered — they test production judgment, the senior-level skill.</li>
-          <li>Pass the <b>mastery exam</b> (20 questions sampled across the block, ≥{PASS_EXAM}%) to lock in the block.</li>
+          <li><Html as="span" html={L.dashHowScenarios} /></li>
+          <li><Html as="span" html={L.dashHowExam(PASS_EXAM)} /></li>
           <li>
             Progress saves to your account and syncs across devices.{" "}
             <button

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
 import { useCourseStore } from "./StoreProvider";
+import { learnLabelsFor, type LearnLabels } from "@/lib/learn-labels";
 
 // Per-area guided tours. Rather than one long walkthrough on first login, each
 // major page shows its own short tour the first time the user lands on it
@@ -21,7 +22,11 @@ type TourDef = {
   onEnd?: (goTab: (t: "learn" | "apply" | "res" | "code") => void) => void;
 };
 
-const TOURS: Record<string, TourDef> = {
+// Course-aware tour copy: most steps are course-agnostic, but a handful carry
+// engineer/Mastery wording that reads wrong for a beginner course. Those strings
+// come from the shared learn-labels map (L), which defaults to the existing
+// ai-eng copy — so ai-eng (and any unknown slug) is unchanged.
+const buildTours = (L: LearnLabels): Record<string, TourDef> => ({
   dash: {
     anchor: '[data-tour="dash-hero"]',
     steps: (isMobile) => [
@@ -45,9 +50,8 @@ const TOURS: Record<string, TourDef> = {
       {
         element: '[data-tour="dash-overall"]',
         popover: {
-          title: "Overall mastery",
-          description:
-            "A module counts as <b>mastered</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
+          title: L.tourOverallTitle,
+          description: L.tourOverallDesc,
           side: "bottom",
           align: "start",
         },
@@ -55,10 +59,8 @@ const TOURS: Record<string, TourDef> = {
       {
         element: '[data-tour="dash-blocks"]',
         popover: {
-          title: "21 modules, 5 blocks",
-          description: isMobile
-            ? "The course is grouped into 5 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
-            : "The course is grouped into 5 blocks. Hit <b>Study</b> on a block to dive in, or use the menu on the left to jump anywhere.",
+          title: L.tourBlocksTitle,
+          description: L.tourBlocksDesc(isMobile),
           side: "top",
           align: "start",
         },
@@ -91,8 +93,7 @@ const TOURS: Record<string, TourDef> = {
         element: '[data-tour="tab-apply"]',
         popover: {
           title: "Apply tab",
-          description:
-            "A worked example, a production checklist, and a hands-on build exercise.",
+          description: L.tourApplyDesc,
           side: "bottom",
           align: "start",
         },
@@ -119,8 +120,7 @@ const TOURS: Record<string, TourDef> = {
         element: '[data-tour="quiz"]',
         popover: {
           title: "Read it, then prove it",
-          description:
-            "When you've worked through the tabs, mark the module read and take its quiz — score ≥80% to master it.",
+          description: L.tourQuizDesc,
           side: "top",
           align: "start",
         },
@@ -175,8 +175,7 @@ const TOURS: Record<string, TourDef> = {
       {
         popover: {
           title: "Scenario challenges",
-          description:
-            "Real production dilemmas. Write (or speak) your own answer <b>first</b>, then reveal the model answer and get AI feedback — retrieval practice is where senior judgment forms.",
+          description: L.tourScenDesc,
         },
       },
     ],
@@ -186,9 +185,8 @@ const TOURS: Record<string, TourDef> = {
     steps: () => [
       {
         popover: {
-          title: "Mastery exam",
-          description:
-            "An exam samples ~20 questions from across the whole block. Master the block's modules first, then pass at ≥85% to lock the block in.",
+          title: L.tourExamTitle,
+          description: L.tourExamDesc,
         },
       },
     ],
@@ -199,18 +197,18 @@ const TOURS: Record<string, TourDef> = {
       {
         popover: {
           title: "Start Here",
-          description:
-            "A ~15-minute orientation that gives you the mental model the rest of the course builds on. Worth doing first if you're newer to AI engineering.",
+          description: L.tourStartDesc,
         },
       },
     ],
   },
-};
+});
 
 export default function Tour() {
-  const { tours, page, nameHandled, goTab, markTour } = useCourseStore((s) => ({
+  const { tours, page, courseSlug, nameHandled, goTab, markTour } = useCourseStore((s) => ({
     tours: s.S.tours,
     page: s.route.page,
+    courseSlug: s.courseSlug,
     nameHandled: !!(s.S.name || s.S.nameAsked),
     goTab: s.goTab,
     markTour: s.markTour,
@@ -224,7 +222,7 @@ export default function Tour() {
     if (page === "dash" && !nameHandled) return;
 
     const key = page;
-    const def = TOURS[key];
+    const def = buildTours(learnLabelsFor(courseSlug))[key];
     if (!def || tours?.[key] || started.current.has(key)) return;
 
     let cancelled = false;
@@ -268,7 +266,7 @@ export default function Tour() {
       cancelled = true;
       clearInterval(poll);
     };
-  }, [page, tours, nameHandled, goTab, markTour]);
+  }, [page, tours, courseSlug, nameHandled, goTab, markTour]);
 
   return null;
 }

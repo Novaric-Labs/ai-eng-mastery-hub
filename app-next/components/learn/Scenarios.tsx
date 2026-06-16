@@ -4,14 +4,17 @@ import { useState } from "react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
+import { learnLabelsFor } from "@/lib/learn-labels";
 
 export default function Scenarios() {
-  const { course, S, setScen, setScenNote } = useCourseStore((s) => ({
+  const { course, courseSlug, S, setScen, setScenNote } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     setScen: s.setScen,
     setScenNote: s.setScenNote,
   }));
+  const L = learnLabelsFor(courseSlug);
 
   const [open, setOpen] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(false);
@@ -49,7 +52,7 @@ export default function Scenarios() {
     return (
       <div className="page">
         <h2>Scenario Challenges</h2>
-        <p className="tagline">Production-judgment challenges across all five blocks.</p>
+        <p className="tagline">{L.scenLockedTagline}</p>
         <Paywall heading="Scenarios are part of the full course" />
       </div>
     );
@@ -65,11 +68,7 @@ export default function Scenarios() {
   return (
     <div className="page">
       <h2>Scenario Challenges</h2>
-      <p className="tagline">
-        Production judgment under realistic conditions. Write or speak your answer BEFORE revealing
-        the model answer — retrieval practice is where mastery forms. Then self-grade honestly
-        against the key points.
-      </p>
+      <p className="tagline">{L.scenIntroTagline}</p>
       {course.blocks.map((b) => (
         <div key={b.id}>
           <h3>{b.name}</h3>
