@@ -13,7 +13,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
-const DEFAULT_VOICE = "21m00Tcm4TlvDq8ikWAM"; // ElevenLabs "Rachel" (always available)
+// "Eric — Smooth, Trustworthy": a premade voice (works on free plans via API,
+// unlike Voice-Library voices). Calm, conversational, staff-engineer tone.
+// Override per-run with ELEVENLABS_VOICE_ID or per-video via `voiceId`.
+const DEFAULT_VOICE = "cjVigY5qzO86Huf0OWal";
 
 function fmtTime(s) {
   const ms = Math.round(s * 1000);

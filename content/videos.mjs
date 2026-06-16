@@ -16,7 +16,7 @@ export const VIDEOS = {
     src: "rag/preface.mp4",
     poster: "rag/preface.jpg",
     vtt: "rag/preface.en.vtt",
-    duration: 78, // seconds — update to the real runtime after rendering
+    duration: 53, // seconds (real runtime from the render)
     tier: "public",
     title: "Why retrieval beats a bigger prompt",
     caption: "A short preface — the problem RAG actually solves, before we get into how it works.",
