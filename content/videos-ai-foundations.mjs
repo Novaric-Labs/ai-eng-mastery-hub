@@ -3,4 +3,77 @@
 // Sparse preface-video registry: only modules that have been rendered + uploaded.
 // Seeded as the public `videos` content row for the 'ai-foundations' course.
 
-export const VIDEOS = {};
+export const VIDEOS = {
+  "whatai": {
+    "src": "af-whatai/preface.mp4",
+    "poster": "af-whatai/preface.jpg",
+    "vtt": "af-whatai/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "It's simpler than it looks",
+    "caption": "A short preface — what an AI model really is, before any of the details."
+  },
+  "tokens": {
+    "src": "af-tokens/preface.mp4",
+    "poster": "af-tokens/preface.jpg",
+    "vtt": "af-tokens/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "How the model really reads",
+    "caption": "A short preface — why the model reads text in puzzle pieces, not words."
+  },
+  "context": {
+    "src": "af-context/preface.mp4",
+    "poster": "af-context/preface.jpg",
+    "vtt": "af-context/preface.en.vtt",
+    "duration": 49,
+    "tier": "public",
+    "title": "The model's tiny desk",
+    "caption": "A short preface — why the model forgets, and what you can do about it."
+  },
+  "prompting": {
+    "src": "af-prompting/preface.mp4",
+    "poster": "af-prompting/preface.jpg",
+    "vtt": "af-prompting/preface.en.vtt",
+    "duration": 50,
+    "tier": "public",
+    "title": "The words are the steering wheel",
+    "caption": "A short preface — why how you ask changes everything you get back."
+  },
+  "chat": {
+    "src": "af-chat/preface.mp4",
+    "poster": "af-chat/preface.jpg",
+    "vtt": "af-chat/preface.en.vtt",
+    "duration": 52,
+    "tier": "public",
+    "title": "The memory that isn't there",
+    "caption": "A short preface — how a chat fakes memory with a model that has none."
+  },
+  "limits": {
+    "src": "af-limits/preface.mp4",
+    "poster": "af-limits/preface.jpg",
+    "vtt": "af-limits/preface.en.vtt",
+    "duration": 52,
+    "tier": "public",
+    "title": "Where it goes wrong",
+    "caption": "A short preface — the two failures you should always expect."
+  },
+  "tools": {
+    "src": "af-tools/preface.mp4",
+    "poster": "af-tools/preface.jpg",
+    "vtt": "af-tools/preface.en.vtt",
+    "duration": 54,
+    "tier": "public",
+    "title": "An engine, and a car",
+    "caption": "A short preface — how a text engine ends up doing so much more than text."
+  },
+  "using": {
+    "src": "af-using/preface.mp4",
+    "poster": "af-using/preface.jpg",
+    "vtt": "af-using/preface.en.vtt",
+    "duration": 54,
+    "tier": "public",
+    "title": "Putting it all together",
+    "caption": "A short preface — turning everything you've learned into one simple habit."
+  }
+};
