@@ -3,17 +3,17 @@ import LegalPage from "@/components/LegalPage";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
-  description: "The terms governing your use of Novacademy and the AI Engineering Mastery Hub course.",
+  description: "The terms governing your use of Novacademy and its membership courses.",
   alternates: { canonical: "/terms" },
 };
 
 export default function Terms() {
   return (
-    <LegalPage title="Terms of Service" updated="June 15, 2026">
+    <LegalPage title="Terms of Service" updated="June 16, 2026">
       <p>
         These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of Novacademy
         (the &ldquo;Service&rdquo;), operated by <strong>[Novacademy — legal entity name]</strong>
-        {" "}(&ldquo;we&rdquo;, &ldquo;us&rdquo;), including the AI Engineering Mastery Hub course at{" "}
+        {" "}(&ldquo;we&rdquo;, &ldquo;us&rdquo;), including its online courses at{" "}
         <strong>novacademy.ai</strong>. By creating an account or using the Service you agree to these Terms.
         If you don&rsquo;t agree, don&rsquo;t use the Service.
       </p>
@@ -35,8 +35,9 @@ export default function Terms() {
 
       <h2>3. License &amp; acceptable use</h2>
       <p>
-        Upon purchase or redemption of an access code, we grant you a personal, non-exclusive,
-        non-transferable, revocable license to access the course content for your own learning. You may not:
+        While you have an active membership, or upon redemption of an access code, we grant you a personal,
+        non-exclusive, non-transferable, revocable license to access the course content available to you for
+        your own learning. You may not:
       </p>
       <ul>
         <li>share, resell, sublicense, or redistribute the content or your account access;</li>
@@ -45,12 +46,22 @@ export default function Terms() {
         <li>use the Service unlawfully or to infringe others&rsquo; rights.</li>
       </ul>
 
-      <h2>4. Purchases &amp; access</h2>
+      <h2>4. Membership, billing &amp; auto-renewal</h2>
       <p>
-        Access may be obtained by a one-time purchase (lifetime access to the purchased course) or by a
-        valid access code we issue. Payments are processed by <strong>Stripe</strong>; we don&rsquo;t store
-        your card details. Prices may change, but changes don&rsquo;t affect access you&rsquo;ve already
-        purchased. Refunds are governed by our <a href="/refund">Refund Policy</a>.
+        Access to paid content is provided through a <strong>membership</strong> — a recurring subscription
+        that unlocks every course on the platform (current and future) while it is active. You choose a plan
+        at checkout (for example, monthly, 3-month, 6-month, or annual). Payments are processed by{" "}
+        <strong>Stripe</strong>; we don&rsquo;t store your card details.
+      </p>
+      <p>
+        <strong>Your membership automatically renews</strong> at the end of each billing period at the
+        then-current price for your plan, and your payment method is charged for the next period, until you
+        cancel. You can <strong>cancel at any time</strong> from &ldquo;Manage membership&rdquo; in your
+        account; cancellation takes effect at the end of the current paid period, after which renewal stops
+        and paid access ends. We may change prices, but a price change applies only to billing periods that
+        begin after we notify you. As an alternative to membership, access to a specific course may also be
+        granted by a valid access code we issue. Cancellations and refunds are governed by our{" "}
+        <a href="/refund">Refund Policy</a>.
       </p>
 
       <h2>5. Intellectual property</h2>
