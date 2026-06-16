@@ -67,8 +67,10 @@ export default function ModuleView({ id }: { id: string }) {
   // Preface video. Feature-flagged to the owner/admin until launch (then drop
   // the `admin &&` guard). On a locked module we only surface a "public" video —
   // a free teaser; a "paid" one would 403 on play, so it stays hidden there.
+  // `key={id}` forces a fresh mount per module so the player resets (stops
+  // playback, clears the prior module's loaded source) when navigating lessons.
   const video = course.videos[id];
-  const videoEl = admin && video ? <VideoPreface id={id} meta={video} /> : null;
+  const videoEl = admin && video ? <VideoPreface key={id} id={id} meta={video} /> : null;
   const teaserEl = video && (video.tier ?? "public") === "public" ? videoEl : null;
 
   const header = (
