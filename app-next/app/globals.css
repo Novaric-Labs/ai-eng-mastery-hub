@@ -463,3 +463,27 @@ button.blockhead:hover { color: var(--dim2); }
 .price-amt { font-size: 40px; font-weight: 700; letter-spacing: -.03em; color: var(--text); }
 .price-unit { font-size: 14px; color: var(--dim); }
 .price-note { font-size: 13px; color: var(--faint); margin-bottom: 6px; }
+
+/* preface video (top of a module's Learn tab) */
+.vpreface { margin: 0 0 18px; }
+.vpreface-frame { position: relative; aspect-ratio: 16 / 9; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border2); background: var(--bg3); box-shadow: var(--shadow-1), var(--hairline); }
+.vpreface-video { width: 100%; height: 100%; display: block; background: #000; }
+.vpreface-cover { position: absolute; inset: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; border: none; font-family: inherit; color: var(--text); background-color: var(--bg2); background-size: cover; background-position: center; transition: filter .15s; }
+/* subtle brand gradient when there's no poster image */
+.vpreface-cover:not([style*="url"]) { background-image: radial-gradient(120% 90% at 50% 0%, rgba(69,179,192,.16), transparent 60%), linear-gradient(160deg, var(--bg2), var(--bg)); }
+.vpreface-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.35)); pointer-events: none; }
+.vpreface-cover:hover { filter: brightness(1.06); }
+.vpreface-cover:disabled { cursor: progress; }
+.vpreface-cover > * { position: relative; z-index: 1; }
+.vpreface-eyebrow { position: absolute; top: 12px; left: 13px; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--teal); }
+.vpreface-mark { color: var(--teal); opacity: .9; }
+.vpreface-play { display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.94); color: #0a0a0b; box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+.vpreface-cover:hover .vpreface-play { transform: scale(1.05); transition: transform .15s; }
+.vpreface-label { max-width: 80%; text-align: center; font-size: 14px; font-weight: 600; color: var(--text); text-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.vpreface-cap { margin-top: 8px; font-size: 13px; color: var(--dim); line-height: 1.5; }
+.vpreface-spin { animation: vpreface-spin 1s linear infinite; }
+@keyframes vpreface-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .vpreface-spin { animation: none; }
+  .vpreface-cover:hover .vpreface-play { transform: none; }
+}

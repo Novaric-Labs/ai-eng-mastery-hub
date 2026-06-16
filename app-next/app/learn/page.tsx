@@ -31,6 +31,7 @@ export default async function LearnPage() {
     <LearnApp
       content={(content ?? []) as ContentRow[]}
       entitled={admin || !!ent?.active}
+      admin={admin}
       userId={user?.id ?? ""}
       initialProgress={(prog?.state ?? {}) as ProgressState}
     />

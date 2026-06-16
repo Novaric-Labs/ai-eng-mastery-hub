@@ -8,6 +8,7 @@
 // Uses the PostgREST REST endpoint via fetch (not supabase-js, which initializes
 // a realtime WebSocket client that Node < 22 can't construct).
 import fs from "fs";
+import { VIDEOS } from "../../content/videos.mjs";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -29,6 +30,7 @@ add("meta:catalog", "public", d.MODULES.map((m) => ({
 })));
 add("glossary", "public", d.GLOSSARY);
 add("plain", "public", d.PLAIN);
+add("videos", "public", VIDEOS); // sparse preface-video registry (free teasers)
 
 for (const m of d.MODULES) {
   const tier = m.id === SAMPLE ? "public" : "paid";

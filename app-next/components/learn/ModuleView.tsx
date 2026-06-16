@@ -5,6 +5,7 @@ import { useCourseStore } from "./StoreProvider";
 import HtmlRaw from "./Html";
 import Paywall from "./Paywall";
 import SectionRail from "./SectionRail";
+import VideoPreface from "./VideoPreface";
 import {
   fmtMin,
   modMastered,
@@ -37,10 +38,11 @@ function Html(props: React.ComponentProps<typeof HtmlRaw>) {
 }
 
 export default function ModuleView({ id }: { id: string }) {
-  const { course, S, tab, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
+  const { course, S, tab, admin, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
     course: s.course,
     S: s.S,
     tab: s.route.tab,
+    admin: s.admin,
     go: s.go,
     goTab: s.goTab,
     startQuiz: s.startQuiz,
@@ -62,6 +64,13 @@ export default function ModuleView({ id }: { id: string }) {
   const mastered = modMastered(S, id);
   const plain = course.plain[id];
 
+  // Preface video. Feature-flagged to the owner/admin until launch (then drop
+  // the `admin &&` guard). On a locked module we only surface a "public" video —
+  // a free teaser; a "paid" one would 403 on play, so it stays hidden there.
+  const video = course.videos[id];
+  const videoEl = admin && video ? <VideoPreface id={id} meta={video} /> : null;
+  const teaserEl = video && (video.tier ?? "public") === "public" ? videoEl : null;
+
   const header = (
     <>
       <h2>{meta.title}</h2>{" "}
@@ -75,6 +84,7 @@ export default function ModuleView({ id }: { id: string }) {
     return (
       <div className="page">
         {header}
+        {teaserEl}
         {plain && (
           <div className="card" style={{ borderColor: "var(--teal)" }}>
             <b style={{ color: "var(--teal)" }}>In plain English</b>
@@ -123,6 +133,7 @@ export default function ModuleView({ id }: { id: string }) {
 
   const learn = (
     <>
+      {videoEl}
       {plain && (
         <div id="sec-why" className="card" style={{ borderColor: "var(--teal)" }}>
           <b style={{ color: "var(--teal)" }}>In plain English</b>

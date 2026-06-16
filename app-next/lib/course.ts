@@ -58,6 +58,21 @@ export type ModuleBundle = {
   patterns: Patterns | null;
 };
 
+// Per-module preface video. Only modules that genuinely benefit get an entry,
+// so `videos` is sparse. `src`/`poster` are object paths inside the private
+// `course-video` Storage bucket (resolved to signed URLs by /api/video/[id]).
+// `tier` mirrors the content model: "public" videos are free teasers shown even
+// on locked modules; "paid" videos require an entitlement to play.
+export type VideoMeta = {
+  src: string;
+  poster?: string;
+  vtt?: string;
+  duration?: number;
+  title?: string;
+  caption?: string;
+  tier?: "public" | "paid";
+};
+
 export type QuizItem = { q: string; o: string[]; a: number; exp: string };
 export type Card = { m: string; f: string; b: string };
 export type Scenario = {
@@ -84,6 +99,8 @@ export type Course = {
   scenarios: Scenario[] | null;
   glossary: GlossTerm[];
   plain: Record<string, string>;
+  /** Preface videos keyed by module id. Sparse — only some modules have one. */
+  videos: Record<string, VideoMeta>;
 };
 
 // Default per-module time estimates (minutes). The vanilla app seeds these at
@@ -107,6 +124,7 @@ export function buildCourse(rows: ContentRow[]): Course {
   }));
   const glossary = (byId.get("glossary") as GlossTerm[]) ?? [];
   const plain = (byId.get("plain") as Record<string, string>) ?? {};
+  const videos = (byId.get("videos") as Record<string, VideoMeta>) ?? {};
 
   const modules: Record<string, ModuleBundle> = {};
   const quizzes: Record<string, QuizItem[]> = {};
@@ -127,6 +145,7 @@ export function buildCourse(rows: ContentRow[]): Course {
     scenarios: (byId.get("scenarios") as Scenario[]) ?? null,
     glossary,
     plain,
+    videos,
   };
 }
 

@@ -27,11 +27,13 @@ const VALID: Page[] = ["dash", "mod", "quiz", "exam", "cards", "scen", "start", 
 export default function LearnApp({
   content,
   entitled,
+  admin,
   userId,
   initialProgress,
 }: {
   content: ContentRow[];
   entitled: boolean;
+  admin: boolean;
   userId: string;
   initialProgress: ProgressState;
 }) {
@@ -40,6 +42,7 @@ export default function LearnApp({
     () => ({
       course,
       entitled,
+      admin,
       userId,
       initialProgress,
       initialRoute: { page: "dash", tab: "learn" } as Route,
@@ -48,7 +51,7 @@ export default function LearnApp({
           ? ("light" as const)
           : ("dark" as const),
     }),
-    [course, entitled, userId, initialProgress],
+    [course, entitled, admin, userId, initialProgress],
   );
 
   // No catalog rows → the content table hasn't been seeded (or RLS returned

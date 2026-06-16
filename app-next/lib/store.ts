@@ -56,6 +56,8 @@ export type Route = { page: Page; arg?: string; tab: Tab };
 export type CourseState = {
   course: Course;
   entitled: boolean;
+  /** Owner/admin — used to gate not-yet-launched features (e.g. preface videos). */
+  admin: boolean;
   userId: string;
   S: ProgressState;
   route: Route;
@@ -91,6 +93,7 @@ function emptyProgress(): ProgressState {
 export type StoreInit = {
   course: Course;
   entitled: boolean;
+  admin: boolean;
   userId: string;
   initialProgress: ProgressState;
   initialRoute: Route;
@@ -101,6 +104,7 @@ export function createCourseStore(init: StoreInit) {
   return createStore<CourseState>()((set, get) => ({
     course: init.course,
     entitled: init.entitled,
+    admin: init.admin,
     userId: init.userId,
     S: { ...emptyProgress(), ...init.initialProgress },
     route: init.initialRoute,
