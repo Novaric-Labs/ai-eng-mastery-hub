@@ -25,10 +25,23 @@ async function main() {
   console.log(`· Rendering ${targets.length} module(s): ${targets.join(", ")}`);
 
   // 1. TTS for every target first, so all narration is on disk before bundling.
+  // Resilient: if one module's TTS fails (e.g. ElevenLabs quota), skip it and
+  // keep going, so a mid-batch failure still produces every other video.
   const jobs = [];
+  const failed = [];
   for (const id of targets) {
     console.log(`\n— TTS ${id} —`);
-    jobs.push({ id, props: await synth(id) });
+    try {
+      jobs.push({ id, props: await synth(id) });
+    } catch (e) {
+      console.error(`  ✗ skipped ${id}: ${e.message}`);
+      failed.push(id);
+    }
+  }
+  if (!jobs.length) {
+    console.error("\n✗ No modules synthesized (all failed). Nothing to render.");
+    if (failed.length) console.error(`  failed: ${failed.join(", ")}`);
+    process.exit(1);
   }
 
   // 2. Bundle once (captures every public/<id>/narration.mp3).
@@ -68,7 +81,9 @@ async function main() {
     console.log(`✓ ${id}: ${props.durationInSeconds.toFixed(0)}s  → out/${id}/preface.{mp4,jpg,en.vtt}`);
   }
 
-  console.log(`\nDone (${jobs.length}). Next: upload each, then regenerate videos + reseed.`);
+  console.log(`\nDone: rendered ${jobs.length} (${jobs.map((j) => j.id).join(", ")}).`);
+  if (failed.length) console.log(`Skipped ${failed.length} (likely quota): ${failed.join(", ")}`);
+  console.log("Next: upload each, then regenerate videos + reseed.");
 }
 
 main().catch((e) => {

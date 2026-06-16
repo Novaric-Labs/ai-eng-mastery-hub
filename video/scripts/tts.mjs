@@ -13,10 +13,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
-// "Eric — Smooth, Trustworthy": a premade voice (works on free plans via API,
-// unlike Voice-Library voices). Calm, conversational, staff-engineer tone.
+// Course narrator: "Tim — Solid and Enthusiastic" (Voice Library). Natural,
+// warm, clean — no breathy mic realism. Requires a paid plan to use via API.
 // Override per-run with ELEVENLABS_VOICE_ID or per-video via `voiceId`.
-const DEFAULT_VOICE = "cjVigY5qzO86Huf0OWal";
+const DEFAULT_VOICE = "6psAnGNeDguzLyTxKYvI";
 
 function fmtTime(s) {
   const ms = Math.round(s * 1000);
@@ -98,7 +98,7 @@ export async function synth(id) {
   if (!video?.segments?.length) throw new Error(`No preface for "${id}" in data/prefaces.mjs.`);
 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || video.voiceId || DEFAULT_VOICE;
-  const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
+  const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
   // Force the language so the multilingual model can't briefly drift into
   // another language/accent mid-sentence. Honored by turbo_v2_5 / flash_v2_5.
   const languageCode = process.env.ELEVENLABS_LANGUAGE || "en";
@@ -116,9 +116,17 @@ export async function synth(id) {
       body: JSON.stringify({
         text: fullText,
         model_id: modelId,
-        language_code: languageCode,
-        // Higher stability also reduces odd pronunciation/accent excursions.
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+        // language_code is honored by the v2_5 (turbo/flash) models; the
+        // higher-quality multilingual_v2 infers language and rejects the param.
+        ...(/v2_5/.test(modelId) ? { language_code: languageCode } : {}),
+        // Tunable: lower stability = more natural prosody (less "processed/flat"),
+        // too low risks drift. Defaults aim for clean + naturally inflected.
+        voice_settings: {
+          stability: Number(process.env.ELEVENLABS_STABILITY ?? 0.4),
+          similarity_boost: Number(process.env.ELEVENLABS_SIMILARITY ?? 0.8),
+          style: Number(process.env.ELEVENLABS_STYLE ?? 0),
+          use_speaker_boost: true,
+        },
       }),
     },
   );

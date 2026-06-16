@@ -4,6 +4,24 @@
 // Seeded as the public `videos` content row by both seed paths.
 
 export const VIDEOS = {
+  "llm": {
+    "src": "llm/preface.mp4",
+    "poster": "llm/preface.jpg",
+    "vtt": "llm/preface.en.vtt",
+    "duration": 41,
+    "tier": "public",
+    "title": "What an LLM actually is",
+    "caption": "A short preface — what an LLM really is, before the cost, latency, and model-choice details."
+  },
+  "prompt": {
+    "src": "prompt/preface.mp4",
+    "poster": "prompt/preface.jpg",
+    "vtt": "prompt/preface.en.vtt",
+    "duration": 48,
+    "tier": "public",
+    "title": "The cheapest quality lever you own",
+    "caption": "A short preface — why prompting is the first lever to pull, before the techniques."
+  },
   "context": {
     "src": "context/preface.mp4",
     "poster": "context/preface.jpg",
@@ -12,6 +30,15 @@ export const VIDEOS = {
     "tier": "public",
     "title": "Curating what the model sees",
     "caption": "A short preface — why what the model sees matters more than how you phrase it."
+  },
+  "landscape": {
+    "src": "landscape/preface.mp4",
+    "poster": "landscape/preface.jpg",
+    "vtt": "landscape/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "How to choose, when the lineup keeps changing",
+    "caption": "A short preface — how to choose a model in a lineup that changes every quarter."
   },
   "rag": {
     "src": "rag/preface.mp4",
@@ -26,27 +53,144 @@ export const VIDEOS = {
     "src": "embed/preface.mp4",
     "poster": "embed/preface.jpg",
     "vtt": "embed/preface.en.vtt",
-    "duration": 44,
+    "duration": 49,
     "tier": "public",
     "title": "Meaning as geometry",
     "caption": "A short preface — the intuition behind meaning-as-geometry, before the engineering."
+  },
+  "vecdb": {
+    "src": "vecdb/preface.mp4",
+    "poster": "vecdb/preface.jpg",
+    "vtt": "vecdb/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "A search index, not a database of record",
+    "caption": "A short preface — what a vector database really is, and when you need one."
+  },
+  "memory": {
+    "src": "memory/preface.mp4",
+    "poster": "memory/preface.jpg",
+    "vtt": "memory/preface.en.vtt",
+    "duration": 37,
+    "tier": "public",
+    "title": "State across the stateless",
+    "caption": "A short preface — why remembering is a write-path problem you engineer."
   },
   "agents": {
     "src": "agents/preface.mp4",
     "poster": "agents/preface.jpg",
     "vtt": "agents/preface.en.vtt",
-    "duration": 38,
+    "duration": 39,
     "tier": "public",
     "title": "An LLM in a loop",
     "caption": "A short preface — what an agent is, and why reliability comes from the loop."
+  },
+  "tools": {
+    "src": "tools/preface.mp4",
+    "poster": "tools/preface.jpg",
+    "vtt": "tools/preface.en.vtt",
+    "duration": 39,
+    "tier": "public",
+    "title": "The hands of the model",
+    "caption": "A short preface — why most agent bugs are really tool-design bugs."
+  },
+  "harness": {
+    "src": "harness/preface.mp4",
+    "poster": "harness/preface.jpg",
+    "vtt": "harness/preface.en.vtt",
+    "duration": 43,
+    "tier": "public",
+    "title": "Where capability actually comes from",
+    "caption": "A short preface — why the harness, not the model, is where capability lives."
+  },
+  "multi": {
+    "src": "multi/preface.mp4",
+    "poster": "multi/preface.jpg",
+    "vtt": "multi/preface.en.vtt",
+    "duration": 40,
+    "tier": "public",
+    "title": "An org chart for context windows",
+    "caption": "A short preface — when adding more agents pays off, and when it just adds cost."
+  },
+  "design": {
+    "src": "design/preface.mp4",
+    "poster": "design/preface.jpg",
+    "vtt": "design/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "The model call is 5% of the system",
+    "caption": "A short preface — why the model call is only 5% of a real AI system."
   },
   "evals": {
     "src": "evals/preface.mp4",
     "poster": "evals/preface.jpg",
     "vtt": "evals/preface.en.vtt",
-    "duration": 38,
+    "duration": 41,
     "tier": "public",
     "title": "Shipping, not guessing",
     "caption": "A short preface — why evals are what separate shipping from guessing."
+  },
+  "halluc": {
+    "src": "halluc/preface.mp4",
+    "poster": "halluc/preface.jpg",
+    "vtt": "halluc/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "Engineering around confidently wrong",
+    "caption": "A short preface — why hallucination is intrinsic, and how to engineer around it."
+  },
+  "lead": {
+    "src": "lead/preface.mp4",
+    "poster": "lead/preface.jpg",
+    "vtt": "lead/preface.en.vtt",
+    "duration": 46,
+    "tier": "public",
+    "title": "The judgment layer",
+    "caption": "A short preface — the judgment layer that matters past senior level."
+  },
+  "finetune": {
+    "src": "finetune/preface.mp4",
+    "poster": "finetune/preface.jpg",
+    "vtt": "finetune/preface.en.vtt",
+    "duration": 44,
+    "tier": "public",
+    "title": "Surgery versus clothing",
+    "caption": "A short preface — when reshaping weights beats reshaping prompts."
+  },
+  "aisec": {
+    "src": "aisec/preface.mp4",
+    "poster": "aisec/preface.jpg",
+    "vtt": "aisec/preface.en.vtt",
+    "duration": 41,
+    "tier": "public",
+    "title": "A new attack surface",
+    "caption": "A short preface — why every AI feature is a new attack surface."
+  },
+  "mlops": {
+    "src": "mlops/preface.mp4",
+    "poster": "mlops/preface.jpg",
+    "vtt": "mlops/preface.en.vtt",
+    "duration": 40,
+    "tier": "public",
+    "title": "AI systems fail silently",
+    "caption": "A short preface — why AI systems fail silently, and what to instrument first."
+  },
+  "dataeng": {
+    "src": "dataeng/preface.mp4",
+    "poster": "dataeng/preface.jpg",
+    "vtt": "dataeng/preface.en.vtt",
+    "duration": 42,
+    "tier": "public",
+    "title": "The invisible quality ceiling",
+    "caption": "A short preface — why the data pipeline sets your retrieval ceiling."
+  },
+  "multimodal": {
+    "src": "multimodal/preface.mp4",
+    "poster": "multimodal/preface.jpg",
+    "vtt": "multimodal/preface.en.vtt",
+    "duration": 42,
+    "tier": "public",
+    "title": "When vision earns its cost",
+    "caption": "A short preface — when vision earns its cost, and when to skip it."
   }
 };
