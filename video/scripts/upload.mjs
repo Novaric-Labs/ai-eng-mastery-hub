@@ -9,9 +9,11 @@
 // Node < 22; see app-next/scripts/seed-db.mjs for the same approach).
 //
 //   node --env-file=../app-next/.env.local scripts/upload.mjs rag
+//   ai-foundations:  node --env-file=../app-next/.env.local scripts/upload.mjs --course=ai-foundations whatai
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { courseFromArgs } from "./courses.mjs";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
 const BUCKET = "course-video";
@@ -74,24 +76,27 @@ async function uploadFile(localPath, objectPath) {
 }
 
 async function main() {
-  const id = process.argv[2] || "rag";
-  const outDir = path.join(ROOT, "out", id);
+  const course = courseFromArgs();
+  const id = process.argv.slice(2).find((a) => !a.startsWith("--")) || "rag";
+  const dir = course.dir(id); // <id> for Mastery, af-<id> for Foundations
+  const outDir = path.join(ROOT, "out", dir);
   const files = [
-    ["preface.mp4", `${id}/preface.mp4`],
-    ["preface.jpg", `${id}/preface.jpg`],
-    ["preface.en.vtt", `${id}/preface.en.vtt`],
+    ["preface.mp4", `${dir}/preface.mp4`],
+    ["preface.jpg", `${dir}/preface.jpg`],
+    ["preface.en.vtt", `${dir}/preface.en.vtt`],
   ].filter(([local]) => fs.existsSync(path.join(outDir, local)));
 
   if (!files.length) {
-    console.error(`✗ Nothing to upload — run the render first (out/${id}/preface.mp4 missing).`);
+    console.error(`✗ Nothing to upload — run the render first (out/${dir}/preface.mp4 missing).`);
     process.exit(1);
   }
 
   await ensureBucket();
   for (const [local, obj] of files) await uploadFile(path.join(outDir, local), obj);
 
-  console.log(`\nDone. Set the real duration in content/videos.mjs, then re-seed the videos row:`);
-  console.log(`  cd ../app-next && node --env-file=.env.local scripts/seed-db.mjs`);
+  console.log(`\nDone. Regenerate the videos registries, then re-seed the '${course.slug}' videos row:`);
+  console.log(`  node scripts/gen-videos.mjs`);
+  console.log(`  cd ../app-next && SEED_COURSE=${course.slug} bash scripts/seed-db.sh`);
 }
 
 main().catch((e) => {

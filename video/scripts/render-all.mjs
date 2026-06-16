@@ -4,14 +4,17 @@
 //
 //   node --env-file=.env scripts/render-all.mjs                 # all modules in prefaces.mjs
 //   node --env-file=.env scripts/render-all.mjs context embed   # just these
+//   ai-foundations:  node --env-file=.env scripts/render-all.mjs --course=ai-foundations
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundle } from "@remotion/bundler";
 import { selectComposition, renderMedia, renderStill, ensureBrowser } from "@remotion/renderer";
 import { synth } from "./tts.mjs";
-import { PREFACES } from "../data/prefaces.mjs";
+import { courseFromArgs, loadPrefaces } from "./courses.mjs";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
+const course = courseFromArgs();
+const PREFACES = await loadPrefaces(course);
 const ids = process.argv.slice(2).filter((a) => !a.startsWith("--"));
 const targets = ids.length ? ids : Object.keys(PREFACES);
 
@@ -32,7 +35,7 @@ async function main() {
   for (const id of targets) {
     console.log(`\n— TTS ${id} —`);
     try {
-      jobs.push({ id, props: await synth(id) });
+      jobs.push({ id, props: await synth(id, course) });
     } catch (e) {
       console.error(`  ✗ skipped ${id}: ${e.message}`);
       failed.push(id);
@@ -56,7 +59,7 @@ async function main() {
   // 3. Render each module against the shared bundle.
   for (const { id, props } of jobs) {
     const composition = await selectComposition({ serveUrl, id: "PrefaceVideo", inputProps: props });
-    const outDir = path.join(ROOT, "out", id);
+    const outDir = path.join(ROOT, "out", course.dir(id));
     await renderMedia({
       composition,
       serveUrl,
@@ -78,12 +81,12 @@ async function main() {
       imageFormat: "jpeg",
       jpegQuality: 90,
     });
-    console.log(`✓ ${id}: ${props.durationInSeconds.toFixed(0)}s  → out/${id}/preface.{mp4,jpg,en.vtt}`);
+    console.log(`✓ ${id}: ${props.durationInSeconds.toFixed(0)}s  → out/${course.dir(id)}/preface.{mp4,jpg,en.vtt}`);
   }
 
   console.log(`\nDone: rendered ${jobs.length} (${jobs.map((j) => j.id).join(", ")}).`);
   if (failed.length) console.log(`Skipped ${failed.length} (likely quota): ${failed.join(", ")}`);
-  console.log("Next: upload each, then regenerate videos + reseed.");
+  console.log(`Next: upload each (scripts/upload.mjs --course=${course.slug} <id>), then gen-videos + reseed.`);
 }
 
 main().catch((e) => {

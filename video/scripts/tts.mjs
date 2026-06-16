@@ -8,9 +8,11 @@
 //   out/<id>/preface.en.vtt     - captions
 //
 // Run standalone:  node --env-file=.env scripts/tts.mjs rag
+//   ai-foundations:  node --env-file=.env scripts/tts.mjs --course=ai-foundations whatai
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { COURSES, courseFromArgs, loadPrefaces } from "./courses.mjs";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
 // Course narrator: "Tim — Solid and Enthusiastic" (Voice Library). Natural,
@@ -89,13 +91,14 @@ async function fetchWithRetry(url, opts, tries = 4) {
   throw last;
 }
 
-export async function synth(id) {
+export async function synth(id, course = COURSES["ai-eng"]) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY is not set (see video/.env.example).");
 
-  const { PREFACES } = await import("../data/prefaces.mjs");
+  const PREFACES = await loadPrefaces(course);
   const video = PREFACES[id];
-  if (!video?.segments?.length) throw new Error(`No preface for "${id}" in data/prefaces.mjs.`);
+  if (!video?.segments?.length) throw new Error(`No preface for "${id}" in ${course.prefaces}.`);
+  const dir = course.dir(id);
 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || video.voiceId || DEFAULT_VOICE;
   const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2";
@@ -158,9 +161,9 @@ export async function synth(id) {
     return { kicker: s.slide.kicker, lines: s.slide.lines, start, end };
   });
 
-  // Write outputs.
-  const pubDir = path.join(ROOT, "public", id);
-  const outDir = path.join(ROOT, "out", id);
+  // Write outputs (namespaced per course: <id> for Mastery, af-<id> for Foundations).
+  const pubDir = path.join(ROOT, "public", dir);
+  const outDir = path.join(ROOT, "out", dir);
   fs.mkdirSync(pubDir, { recursive: true });
   fs.mkdirSync(outDir, { recursive: true });
 
@@ -173,8 +176,8 @@ export async function synth(id) {
     title: video.title,
     segments,
     durationInSeconds: duration,
-    audioSrc: `${id}/narration.mp3`,
-    vtt: `${id}/preface.en.vtt`,
+    audioSrc: `${dir}/narration.mp3`,
+    vtt: `${dir}/preface.en.vtt`,
   };
   fs.writeFileSync(path.join(pubDir, "props.json"), JSON.stringify(props, null, 2));
 
@@ -184,8 +187,9 @@ export async function synth(id) {
 
 // CLI
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const id = process.argv[2] || "rag";
-  synth(id).catch((e) => {
+  const course = courseFromArgs();
+  const id = process.argv.slice(2).find((a) => !a.startsWith("--")) || "rag";
+  synth(id, course).catch((e) => {
     console.error("✗", e.message);
     process.exit(1);
   });

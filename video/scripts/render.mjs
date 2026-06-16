@@ -3,21 +3,25 @@
 //
 //   node --env-file=.env scripts/render.mjs rag      # full render (needs ELEVENLABS_API_KEY)
 //   node scripts/render.mjs --smoke                  # silent validation render (no key needed)
+//   ai-foundations:  node --env-file=.env scripts/render.mjs --course=ai-foundations whatai
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { bundle } from "@remotion/bundler";
 import { selectComposition, renderMedia, renderStill, ensureBrowser } from "@remotion/renderer";
 import { synth } from "./tts.mjs";
+import { courseFromArgs, loadPrefaces } from "./courses.mjs";
 
 const ROOT = path.resolve(fileURLToPath(import.meta.url), "../..");
 const args = process.argv.slice(2);
 const smoke = args.includes("--smoke");
+const course = courseFromArgs();
 const id = args.find((a) => !a.startsWith("--")) || "rag";
+const dir = course.dir(id);
 
 // Mirror Root.tsx's estimator for the no-audio smoke render.
 async function estimateProps(videoId) {
-  const { PREFACES } = await import("../data/prefaces.mjs");
+  const PREFACES = await loadPrefaces(course);
   const data = PREFACES[videoId];
   const WPS = 2.6;
   let cursor = 0;
@@ -31,7 +35,7 @@ async function estimateProps(videoId) {
 }
 
 async function main() {
-  const inputProps = smoke ? await estimateProps(id) : await synth(id);
+  const inputProps = smoke ? await estimateProps(id) : await synth(id, course);
 
   console.log("· Ensuring headless browser…");
   await ensureBrowser();
@@ -45,7 +49,7 @@ async function main() {
   const composition = await selectComposition({ serveUrl, id: "PrefaceVideo", inputProps });
   console.log(`· Composition: ${composition.durationInFrames} frames @ ${composition.fps}fps`);
 
-  const outDir = path.join(ROOT, "out", smoke ? "_smoke" : id);
+  const outDir = path.join(ROOT, "out", smoke ? "_smoke" : dir);
   fs.mkdirSync(outDir, { recursive: true });
   const videoOut = path.join(outDir, smoke ? "smoke.mp4" : "preface.mp4");
 
@@ -81,11 +85,11 @@ async function main() {
       imageFormat: "jpeg",
       jpegQuality: 90,
     });
-    console.log(`✓ Poster: out/${id}/preface.jpg (frame ${frame})`);
+    console.log(`✓ Poster: out/${dir}/preface.jpg (frame ${frame})`);
   }
 
   console.log(`✓ Video: ${path.relative(ROOT, videoOut)}`);
-  if (!smoke) console.log(`\nNext: node --env-file=../app-next/.env.local scripts/upload.mjs ${id}`);
+  if (!smoke) console.log(`\nNext: node --env-file=../app-next/.env.local scripts/upload.mjs --course=${course.slug} ${id}`);
 }
 
 main().catch((e) => {
