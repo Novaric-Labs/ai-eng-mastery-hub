@@ -154,10 +154,10 @@ export default function Sidebar() {
                   const dot = modMastered(S, m.id) ? "mastered" : S.read?.[m.id] ? "read" : "";
                   const locked = !moduleUnlocked(course, m.id);
                   return (
-                    <button key={m.id} className={nav("mod", m.id)} onClick={() => go("mod", m.id)}>
+                    <button key={m.id} className={`${nav("mod", m.id)} modrow`} onClick={() => go("mod", m.id)}>
                       <span className={`dot ${dot}`} />
-                      {m.title}
-                      {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", opacity: 0.6 }} />}
+                      <span className="navbtn-label">{m.title}</span>
+                      {locked && <Lock size={12} strokeWidth={1.75} style={{ marginLeft: "auto", marginTop: 3, flexShrink: 0, opacity: 0.6 }} />}
                     </button>
                   );
                 })}
