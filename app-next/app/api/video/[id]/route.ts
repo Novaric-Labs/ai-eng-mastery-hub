@@ -20,10 +20,15 @@ const TTL = 60 * 60 * 2; // 2 hours
 // trusted `videos` content row, never from the request, so a caller can't sign
 // an arbitrary object in the bucket.
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
+  // Scope to the caller's course: each course has its own `videos` row, and the
+  // content table is keyed by (course_id, id). Without this an unscoped lookup
+  // matches multiple `videos` rows once more than one course exists. Default to
+  // ai-eng so older clients that omit the param keep working.
+  const course = new URL(req.url).searchParams.get("course") || "ai-eng";
 
   // Resolve the video meta server-side via the service role (the `videos` row is
   // public, but signing the object requires the service role regardless).
@@ -31,6 +36,7 @@ export async function GET(
   const { data: row } = await admin
     .from("content")
     .select("data")
+    .eq("course_id", course)
     .eq("id", "videos")
     .maybeSingle();
 
