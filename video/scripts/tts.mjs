@@ -70,6 +70,25 @@ function toVtt(cues) {
   return out;
 }
 
+// ElevenLabs connections from some networks intermittently connect-timeout;
+// retry transport-level failures (not HTTP error statuses) with backoff.
+async function fetchWithRetry(url, opts, tries = 4) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fetch(url, opts);
+    } catch (e) {
+      last = e;
+      if (i < tries - 1) {
+        const wait = 600 * (i + 1);
+        console.log(`· network hiccup (${e.cause?.code ?? e.message}); retry ${i + 1}/${tries - 1} in ${wait}ms`);
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    }
+  }
+  throw last;
+}
+
 export async function synth(id) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY is not set (see video/.env.example).");
@@ -82,18 +101,27 @@ export async function synth(id) {
 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || video.voiceId || DEFAULT_VOICE;
   const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
+  // Force the language so the multilingual model can't briefly drift into
+  // another language/accent mid-sentence. Honored by turbo_v2_5 / flash_v2_5.
+  const languageCode = process.env.ELEVENLABS_LANGUAGE || "en";
 
   const segJoin = " ";
   const fullText = video.segments.map((s) => s.say.trim()).join(segJoin);
 
-  console.log(`· TTS: ${video.segments.length} segments, ${fullText.length} chars, voice ${voiceId}, model ${modelId}`);
+  console.log(`· TTS: ${video.segments.length} segments, ${fullText.length} chars, voice ${voiceId}, model ${modelId}, lang ${languageCode}`);
 
-  const res = await fetch(
+  const res = await fetchWithRetry(
     `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/with-timestamps?output_format=mp3_44100_128`,
     {
       method: "POST",
       headers: { "xi-api-key": apiKey, "content-type": "application/json" },
-      body: JSON.stringify({ text: fullText, model_id: modelId }),
+      body: JSON.stringify({
+        text: fullText,
+        model_id: modelId,
+        language_code: languageCode,
+        // Higher stability also reduces odd pronunciation/accent excursions.
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+      }),
     },
   );
   if (!res.ok) {
