@@ -17,8 +17,8 @@ const id = args.find((a) => !a.startsWith("--")) || "rag";
 
 // Mirror Root.tsx's estimator for the no-audio smoke render.
 async function estimateProps(videoId) {
-  const mod = await import(`../data/${videoId}.mjs`);
-  const data = mod.default ?? mod[videoId];
+  const { PREFACES } = await import("../data/prefaces.mjs");
+  const data = PREFACES[videoId];
   const WPS = 2.6;
   let cursor = 0;
   const segments = data.segments.map((s) => {

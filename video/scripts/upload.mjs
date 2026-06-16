@@ -24,10 +24,24 @@ if (!url || !key || /placeholder/i.test(`${url}${key}`)) {
 }
 const headers = { apikey: key, Authorization: `Bearer ${key}` };
 
+// Retry transport-level failures (intermittent connect timeouts to Supabase).
+async function fetchRetry(u, opts, tries = 4) {
+  let last;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fetch(u, opts);
+    } catch (e) {
+      last = e;
+      if (i < tries - 1) await new Promise((r) => setTimeout(r, 600 * (i + 1)));
+    }
+  }
+  throw last;
+}
+
 const MIME = { ".mp4": "video/mp4", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".vtt": "text/vtt" };
 
 async function ensureBucket() {
-  const res = await fetch(`${url}/storage/v1/bucket`, {
+  const res = await fetchRetry(`${url}/storage/v1/bucket`, {
     method: "POST",
     headers: { ...headers, "content-type": "application/json" },
     body: JSON.stringify({ id: BUCKET, name: BUCKET, public: false }),
@@ -47,7 +61,7 @@ async function ensureBucket() {
 async function uploadFile(localPath, objectPath) {
   const data = fs.readFileSync(localPath);
   const ext = path.extname(localPath).toLowerCase();
-  const res = await fetch(`${url}/storage/v1/object/${BUCKET}/${objectPath}`, {
+  const res = await fetchRetry(`${url}/storage/v1/object/${BUCKET}/${objectPath}`, {
     method: "POST",
     headers: { ...headers, "content-type": MIME[ext] ?? "application/octet-stream", "x-upsert": "true" },
     body: data,

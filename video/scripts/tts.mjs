@@ -93,11 +93,9 @@ export async function synth(id) {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   if (!apiKey) throw new Error("ELEVENLABS_API_KEY is not set (see video/.env.example).");
 
-  const mod = await import(`../data/${id}.mjs`).catch(() => {
-    throw new Error(`No data/${id}.mjs found.`);
-  });
-  const video = mod.default ?? mod[id];
-  if (!video?.segments?.length) throw new Error(`data/${id}.mjs has no segments.`);
+  const { PREFACES } = await import("../data/prefaces.mjs");
+  const video = PREFACES[id];
+  if (!video?.segments?.length) throw new Error(`No preface for "${id}" in data/prefaces.mjs.`);
 
   const voiceId = process.env.ELEVENLABS_VOICE_ID || video.voiceId || DEFAULT_VOICE;
   const modelId = process.env.ELEVENLABS_MODEL_ID || "eleven_turbo_v2_5";
