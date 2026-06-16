@@ -10,5 +10,5 @@ export async function GET(request: Request) {
     const supabase = await supabaseServer();
     await supabase.auth.exchangeCodeForSession(code);
   }
-  return NextResponse.redirect(`${origin}/learn`);
+  return NextResponse.redirect(`${origin}/courses`);
 }

@@ -30,9 +30,12 @@ export async function POST(request: Request) {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.SUPABASE_SERVICE_ROLE_KEY!,
       );
+      // Which course was purchased (set in checkout metadata; default flagship).
+      const course = s.metadata?.course || "ai-eng";
       const { error } = await admin.rpc("grant_stripe_entitlement", {
         p_user: s.client_reference_id,
         p_customer: typeof s.customer === "string" ? s.customer : null,
+        p_course: course,
       });
       if (error) {
         return new NextResponse(`grant failed: ${error.message}`, {

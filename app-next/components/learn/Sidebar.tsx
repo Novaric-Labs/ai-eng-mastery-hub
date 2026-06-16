@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Sparkles,
   BookA,
@@ -16,11 +17,13 @@ import {
   Flame,
   Unlock,
   ChevronDown,
+  ChevronLeft,
   Pencil,
 } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
 import RedeemDialog from "./RedeemDialog";
 import { useCourseStore } from "./StoreProvider";
+import { courseBySlug } from "@/lib/courses";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import {
   blockMastered,
@@ -33,8 +36,9 @@ import {
 } from "@/lib/course";
 
 export default function Sidebar() {
-  const { course, S, route, entitled, go, theme, toggleTheme } = useCourseStore((s) => ({
+  const { course, courseSlug, S, route, entitled, go, theme, toggleTheme } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     route: s.route,
     entitled: s.entitled,
@@ -43,10 +47,15 @@ export default function Sidebar() {
     toggleTheme: s.toggleTheme,
   }));
   const [busy, setBusy] = useState(false);
+  const courseTitle = courseBySlug(courseSlug)?.title ?? "AI Engineering Mastery";
 
   async function buy() {
     setBusy(true);
-    const res = await fetch("/api/checkout", { method: "POST" });
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ course: courseSlug }),
+    });
     const d = await res.json();
     if (d.url) location.href = d.url;
     else { setBusy(false); alert("Checkout error: " + (d.error ?? "unknown")); }
@@ -83,7 +92,14 @@ export default function Sidebar() {
         <NovaMark size={19} className="brand-mark" />
         <span className="brand-word">Novacademy</span>
       </h1>
-      <div className="sub">AI Engineering Mastery</div>
+      <Link
+        href="/courses"
+        className="navbtn"
+        style={{ fontSize: 12.5, color: "var(--dim)", marginBottom: 2 }}
+      >
+        <ChevronLeft size={14} strokeWidth={1.75} /> All courses
+      </Link>
+      <div className="sub">{courseTitle}</div>
 
       <div className="sideprog">
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

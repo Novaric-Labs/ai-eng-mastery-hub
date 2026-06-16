@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Lock } from "lucide-react";
 import RedeemDialog from "./RedeemDialog";
+import { useCourseStore } from "./StoreProvider";
 
 // Shown wherever paid content is requested by a non-entitled user (locked
 // module, flashcards, scenarios). Buy → Stripe Checkout; redeem → access code.
@@ -15,12 +16,17 @@ export default function Paywall({
 }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
+  const courseSlug = useCourseStore((s) => s.courseSlug);
 
   async function buy() {
     setBusy(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/checkout", { method: "POST" });
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ course: courseSlug }),
+      });
       const d = await res.json();
       if (d.url) location.href = d.url;
       else {

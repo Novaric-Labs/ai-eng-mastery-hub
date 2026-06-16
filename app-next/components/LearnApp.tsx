@@ -26,12 +26,14 @@ const VALID: Page[] = ["dash", "mod", "quiz", "exam", "cards", "scen", "start", 
 
 export default function LearnApp({
   content,
+  courseSlug,
   entitled,
   admin,
   userId,
   initialProgress,
 }: {
   content: ContentRow[];
+  courseSlug: string;
   entitled: boolean;
   admin: boolean;
   userId: string;
@@ -41,6 +43,7 @@ export default function LearnApp({
   const init = useMemo(
     () => ({
       course,
+      courseSlug,
       entitled,
       admin,
       userId,
@@ -51,7 +54,7 @@ export default function LearnApp({
           ? ("light" as const)
           : ("dark" as const),
     }),
-    [course, entitled, admin, userId, initialProgress],
+    [course, courseSlug, entitled, admin, userId, initialProgress],
   );
 
   // No catalog rows → the content table hasn't been seeded (or RLS returned
