@@ -36,7 +36,7 @@ export default function Scenarios() {
       const res = await fetch("/api/grade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scenarioId: id, answer }),
+        body: JSON.stringify({ scenarioId: id, answer, course: courseSlug }),
       });
       const d = await res.json();
       if (!res.ok) setAiErr(d.error || "Couldn't grade that.");

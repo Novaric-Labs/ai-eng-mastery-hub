@@ -11,7 +11,7 @@ type Loaded = { url: string; poster: string | null; vtt: string | null };
 // reading, rather than restating it. Click-to-play: the signed playback URL is
 // fetched on demand (the file lives in a private bucket), so nothing streams
 // until the learner chooses to watch.
-export default function VideoPreface({ id, meta }: { id: string; meta: VideoMeta }) {
+export default function VideoPreface({ id, meta, courseSlug }: { id: string; meta: VideoMeta; courseSlug: string }) {
   const [state, setState] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [data, setData] = useState<Loaded | null>(null);
 
@@ -19,7 +19,7 @@ export default function VideoPreface({ id, meta }: { id: string; meta: VideoMeta
     if (state === "loading") return;
     setState("loading");
     try {
-      const res = await fetch(`/api/video/${id}`);
+      const res = await fetch(`/api/video/${id}?course=${encodeURIComponent(courseSlug)}`);
       if (!res.ok) throw new Error(String(res.status));
       const json = (await res.json()) as Loaded;
       if (!json.url) throw new Error("no url");

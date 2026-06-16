@@ -122,7 +122,7 @@ export default function ModuleView({ id }: { id: string }) {
   // so it stays hidden there. `key={id}` forces a fresh mount per module so the
   // player resets (stops playback, clears the prior source) when switching lessons.
   const video = course.videos[id];
-  const videoEl = video ? <VideoPreface key={id} id={id} meta={video} /> : null;
+  const videoEl = video ? <VideoPreface key={id} id={id} meta={video} courseSlug={courseSlug} /> : null;
   const teaserEl = video && (video.tier ?? "public") === "public" ? videoEl : null;
 
   const header = (

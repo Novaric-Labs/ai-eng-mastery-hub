@@ -24,10 +24,13 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}));
   const scenarioId = String(body.scenarioId ?? "");
   const answer = String(body.answer ?? "").slice(0, 4000).trim(); // cap input
+  // Scope to the caller's course (content is keyed by course_id,id); default
+  // ai-eng for back-compat with clients that don't send it.
+  const course = String(body.course ?? "ai-eng") || "ai-eng";
   if (!scenarioId || !answer) return NextResponse.json({ error: "Missing scenario or answer." }, { status: 400 });
 
   // Fetch the scenario server-side (don't trust the client for the model answer).
-  const { data: row } = await supabase.from("content").select("data").eq("id", "scenarios").maybeSingle();
+  const { data: row } = await supabase.from("content").select("data").eq("course_id", course).eq("id", "scenarios").maybeSingle();
   const scenarios = (row?.data as Scenario[] | undefined) ?? [];
   const sc = scenarios.find((s) => s.id === scenarioId);
   if (!sc) return NextResponse.json({ error: "Scenario not found." }, { status: 404 });
