@@ -21,6 +21,57 @@ const TAB_OF: Record<string, Tab> = {
   patterns: "code",
 };
 
+// Course-aware section labels. The same ModuleView renders every course, but a
+// handful of section titles are written for the engineer/staff audience of the
+// Mastery Hub ('ai-eng') and read wrong for a beginner course. We keep the
+// Mastery wording as the default and override only the audience-flavored strings
+// per course slug. Only the human-readable titles change here — which fields
+// render and their guarding logic are untouched.
+type SectionLabels = {
+  tradeoffs: string; // DEPTH: "Architectural tradeoffs" table heading
+  scaleNotes: string; // DEPTH: <details> summary over dp.scale
+  secNotes: string; // DEPTH: <details> summary over dp.sec
+  ask: string; // MOD: heading over m.ask ("Questions to ask …")
+  articulate: string; // DEPTH: heading over dp.interview
+  articulatePractice: string; // DEPTH: practice prose under dp.interview
+  goodInProd: string; // DEEP: heading over d.good
+  loadBearing: string; // PATTERNS: heading over p.notes
+};
+
+// Default = the existing Mastery ('ai-eng') copy, byte-for-byte. Any unknown or
+// future course falls back to this, so ai-eng stays visually identical.
+const DEFAULT_LABELS: SectionLabels = {
+  tradeoffs: "Architectural tradeoffs",
+  scaleNotes: "Scale, cost & latency notes",
+  secNotes: "Security & governance notes",
+  ask: "Questions to ask your engineers",
+  articulate: "Say it like a staff engineer",
+  articulatePractice:
+    "Practice saying this out loud, unscripted, in your own words. The articulation under pressure — in a design review, an interview, an incident call — is the staff-level skill the reading builds toward.",
+  goodInProd: "What good looks like in production",
+  loadBearing: "Why these lines are load-bearing",
+};
+
+// Per-course overrides. Beginner reframes for 'ai-foundations'; the content was
+// authored to fit these plainer framings.
+const LABELS_BY_COURSE: Record<string, SectionLabels> = {
+  "ai-foundations": {
+    tradeoffs: "Trade-offs to weigh",
+    scaleNotes: "Speed & cost notes",
+    secNotes: "Privacy & safety notes",
+    ask: "Questions to ask yourself",
+    articulate: "Explain it to a friend",
+    articulatePractice:
+      "Practice saying this out loud, unscripted, in your own words. Being able to explain it simply — to a friend, a coworker, or your future self — is the sign it has actually clicked.",
+    goodInProd: "What good looks like",
+    loadBearing: "Why these lines matter",
+  },
+};
+
+function labelsFor(courseSlug: string): SectionLabels {
+  return LABELS_BY_COURSE[courseSlug] ?? DEFAULT_LABELS;
+}
+
 // Turn textual "<Tab> tab" mentions in authored content into clickable buttons
 // that jump to that tab (handled by delegation in ModuleView). We wrap only the
 // tab name so the surrounding sentence is untouched.
@@ -38,8 +89,9 @@ function Html(props: React.ComponentProps<typeof HtmlRaw>) {
 }
 
 export default function ModuleView({ id }: { id: string }) {
-  const { course, S, tab, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
+  const { course, courseSlug, S, tab, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     tab: s.route.tab,
     go: s.go,
@@ -47,6 +99,8 @@ export default function ModuleView({ id }: { id: string }) {
     startQuiz: s.startQuiz,
     markRead: s.markRead,
   }));
+
+  const L = labelsFor(courseSlug);
 
   // Delegated handler: a click on any linkified tab mention jumps to that tab.
   const onContentClick = (e: React.MouseEvent) => {
@@ -168,7 +222,7 @@ export default function ModuleView({ id }: { id: string }) {
 
       {dp && (
         <>
-          <h3 id="sec-tradeoffs">Architectural tradeoffs</h3>
+          <h3 id="sec-tradeoffs">{L.tradeoffs}</h3>
           <div className="card" style={{ padding: "10px 14px" }}>
             <table>
               <tbody>
@@ -188,13 +242,13 @@ export default function ModuleView({ id }: { id: string }) {
             </table>
           </div>
           <details className="deep">
-            <summary><Zap size={15} strokeWidth={1.75} /> Scale, cost &amp; latency notes</summary>
+            <summary><Zap size={15} strokeWidth={1.75} /> {L.scaleNotes}</summary>
             <ul className="flat">
               {dp.scale.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}
             </ul>
           </details>
           <details className="deep">
-            <summary><Lock size={15} strokeWidth={1.75} /> Security &amp; governance notes</summary>
+            <summary><Lock size={15} strokeWidth={1.75} /> {L.secNotes}</summary>
             <ul className="flat">
               {dp.sec.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}
             </ul>
@@ -210,7 +264,7 @@ export default function ModuleView({ id }: { id: string }) {
       <div className="card">
         <ul className="flat flags">{m.flags.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}</ul>
       </div>
-      <h3 id="sec-ask">Questions to ask your engineers</h3>
+      <h3 id="sec-ask">{L.ask}</h3>
       <div className="card">
         <ul className="flat">{m.ask.map((x, i) => <li key={i}>&quot;<Html as="span" html={x} />&quot;</li>)}</ul>
       </div>
@@ -224,7 +278,7 @@ export default function ModuleView({ id }: { id: string }) {
 
       {dp && (
         <>
-          <h3 id="sec-artic">Say it like a staff engineer</h3>
+          <h3 id="sec-artic">{L.articulate}</h3>
           <div
             className="worked"
             style={{ borderLeftColor: "var(--accent2)", background: "linear-gradient(90deg,rgba(188,140,255,.06),transparent)" }}
@@ -233,7 +287,7 @@ export default function ModuleView({ id }: { id: string }) {
             <Html as="span" html={dp.interview} />
           </div>
           <p style={{ color: "var(--dim)", fontSize: 13 }}>
-            Practice saying this out loud, unscripted, in your own words. The articulation under pressure — in a design review, an interview, an incident call — is the staff-level skill the reading builds toward.
+            {L.articulatePractice}
           </p>
         </>
       )}
@@ -244,7 +298,7 @@ export default function ModuleView({ id }: { id: string }) {
     <>
       <h3>Worked example</h3>
       <Html className="worked" html={d.worked} />
-      <h3>What good looks like in production</h3>
+      <h3>{L.goodInProd}</h3>
       <div className="card">
         <ul className="flat checks">{d.good.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}</ul>
       </div>
@@ -285,7 +339,7 @@ export default function ModuleView({ id }: { id: string }) {
       <h3>Implementation pattern</h3>
       <Html as="p" style={{ color: "var(--dim)", fontSize: 13.5 }} html={p.intro} />
       <pre className="codeblock">{p.code}</pre>
-      <h3>Why these lines are load-bearing</h3>
+      <h3>{L.loadBearing}</h3>
       <div className="card">
         <ul className="flat">{p.notes.map((n, i) => <li key={i}><Html as="span" html={n} /></li>)}</ul>
       </div>
