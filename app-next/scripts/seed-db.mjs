@@ -1,14 +1,17 @@
 // Seed public.content directly via the Supabase API (service role), instead of
-// pasting the 560 KB supabase/seed.sql into the SQL editor (which chokes on large
-// statements). Same row split as content/seed.mjs. Safe to re-run (upsert on id).
+// pasting the large supabase/seed.sql into the SQL editor (which chokes on large
+// statements). Same row split as content/seed.mjs. Safe to re-run (upsert on
+// course_id,id).
 //
 // Run from app-next/:  node --env-file=.env.local scripts/seed-db.mjs
 // Requires NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local.
 //
-// Uses the PostgREST REST endpoint via fetch (not supabase-js, which initializes
-// a realtime WebSocket client that Node < 22 can't construct).
+// Multi-course: builds the payload for BOTH courses (ai-eng + ai-foundations),
+// each row tagged with its course_id. The actual POST is done by scripts/seed-db.sh
+// (Node's fetch/undici can't reliably establish the connection in some local envs).
 import fs from "fs";
-import { VIDEOS } from "../../content/videos.mjs";
+import { VIDEOS as AI_ENG_VIDEOS } from "../../content/videos.mjs";
+import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from "../../content/videos-ai-foundations.mjs";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -17,34 +20,46 @@ if (!url || !key || /placeholder/i.test(`${url}${key}`)) {
   process.exit(1);
 }
 
-const d = JSON.parse(fs.readFileSync(new URL("../../content/content.json", import.meta.url)));
-const SAMPLE = "llm"; // the one module offered free as a sample
+const read = (file) => JSON.parse(fs.readFileSync(new URL("../../content/" + file, import.meta.url)));
 
-const rows = [];
-const add = (id, tier, data) => rows.push({ id, tier, data });
+// One descriptor per course (mirrors content/seed.mjs). `sample` = the single
+// module offered free; every other module is paid.
+const COURSES = [
+  { course: "ai-eng", json: "content.json", sample: "llm", videos: AI_ENG_VIDEOS },
+  { course: "ai-foundations", json: "ai-foundations.json", sample: "whatai", videos: AI_FOUNDATIONS_VIDEOS },
+];
 
-add("meta:blocks", "public", d.BLOCKS);
-add("meta:catalog", "public", d.MODULES.map((m) => ({
-  id: m.id, block: m.block, title: m.title, tag: m.tag, why: m.why,
-  isNew: !!m.isNew, isUpd: !!m.isUpd, estMin: m.estMin,
-})));
-add("glossary", "public", d.GLOSSARY);
-add("plain", "public", d.PLAIN);
-add("videos", "public", VIDEOS); // sparse preface-video registry (free teasers)
+function buildRows({ course, json, sample, videos }) {
+  const d = read(json);
+  const rows = [];
+  const add = (id, tier, data) => rows.push({ course_id: course, id, tier, data });
 
-for (const m of d.MODULES) {
-  const tier = m.id === SAMPLE ? "public" : "paid";
-  add("module:" + m.id, tier, {
-    mod: m,
-    deep: d.DEEP[m.id] || null,
-    depth: d.DEPTH[m.id] || null,
-    patterns: d.PATTERNS[m.id] || null,
-  });
-  add("quiz:" + m.id, tier, d.QUIZ[m.id] || []);
+  add("meta:blocks", "public", d.BLOCKS);
+  add("meta:catalog", "public", d.MODULES.map((m) => ({
+    id: m.id, block: m.block, title: m.title, tag: m.tag, why: m.why,
+    isNew: !!m.isNew, isUpd: !!m.isUpd, estMin: m.estMin,
+  })));
+  add("glossary", "public", d.GLOSSARY);
+  add("plain", "public", d.PLAIN);
+  add("videos", "public", videos); // sparse preface-video registry (free teasers)
+
+  for (const m of d.MODULES) {
+    const tier = m.id === sample ? "public" : "paid";
+    add("module:" + m.id, tier, {
+      mod: m,
+      deep: d.DEEP[m.id] || null,
+      depth: d.DEPTH[m.id] || null,
+      patterns: d.PATTERNS[m.id] || null,
+    });
+    add("quiz:" + m.id, tier, d.QUIZ[m.id] || []);
+  }
+
+  add("cards", "paid", d.CARDS);
+  add("scenarios", "paid", d.SCENARIOS);
+  return rows;
 }
 
-add("cards", "paid", d.CARDS);
-add("scenarios", "paid", d.SCENARIOS);
+const rows = COURSES.flatMap(buildRows);
 
 // Write the upsert payload to a file. Node's fetch (undici) can't reliably
 // establish the connection in some local environments, so the actual POST is
@@ -52,4 +67,5 @@ add("scenarios", "paid", d.SCENARIOS);
 const out = new URL("./seed-payload.json", import.meta.url);
 fs.writeFileSync(out, JSON.stringify(rows));
 const pub = rows.filter((r) => r.tier === "public").length;
-console.log(`Wrote ${rows.length}-row payload (${pub} public, ${rows.length - pub} paid) to scripts/seed-payload.json`);
+const byCourse = COURSES.map((c) => `${c.course}:${rows.filter((r) => r.course_id === c.course).length}`).join(", ");
+console.log(`Wrote ${rows.length}-row payload (${pub} public, ${rows.length - pub} paid) to scripts/seed-payload.json [${byCourse}]`);

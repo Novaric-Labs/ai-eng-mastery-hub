@@ -1,0 +1,1496 @@
+{
+  "BLOCKS": [
+    { "id": "b1", "name": "Block 1 · Getting Started" },
+    { "id": "b2", "name": "Block 2 · Working With Models" }
+  ],
+  "MODULES": [
+    {
+      "id": "whatai",
+      "block": "b1",
+      "title": "What AI Actually Is",
+      "tag": "LLMs demystified: a text-prediction machine, not a mind",
+      "why": "Almost everything people call \"AI\" today runs on the same kind of engine: a large language model. If you understand what that engine really does, and the few things it can't do, you'll stop being surprised by it. You'll know when to trust it, when to double-check it, and why it behaves the way it does. Every other lesson in this course builds on this one idea.",
+      "mental": "A large language model is a <b>text-prediction machine</b>. You give it some text, and it guesses the most likely next chunk of text, over and over, until it has written a full answer. That's the whole trick. It is not looking anything up, it has no memory of you, and it isn't \"thinking\" the way a person does. Once you picture it as <b>a very, very well-read autocomplete</b>, the rest of AI stops feeling like magic and starts feeling like a tool with rules.",
+      "concepts": [
+        [
+          "LLM (large language model)",
+          "The engine behind ChatGPT, Claude, and Gemini. It's a program trained on an enormous amount of text, and its one job is to predict what text comes next. That simple skill, done extremely well, is enough to write, summarize, answer questions, and even code."
+        ],
+        [
+          "Predicting the next word",
+          "When you ask the model something, it builds its answer one piece at a time, each time guessing the most likely next piece based on everything so far. Nothing is written in advance, the whole answer is assembled on the spot."
+        ],
+        [
+          "Training",
+          "Before you ever use it, the model was shown a huge amount of text and slowly tuned to get better at predicting it. This happened once, in advance. Using the model later doesn't teach it anything new."
+        ],
+        [
+          "It sounds confident either way",
+          "Because the model's goal is to produce text that reads well, it phrases a wrong answer just as smoothly as a right one. Confidence in the wording tells you nothing about whether it's correct."
+        ],
+        [
+          "Not a search engine",
+          "A search engine finds existing pages and shows them to you. A language model doesn't look anything up by default, it generates new text from patterns it learned. That's why it can be creative, and also why it can make things up."
+        ],
+        [
+          "Same engine, many products",
+          "ChatGPT, Claude, and Gemini are all chat products built on top of large language models. The chat window, the memory features, the ability to see images, those are extras added around the core text-prediction engine."
+        ]
+      ],
+      "mistakes": [
+        "Thinking the model \"knows\" things the way a database does, it's predicting likely text, not retrieving stored facts",
+        "Trusting an answer because it sounds confident, fluent wording and correctness are unrelated",
+        "Expecting it to remember a past conversation on its own, by default each chat starts fresh",
+        "Assuming it searched the web, unless a product explicitly adds that, it didn't",
+        "Treating it as a calculator for exact math or precise quotes, it predicts plausible text, which isn't the same as being exact"
+      ],
+      "flags": [
+        "\"The AI told me, so it must be right\", confidence isn't evidence; verify anything that matters",
+        "\"It made up a fact / a fake quote / a broken link\", that's the prediction engine filling a gap, not a glitch you can fully turn off",
+        "\"It forgot what I said earlier\", you likely hit the limits of its short-term memory, covered in the context lesson",
+        "\"It gave me a different answer the second time\", normal, the model makes fresh guesses each time"
+      ],
+      "ask": [
+        "Is this a question where being wrong would cost me, and if so, how will I check the answer?",
+        "Am I expecting it to recall something, or to generate something? (It's much better at generating.)",
+        "Could this need fresh or private information the model was never trained on?",
+        "Would a real source (a search, a document, a person) be a better fit than a confident guess?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "tokens",
+      "block": "b1",
+      "title": "Tokens & How Models Read Text",
+      "tag": "The model doesn't read words, it reads tokens, and that explains a lot",
+      "why": "You're billed in tokens, you run out of room in tokens, and a few of the model's weirdest quirks (bad spelling tricks, shaky math, trouble counting letters) come straight from tokens. You don't need to count them by hand, but once you know what a token is, three confusing things about AI suddenly make sense: why it costs what it costs, why it sometimes forgets, and why it stumbles on tasks that look easy.",
+      "mental": "Before the model can predict the next chunk of text, it has to chop your text into pieces. Those pieces are called <b>tokens</b>. A token is usually a short run of characters, often about <b>three-quarters of a word</b>, so common words are one token, and longer or unusual words get split into several. The model never sees letters or whole words the way you do, it sees a stream of tokens. Picture it reading text in <b>puzzle pieces rather than letters</b>: that one image explains the cost, the limits, and the quirks you'll meet for the rest of this course.",
+      "concepts": [
+        [
+          "Token",
+          "The small chunk of text a model actually reads and writes. Often a common word, a word-piece, a space, or a punctuation mark. As a rough rule of thumb, one token is about four characters of English, or roughly three-quarters of a word."
+        ],
+        [
+          "Tokenizing",
+          "The step where your text is sliced into tokens before the model sees it. It happens automatically, every time, for both what you send in and what the model writes back."
+        ],
+        [
+          "Why splitting helps",
+          "There are too many possible words (and typos, and names) to give each its own slot. Breaking text into a few thousand reusable pieces lets the model handle any text, even words it never saw, by spelling them out of smaller pieces."
+        ],
+        [
+          "Tokens, not words, are the unit",
+          "Length limits and pricing are measured in tokens, not words or characters. A long word can be several tokens, and a space or comma can be its own token, so token counts rarely match word counts exactly."
+        ],
+        [
+          "Input tokens and output tokens",
+          "Everything you send (your question, plus any text you paste in) is input tokens. Everything the model writes back is output tokens. Both count, and longer of either means slower and more expensive."
+        ],
+        [
+          "Where the quirks come from",
+          "Because the model sees tokens, not letters, tasks that depend on individual characters get hard: counting the letters in a word, reversing it, or precise spelling. It's not that the model is dumb here, it just isn't looking at letters."
+        ]
+      ],
+      "mistakes": [
+        "Assuming one word equals one token, short common words are one token, but longer or rarer words split into several, so counts don't line up",
+        "Forgetting that the text you paste in counts too, a long document you attach can use far more tokens than your actual question",
+        "Being surprised the model miscounts letters or botches a word-reversal, it reads tokens, not letters, so character-level tasks are genuinely its weak spot",
+        "Thinking only your input is billed, the answer the model writes (output tokens) costs too, and is often the bigger half",
+        "Expecting other languages to cost the same, text in many non-English languages splits into more tokens, so the same meaning can cost more"
+      ],
+      "flags": [
+        "\"Why did this short chat cost so much?\", you probably pasted in a long document; that input is tokens too",
+        "\"It can't tell me how many r's are in a word\", classic token blind spot, it isn't seeing the letters",
+        "\"It cut off mid-answer\", you likely hit a length limit measured in tokens, covered next lesson on the context window",
+        "\"The same request is pricier in my language\", some languages tokenize into more pieces, so they cost more for the same content"
+      ],
+      "ask": [
+        "Am I about to paste in a lot of text? If so, that's a lot of tokens, do I really need all of it?",
+        "Is this a letter-by-letter task (counting characters, exact spelling, reversing a word)? If so, the model may struggle, and a simple tool would be more reliable.",
+        "Could I get the same result with a shorter prompt or a shorter requested answer, to save time and cost?",
+        "If cost matters, have I checked roughly how many tokens my typical request uses?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "context",
+      "block": "b1",
+      "title": "The Context Window",
+      "tag": "The model's short-term memory, and why it's smaller than you think",
+      "why": "This one idea explains the single most common frustration people have with AI: \"why did it forget what I just told it?\" The model can only look at a limited amount of text at once, called the context window. Everything it knows in the moment, your question, the conversation so far, any file you pasted, has to fit inside that window. Understand the window and you'll know why long chats drift, why pasting a giant document can backfire, and how to keep the model on track.",
+      "mental": "The model has no memory of its own between messages. Each time you hit send, it's handed one big block of text, the conversation so far plus your new message, and it reads only that. The size limit on that block is the <b>context window</b>. Think of it as the model's <b>desk, not its filing cabinet</b>: only what's on the desk right now can be used, and the desk has an edge. When the conversation grows past that edge, the oldest things slide off and are simply gone. The model isn't choosing to forget, it literally never sees what fell off the desk.",
+      "concepts": [
+        [
+          "Context window",
+          "The maximum amount of text, measured in tokens, the model can look at in one go. It has to hold everything at once: the conversation history, your current message, any pasted files, and the answer being written."
+        ],
+        [
+          "It's the model's working memory",
+          "Whatever is in the window is what the model 'knows' in this moment. It doesn't remember earlier chats, and within a chat it only has what still fits in the window right now."
+        ],
+        [
+          "Falling off the edge",
+          "When a conversation gets longer than the window, the earliest messages stop being included. The model can't refer back to them because, from its point of view, they're no longer there."
+        ],
+        [
+          "Bigger windows, real limits",
+          "Modern models have large windows (often enough for many pages, sometimes a whole book), but the limit is still real, still measured in tokens, and using a big window is slower and costs more."
+        ],
+        [
+          "More text isn't always better",
+          "Stuffing the window with everything you have can actually hurt, the important detail gets buried in noise and the model may latch onto the wrong thing. A focused, relevant context usually beats a huge one."
+        ],
+        [
+          "You control the window",
+          "You decide what goes in: a tight question with just the needed details, or a long ramble with a pasted novel. Curating what the model sees is the most practical skill in this whole course."
+        ]
+      ],
+      "mistakes": [
+        "Assuming the model remembers everything you've ever said to it, within a chat it only has what still fits the window, and across chats it remembers nothing by default",
+        "Pasting in a huge document and expecting laser-accurate recall, the more you cram in, the easier it is for the key detail to get lost",
+        "Blaming the model for 'forgetting' early parts of a very long conversation, those parts likely fell off the edge of the window",
+        "Thinking a bigger context window is always better, it costs more, runs slower, and can dilute the important bits",
+        "Burying the actual question at the top of a wall of text, the model does best when the ask is clear and the context around it is relevant"
+      ],
+      "flags": [
+        "\"It forgot a detail I gave it ten messages ago\", that detail probably slid off the edge of the window; restate it",
+        "\"It's ignoring most of the long document I pasted\", important parts may be buried; give it just the relevant section",
+        "\"Long chats get worse over time\", normal drift as early context drops off; starting a fresh chat with a clean summary often fixes it",
+        "\"It mixed up two different things I asked about\", too much unrelated stuff in the window at once; keep one task per conversation when it matters"
+      ],
+      "ask": [
+        "Does the model actually have, in this conversation, the detail I'm expecting it to use? If not, I need to include it.",
+        "Am I giving it the relevant context, or just a lot of context? Could I trim this down to what matters?",
+        "Has this chat gotten really long? Would starting fresh with a short summary work better?",
+        "Is my real question easy to spot, or is it buried under everything I pasted?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "prompting",
+      "block": "b1",
+      "title": "Talking to the Model: Prompting Basics",
+      "tag": "The words you give it are the steering wheel, small changes, big differences",
+      "why": "The same model can give you a vague, useless answer or a sharp, exactly-what-you-wanted one, and the only thing that changed was how you asked. That request you type is called a prompt, and learning to write a good one is the highest-leverage skill in this whole course. You don't need clever tricks or secret phrases. You need a few plain habits that get you from \"meh\" to \"that's perfect\" far more often.",
+      "mental": "A prompt is just the text you give the model to work with, and the model takes it completely literally, it can't read your mind or see what's on your screen. So think of prompting as <b>briefing a brilliant, eager new assistant on their first day</b>: they're capable and fast, but they know nothing about your situation unless you tell them. The clearer you are about the task, the context, and what a good answer looks like, the better the result. A vague brief gets a vague reply, a specific brief gets a specific one. <b>You're not casting a spell, you're writing a good set of instructions.</b>",
+      "concepts": [
+        [
+          "Prompt",
+          "The text you send the model, your question or instruction, plus any context or examples you include. It's the entire input the model has to work from, so whatever you leave out, it simply doesn't know."
+        ],
+        [
+          "Be specific about the task",
+          "Tell the model exactly what you want it to do. \"Write something about dogs\" and \"Write a friendly three-sentence intro for a dog-walking flyer\" produce very different results, because the second one actually says what success looks like."
+        ],
+        [
+          "Give it the context it needs",
+          "The model only knows what you tell it in the prompt. Who's the audience, what's the goal, what background matters? Including the relevant context is usually the difference between a generic answer and one that fits your situation."
+        ],
+        [
+          "Say what a good answer looks like",
+          "Ask for the format you want: a bulleted list, a short paragraph, a table, a specific tone, a length. The model is happy to oblige, but only if you say so, otherwise it guesses."
+        ],
+        [
+          "Show an example",
+          "If you have a sample of the style or format you want, paste it in and say \"like this.\" One good example often teaches the model more than a paragraph of instructions."
+        ],
+        [
+          "Iterate, don't expect perfection first try",
+          "Prompting is a conversation. If the first answer is close but not right, tell it what to change (\"shorter,\" \"more formal,\" \"focus on the second point\"). Refining is normal and usually faster than rewriting from scratch."
+        ]
+      ],
+      "mistakes": [
+        "Being too vague, a one-line request with no context gets a generic answer, the model fills the gaps with guesses",
+        "Assuming the model can see what you see, it can't read your screen, your files, or your mind, only the words in the prompt",
+        "Not saying what format or length you want, then being annoyed it wrote five paragraphs when you wanted three bullets",
+        "Giving up after one mediocre answer instead of refining, the second or third pass is usually where it gets good",
+        "Piling on so many instructions at once that the important one gets lost, sometimes it's better to do it in steps"
+      ],
+      "flags": [
+        "\"It gave me something generic and bland\", the prompt was probably too vague; add the task, the audience, and the format you want",
+        "\"It answered a slightly different question than I meant\", it took your wording literally; restate the ask more precisely",
+        "\"It's the right idea but the wrong shape\", you likely didn't specify format or length; just ask for the shape you want",
+        "\"It keeps missing one requirement\", too much crammed in one prompt; pull that requirement out and handle it as its own step"
+      ],
+      "ask": [
+        "Have I actually said what I want, clearly enough that a stranger could follow it?",
+        "Does the model have the context it needs, or am I assuming it knows something I never told it?",
+        "Did I say what a good answer looks like, the format, length, and tone?",
+        "If the first answer is close, what one change would I ask for to make it right?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "chat",
+      "block": "b2",
+      "title": "How Chat Works",
+      "tag": "There's no \"it\" remembering you, just the same block of text, re-sent every turn",
+      "why": "Chatting with an AI feels like talking to someone who's following along. But under the hood, there's no \"someone\" keeping track, the chat is a clever illusion built on top of a model with no memory. Understanding how that illusion actually works clears up a surprising number of confusions: why a new chat starts blank, why \"memory\" features are a separate add-on, and why the model can suddenly contradict itself. Once you see the mechanism, you'll use chat tools with far less surprise.",
+      "mental": "The model itself is <b>stateless</b>, a fancy word for \"it remembers nothing between turns.\" Each message you send, it sees fresh, with no recollection of the last one. So how does a conversation hold together? The chat app does the remembering for it. Every time you hit send, the app <b>quietly re-sends the entire conversation so far</b>, all of it, your messages and the model's replies, glued together, with your new message tacked on the end. The model reads that whole block, answers, and forgets again. Picture it as <b>a brilliant expert with no memory, handed a complete transcript before every single reply</b>. The continuity you feel isn't in the model, it's in the transcript the app keeps re-handing it.",
+      "concepts": [
+        [
+          "Stateless",
+          "The model keeps no memory between turns. Each request is handled on its own, as if it were the first thing you'd ever said. Any sense of an ongoing conversation comes from outside the model, not from the model itself."
+        ],
+        [
+          "Conversation history",
+          "The running transcript of everything said so far, your messages and the model's replies. The chat app stores this and re-sends the whole thing each turn so the model has the full picture."
+        ],
+        [
+          "The illusion of memory",
+          "Because the app re-feeds the entire history every turn, the model appears to remember. It isn't, it's re-reading the transcript each time. Same effect, completely different mechanism, and the difference matters when things go wrong."
+        ],
+        [
+          "A new chat is a blank slate",
+          "Start a fresh conversation and the transcript is empty, so the model knows nothing about your previous chats. That's not a bug, it's the default, each chat is its own separate transcript."
+        ],
+        [
+          "\"Memory\" features are an extra layer",
+          "Some products add a real memory feature that saves notes about you and slips them into the transcript automatically. That's a feature built on top of the model, not something the model does on its own, and you can usually see and edit what it stored."
+        ],
+        [
+          "System message (the hidden brief)",
+          "Most chat tools quietly add an instruction at the very top of the transcript, before your first word, telling the model how to behave (\"You are a helpful assistant\"). You don't see it, but it's part of every turn, shaping the tone and rules of the whole chat."
+        ]
+      ],
+      "mistakes": [
+        "Thinking the model is personally remembering you, it's the app re-sending the transcript; the model itself recalls nothing",
+        "Expecting a brand-new chat to know about an earlier one, by default each chat is a separate, blank transcript",
+        "Assuming a \"memory\" feature means the model learned something, it just saved a note and slips it into the transcript; the model still didn't change",
+        "Being surprised the model contradicts what it said an hour ago in a long chat, if that part fell out of the window, it's no longer in the transcript it sees",
+        "Not realizing a hidden system message is shaping every answer, the tool's built-in instructions are part of the conversation too"
+      ],
+      "flags": [
+        "\"It doesn't remember my last chat\", expected; each new conversation starts with an empty transcript unless a memory feature is on",
+        "\"It suddenly forgot what we agreed earlier\", in a long chat that part may have dropped out of the window, so it's no longer in the transcript",
+        "\"The memory feature remembered something weird about me\", that's a stored note you can usually view and delete in settings",
+        "\"It behaves with a personality I didn't ask for\", that's often the hidden system message the product added; a different tool will have a different one"
+      ],
+      "ask": [
+        "Am I expecting this chat to know something from a different conversation? If so, I need to bring it in, it won't carry over by itself.",
+        "Is this a fresh chat, or a long one where early details may have dropped off the transcript?",
+        "If I'm relying on a memory feature, do I actually know what it has stored about me?",
+        "Could a hidden system message be shaping these answers in a way I should account for?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "limits",
+      "block": "b2",
+      "title": "What Models Get Wrong",
+      "tag": "Hallucination and the knowledge cutoff, the two failure modes you must always expect",
+      "why": "A model that's right ninety percent of the time and confident one hundred percent of the time is genuinely dangerous if you don't know where the ten percent hides. This lesson names the two big, predictable ways models go wrong: they invent things that sound true (hallucination), and they don't know anything recent (the knowledge cutoff). These aren't rare glitches, they're built into how the engine works. Knowing exactly when to expect them is what separates someone who gets burned by AI from someone who uses it safely.",
+      "mental": "Both failures come straight from the one idea you already know: the model predicts likely-sounding text, it doesn't look anything up. So when it doesn't have a real answer, it doesn't stop, it produces the <b>most plausible-sounding text instead</b>, and that invented-but-convincing answer is a <b>hallucination</b>. And because the model was trained once, in the past, its knowledge stops at a certain date, the <b>knowledge cutoff</b>, after which it knows nothing unless a tool feeds it fresh information. Picture <b>a brilliant expert who's been locked in a room since some date last year, and who, rather than ever saying \"I don't know,\" will smoothly make something up</b>. That single image tells you exactly when to be careful: anything recent, and anything where a confident guess would cost you.",
+      "concepts": [
+        [
+          "Hallucination",
+          "When the model states something false as if it were true, a fake statistic, an invented quote, a citation to a paper that doesn't exist, a made-up feature. It happens because the model fills gaps with plausible text rather than admitting it doesn't know."
+        ],
+        [
+          "Why hallucination can't be fully switched off",
+          "It's the same machinery that makes the model useful: always producing likely-sounding text. You can reduce it (better prompts, giving it real sources, asking it to cite), but there's no setting that guarantees it never makes things up."
+        ],
+        [
+          "Knowledge cutoff",
+          "The date the model's training data stops. It knows nothing about events, prices, releases, or news after that point, and often isn't sure exactly where its own cutoff is. Ask about last week and it may confidently answer from an outdated world."
+        ],
+        [
+          "Confidence is not a signal",
+          "The model sounds equally sure whether it's right, hallucinating, or answering from stale knowledge. You cannot tell from the tone, which is precisely why tone can't be your safety check."
+        ],
+        [
+          "It's worst on the specific and the obscure",
+          "Hallucination is most likely on precise, verifiable details (names, numbers, quotes, links, citations) about niche or recent topics, exactly the things that look most authoritative and are most tempting to copy."
+        ],
+        [
+          "Grounding reduces it",
+          "When you give the model the real source to work from, paste the document, or use a tool that searches, it has actual material to draw on instead of guessing. \"Answer only from this text\" is far safer than \"answer from memory.\""
+        ]
+      ],
+      "mistakes": [
+        "Trusting a confident answer on a recent topic, the model's knowledge stops at its cutoff and it won't reliably tell you it's out of date",
+        "Copying specific details (quotes, statistics, citations, links) without checking, these are exactly what hallucination produces most convincingly",
+        "Believing the model when it 'cites a source', it can invent realistic-looking sources that don't exist",
+        "Assuming a newer or bigger model never hallucinates, better models hallucinate less, but none are immune",
+        "Asking it about today's news or live data and taking the answer at face value, without a search tool it literally cannot know"
+      ],
+      "flags": [
+        "\"It gave me a source/quote/statistic\", verify it exists before using it; fabricated-but-realistic references are a classic hallucination",
+        "\"It told me about a recent event confidently\", check whether that's even after its knowledge cutoff; it may be guessing from an old world",
+        "\"It contradicted itself between answers\", a sign it was generating plausible text rather than drawing on a stable fact",
+        "\"It insisted it was right when I pushed back\", confidence under pressure still isn't evidence; go check an actual source"
+      ],
+      "ask": [
+        "Is this about something recent? If so, is it past the model's knowledge cutoff, and do I need a search tool or a real source instead?",
+        "Would being wrong here actually cost me, and if so, how will I verify it independently?",
+        "Did the model give me specific, copyable details (numbers, names, quotes, links)? Those are the ones to check first.",
+        "Could I make this safer by giving the model the real source to answer from, instead of asking it from memory?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "tools",
+      "block": "b2",
+      "title": "Beyond Text",
+      "tag": "Images, files, the internet, and tools, the extras bolted onto the text engine",
+      "why": "By now you know the core model only predicts text, and only knows what's in its training and your prompt. So how can ChatGPT look at a photo, read your PDF, search the web, or run a calculation? The answer is that modern AI products bundle extra abilities around the text engine. Knowing which abilities are core to the model and which are bolt-on features explains what your particular tool can and can't do, and stops you from assuming every AI can do everything you've seen somewhere.",
+      "mental": "Think of the language model as a powerful <b>engine</b>, and the product you actually use (ChatGPT, Claude, Gemini) as a <b>car built around that engine</b>. The engine does text prediction. Everything else, seeing images, reading files, searching the internet, doing math, running code, is a <b>capability the car adds on</b>. Crucially, when the model needs something outside its own abilities, it doesn't magically gain a new power, it <b>calls a tool</b>: a separate piece of software that does the real work and hands the result back as text the model can use. So \"can this AI do X?\" almost always means \"does this product give the model a tool for X?\" <b>Same engine, different cars, different features.</b>",
+      "concepts": [
+        [
+          "Multimodal (seeing and hearing)",
+          "Some models can take in more than text, an image, a screenshot, sometimes audio, and describe or reason about it. This is a real capability of those specific models, not every model has it, and the model is still predicting text, just text about what it was shown."
+        ],
+        [
+          "Reading files",
+          "When you attach a PDF or document, the product extracts the text and slips it into the prompt for you. The model isn't 'opening' the file, it's reading text the tool pulled out, which is why a scanned image with no real text can stump it."
+        ],
+        [
+          "Web search / browsing",
+          "By itself the model can't reach the internet. A search tool, when the product includes one, looks things up live and feeds the results into the prompt. That's how an AI can answer about today, it's reading fresh text the tool fetched, not 'knowing' it."
+        ],
+        [
+          "Tools (the general idea)",
+          "A tool is any outside helper the model can call: a calculator, a search engine, a code runner, a database. The model decides it needs help, the tool does the exact work, and the result comes back as text. This is how AI gets reliable at things text-prediction is bad at."
+        ],
+        [
+          "Why tools make it more reliable",
+          "Letting a calculator do the math, or a search engine fetch the fact, replaces a shaky guess with an actual answer. Tools are how products patch over the model's weak spots, arithmetic, fresh info, exact lookups, without changing the engine itself."
+        ],
+        [
+          "Generating images is a different model",
+          "When an AI 'draws' a picture, that's usually a separate image-generation model, not the text engine. The product routes your request to it. It's another example of capabilities bundled into one friendly interface."
+        ]
+      ],
+      "mistakes": [
+        "Assuming every AI can see images or search the web, those are features of specific products and models, not universal powers",
+        "Thinking the model 'opened' your file, the tool extracted the text first; a scanned or image-only PDF may have no text to read",
+        "Believing an answer is current just because the tool can search, check whether search actually ran for that answer, or whether it fell back on old training",
+        "Expecting the text model to do flawless math on its own, reliable arithmetic comes from a calculator tool, not the prediction engine",
+        "Confusing 'the AI generated an image' with the chat model drawing, that's usually a separate image model the product called"
+      ],
+      "flags": [
+        "\"It couldn't read my PDF\", it may be a scanned image with no extractable text, or the file was too long for the window",
+        "\"It gave outdated info even though it can browse\", search may not have run that turn; ask it explicitly to search, or check for a source link",
+        "\"It got the math wrong\", the plain text model was guessing; use a tool/calculator feature, or have it show and you verify the steps",
+        "\"This works in one AI app but not another\", different products bundle different tools; the capability isn't part of every model"
+      ],
+      "ask": [
+        "Does the tool I'm using actually have this capability (image input, web search, file reading), or am I assuming it from something I saw elsewhere?",
+        "For a fresh-info answer, did it really search, is there a source or link, or might it be answering from old training?",
+        "For anything exact (math, data lookup), is a tool doing the work, or is the model just predicting a plausible number?",
+        "Could giving it the source directly (paste the text, attach the file) be more reliable than hoping a tool fetched the right thing?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "using",
+      "block": "b2",
+      "title": "Putting It Together",
+      "tag": "Choosing a model, building cost intuition, and where to go next",
+      "why": "You now know what the engine is, how it reads, what it forgets, how to talk to it, where it fails, and what the extras do. This final lesson ties it into practical judgment: how to pick a model for a task, a rough feel for what things cost, and a simple habit for deciding when to trust an answer. It's also your on-ramp, when you're ready to actually build things with these models, the Engineering Mastery course picks up right where this leaves off.",
+      "mental": "Everything in this course collapses into one working habit: <b>match the model and your effort to what the task actually needs.</b> A throwaway brainstorm doesn't need the biggest, priciest model or careful fact-checking. A client-facing claim or a medical question needs your best model, a tight prompt, real sources, and a human check. So before each task, ask two quick questions: <b>how capable does the model need to be, and how much does being wrong cost me?</b> Cheap-and-fast for low stakes, careful-and-verified for high stakes. <b>You're not memorizing rules, you're learning to right-size your tool, which is exactly how a professional uses one.</b>",
+      "concepts": [
+        [
+          "Bigger model vs smaller model",
+          "Most providers offer a range: larger, smarter, slower, pricier models, and smaller, faster, cheaper ones. The big one isn't always the right call. For simple tasks the small one is quicker and far cheaper; save the heavyweight for genuinely hard work."
+        ],
+        [
+          "A rough feel for cost",
+          "Cost tracks tokens, both what you send and what comes back. Short chats are nearly free; the expense comes from big pasted documents and long generated answers. You don't need exact numbers, just the instinct that 'huge input plus long output equals real money.'"
+        ],
+        [
+          "Match effort to stakes",
+          "Low-stakes, reversible task? Move fast, accept a good-enough answer. High-stakes or hard-to-undo? Use a stronger model, give it sources, and verify the output yourself. Right-sizing your caution is the core skill."
+        ],
+        [
+          "Know when to verify",
+          "Trust the model for drafting, brainstorming, explaining, and rephrasing. Verify it for facts, numbers, recent events, citations, and anything where being wrong has a cost. This single split prevents most AI mishaps."
+        ],
+        [
+          "Pick the tool with the right features",
+          "If you need current info, choose a product with web search. If you work with images or PDFs, choose one that handles them. The 'best' AI is the one whose bundled capabilities match what you're actually doing."
+        ],
+        [
+          "Where to go next",
+          "If you want to go from using these models to building with them, designing prompts at scale, wiring up tools, controlling cost in real systems, that's the Engineering Mastery course. Everything here is the foundation it assumes."
+        ]
+      ],
+      "mistakes": [
+        "Always reaching for the biggest model, it's slower and costlier, and overkill for most everyday tasks",
+        "Ignoring cost until a surprise bill, a quick instinct about input and output size prevents nearly all of them",
+        "Applying the same caution to everything, a brainstorm and a legal question don't deserve the same scrutiny, or the same trust",
+        "Choosing an AI tool by hype rather than by whether it has the features your task needs (search, files, images)",
+        "Treating the model as either magic or useless, the skill is knowing which tasks it's great at and which need a check"
+      ],
+      "flags": [
+        "\"This is taking forever and costing a lot\", you may be on the heavyweight model for a simple task, or sending huge inputs; right-size both",
+        "\"I'm not sure whether to trust this answer\", run the split: drafting/brainstorming is fine; facts/numbers/recent/citations need verifying",
+        "\"My tool can't do something I need\", it may lack that feature; pick a product whose bundled capabilities fit the task",
+        "\"I want to actually build with this, not just chat\", that's the on-ramp to the Engineering Mastery course, this was the foundation"
+      ],
+      "ask": [
+        "How capable does the model really need to be for this, could a smaller, cheaper, faster one do just fine?",
+        "Roughly how many tokens is this, am I pasting a lot in or asking for a very long answer, and do I need to?",
+        "What are the stakes if this is wrong, and does that mean I should verify it or give it a real source?",
+        "Does my tool actually have the features this task needs, and if I'm ready to build, am I ready for the next course?"
+      ],
+      "estMin": 30
+    }
+  ],
+  "PLAIN": {
+    "whatai": "AI tools like ChatGPT are powered by something called a large language model. Underneath, it does one surprisingly simple thing: it predicts the next bit of text, again and again, until it has written a whole answer. It isn't looking things up, it has no real memory of you, and it doesn't \"know\" facts the way a person or a database does, it produces text that sounds right based on patterns it learned. That's why it can be incredibly helpful and also, sometimes, confidently wrong. This lesson is about that one core idea, because everything else in AI makes sense once you've got it.",
+    "tokens": "Before an AI model can do anything with your text, it chops it into little pieces called tokens. A token is roughly three-quarters of a word, so common words are one piece and longer or unusual words get split into several. The model never sees letters or whole words the way you do, it sees this stream of tokens. That one fact quietly explains a lot: you're charged by the token (both what you type and what it writes back), length limits are counted in tokens, and the model's odd weak spots, like miscounting the letters in a word, happen because it isn't looking at letters at all. You won't count tokens by hand, but knowing they exist makes AI's cost and quirks stop being mysterious.",
+    "context": "An AI model has no memory of its own. Every time you send a message, it's handed one big block of text, the conversation so far plus your new message, and it can only look at what fits in that block. The size of that block is called the context window, and it's the model's short-term memory, like a desk with a hard edge. Whatever's on the desk, it can use; whatever falls off the edge when the conversation gets too long is simply gone. That's why a model can 'forget' something you said much earlier, why pasting in a giant document can backfire, and why long chats slowly drift. The practical takeaway: you control what goes on the desk, and keeping it focused on what matters is the most useful AI skill there is.",
+    "prompting": "A prompt is just the text you give an AI to work with, your question or instruction plus any context you include. The model takes it literally and can't read your mind, so the quality of your prompt drives the quality of the answer. The trick isn't secret phrases, it's treating the model like a brilliant new assistant on their first day: tell it clearly what you want done, give it the background it needs, and say what a good answer looks like (a list, a short paragraph, a friendly tone, a certain length). If the first reply is close but not quite right, just tell it what to change, prompting is a back-and-forth, not a one-shot spell. Vague in, vague out; specific in, specific out. This is the single highest-leverage skill in the whole course.",
+    "chat": "Chatting with an AI feels like talking to someone who remembers the conversation, but the model itself remembers nothing between messages, it's what engineers call stateless. The continuity is an illusion created by the chat app: every time you hit send, the app re-sends the entire conversation so far, your messages and the model's replies, all glued together, plus your new message. The model reads that whole transcript, answers, and forgets again. That's why a brand-new chat starts blank (empty transcript), why 'memory' features are a separate add-on that saves notes and slips them into the transcript, and why a hidden 'system message' the product adds at the top can quietly shape every answer. Once you see that the memory lives in the re-sent transcript and not in the model, chat tools stop being mysterious.",
+    "limits": "Models go wrong in two big, predictable ways, and both come from the same fact: the model predicts plausible-sounding text, it doesn't look things up. First, when it doesn't actually know something, it tends to make up a convincing answer rather than admit it, fake statistics, invented quotes, citations to papers that don't exist. That's called hallucination, and there's no setting that fully turns it off. Second, the model was trained once in the past, so its knowledge stops at a certain date, the knowledge cutoff, and it knows nothing newer unless a tool feeds it fresh information. Picture a brilliant expert locked in a room since last year who'd rather smoothly invent an answer than say 'I don't know.' The danger is that it sounds just as confident when it's wrong, so confidence is never your safety check. Be especially careful with specific details and anything recent, and verify anything where being wrong would cost you.",
+    "tools": "The core AI model only predicts text, so how can your app look at a photo, read your PDF, search the web, or do math? Modern AI products bundle extra abilities around the text engine. Think of the model as an engine and the product (ChatGPT, Claude, Gemini) as a car built around it: seeing images, reading files, searching the internet, running calculations, these are features the car adds. When the model needs something outside its own ability, it calls a tool, a separate piece of software that does the real work and hands the result back as text. Reading a file means the tool pulled the text out; searching the web means a tool fetched fresh pages; getting the math right means a calculator did it. So 'can this AI do X?' really means 'does this product give the model a tool for X?' Same engine, different cars, different features, which is why two AI apps can have very different abilities.",
+    "using": "This lesson ties everything together into a single working habit: match the model, and your own effort, to what the task actually needs. Providers offer bigger, smarter, slower, pricier models and smaller, faster, cheaper ones, and the big one isn't always right, save it for genuinely hard work. Cost tracks tokens, so short chats are nearly free and the expense comes from big pasted documents and long answers; you just need the instinct that 'huge input plus long output equals real money.' Before each task, ask two questions: how capable does the model need to be, and how much does being wrong cost me? Move fast and accept good-enough for low-stakes work; use a stronger model, give it real sources, and verify the output for anything high-stakes. Trust it for drafting, brainstorming, and rephrasing; verify it for facts, numbers, recent events, and citations. That's how a professional uses the tool, and if you're ready to go from using these models to building with them, the Engineering Mastery course picks up right here."
+  },
+  "GLOSSARY": [
+    ["AI (artificial intelligence)", "A broad term for software that does things we used to think required human intelligence, like understanding language or recognizing images. Today, most of the \"AI\" people talk about is built on large language models.", "whatai"],
+    ["LLM (large language model)", "The engine behind tools like ChatGPT, Claude, and Gemini. A program trained on a huge amount of text whose core skill is predicting the next word, which turns out to be enough to write, answer, and reason.", "whatai"],
+    ["Model", "Short for the AI program itself, the trained \"brain\" you send text to and get text back from. \"The model\" and \"the LLM\" usually mean the same thing.", "whatai"],
+    ["Predicting the next word", "The basic move an LLM makes: given the text so far, guess the most likely next chunk. Repeat that thousands of times and you get a full answer.", "whatai"],
+    ["Training", "The one-time process of showing a model enormous amounts of text so it gets good at predicting it. Using the model afterward doesn't add to its training.", "whatai"],
+    ["Generate", "To produce new text on the spot, rather than look it up. LLMs generate answers, which is why they can be both creative and occasionally wrong.", "whatai"],
+    ["ChatGPT / Claude / Gemini", "Popular chat products, each built on top of a large language model. The differences you notice are mostly in the product wrapped around the model, not a different kind of engine.", "whatai"],
+    ["Token", "The small chunk of text a model actually reads and writes, often a common word, a word-piece, or a punctuation mark. As a rough rule, one token is about four characters, or three-quarters of a word.", "tokens"],
+    ["Tokenizing", "Slicing your text into tokens before the model sees it. It happens automatically every time, for both your input and the model's output.", "tokens"],
+    ["Input tokens / output tokens", "Input tokens are everything you send in (your prompt plus any pasted text); output tokens are everything the model writes back. Both are counted, and both affect speed and cost.", "tokens"],
+    ["Context window", "The maximum amount of text, measured in tokens, a model can look at in one go. It must hold the whole conversation, your message, any pasted files, and the answer being written, all at once.", "context"],
+    ["Working memory (of a model)", "A plain-English name for what's in the context window right now: the only thing the model can actually use this turn. It doesn't remember anything outside that window by default.", "context"],
+    ["Falling out of context", "What happens when a conversation grows past the window: the earliest messages stop being included, so the model can no longer refer to them, it's not choosing to forget, it simply can't see them.", "context"],
+    ["Prompt", "The text you give the model to work with: your question or instruction plus any context or examples. It's the entire input the model has, so anything you leave out, it doesn't know.", "prompting"],
+    ["Prompting", "The skill of writing clear instructions for a model. Less about clever tricks, more about saying plainly what you want, giving the needed context, and describing what a good answer looks like.", "prompting"],
+    ["Iterating (on a prompt)", "Refining your request after seeing the first answer, telling the model what to change ('shorter', 'more formal', 'focus on this') instead of rewriting from scratch. Prompting is a back-and-forth, not one shot.", "prompting"],
+    ["Stateless", "Describes the model keeping no memory between turns: each message is handled on its own, as if it were the first. Any sense of an ongoing conversation comes from outside the model.", "chat"],
+    ["Conversation history", "The running transcript of everything said so far, your messages and the model's replies. The chat app stores it and re-sends the whole thing each turn so the model has the full picture.", "chat"],
+    ["System message", "A hidden instruction most chat tools add at the very top of the transcript, before your first word, telling the model how to behave. You don't see it, but it shapes the tone and rules of every answer.", "chat"],
+    ["Memory feature", "An optional extra, built on top of the model, that saves notes about you and slips them into the transcript automatically. The model didn't 'learn', the app just stores and re-inserts the notes; you can usually view and edit them.", "chat"],
+    ["Hallucination", "When a model states something false as if it were true, a fake quote, an invented statistic, a citation to a paper that doesn't exist. It happens because the model fills gaps with plausible text instead of admitting it doesn't know.", "limits"],
+    ["Knowledge cutoff", "The date a model's training data stops. It knows nothing about events, prices, or releases after that point, and often isn't sure exactly when its own cutoff is, so it may answer recent questions from an outdated world.", "limits"],
+    ["Grounding", "Giving the model real material to answer from, a pasted document or a tool's search results, instead of asking it from memory. Grounded answers are far less likely to be made up.", "limits"],
+    ["Multimodal", "Describes a model that can take in more than text, such as images or audio, and reason about it. It's a capability of specific models, not a universal power, and the model is still producing text about what it was shown.", "tools"],
+    ["Tool (tool use)", "Any outside helper a model can call when it needs something beyond text prediction: a calculator, a web search, a code runner, a database. The tool does the real work and hands the result back as text the model can use.", "tools"],
+    ["Web search / browsing", "A tool that lets an AI product look things up live on the internet and feed the results into the prompt. The core model can't reach the web by itself; this is a bolted-on feature, and not every product has it.", "tools"]
+  ],
+  "DEEP": {
+    "whatai": {
+      "worked": "Ask a model, \"What's the capital of France?\" and it answers \"Paris\", instantly and correctly. It feels like it looked that up in a database. It didn't. The phrase \"the capital of France is\" appeared so many times in its training text, always followed by \"Paris\", that \"Paris\" is overwhelmingly the most likely next word. The model is just completing the pattern. Now ask it, \"What did I have for breakfast last Tuesday?\" It has no way to know, but its job is to produce likely-sounding text, so it may <b>cheerfully invent</b> a plausible breakfast. Same engine, same behavior, completing text. The difference is that one pattern was all over its training data and the other one it had to make up. Holding both examples in your head at once is the whole lesson: <b>right answers and made-up answers come out of the exact same machine, the same way.</b>",
+      "good": [
+        "You treat the model as a confident draft-writer, not a source of truth",
+        "You double-check anything where being wrong would actually cost you",
+        "You're not surprised when it makes something up, you expect it and verify",
+        "You reach for a real search or a document when you need current or private facts",
+        "You ask it to generate, brainstorm, rephrase, and explain, where it genuinely shines"
+      ],
+      "build": "Try this five-minute experiment in any chat AI. First, ask it a well-known fact (\"What year did the first iPhone come out?\"), it will likely nail it. Then ask it something it can't possibly know but that sounds answerable (\"What's the name of the small café two doors down from my office?\"). Watch it produce a confident, specific, and completely invented answer. Seeing the same tool be reliably right and confidently wrong, back to back, makes the \"text-prediction machine\" idea stick far better than any explanation.",
+      "res": [
+        ["3Blue1Brown, \"But what is a neural network?\" (visual intro)", "https://www.youtube.com/watch?v=aircAruvnKk", "Optional and gentle, a beautifully visual look at what's happening inside. You do not need the math; watch it for the intuition."],
+        ["Anthropic Academy (general learning hub)", "https://www.anthropic.com/learn", "A plain-English learning hub from one of the model makers. Browse it after this lesson for background that reinforces the core idea."]
+      ]
+    },
+    "tokens": {
+      "worked": "Take the simple sentence \"I love tokenization!\" To you, that's three words. To the model, it might be six or seven tokens: <b>\"I\"</b>, <b>\" love\"</b> (the space rides along), <b>\" token\"</b>, <b>\"ization\"</b>, and <b>\"!\"</b>. Notice three things. First, the common word \"love\" is a single token, but the longer, less common word \"tokenization\" got split into pieces. Second, spaces and punctuation are tokens too. Third, and this is the punchline, the model never saw the letters t-o-k-e-n; it saw the chunks \" token\" and \"ization\". So if you ask it, \"how many letter z's are in that sentence?\", it has to reason about something it can't actually see, and it often gets it wrong. <b>The same blindness that makes it stumble on counting letters is exactly why it can read almost any text, in any language, including words it was never trained on:</b> it just spells the unfamiliar word out of smaller, familiar tokens.",
+      "good": [
+        "You think in rough tokens, not exact words, when you estimate length or cost (a chunky paragraph is a few hundred tokens, not a precise figure)",
+        "You remember that pasted text counts as input tokens, so you trim documents down to the part that matters",
+        "You don't ask the model to do letter-level tasks (counting characters, exact anagrams) and trust the result, you reach for a real tool",
+        "You're not surprised that a long answer costs more than a short one, output tokens are billed too",
+        "You notice that the same content can cost more in some languages, and factor that in if it matters"
+      ],
+      "build": "Spend five minutes with a free online tokenizer (search \"OpenAI tokenizer\" or \"Tiktokenizer\" and open the visual one). Paste in a normal sentence and watch it split into colored chunks, count them. Then paste a made-up word like \"flibbertigibbeting\" and see it shatter into many tiny pieces. Finally, paste the same sentence translated into another language and compare the token count. In five minutes you'll have seen, with your own eyes, why common words are cheap, rare words are expensive, and the model reads in chunks rather than letters.",
+      "res": [
+        ["The OpenAI Tokenizer (visual playground)", "https://platform.openai.com/tokenizer", "Use right now: paste any text and literally see it broken into tokens. The fastest way to make this lesson concrete."],
+        ["Tiktokenizer (interactive, multi-model)", "https://tiktokenizer.vercel.app/", "Use when you want to compare how different models chop the same text, or to count tokens before a big paste."],
+        ["Anthropic Academy (general learning hub)", "https://www.anthropic.com/learn", "A plain-English learning hub from a model maker. Browse it after the lesson for background that reinforces why models use tokens at all."]
+      ]
+    },
+    "context": {
+      "worked": "Imagine a long chat with an assistant. Near the start, you mention, \"My dog's name is Pixel.\" You then talk for forty more messages about a totally different project. Finally you ask, \"What's my dog's name?\" and the model says it doesn't know, or worse, confidently guesses \"Max.\" It didn't betray you. As the conversation grew, it eventually got longer than the context window, and the earliest messages, including the one about Pixel, slid off the edge. From the model's point of view in that final turn, you simply never mentioned a dog. <b>The model isn't remembering and then forgetting; each turn it only ever sees what currently fits in the window.</b> Now flip it around: if instead you'd said, \"Earlier I told you my dog's name, remind me to use it, his name is Pixel,\" right before asking, the detail would be back on the desk and the model would nail it. Same model, same question, completely different result, because of what was in the window at the moment you asked.",
+      "good": [
+        "You restate key details when a conversation has gotten long, rather than assuming the model still has them",
+        "You paste in only the relevant part of a document, not the whole thing, so the important bit isn't buried",
+        "You start a fresh chat (with a short summary) when an old one has drifted, instead of fighting the drift",
+        "You keep one task per conversation when accuracy matters, so unrelated context doesn't confuse things",
+        "You put your actual question where it's easy to find, not buried under a wall of pasted text"
+      ],
+      "build": "Run a two-part experiment in any chat AI. Part one: in a brand-new chat, tell it a specific made-up fact about yourself in the first message (\"My favorite number is 17\"), then paste in something long and unrelated, a few pages of any article, and have a short back-and-forth about it. Now ask, \"What's my favorite number?\" See whether it still has it. Part two: do it again, but this time restate the fact right before you ask. Watching the model lose a detail and then reliably keep it, just by changing what's in the window, turns 'the context window' from an abstract phrase into something you can feel.",
+      "res": [
+        ["Tiktokenizer (to see how much fills a window)", "https://tiktokenizer.vercel.app/", "Use when you're curious how many tokens a document is, paste it in and compare against a model's advertised window size."],
+        ["Your AI tool's own docs on context length", "#", "Use when it matters: each product lists its context-window size. Knowing roughly how big yours is tells you how long a chat or document it can really handle."],
+        ["Anthropic Academy (general learning hub)", "https://www.anthropic.com/learn", "A plain-English learning hub from a model maker. Browse it after the lesson for background on why the window exists and why bigger isn't always better."]
+      ]
+    },
+    "prompting": {
+      "worked": "Watch one prompt improve in three steps. Step one, the vague version: <b>\"Write about our coffee shop.\"</b> The model has nothing to go on, so it produces something generic that could describe any cafe anywhere. Step two, add the task and audience: <b>\"Write a short, warm welcome blurb for the About page of our neighborhood coffee shop, aimed at first-time visitors.\"</b> Already far better, it now knows what, for whom, and the tone. Step three, add the shape and a detail: <b>\"...in three sentences, friendly but not cutesy, and mention that we roast our own beans.\"</b> Now you'll get something you could almost paste straight in. Nothing clever happened, no magic words, you just told a capable assistant what you actually wanted. And if the result is still a touch off, you don't start over: you say <b>\"good, but make the first sentence punchier.\"</b> That last move, refining instead of rewriting, is the habit that makes prompting feel easy.",
+      "good": [
+        "You state the task plainly, what you want done, not just the topic",
+        "You include the context the model couldn't otherwise know (audience, goal, relevant background)",
+        "You say what a good answer looks like, format, length, and tone",
+        "You paste an example when you have one, and say 'like this'",
+        "You refine in small steps when the first answer is close, instead of starting from scratch"
+      ],
+      "build": "Pick any real task you'd actually use AI for, an email, a summary, a list of ideas. Write the laziest one-line prompt for it and note the answer. Then rewrite the prompt with three additions: the specific task, the context (who it's for, what it's about), and the format you want. Send it again and compare. Finally, take that second answer and refine it once with a single instruction ('shorter', 'warmer', 'add a call to action'). In five minutes you'll have felt the whole arc, vague to specific to refined, on a task you care about, which is the fastest way to make prompting a habit instead of a theory.",
+      "res": [
+        ["OpenAI, \"Prompt engineering\" guide (beginner-friendly parts)", "https://platform.openai.com/docs/guides/prompt-engineering", "Skim the early, plain-English sections after this lesson. Ignore the advanced bits for now; the basics reinforce exactly what you just learned."],
+        ["Anthropic, \"Prompt engineering overview\"", "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview", "A clear vendor explainer of the same habits, clarity, context, examples. Read it for a second angle on writing good instructions."]
+      ]
+    },
+    "chat": {
+      "worked": "Here's the illusion taken apart. You open a chat and type \"My name is Sam.\" The model replies, \"Nice to meet you, Sam.\" Next you ask, \"What's my name?\" and it says \"Sam.\" It feels like it remembered. But watch what the app actually sent on that second turn: not just \"What's my name?\", but the <b>entire transcript</b>, \"My name is Sam.\" / \"Nice to meet you, Sam.\" / \"What's my name?\", all glued together and handed over fresh. The model read the whole thing top to bottom and saw your name sitting right there in the text. It didn't recall anything; it <b>re-read a transcript that happened to contain the answer.</b> Now picture the same setup but a thousand messages long, until that first \"My name is Sam\" finally falls out of the context window. Ask \"What's my name?\" again and the model can't tell you, the line is no longer in the transcript it receives. <b>Same model, same question, different answer, entirely because of what's in the re-sent transcript.</b> The memory was never in the model; it was in the text being re-handed to it each turn.",
+      "good": [
+        "You treat each new chat as a blank slate and bring in any detail you need from before",
+        "You understand the 'memory' is the re-sent transcript, not the model recalling anything",
+        "You restate key facts in a long chat rather than assuming earlier messages survived",
+        "When you turn on a memory feature, you check what it actually stored about you",
+        "You're not thrown when a hidden system message gives the tool a certain personality or rules"
+      ],
+      "build": "Do a quick two-part test in any chat AI. Part one: tell it a fact in a fresh chat ('I'm planning a trip to Lisbon'), then ask a couple of follow-ups, and watch it carry the detail, that's the transcript at work. Part two: open a brand-new, separate chat and immediately ask, 'Where am I planning to travel?' It won't know, because the new transcript is empty. Seeing it 'remember' in one window and draw a total blank in another, with no setting changed, makes statelessness click: the continuity lived in the conversation, not in the model.",
+      "res": [
+        ["OpenAI Help Center, \"Memory and new controls in ChatGPT\"", "https://help.openai.com/en/articles/8590148-memory-faq", "Read after the lesson to see how one product's optional memory feature works, and how to view or clear what it stored. A concrete example of the 'extra layer' idea."],
+        ["Anthropic, \"System prompts\" explainer", "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/system-prompts", "Skim to see the hidden 'system message' that sits atop the transcript and shapes how an assistant behaves every turn."]
+      ]
+    },
+    "limits": {
+      "worked": "Ask a model, \"Give me three peer-reviewed studies showing that houseplants improve office productivity, with authors and years.\" You'll likely get exactly that: three crisp citations, real-sounding author names, plausible journals, recent years. It looks authoritative. Now try to find one of them, search the title, the authors. There's a good chance one or more simply <b>does not exist.</b> The model wasn't lying or broken; you asked for the shape of an answer (citations) on a specific topic, and it produced the most likely-looking text of that shape, <b>inventing the details it didn't actually have.</b> That's hallucination in its most dangerous form, because the polish makes it feel trustworthy. Now stack the second failure on top: ask it, \"What major news happened last week?\" and it may answer confidently about events, except its training stopped months or years ago, so it's describing a world that's out of date, with no built-in way to tell you so. <b>One engine, two predictable failures, made-up specifics and stale knowledge, both wearing the same confident voice.</b> Spotting them is the whole skill.",
+      "good": [
+        "You verify specific, copyable details (quotes, numbers, citations, links) before relying on them",
+        "You check whether a question is about something recent, past the model's cutoff, and reach for search or a real source if so",
+        "You never use the model's confidence as a signal of correctness",
+        "You ground important questions by pasting the real source and saying 'answer only from this'",
+        "You stay a little skeptical exactly when an answer is most specific and most tempting to copy"
+      ],
+      "build": "Run the hallucination test for yourself, safely. Ask any chat AI for a few specific citations or facts on a niche topic, sources, statistics, a quote attributed to someone. Then actually try to verify one or two by searching. Notice how convincing the fabrications look. Next, ask it something clearly recent ('what's the latest version of X', 'what happened this month') and see whether it admits uncertainty or answers confidently from old knowledge. Doing this once, on purpose, in a low-stakes way, builds the instinct that protects you everywhere else: confident is not the same as correct.",
+      "res": [
+        ["OpenAI Help Center, \"What is ChatGPT?\"", "https://help.openai.com/en/articles/6783457-what-is-chatgpt", "A plain-English vendor overview that notes ChatGPT can sometimes produce inaccurate information, useful background for why verification matters."],
+        ["Anthropic, \"Reducing hallucinations\" guidance", "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations", "Skim after the lesson for concrete habits, like grounding in a source and asking for citations, that lower (not eliminate) made-up answers."]
+      ]
+    },
+    "tools": {
+      "worked": "Picture asking an AI, \"What's 4,817 times 9,231, and what's the weather in Lisbon right now?\" A plain text model, on its own, would <b>guess</b> at the multiplication (often landing close but wrong) and would have <b>no idea</b> about today's weather, its knowledge is frozen and it can't see outside. But in a modern product, something smarter happens. For the math, the model recognizes it needs help and <b>calls a calculator tool</b>: the calculator does the exact arithmetic and hands back the real number, which the model drops into its answer. For the weather, it <b>calls a search tool</b> that fetches the current conditions and feeds that fresh text into the prompt, now the model can report it accurately. Notice what changed: the engine didn't suddenly get good at math or gain a window to the world. The product <b>routed each sub-task to a tool built for it</b>, and the model stitched the results into one fluent reply. <b>That's the entire pattern behind 'AI that can do anything', it's a text engine surrounded by helpers it knows how to call.</b>",
+      "good": [
+        "You know which abilities are core (text) and which are bolt-on tools (search, files, images, math)",
+        "You check whether your specific product actually has the capability you need",
+        "For fresh-info answers, you look for a sign that search really ran (a source or link)",
+        "You let a tool handle exact work (math, lookups) rather than trusting the model to guess it",
+        "You give the model the source directly when you can, instead of hoping a tool fetched the right thing"
+      ],
+      "build": "Explore what your AI tool can and can't do. Try giving it an image (a screenshot or photo) and asking what it sees, does it have vision, or does it say it can't? Attach a PDF and ask for a summary, did it read the text? Ask it something that needs today's information and watch for whether it searches (look for a source link) or answers from memory. Ask it a tricky multiplication and check the result. In a few minutes you'll have mapped your specific tool's real capabilities, and you'll stop assuming every AI can do everything you've seen somewhere.",
+      "res": [
+        ["ChatGPT Capabilities Overview", "https://help.openai.com/en/articles/9260256-chatgpt-capabilities-overview", "Read to see, in one product, exactly which abilities (browsing, image input, file reading) are features layered on the model, a concrete version of this lesson."],
+        ["Anthropic, \"Tool use\" overview", "https://platform.claude.com/docs/en/build-with-claude/tool-use/overview", "Optional, slightly more technical. Skim the intro to see how a model 'calls a tool' and gets a result back, the mechanism behind every example here."]
+      ]
+    },
+    "using": {
+      "worked": "Let's run two real tasks through the habit and watch the right choice fall out. Task one: <b>brainstorm ten playful names for a houseplant shop.</b> Stakes are low, it's reversible, and it's pure creative generation, the model's home turf. So: reach for a smaller, faster, cheaper model, write a quick prompt, and happily accept a good-enough list. No fact-checking needed, no heavyweight model, no fuss. Task two: <b>draft a paragraph for a patient handout about a medication's side effects.</b> Completely different. Being wrong here could hurt someone, so the stakes are high and the facts must be exact. Now the habit points the other way: use your most capable model, give it the real source (paste the official drug information and say 'use only this'), and then have a qualified human verify every claim before it goes anywhere. <b>Same person, same tool, two opposite approaches, and the deciding questions were just 'how capable does this need to be?' and 'what does being wrong cost me?'</b> That's the whole course, distilled into a habit you can run in five seconds before any task.",
+      "good": [
+        "You right-size the model: small and cheap for easy tasks, the heavyweight only when it's truly needed",
+        "You have a rough instinct for cost, big pasted inputs and long answers are where the money goes",
+        "You scale your caution to the stakes, fast and loose for low-stakes, careful and verified for high-stakes",
+        "You apply the trust split cleanly: draft and brainstorm freely, verify facts, numbers, and recent claims",
+        "You pick tools by whether their features fit the task, not by hype"
+      ],
+      "build": "Make your own one-page cheat sheet, it'll cement everything. Jot two columns: 'go fast' and 'slow down and verify.' Under each, list the kinds of tasks from your own life that belong there (go fast: brainstorming, rough drafts, rephrasing; slow down: anything client-facing, medical, legal, financial, or with specific facts and numbers). Then add your two deciding questions at the top: 'How capable does the model need to be?' and 'What does being wrong cost me?' Keep it nearby for a week and actually run it before tasks. By the end it won't be a sheet, it'll be a reflex, which is exactly the judgment the rest of this course was building toward.",
+      "res": [
+        ["OpenAI's model lineup page (other providers have equivalent pages)", "https://platform.openai.com/docs/models", "Use when choosing: each provider lists its models from largest to smallest with rough speed and cost notes. Skim to see the trade-off this lesson describes, made concrete."],
+        ["Novacademy, \"Engineering Mastery\" course", "#", "Your next step. When you're ready to go from using these models to building real things with them, prompts at scale, tools, cost control in live systems, this course picks up exactly where Foundations ends."]
+      ]
+    }
+  },
+  "DEPTH": {
+    "whatai": {
+      "mech": "Here's a little more of what's happening under the hood, no math required. When you send the model text, it first chops it into small chunks (you'll meet these as <b>tokens</b> in the next lesson). Then it runs those chunks through a giant web of numbers, learned during training, that has effectively absorbed the statistical patterns of how language tends to flow. The output of all that is a ranked list of likely next chunks, with a probability on each. The model picks one, adds it to the text, and runs the whole process again for the next chunk. It repeats this until it decides the answer is complete.<br><br>Two things follow from this, and they explain almost everything beginners find confusing. First, <b>the model has no separate store of facts to check against.</b> \"Knowing\" that Paris is the capital of France just means that, given the surrounding words, \"Paris\" comes out on top. When a fact was rare or absent in training, the most likely next words can be plausible-sounding nonsense, that's a <b>hallucination</b>, and it isn't a bug that gets patched away. Second, <b>the model is frozen.</b> Training happened once, in the past, so it has a knowledge cutoff and knows nothing about you or about events after that date, unless a product feature explicitly feeds it that information at the moment you ask.",
+      "trade": [
+        ["Generating vs looking up", "Creativity vs accuracy", "The same skill that lets it write and brainstorm freely is what lets it confidently make facts up"],
+        ["Sounds confident vs is correct", "Smooth wording vs trustworthiness", "Fluency is the model's whole goal; it is not a signal that the answer is right"],
+        ["Frozen training vs fresh info", "Self-contained vs current", "By itself the model can't know today's news or your private data; that needs an extra step, like search or pasting it in"]
+      ],
+      "scale": [
+        "Helpful framing for everyday use, not engineering, since this is a foundations course: the bigger and more capable the model, the slower and more expensive each answer tends to be, so you don't need the biggest model for simple tasks",
+        "The same question can cost more or less depending on how long your input and the answer are, you'll see exactly why in the next lesson on tokens",
+        "If a tool feels slow, it's often the model writing a long answer one chunk at a time, asking for a shorter answer genuinely makes it faster"
+      ],
+      "sec": [
+        "Treat anything you paste into a chat as if it could be stored or seen by the company that runs the model, don't paste passwords, private keys, or other people's personal data",
+        "The model can sound authoritative about medical, legal, or financial matters and still be wrong, for decisions that matter, use it to get oriented, then confirm with a real professional or source",
+        "Be a little skeptical of any answer that's suspiciously specific (exact numbers, names, quotes, links) on a topic the model couldn't really know, that specificity is often invented"
+      ],
+      "interview": "Here's how I'd explain it to a friend in two sentences. A large language model is a text-prediction machine: you give it words, and it keeps guessing the most likely next word until it has written a full answer, like an incredibly well-read autocomplete. It isn't looking anything up and it doesn't truly know facts, which is why it can be amazingly helpful and also, sometimes, confidently and completely wrong."
+    },
+    "tokens": {
+      "mech": "A little more under the hood, still no math. Every model ships with a fixed vocabulary of tokens, often around fifty to a hundred thousand of them, built once when the model was made. The pieces aren't chosen by hand; a process scans huge amounts of text and keeps the chunks that show up most often. Very common words earn their own single token. Rarer words get assembled from smaller pieces, and truly unusual strings (a random password, a long chemical name) can break down almost letter by letter. That's the trade that makes the whole thing work: a manageable, fixed set of pieces that can still spell out absolutely anything.<br><br>This is why the model's view of text is genuinely different from yours, and it explains the quirks. <b>It sees \" token\" + \"ization\", not t-o-k-e-n-i-z-a-t-i-o-n</b>, so counting letters, reversing a word, or perfect spelling are awkward, the raw letters aren't really visible to it. It also explains cost and limits: since everything is measured in tokens, your bill and your length limit both track token counts, and languages that happen to split into more tokens cost more to process for the very same meaning. None of this is a flaw to be fixed; it's just the shape of how the model reads.",
+      "trade": [
+        ["Common word vs rare word", "One token vs many", "Everyday words are cheap and quick; long, rare, or made-up words cost more tokens and a bit more processing"],
+        ["Token view vs letter view", "Reads chunks, not characters", "Lets it handle any text including unseen words, but makes letter-level tasks (counting, spelling, reversing) genuinely shaky"],
+        ["Shorter prompt vs more detail", "Cost and speed vs completeness", "Fewer tokens is cheaper and faster; the skill is including what matters and trimming what doesn't"]
+      ],
+      "scale": [
+        "Rough rule of thumb for everyday estimating: about seven hundred fifty words is around a thousand tokens, so a few pages of text is several thousand tokens",
+        "Both halves count toward cost: the text you send (input) and the text the model writes back (output), and the answer is often the bigger, pricier half",
+        "If a long answer feels slow, it's the model emitting tokens one at a time, asking for a shorter or more focused answer genuinely speeds things up and lowers cost"
+      ],
+      "sec": [
+        "Remember the text you paste is sent to the company running the model and counts as tokens, so don't paste secrets or other people's private data just to save yourself some typing",
+        "For any letter-perfect task (a license key, an exact code, a precise count of characters), don't trust the model's token's-eye view, double-check with a tool that actually sees the characters",
+        "If a vendor charges by tokens, a surprise bill usually traces back to large pasted inputs or very long outputs, watch both"
+      ],
+      "interview": "Here's the friend-explanation. Before an AI model reads your text, it chops it into little chunks called tokens, roughly three-quarters of a word each, so common words are one chunk and rare ones get split up. The model only ever sees those chunks, never the individual letters. That single fact explains three things at once: you're billed by the token for both what you type and what it writes, length limits are counted in tokens, and the model fumbles letter-level tasks like counting characters because it genuinely isn't looking at letters."
+    },
+    "context": {
+      "mech": "Here's what's really happening when you 'have a conversation' with an AI, and it surprises almost everyone. The model has no memory between turns. Each time you press send, the app quietly glues together the entire conversation so far, every earlier message from both of you, plus any files you attached and your new question, into one long block of text, and hands that whole block to the model fresh. The model reads it, predicts an answer, and then forgets it ever happened. The illusion of an ongoing chat is really the app re-sending the whole history every single time.<br><br>That block has a maximum size, the <b>context window</b>, measured in tokens. As long as the conversation fits, everything works and the model appears to 'remember.' But when the history grows past the window, something has to give: the app drops the oldest messages so the rest still fits. <b>Those dropped messages are simply not in the block the model receives, so it cannot use them, it's not forgetting, it never saw them this turn.</b> Two practical consequences follow. First, bigger windows help but never make the limit vanish, and a fuller window is slower and costs more. Second, more text is not automatically better: when the window is crammed with marginally-relevant stuff, the one detail that matters is easy to miss, which is why a focused context usually beats a giant one.",
+      "trade": [
+        ["Long chat vs fresh chat", "Continuity vs a clean slate", "Long chats drift as early context drops off; starting fresh with a short summary often restores accuracy"],
+        ["Paste everything vs paste the relevant part", "Convenience vs precision", "A giant paste can bury the key detail and dilute the answer; a focused excerpt usually performs better"],
+        ["Bigger window vs smaller window", "Capacity vs speed and cost", "More room lets you include more, but every extra token in the window is slower and more expensive, and can add noise"]
+      ],
+      "scale": [
+        "Context windows are advertised per model, often large enough for many pages and sometimes a whole book, but the limit is still real and still counted in tokens",
+        "A fuller window costs more and responds slower, because everything in it has to be processed every single turn, so don't fill it just because you can",
+        "If a chat is getting expensive or sluggish, it's often because the growing history is being re-sent each turn, summarizing and starting fresh resets that"
+      ],
+      "sec": [
+        "Everything in the window is something the model will read and may act on, so be careful pasting in text from untrusted sources, hidden instructions inside it can sway the answer",
+        "Don't leave sensitive details sitting in a long shared conversation longer than needed; what's in the window is what gets sent each turn",
+        "When precision matters, confirm the specific fact you care about is actually still in the conversation (not fallen off the edge) before you rely on the model's answer"
+      ],
+      "interview": "The friend-version goes like this. An AI model has no memory of its own, so every time you send a message, the app hands it the whole conversation so far plus your new message as one big block of text, and the model only sees what's in that block. The block has a size limit called the context window; when the chat grows past it, the oldest messages drop off and the model genuinely can't see them anymore. That's why it 'forgets' early details and why cramming in a huge document can backfire, the fix is to keep the window focused on what actually matters."
+    },
+    "prompting": {
+      "mech": "A little more on why phrasing matters so much, and it connects straight back to lesson one. The model predicts the next chunk of text based on <b>everything in the prompt so far</b>. Your prompt isn't a command that flips a switch; it's the starting text that steers every prediction that follows. A vague opening (\"write about dogs\") leaves the most-likely continuation wide open, so the model drifts toward the bland, average, could-be-anything answer, because that's statistically the safe path. A specific opening (\"write a three-sentence, upbeat intro for a dog-walking flyer aimed at busy professionals\") narrows the likely continuations dramatically, so the answer lands much closer to what you pictured.<br><br>This is also why <b>examples are so powerful.</b> When you paste a sample and say \"like this,\" you've put a concrete pattern right into the text the model is continuing, and continuing a pattern is exactly what it's best at. And it's why <b>iterating works:</b> when you reply \"shorter, and warmer,\" that feedback becomes part of the running prompt, so the next prediction is steered by it. You're not arguing with a person, you're adjusting the text that shapes the next guess. Seen this way, good prompting isn't a bag of tricks, it's just giving the prediction engine a clear, well-pointed starting line.",
+      "trade": [
+        ["Vague prompt vs specific prompt", "Effort vs quality", "A quick vague ask is less typing but gets a generic answer; a specific ask takes a moment longer and usually nails it"],
+        ["One big prompt vs step by step", "All-at-once vs reliability", "Cramming every requirement in at once can lose one; breaking a complex task into steps is often more reliable"],
+        ["Telling vs showing", "Instructions vs an example", "Describing the format works, but pasting one good example of it often teaches the model faster and more precisely"]
+      ],
+      "scale": [
+        "A longer, more detailed prompt costs a few more tokens, this is almost always worth it, since a good answer the first time beats several cheap, useless ones",
+        "Iterating (a few short follow-ups) is cheap and fast, you don't have to get the perfect prompt on the first try, refining is a normal part of the flow",
+        "If you reuse a prompt often, it's worth polishing once and saving it; a good saved prompt pays for itself every time you use it"
+      ],
+      "sec": [
+        "Only include the context the task needs, don't paste private or sensitive details into a prompt just to be thorough, remember it's sent to the company running the model",
+        "Be specific about what you don't want too (\"don't make up statistics,\" \"only use the text I gave you\"), it meaningfully reduces invented content",
+        "If an answer must be safe or accurate, say so in the prompt and still verify it, a good prompt lowers the odds of a bad answer but never guarantees one"
+      ],
+      "interview": "Here's the friend-explanation. A prompt is just the text you give the model, and it takes it completely literally, it can't read your mind or see your screen, so the clearer your instructions, the better the answer. Treat it like briefing a sharp new assistant on day one: say what you want done, give the context they'd need, and describe what a good result looks like, a list, a short paragraph, a friendly tone. And if the first reply is close but not quite right, you don't start over, you just tell it what to change. Prompting is a back-and-forth, not a magic phrase."
+    },
+    "chat": {
+      "mech": "Let's make the illusion fully concrete, because once you see it you can't unsee it. The model is a function that takes a block of text in and gives a block of text out, with <b>nothing remembered in between.</b> A chat app turns that memoryless function into a flowing conversation with one trick: it keeps a transcript. Every turn, it does the same four things, appends your new message to the transcript, glues the whole transcript into one text block (usually with a hidden <b>system message</b> pinned at the very top, setting the assistant's behavior), sends that entire block to the model, and appends the reply back onto the transcript. Repeat. The model never sees a 'conversation', it sees one long document, freshly handed over each turn.<br><br>Three real consequences fall out of this. First, a <b>new chat is a new transcript</b>, empty except for the system message, which is why it knows nothing about your other chats. Second, this is where the <b>context window from lesson three bites:</b> as the transcript grows past the window, the oldest lines get trimmed to fit, so 'it forgot' is really 'that line is no longer in the document it received.' Third, a <b>memory feature</b> is just an extra step that, before sending, looks up saved notes about you and quietly inserts them into the transcript, the model still didn't learn anything, the app just put the note in front of it. The whole magic of chat is bookkeeping around a function with no memory.",
+      "trade": [
+        ["Stateless model vs felt continuity", "Simplicity vs the illusion", "A memoryless model is simpler and more predictable; the app re-sending the transcript is what creates the feeling of memory"],
+        ["No memory feature vs memory on", "Privacy/blank-slate vs convenience", "Off means every chat starts clean (more private, more repetitive); on means it recalls saved notes (handier, but stores things about you)"],
+        ["Long single chat vs fresh chats", "Carrying context vs staying focused", "One long chat keeps everything until it overflows the window; starting fresh keeps things clean but you re-supply what matters"]
+      ],
+      "scale": [
+        "Because the whole transcript is re-sent every turn, a long conversation gets more expensive and slower with each message, it's not just your latest question being processed, it's everything before it too",
+        "Starting a fresh chat with a short summary resets that cost, you carry forward only what matters instead of dragging the entire history",
+        "Memory features and hidden system messages add a little to every prompt, usually small, but it's text that gets sent each turn alongside your own"
+      ],
+      "sec": [
+        "What's in the transcript is what gets sent each turn, so don't leave passwords or sensitive personal details sitting in a long conversation longer than you need them",
+        "If a memory feature is on, periodically check what it has saved about you, it's inserting those notes into your chats, and you can usually view, edit, or clear them",
+        "Be cautious pasting text from untrusted sources into a chat, hidden instructions buried in it become part of the transcript the model reads and may sway its replies"
+      ],
+      "interview": "The friend-version: when you chat with an AI, it feels like it's remembering the conversation, but the model itself remembers nothing between messages, it's what's called stateless. The trick is that the chat app re-sends the entire conversation so far, every message from both of you, plus a hidden instruction at the top, as one big block of text every single turn. The model reads that whole transcript, replies, and forgets again. So the 'memory' isn't in the model, it's in the transcript the app keeps re-handing it, which is exactly why a brand-new chat starts blank."
+    },
+    "limits": {
+      "mech": "Both failures trace back to one line from lesson one: the model outputs the most likely next text, it has no separate store of facts to check against. So picture the model reaching a point where the honest answer is 'I don't actually know.' Nothing in the machinery produces that pause. It still has to emit the most plausible continuation, and a confident, specific-sounding answer is statistically more 'answer-shaped' than a hedge, so out comes a <b>fluent fabrication</b>. That's a hallucination: not a lie, not a bug, just the prediction engine doing its only job where it lacks real material. This is why it's worst on precise, obscure details, there the gap between 'sounds right' and 'is right' is widest, and why <b>grounding</b> (handing it the real source) helps so much: now the likely-next-text is anchored to actual material instead of thin air.<br><br>The <b>knowledge cutoff</b> is the second failure and it's even simpler. Training happened once, ending on some date. Everything after that, last week's news, this year's prices, the newest release, was never in the data, so the patterns simply aren't there. Worse, the model usually can't reliably report its own cutoff or notice that your question is about 'after' it, so it answers from its frozen worldview with the same confidence as everything else. Put the two together and you get the rule that protects you: <b>be most careful exactly when an answer is most specific or most recent, because that's where confident and correct are most likely to come apart.</b>",
+      "trade": [
+        ["Always answers vs admits ignorance", "Helpfulness vs honesty", "The drive to always produce an answer is what makes it useful and what makes it hallucinate; it rarely just says 'I don't know'"],
+        ["Frozen knowledge vs live tools", "Self-contained vs current", "By itself it's stuck at its cutoff; a search tool can fetch fresh info, but only if the product has one and it actually runs"],
+        ["Answer from memory vs from a source", "Convenience vs reliability", "Asking from memory is easy but guess-prone; pasting the real source ('use only this') trades a little effort for far fewer made-up facts"]
+      ],
+      "scale": [
+        "Stronger, larger models tend to hallucinate less and have more recent cutoffs, but 'less' is not 'never', so the verify-the-important-stuff habit applies to every model",
+        "Grounding the model in a pasted source or a search result usually costs more tokens (you're sending more text), and it's almost always worth it when accuracy matters",
+        "Asking the model to show its reasoning or cite where a claim came from costs a little more output but makes it far easier for you to catch a fabrication"
+      ],
+      "sec": [
+        "Never let a model be the last word on anything safety-critical, medical, legal, financial, or where someone could be harmed, use it to get oriented, then confirm with a qualified human or an authoritative source",
+        "Treat any specific quote, statistic, citation, or link as unverified until you've checked it exists, realistic-looking fabricated references are the most common and most damaging hallucination",
+        "For recent or time-sensitive questions, assume the model may be out of date unless you can confirm a search tool actually ran and pulled current information"
+      ],
+      "interview": "Here's how I'd put it to a friend. AI models fail in two predictable ways, and both come from the fact that they predict likely text instead of looking things up. First, when a model doesn't really know something, it tends to invent a convincing answer rather than admit it, fake quotes, made-up statistics, citations to papers that don't exist, that's called hallucination, and there's no setting that fully turns it off. Second, it was trained once in the past, so its knowledge stops at a cutoff date and it knows nothing newer. Picture a brilliant expert locked in a room since last year who'd rather smoothly make something up than say 'I don't know.' The catch is it sounds just as confident when it's wrong, so always double-check anything specific or recent."
+    },
+    "tools": {
+      "mech": "Here's the mechanism behind 'AI that can do anything', and it's tidier than it looks. The text model stays exactly what you learned: a next-text predictor that knows only its training and the current prompt. <b>Tools</b> are separate programs the product makes available, a calculator, a web search, a file reader, a code runner, an image generator. The clever part is that the model can be trained to recognize when a task is beyond it and to emit a little request like 'search for X' or 'calculate Y' instead of guessing. The surrounding product spots that request, <b>runs the real tool</b>, and pastes the tool's result back into the prompt as fresh text. Then the model continues, now with a real answer to work from. From your seat it looks like one smart assistant; under the hood it's a text engine orchestrating helpers.<br><br>This reframes the whole question of 'what can this AI do?' It's not about the engine, which is the same text predictor everywhere, it's about <b>which tools the product wired up.</b> Image input ('multimodal') is a genuine model capability some models have and others don't. Reading a PDF is a tool extracting text and feeding it in, which is why a scanned, text-free image of a page can defeat it. Answering about today is a search tool fetching pages, which is why, with no such tool, the model is stuck at its cutoff. Even 'drawing a picture' is usually the product handing your request to a <b>separate image model.</b> Same friendly chat box, very different machinery behind each button, and knowing which is which tells you exactly what to expect.",
+      "trade": [
+        ["Model alone vs model plus tools", "Simplicity vs capability", "The bare model only predicts text; tools add real abilities (math, search, files) but each is a feature the product had to build in"],
+        ["Tool-fetched info vs trained-in knowledge", "Current vs frozen", "Search gives fresh answers but only when it actually runs; trained-in knowledge is instant but stuck at the cutoff"],
+        ["Convenience of one app vs right capabilities", "All-in-one vs fit-for-task", "One tool that does everything is convenient, but the better choice is the product whose specific features match what you actually need"]
+      ],
+      "scale": [
+        "Tools add steps, a web search or file read happens before the model can answer, so tool-using replies are often a bit slower than plain text ones",
+        "Feeding a tool's results (search snippets, extracted file text) into the prompt adds tokens, so capable, tool-rich answers can cost more than a quick text-only reply",
+        "For exact work, math, data lookups, the right move is letting a tool do it; the small extra cost buys a correct answer instead of a confident guess"
+      ],
+      "sec": [
+        "When a tool reads your files or a search pulls in outside pages, that content enters the prompt, be aware that pasted or fetched text from untrusted sources can carry hidden instructions",
+        "Don't assume an answer is current just because the product can search; confirm a search actually ran (look for a source or link) before trusting fresh-sounding claims",
+        "Files you upload are processed by the product and sent onward as text, so apply the same caution you would to pasting, don't hand over sensitive documents you wouldn't want stored"
+      ],
+      "interview": "The friend-version: the core AI model only predicts text, so how can it look at photos, read your PDF, or search the web? Those are extras the product bundles around the engine. Think of the model as an engine and the app as a car built around it, seeing images, reading files, browsing the internet, doing math, are features the car adds. When the model needs something beyond text, it calls a tool, a separate program that does the real work and hands the result back as text. So 'can this AI do X?' really means 'does this product give the model a tool for X?', which is exactly why two different AI apps can have very different abilities."
+    },
+    "using": {
+      "mech": "This lesson has no new mechanism, it's the judgment that falls out of all the mechanisms you've already learned, assembled into a five-second habit. Run it before any task. <b>Step one: how capable does the model need to be?</b> You learned models come in sizes, bigger is smarter, slower, pricier; smaller is faster and cheaper. A simple rewrite or brainstorm doesn't need the heavyweight; a subtle analysis might. Right-size it instead of defaulting to the biggest. <b>Step two: roughly how many tokens is this?</b> From the tokens and context lessons you know cost and speed track tokens, and that big pasted inputs and long requested outputs are where the money and the latency live. You don't need exact counts, just the instinct to trim a giant paste and ask for a shorter answer when you can.<br><br><b>Step three: what does being wrong cost me?</b> This is where the limits lesson cashes in. Low-stakes and reversible? Move fast, accept good-enough, skip the heavy verification. High-stakes or hard to undo? Use a stronger model, <b>ground it</b> in real sources, and verify the output yourself, especially specifics and anything recent. And underneath it all sits the one split that prevents most mishaps: <b>trust the model to draft, brainstorm, explain, and rephrase; verify it for facts, numbers, fresh events, and citations.</b> That's the entire course as a reflex. Master it and you're not just using AI, you're ready to start building with it, which is precisely where the Engineering Mastery course begins.",
+      "trade": [
+        ["Bigger model vs smaller model", "Capability vs speed and cost", "The heavyweight is smarter but slower and pricier; for most everyday tasks a smaller model is the better, cheaper call"],
+        ["Move fast vs verify carefully", "Speed vs safety", "Low-stakes work rewards speed and good-enough; high-stakes work demands a stronger model, real sources, and a human check"],
+        ["Trust vs verify (by task type)", "Generation vs facts", "Lean on it for drafting, brainstorming, and rephrasing; double-check it for facts, numbers, recent claims, and citations"]
+      ],
+      "scale": [
+        "The single biggest cost lever for a beginner is model choice plus length, picking a smaller model and trimming huge inputs and outputs handles most of your bill",
+        "Surprise costs almost always trace to the same two things from earlier lessons, large pasted documents (input tokens) and long generated answers (output tokens), watch both",
+        "You don't need to track tokens precisely; a rough instinct, 'this is a big paste and a long answer, so it'll cost real money', is enough to make good everyday calls"
+      ],
+      "sec": [
+        "Scale your caution to the stakes, the same tool deserves a relaxed approach for a brainstorm and a careful, verified, human-checked approach for anything medical, legal, financial, or client-facing",
+        "Before pasting sensitive data to save effort, ask whether the task actually needs it; treat every input as something the provider could store",
+        "When it matters, ground and verify, give the model the real source, ask it to stick to it, and confirm the important claims yourself; that habit prevents the great majority of AI mistakes"
+      ],
+      "interview": "Here's the whole course in a friend-sized nutshell. Before any task, ask two questions: how capable does the model need to be, and how much does being wrong cost me? For easy, low-stakes stuff, use a smaller, cheaper, faster model and just go; for hard or high-stakes stuff, use your best model, give it real sources, and check the result yourself. Remember cost tracks tokens, so big pastes and long answers are where the money goes. And keep one simple split in mind, trust it to draft, brainstorm, and rephrase, but verify it on facts, numbers, recent events, and citations. Do that, and you're using AI like a pro, and you're ready to start actually building with it."
+    }
+  },
+  "PATTERNS": {
+    "whatai": {
+      "intro": "You don't need to code anything in this course, but it helps to see the loop in plain terms. This is the entire idea of how a model writes an answer, written as simple pseudo-code, not a real program. Read it like a recipe.",
+      "code": "text_so_far = your_question\n\n# the model writes the answer one small chunk at a time\nrepeat:\n    next_chunk = model.most_likely_next(text_so_far)   # a fresh guess\n    text_so_far = text_so_far + next_chunk             # add it on\n    if next_chunk == \"[done]\":                         # model decides it's finished\n        stop\n\n# what you read as a single, fluent answer was actually\n# built up guess-by-guess, left to right, just like this.",
+      "notes": [
+        "<b>most_likely_next</b> is the whole model, everything else is just a loop around it. There's no separate step where it checks a fact or searches the web; the next chunk is always just a prediction",
+        "The guess depends on <b>text_so_far</b>, the entire conversation up to this point. Change the input even slightly and the predictions change, which is why how you phrase a question matters",
+        "The <b>[done]</b> stop is itself a prediction, the model decides an answer is complete the same way it decides any other chunk, so it can stop too early or ramble too long",
+        "There's deliberate randomness in the pick, so the same question can produce slightly different answers each run, that's normal, not a malfunction"
+      ],
+      "debug": [
+        ["It stated a 'fact' that turned out to be false", "It filled a gap with likely-sounding text (a hallucination) instead of admitting it didn't know", "Verify anything that matters against a real source; the smoother the wording, the more carefully you should check"],
+        ["It 'forgot' something I told it earlier", "The conversation grew past the model's short-term memory, or it's a brand-new chat", "Covered in the context lesson; for now, restate the key detail or start fresh with it included"],
+        ["I asked twice and got two different answers", "Built-in randomness, the model makes fresh guesses each time", "Expected behavior, not a bug; if you need consistency, ask for it explicitly or pick the better answer yourself"]
+      ]
+    },
+    "tokens": {
+      "intro": "No coding needed, this is just to make tokenizing concrete. Here, in plain pseudo-code, is the idea of slicing text into tokens and seeing why the count rarely matches the word count. Read it like a recipe, not a program.",
+      "code": "text = \"I love tokenization!\"\n\n# the model can't read this directly. first it gets chopped:\ntokens = tokenize(text)\n# -> [\"I\", \" love\", \" token\", \"ization\", \"!\"]\n#    common word \"love\" = 1 token\n#    rare word \"tokenization\" = split into \" token\" + \"ization\"\n#    the space and the \"!\" are tokens too\n\nprint(count(tokens))   # -> 5 tokens, even though it's only 3 words\n\n# cost and length limits are measured in THIS number,\n# not in words and not in characters.",
+      "notes": [
+        "<b>tokenize(text)</b> is the hidden first step on every request, you never call it, but it always runs, on your input and on the model's output",
+        "Common words map to one token; <b>rare or long words get split</b>, which is why the token count is usually higher than the word count",
+        "Spaces and punctuation are tokens too, that's part of why short-looking text can still be a surprising number of tokens",
+        "The model predicts the next <b>token</b>, not the next word, so 'how it reads' and 'how it's priced' are the exact same unit"
+      ],
+      "debug": [
+        ["My cost was higher than I expected", "A long pasted input or a long answer, both are billed in tokens", "Trim the input to what's needed and ask for a shorter answer; check token counts in a tokenizer if it matters"],
+        ["It miscounted the letters in a word", "It sees tokens (chunks), not individual characters", "Don't trust the model for letter-level tasks; use a tool that actually reads characters"],
+        ["The same text costs more in another language", "Many non-English texts split into more tokens for the same meaning", "Expected; budget more tokens for those languages, there's no setting to change it"]
+      ]
+    },
+    "context": {
+      "intro": "No coding needed, this just shows the trick the chat app is doing behind the scenes. In plain pseudo-code, here's how a 'conversation' really works and why things fall out of memory. Read it like a recipe.",
+      "code": "history = []   # the running conversation\n\nwhen you send a message:\n    history.append(your_message)\n\n    # the app glues the WHOLE history into one block...\n    block = join(history)\n\n    # ...but it must fit the context window:\n    while count_tokens(block) > WINDOW_SIZE:\n        drop_oldest(history)        # earliest messages fall off\n        block = join(history)\n\n    answer = model.respond(block)   # model sees ONLY this block\n    history.append(answer)\n\n# the model has no memory of its own — each turn it\n# only ever sees the block that still fits the window.",
+      "notes": [
+        "The model is handed <b>the whole history every turn</b>, the feeling of an ongoing chat is the app re-sending everything, not the model remembering",
+        "<b>drop_oldest</b> is why early details vanish, once a message falls out of the window, the model literally never receives it again",
+        "Everything shares the same window: history, your message, pasted files, and the answer being written, fill it with one and there's less room for the rest",
+        "A bigger <b>WINDOW_SIZE</b> delays the dropping but never removes the limit, and a fuller block is slower and costs more every turn"
+      ],
+      "debug": [
+        ["It forgot something I said much earlier", "That message fell out of the context window as the chat grew", "Restate the key detail right before you need it, or start a fresh chat with a short summary"],
+        ["It's ignoring most of a long document I pasted", "The relevant part is buried, or the document filled the window and crowded things out", "Paste only the section that matters and put your question right next to it"],
+        ["A long conversation keeps getting worse", "Context drift: early framing dropped off and noise accumulated", "Start a new chat, paste a clean summary of what matters, and continue from there"]
+      ]
+    },
+    "prompting": {
+      "intro": "No coding here, just a way to see what makes a prompt good. Below, in plain pseudo-code, is the difference between a vague prompt and a clear one, and the refine-don't-restart move. Read it like a recipe for briefing an assistant.",
+      "code": "# a vague prompt leaves the answer wide open\nask(\"write about dogs\")\n# -> generic, could-be-anything text\n\n# a clear prompt names the task, context, and shape\nask(\"\"\"\n  TASK:    write a welcome blurb\n  CONTEXT: for a neighborhood coffee shop's About page,\n           aimed at first-time visitors\n  FORMAT:  3 sentences, friendly but not cutesy,\n           mention we roast our own beans\n\"\"\")\n# -> specific, on-target text\n\n# if it's close but not perfect, refine — don't start over\nask(\"good — make the first sentence punchier\")",
+      "notes": [
+        "The model takes the prompt <b>literally</b> and knows nothing you didn't include, that's why naming the TASK, CONTEXT, and FORMAT works so well",
+        "<b>CONTEXT</b> is the part beginners skip most, the audience and goal the model can't possibly guess, adding it is usually the biggest single upgrade",
+        "<b>FORMAT</b> (length, tone, structure) turns 'a fine answer' into 'the answer I wanted', if you don't say it, the model just guesses",
+        "The final line is the key habit: <b>refine in small steps</b> instead of rewriting from scratch, your feedback becomes part of the prompt and steers the next try"
+      ],
+      "debug": [
+        ["The answer is generic and bland", "The prompt was too vague, the model filled the gaps with safe, average text", "Add the task, the context (audience/goal), and the format you want, then send again"],
+        ["It answered a slightly different question than I meant", "It took your wording literally", "Restate the ask more precisely; spell out exactly what you want done"],
+        ["It's the right idea but the wrong shape or length", "You didn't specify format", "Just ask: 'in three bullets', 'one short paragraph', 'more formal tone', it'll happily reshape it"],
+        ["It keeps dropping one of my requirements", "Too much packed into one prompt and one got lost", "Pull that requirement out and handle it as a separate follow-up step"]
+      ]
+    },
+    "chat": {
+      "intro": "No coding needed, this just exposes the trick the chat app plays to fake memory. In plain pseudo-code, here's what really happens every time you send a message. Read it like a recipe, not a program.",
+      "code": "transcript = [system_message]   # hidden 'be a helpful assistant' line\n\nwhen you send a message:\n    transcript.append(your_message)\n\n    # glue the WHOLE transcript into one block, every turn\n    block = join(transcript)\n\n    # the model has NO memory — it only sees this block\n    reply = model.respond(block)\n\n    transcript.append(reply)\n\n# a NEW chat just means: transcript = [system_message]\n# (empty of history) — which is why it knows nothing\n# about your other conversations.",
+      "notes": [
+        "The model is <b>stateless</b>, every turn it gets the whole transcript fresh and forgets right after, the 'memory' is the app re-sending everything",
+        "The hidden <b>system_message</b> sits at the top of every block, it's why an assistant has a consistent personality and rules you never typed",
+        "A <b>new chat</b> is literally a transcript reset to just the system message, that's the whole reason it can't see your earlier conversations",
+        "A <b>memory feature</b> is just an extra line that inserts saved notes about you into the transcript before sending, the model still didn't learn anything"
+      ],
+      "debug": [
+        ["A new chat doesn't know about my last one", "Each chat is a separate transcript that starts empty", "Expected; paste in or restate anything you need carried over, or turn on a memory feature if the product has one"],
+        ["It forgot what we agreed earlier in a long chat", "That part dropped out of the context window, so it's no longer in the transcript", "Restate the key point, or start fresh with a short summary at the top"],
+        ["It has a personality or rules I didn't ask for", "A hidden system message is shaping every reply", "That's the product's built-in brief; a different tool has a different one, you can't usually see it"],
+        ["The memory feature stored something odd about me", "It saved a note from an earlier chat and keeps inserting it", "Check the product's memory settings, you can usually view, edit, or delete what it saved"]
+      ]
+    },
+    "limits": {
+      "intro": "No coding needed, this shows in plain terms why a model invents answers and why it's stuck in the past. Read the pseudo-code like a recipe for what the engine does when it hits a gap.",
+      "code": "# the model's only move: produce the most likely next text\nanswer = most_likely_text(prompt)\n\n# it has NO step that looks like this:\n#   if i_dont_actually_know(prompt):\n#       say(\"I don't know\")        # <- this doesn't exist\n#\n# so when it lacks the real answer, it still outputs\n# the most plausible-SOUNDING text  -> a HALLUCINATION.\n\n# and its knowledge is frozen at training time:\nif question_is_after(KNOWLEDGE_CUTOFF):\n    # it has no data for this... but answers anyway,\n    # from an out-of-date world, just as confidently.\n    pass",
+      "notes": [
+        "There's no built-in 'I don't know' step, the model always emits the most likely text, so a gap becomes a <b>confident fabrication</b>, not a blank",
+        "<b>Hallucination is worst on specifics</b> (quotes, numbers, citations, links) about niche topics, that's where 'sounds right' and 'is right' drift furthest apart",
+        "<b>KNOWLEDGE_CUTOFF</b> is a hard wall: anything after it simply wasn't in training, and the model usually can't tell that your question crosses it",
+        "<b>Grounding</b> fixes a lot, give it the real source ('answer only from this text') and the likely-next-text is anchored to facts instead of thin air"
+      ],
+      "debug": [
+        ["It gave me a quote/statistic/citation", "It may have fabricated a realistic-looking detail to fill a gap", "Verify it actually exists before using it; the more specific and authoritative it looks, the more carefully check"],
+        ["It answered confidently about a recent event", "The event may be after its knowledge cutoff, so it's guessing from old data", "Check the date; for anything recent, use a search tool or a real source, not the model's memory"],
+        ["It contradicted itself between two answers", "It was generating plausible text, not drawing on one stable fact", "Treat both as unverified; go check an authoritative source"],
+        ["It doubled down when I pushed back", "Confidence isn't evidence, even under pressure", "Don't be persuaded by insistence; verify independently"]
+      ]
+    },
+    "tools": {
+      "intro": "No coding needed, this shows the simple pattern behind 'AI that can do anything'. In plain pseudo-code, here's how a model uses a tool when a task is beyond plain text. Read it like a recipe.",
+      "code": "# the bare model only predicts text. for real-world\n# tasks, the product gives it TOOLS it can call.\n\nwhen the model hits something it can't do alone:\n    if needs_current_info:\n        result = web_search(query)      # a tool fetches fresh text\n    if needs_exact_math:\n        result = calculator(numbers)    # a tool does the real math\n    if you_attached_a_file:\n        result = read_file(file)        # a tool extracts the text\n\n    # the tool's result is pasted back into the prompt\n    # as TEXT, and the model continues from there.\n    answer = model.respond(prompt + result)\n\n# 'can this AI do X?'  ==  'does this product\n# give the model a TOOL for X?'",
+      "notes": [
+        "The <b>engine never changes</b>, it's always the same text predictor; tools are separate helpers the product wires up around it",
+        "A tool's result comes back as <b>text in the prompt</b>, that's how the model 'uses' a calculator or a search without doing the work itself",
+        "This is why capabilities <b>vary by product</b>: image input, web search, and file reading are features that may or may not be bundled in",
+        "Reading a file means a tool <b>extracted the text</b>, so a scanned, text-free image of a page can have nothing for the model to read"
+      ],
+      "debug": [
+        ["It couldn't read my PDF", "It may be a scanned image with no extractable text, or too long for the window", "Try a text-based file, paste the relevant text directly, or trim it to the part that matters"],
+        ["It gave outdated info even though it can browse", "Search may not have actually run that turn", "Ask it explicitly to search, and look for a source link confirming it pulled fresh information"],
+        ["It got the math wrong", "The plain text model was guessing the number", "Use a calculator/tool feature, or have it show the steps so you can verify, don't trust raw mental math"],
+        ["A feature works in one AI app but not another", "Different products bundle different tools", "The capability isn't part of every model; pick a product whose features fit your task"]
+      ]
+    },
+    "using": {
+      "intro": "No coding needed, this is the whole course distilled into a checklist you run before a task. In plain pseudo-code, here's the habit for choosing a model and deciding how much to trust the answer. Read it like a recipe.",
+      "code": "before each task:\n\n    # 1. how capable does the model need to be?\n    if task_is_simple:\n        model = small_fast_cheap        # don't overpay\n    else:\n        model = bigger_more_capable\n\n    # 2. roughly how many tokens? (cost & speed)\n    trim(huge_pasted_inputs)\n    ask_for(shorter_answer_when_possible)\n\n    # 3. what does being wrong cost me?\n    if low_stakes:\n        go_fast()                       # good-enough is fine\n    else:\n        give_real_sources()             # ground it\n        verify_output_yourself()        # esp. facts & recent\n\n# trust it to: draft, brainstorm, explain, rephrase\n# verify it on: facts, numbers, recent events, citations",
+      "notes": [
+        "<b>Right-size the model</b>, the biggest one is slower and pricier and overkill for most tasks; reach for it only when the work is genuinely hard",
+        "<b>Cost tracks tokens</b>, big pasted inputs and long answers are where the money goes, so trimming both is your main everyday lever",
+        "<b>Scale caution to stakes</b>, fast and good-enough for low-stakes, but ground-and-verify for anything high-stakes or hard to undo",
+        "The bottom two lines are the single most useful split in the whole course: <b>trust it to generate, verify it on facts</b>"
+      ],
+      "debug": [
+        ["This is slow and expensive", "You may be on the heavyweight model for a simple task, or sending huge inputs", "Drop to a smaller model and trim big pastes and long outputs; right-size both"],
+        ["I'm unsure whether to trust an answer", "You haven't run the trust split", "Drafting/brainstorming/rephrasing is fine as-is; facts, numbers, recent claims, and citations need verifying"],
+        ["My tool can't do something I need", "It may lack that feature (search, files, images)", "Pick a product whose bundled capabilities match the task"],
+        ["I want to build with this, not just chat", "Foundations is about using models; building is the next step", "That's the on-ramp to the Engineering Mastery course, which assumes everything here"]
+      ]
+    }
+  },
+  "QUIZ": {
+    "whatai": [
+      {
+        "q": "Your friend says, \"The AI is basically a smart search engine, it looks up the answer and shows it to you.\" What's the most accurate correction?",
+        "o": [
+          "It's the same as search, just with a nicer chat interface on top",
+          "It doesn't look anything up by default, it generates new text by predicting what comes next",
+          "It searches a private, secret database that only the company can see",
+          "It memorized every webpage word-for-word and recites the matching one"
+        ],
+        "a": 1,
+        "exp": "A search engine finds existing pages; a language model generates fresh text by repeatedly predicting the most likely next chunk. That's why it can write something brand new, and also why it can make things up. Some products bolt search onto the model, but that's an added feature, not what the model does on its own."
+      },
+      {
+        "q": "A model gives you a beautifully written, confident answer about a niche topic. What does that confidence tell you about whether it's correct?",
+        "o": [
+          "Confident, fluent wording means it's very likely correct",
+          "Confidence means it found a reliable source",
+          "Almost nothing, fluency is the model's goal and is unrelated to accuracy",
+          "It means the answer was in its training data and is therefore verified"
+        ],
+        "a": 2,
+        "exp": "The model is built to produce text that reads well, so it phrases a wrong answer just as smoothly as a right one. Confidence in the wording is not evidence. For anything that matters, you verify it independently."
+      },
+      {
+        "q": "Why might a model confidently invent a fact, like a fake statistic or a quote that was never said?",
+        "o": [
+          "It's broken and needs to be restarted",
+          "Someone deliberately put false information into it",
+          "Its job is to produce likely-sounding text, so when it lacks the real answer it fills the gap with a plausible guess",
+          "It's lying on purpose to seem helpful"
+        ],
+        "a": 2,
+        "exp": "This is called a hallucination. Because the model always tries to produce the most likely next text, a gap in what it learned gets filled with something that sounds right rather than something that is right. It's a side effect of how the engine works, not a fixable glitch."
+      },
+      {
+        "q": "You ask a model the same question twice and get two slightly different answers. What's going on?",
+        "o": [
+          "One of the answers is a malfunction",
+          "The model is updating itself in real time as you chat",
+          "Normal behavior, it makes fresh guesses each time, so wording can vary",
+          "It remembered you didn't like the first answer and changed it"
+        ],
+        "a": 2,
+        "exp": "The model assembles each answer on the spot, guess by guess, and there's deliberate variation built in. Getting two different-but-reasonable answers is expected, not a sign anything is wrong."
+      },
+      {
+        "q": "Which of these tasks plays directly to what a language model is genuinely good at?",
+        "o": [
+          "Telling you today's weather without any added tools",
+          "Rephrasing a rough email into a clear, polite version",
+          "Recalling exactly what you told it in a chat last week with no memory feature on",
+          "Giving you a precise, guaranteed-correct multiplication of two large numbers"
+        ],
+        "a": 1,
+        "exp": "Rewriting and rephrasing is pure text generation, the model's home turf. The other three depend on things it can't do alone: live data, persistent memory, or exact arithmetic. Knowing the difference is the practical payoff of this whole lesson."
+      }
+    ],
+    "tokens": [
+      {
+        "q": "What is a token, in the way an AI model uses the word?",
+        "o": [
+          "Exactly one English word",
+          "A small chunk of text, often a word-piece, that the model reads and writes",
+          "A single letter of the alphabet",
+          "A special password that unlocks the model"
+        ],
+        "a": 1,
+        "exp": "A token is a small chunk of text, often a common word, a word-piece, a space, or a punctuation mark. As a rough rule it's about three-quarters of a word. The model reads and writes in these chunks rather than in whole words or individual letters."
+      },
+      {
+        "q": "Why does the word count of your message rarely match its token count?",
+        "o": [
+          "Tokens are always exactly the same as words; the counts do match",
+          "The model randomly adds extra tokens to inflate the bill",
+          "Common words are one token, but longer or rarer words split into several, and spaces and punctuation count too",
+          "Token counting is broken and the numbers are meaningless"
+        ],
+        "a": 2,
+        "exp": "Short common words map to a single token, but longer or unusual words get broken into pieces, and spaces and punctuation are their own tokens. So the token count is usually a bit higher than the word count, and the two rarely line up exactly."
+      },
+      {
+        "q": "A model struggles to tell you how many times the letter 's' appears in 'Mississippi.' What's the best explanation?",
+        "o": [
+          "The model is broken and needs an update",
+          "It reads text as tokens (chunks), not as individual letters, so letter-level tasks are genuinely hard for it",
+          "The word is too short for it to process",
+          "It's deliberately refusing to help"
+        ],
+        "a": 1,
+        "exp": "The model sees chunks like 'Miss' and 'issippi', not the separate letters. Counting specific characters means reasoning about something it can't directly see, so it's a real weak spot. For letter-perfect tasks, use a tool that actually reads characters."
+      },
+      {
+        "q": "You have a short question but you paste a 20-page document along with it. What happens to the token count?",
+        "o": [
+          "Only your question counts; pasted text is free",
+          "The pasted document is input tokens too, so the total is large even though your question is short",
+          "Pasting text reduces the token count",
+          "Tokens only apply to the model's answer, never to your input"
+        ],
+        "a": 1,
+        "exp": "Everything you send in is input tokens, including pasted documents. A short question with a big paste can use a lot of tokens, which means more cost and a slower response. Trimming to the part that matters is the fix."
+      },
+      {
+        "q": "Which statement about cost is accurate?",
+        "o": [
+          "Only the text you type is counted; the model's reply is free",
+          "Only the model's reply is counted; your input is free",
+          "Both your input and the model's reply count as tokens, and the reply is often the bigger half",
+          "Cost has nothing to do with tokens"
+        ],
+        "a": 2,
+        "exp": "Both input tokens (what you send) and output tokens (what the model writes back) are counted, and the answer is frequently the larger and more expensive half. That's why asking for a shorter answer can meaningfully cut cost and time."
+      }
+    ],
+    "context": [
+      {
+        "q": "What is the context window?",
+        "o": [
+          "A pop-up window in the chat app",
+          "The maximum amount of text, in tokens, a model can look at in one go",
+          "The model's permanent, long-term memory of everything you've said",
+          "A setting that makes the model think harder"
+        ],
+        "a": 1,
+        "exp": "The context window is the cap on how much text the model can take in at once, measured in tokens. It has to hold the conversation so far, your current message, any pasted files, and the answer being written, all at the same time."
+      },
+      {
+        "q": "In a long conversation, the model 'forgets' something you said near the start. What most likely happened?",
+        "o": [
+          "The model got bored and stopped paying attention",
+          "The conversation grew past the context window, so the earliest messages were dropped and the model no longer receives them",
+          "The model is punishing you for talking too much",
+          "Your internet connection deleted the message"
+        ],
+        "a": 1,
+        "exp": "As a chat grows beyond the window, the oldest messages stop being included in what the model is sent. From its point of view this turn, those messages were never there, so it can't refer to them. Restating the detail brings it back."
+      },
+      {
+        "q": "Does the model remember your conversation on its own between turns?",
+        "o": [
+          "Yes, it has a private memory of every message",
+          "No, the app re-sends the whole conversation each turn, and the model only sees what fits in the window",
+          "Yes, but only if you pay extra",
+          "No, it forgets your message the instant you send it and answers blindly"
+        ],
+        "a": 1,
+        "exp": "The model has no memory of its own between turns. The feeling of an ongoing chat comes from the app gluing the whole history together and re-sending it every time. The model only ever works with the block of text it's handed, as long as it fits the window."
+      },
+      {
+        "q": "You paste an entire long report and ask a precise question about one line buried in it. Why might the answer disappoint you?",
+        "o": [
+          "Pasting always breaks the model",
+          "The key detail can get buried in a crowded window, so the model may latch onto the wrong thing",
+          "The model refuses to read documents",
+          "Long documents make the model faster and more accurate"
+        ],
+        "a": 1,
+        "exp": "More text isn't automatically better. When the window is packed with mostly-irrelevant material, the one line that matters is easy to miss. Giving the model just the relevant section, with your question right beside it, usually works far better."
+      },
+      {
+        "q": "A conversation has gotten very long and the model's answers are drifting. What's a reliable fix?",
+        "o": [
+          "Keep going and hope it self-corrects",
+          "Type in all capital letters so it pays attention",
+          "Start a fresh chat and paste in a short summary of what actually matters",
+          "Ask the same question many times until it gets it right"
+        ],
+        "a": 2,
+        "exp": "Drift happens as early context drops off and noise piles up in the window. Starting a clean chat with a concise summary puts just the relevant information back in front of the model, which usually restores accuracy. You control what's in the window."
+      }
+    ],
+    "prompting": [
+      {
+        "q": "What is a prompt?",
+        "o": [
+          "A secret password that unlocks better answers",
+          "The text you give the model to work with, your instruction plus any context you include",
+          "A setting that makes the model smarter",
+          "The model's reply to your question"
+        ],
+        "a": 1,
+        "exp": "A prompt is simply the input you send the model: your question or instruction, plus any context or examples. It's everything the model has to work from, so whatever you leave out, it doesn't know. Writing clear prompts is the highest-leverage skill in the course."
+      },
+      {
+        "q": "Your prompt is just \"write something about our app.\" Why is the result likely to be generic?",
+        "o": [
+          "The model is being lazy",
+          "The prompt is too vague, with no task, audience, or format, so the model fills the gaps with safe, average text",
+          "You need to use special command words",
+          "The model can't write about apps"
+        ],
+        "a": 1,
+        "exp": "A vague prompt leaves the most-likely continuation wide open, so the model drifts toward bland, could-be-anything text. Adding the specific task, the audience and goal, and the format you want narrows it down and gets you a far more useful answer."
+      },
+      {
+        "q": "The first answer is close to what you wanted but a bit too long and too formal. What's the best next move?",
+        "o": [
+          "Start over with a brand-new, longer prompt",
+          "Give up, the model clearly can't do it",
+          "Reply with a small refinement, like 'shorter and a bit more casual'",
+          "Send the exact same prompt again and hope for better luck"
+        ],
+        "a": 2,
+        "exp": "Prompting is a back-and-forth. When an answer is close, refining with a small instruction is faster and more reliable than rewriting from scratch. Your feedback becomes part of the prompt and steers the next attempt toward what you actually want."
+      },
+      {
+        "q": "Why does pasting in one good example of the format you want often work so well?",
+        "o": [
+          "It tricks the model into trying harder",
+          "Continuing a concrete pattern is exactly what the model is best at, so an example teaches it the shape fast",
+          "Examples are required or the model won't respond",
+          "It has no real effect; only written instructions matter"
+        ],
+        "a": 1,
+        "exp": "The model predicts text by continuing patterns, so a concrete example dropped into the prompt is a pattern it can follow directly. One good 'like this' sample often communicates format and tone more precisely than a paragraph of description."
+      },
+      {
+        "q": "Which mindset best describes good prompting?",
+        "o": [
+          "Memorizing magic phrases that force good answers",
+          "Arguing with the model until it gives in",
+          "Briefing a capable new assistant: say the task, give the context, describe a good result",
+          "Keeping prompts as short as possible no matter what"
+        ],
+        "a": 2,
+        "exp": "The model takes your words literally and can't read your mind, so the winning mindset is briefing a sharp assistant on day one: state the task, supply the context they'd need, and describe what a good answer looks like. It's clear instructions, not secret tricks."
+      }
+    ],
+    "chat": [
+      {
+        "q": "What does it mean that a language model is 'stateless'?",
+        "o": [
+          "It keeps a permanent record of every chat you've ever had",
+          "It keeps no memory between turns, each message is handled on its own",
+          "It can only handle one topic at a time",
+          "It runs on a special kind of computer"
+        ],
+        "a": 1,
+        "exp": "Stateless means the model remembers nothing between turns, each request is handled as if it were the first thing you'd ever said. Any sense of an ongoing conversation comes from outside the model, not from the model itself."
+      },
+      {
+        "q": "If the model has no memory, how does a chat seem to 'remember' what you said earlier?",
+        "o": [
+          "The model secretly stores your messages in its brain",
+          "The chat app re-sends the entire conversation so far, as one block, every turn",
+          "It guesses what you probably said before",
+          "It doesn't, every reply is completely random"
+        ],
+        "a": 1,
+        "exp": "The chat app keeps a transcript and re-sends the whole thing, your messages and the model's replies, each turn, with your new message added. The model re-reads that transcript every time. The continuity is in the re-sent text, not in the model recalling anything."
+      },
+      {
+        "q": "You start a brand-new chat and it knows nothing about your previous conversation. Why?",
+        "o": [
+          "Something is broken",
+          "A new chat starts with an empty transcript, so by default there's nothing about earlier chats for the model to see",
+          "The model is choosing to ignore you",
+          "You forgot to log in"
+        ],
+        "a": 1,
+        "exp": "Each chat is its own separate transcript. A new one starts empty (apart from a hidden system message), so the model has no information about your other conversations. That's the default behavior, not a bug, unless a memory feature is turned on."
+      },
+      {
+        "q": "A product's 'memory' feature remembers your name and preferences across chats. What's actually happening?",
+        "o": [
+          "The model permanently learned new facts and changed itself",
+          "An extra feature saves notes about you and slips them into the transcript, the model itself still didn't change",
+          "The model is reading your mind",
+          "Nothing, memory features don't really work"
+        ],
+        "a": 1,
+        "exp": "A memory feature is a layer built on top of the model: it stores notes about you and quietly inserts them into the conversation. The model didn't learn anything, the app just put the note in front of it. You can usually view and edit what it saved."
+      },
+      {
+        "q": "Many chat tools add a hidden instruction at the very top of the transcript. What is it for?",
+        "o": [
+          "To slow the model down",
+          "To tell the model how to behave (its role, tone, and rules), shaping every answer in the chat",
+          "To store your password",
+          "It's just decoration with no effect"
+        ],
+        "a": 1,
+        "exp": "That's the system message: a behind-the-scenes instruction pinned to the top of every turn, telling the model how to act ('you are a helpful assistant'). You don't see it, but it's part of the transcript each turn and shapes the tone and rules of the whole conversation."
+      }
+    ],
+    "limits": [
+      {
+        "q": "What is a hallucination, in AI terms?",
+        "o": [
+          "A rare glitch that a software update will fix",
+          "When the model states something false as if it were true, filling a gap with plausible-sounding text",
+          "When the model refuses to answer",
+          "A feature that makes answers more creative on purpose"
+        ],
+        "a": 1,
+        "exp": "A hallucination is the model presenting something false, an invented quote, a fake statistic, a citation to a paper that doesn't exist, as if it were fact. It happens because the model fills gaps with likely-sounding text rather than admitting it doesn't know."
+      },
+      {
+        "q": "Why can't hallucination simply be switched off completely?",
+        "o": [
+          "The companies don't care enough to fix it",
+          "It comes from the same machinery that makes the model useful, always producing likely-sounding text",
+          "It only happens on cheap models",
+          "It can be, there's a setting that guarantees no mistakes"
+        ],
+        "a": 1,
+        "exp": "Hallucination is a side effect of the core behavior: always generating the most plausible next text. You can reduce it with better prompts, real sources, and asking for citations, but there's no setting that guarantees the model never makes anything up."
+      },
+      {
+        "q": "What is the knowledge cutoff?",
+        "o": [
+          "A daily limit on how many questions you can ask",
+          "The date a model's training data stops, after which it knows nothing unless a tool feeds it fresh info",
+          "The point where the model gets tired",
+          "A premium feature you pay to unlock"
+        ],
+        "a": 1,
+        "exp": "The knowledge cutoff is the date the model's training data ends. It knows nothing about events, prices, or releases after that point, and often can't tell exactly when its own cutoff is, so it may answer recent questions confidently from an outdated world."
+      },
+      {
+        "q": "A model gives you a confident answer about something that happened last week. What's the safest assumption?",
+        "o": [
+          "If it sounds confident, it's current and correct",
+          "It may be past the model's knowledge cutoff, so it could be guessing from old data unless a search tool actually ran",
+          "Models are always up to date",
+          "It refreshed its training overnight"
+        ],
+        "a": 1,
+        "exp": "Recent events may fall after the model's cutoff, where it has no real data, yet it still answers confidently. Unless you can confirm a search tool fetched fresh information, treat anything recent as possibly out of date and verify it against a current source."
+      },
+      {
+        "q": "Which type of answer most deserves a careful double-check?",
+        "o": [
+          "A rough brainstorm of creative ideas",
+          "A request to rephrase your own paragraph",
+          "Specific, copyable details, exact statistics, named quotes, citations, links, on a niche or recent topic",
+          "A general explanation of a well-known concept"
+        ],
+        "a": 2,
+        "exp": "Hallucination is most likely and most dangerous on precise, verifiable details about obscure or recent topics, exactly the things that look authoritative and are tempting to copy. Those are the answers to verify first. Drafting and rephrasing carry far less risk."
+      }
+    ],
+    "tools": [
+      {
+        "q": "The core language model only predicts text. So how can an AI app look at a photo or search the web?",
+        "o": [
+          "The model secretly has every ability built in",
+          "Modern products bundle extra abilities (tools) around the text engine",
+          "It can't, those features are fake",
+          "It downloads a new brain each time"
+        ],
+        "a": 1,
+        "exp": "Think of the model as an engine and the product as a car built around it. Seeing images, reading files, browsing the web, and doing math are features the product adds. When the model needs one, it calls a tool that does the real work and returns the result as text."
+      },
+      {
+        "q": "You attach a PDF and the AI summarizes it. What actually happened?",
+        "o": [
+          "The model physically opened and looked at the file",
+          "A tool extracted the text from the file and slipped it into the prompt for the model to read",
+          "The model memorized the PDF permanently",
+          "The PDF was emailed to a human who summarized it"
+        ],
+        "a": 1,
+        "exp": "Reading a file means a tool pulled the text out and added it to the prompt. The model is reading that extracted text, not 'opening' the document, which is exactly why a scanned, image-only PDF with no real text can stump it."
+      },
+      {
+        "q": "What is a 'tool,' in the sense used in this lesson?",
+        "o": [
+          "A button in the app's settings menu",
+          "An outside helper the model can call, like a calculator, web search, or file reader, that does the real work and returns text",
+          "Another word for the model itself",
+          "A physical device you plug in"
+        ],
+        "a": 1,
+        "exp": "A tool is any external helper the model can call when a task is beyond plain text prediction: a calculator, a search engine, a code runner, a database. The model requests it, the tool does the exact work, and the result comes back as text the model uses."
+      },
+      {
+        "q": "Why does giving the model a calculator tool make it more reliable at math?",
+        "o": [
+          "It makes the model think harder about numbers",
+          "The calculator does the exact arithmetic, replacing the model's shaky guess with a real answer",
+          "It doesn't, tools make math worse",
+          "It teaches the model to do math next time"
+        ],
+        "a": 1,
+        "exp": "On its own, the text engine only guesses a plausible-looking number. A calculator tool actually computes the exact result and hands it back. Tools are how products patch over the model's weak spots, math, fresh info, exact lookups, without changing the engine itself."
+      },
+      {
+        "q": "A feature you love in one AI app isn't available in another. What's the most likely reason?",
+        "o": [
+          "The second app uses a fundamentally different, worse engine",
+          "Different products bundle different tools, the capability isn't part of every model",
+          "You're using the second app wrong",
+          "The feature was removed from the internet"
+        ],
+        "a": 1,
+        "exp": "The underlying text engine is similar across products; what differs is which tools and capabilities each one wires up (search, image input, file reading). So 'can this AI do X?' really means 'does this product give the model a tool for X?'"
+      }
+    ],
+    "using": [
+      {
+        "q": "For a quick, low-stakes task like brainstorming names, which model is usually the smart choice?",
+        "o": [
+          "Always the biggest, most powerful model available",
+          "A smaller, faster, cheaper model, it's plenty for simple work",
+          "It doesn't matter, all models cost the same",
+          "Whichever one is most expensive, to be safe"
+        ],
+        "a": 1,
+        "exp": "Bigger models are smarter but slower and pricier, and they're overkill for simple tasks. Right-sizing, using a small, fast, cheap model for easy work and saving the heavyweight for genuinely hard problems, is the core habit of using AI well."
+      },
+      {
+        "q": "Where does most of the cost in everyday AI use actually come from?",
+        "o": [
+          "The number of separate questions you ask",
+          "Big pasted inputs and long generated answers, since cost tracks tokens",
+          "How fast you type",
+          "Cost is fixed and unrelated to what you send"
+        ],
+        "a": 1,
+        "exp": "Cost tracks tokens, both what you send and what comes back. Short chats are nearly free; the expense shows up with large pasted documents (input tokens) and long answers (output tokens). Trimming both is your main everyday cost lever."
+      },
+      {
+        "q": "What two questions best decide how much care a task needs?",
+        "o": [
+          "How fast can I type, and how long is the answer?",
+          "How capable does the model need to be, and how much does being wrong cost me?",
+          "Which model is newest, and which is cheapest?",
+          "Is the AI online, and is my internet fast?"
+        ],
+        "a": 1,
+        "exp": "These two questions, capability needed and cost of being wrong, right-size both your model choice and your caution. Cheap-and-fast for low stakes; stronger model, real sources, and verification for high stakes. That's the whole course as a five-second habit."
+      },
+      {
+        "q": "Which split best captures when to trust the model versus when to verify it?",
+        "o": [
+          "Trust it for math; verify its grammar",
+          "Trust it to draft, brainstorm, explain, and rephrase; verify it on facts, numbers, recent events, and citations",
+          "Trust everything it says; never verify",
+          "Verify everything equally, all the time"
+        ],
+        "a": 1,
+        "exp": "The model shines at generation, drafting, brainstorming, explaining, rephrasing, so you can lean on it there. It's least reliable on facts, numbers, recent events, and citations, so verify those. This single split prevents the great majority of AI mishaps."
+      },
+      {
+        "q": "You've finished this course and want to go from using these models to building real things with them. What's the next step?",
+        "o": [
+          "There's nothing more to learn",
+          "The Engineering Mastery course, which picks up exactly where Foundations ends",
+          "Just keep chatting until you figure it out",
+          "Start over with this same course"
+        ],
+        "a": 1,
+        "exp": "Foundations gave you the mental models for using AI; building with it, designing prompts at scale, wiring up tools, controlling cost in real systems, is the Engineering Mastery course, which assumes everything you learned here. It's the natural next step."
+      }
+    ]
+  },
+  "CARDS": [
+    { "m": "whatai", "f": "In one sentence, what is a large language model?", "b": "A text-prediction machine: you give it text, and it repeatedly guesses the most likely next chunk until it has written a full answer. Think of it as a very well-read autocomplete." },
+    { "m": "whatai", "f": "Does a language model look up facts in a database?", "b": "No. By default it generates new text by predicting what comes next, it isn't retrieving stored facts or searching the web. That's why it can be creative and also why it can make things up." },
+    { "m": "whatai", "f": "Why does a confident-sounding answer not mean a correct answer?", "b": "The model's goal is fluent-sounding text, so it phrases wrong answers just as smoothly as right ones. Confidence is unrelated to accuracy, verify anything that matters." },
+    { "m": "whatai", "f": "What is a hallucination?", "b": "When the model fills a gap in what it learned with plausible-sounding but false text, like a fake quote or invented statistic. It's a side effect of always predicting likely text, not a bug you can fully switch off." },
+    { "m": "whatai", "f": "Is the model learning from your conversation as you chat?", "b": "No. Training happened once, in the past. Chatting with it doesn't teach it anything, and by default it doesn't remember you between conversations." },
+    { "m": "tokens", "f": "What is a token?", "b": "The small chunk of text a model actually reads and writes, often a word, a word-piece, or punctuation. Rough rule: about four characters, or three-quarters of a word. Models read in tokens, not letters or whole words." },
+    { "m": "tokens", "f": "Why does the model struggle to count the letters in a word?", "b": "Because it reads tokens (chunks like ' token' + 'ization'), not individual letters. Letter-level tasks (counting characters, exact spelling, reversing words) are a genuine weak spot, use a real tool instead." },
+    { "m": "tokens", "f": "What gets counted toward cost: your input, the model's output, or both?", "b": "Both. Input tokens are everything you send (including pasted text); output tokens are everything the model writes back. The answer is often the bigger, pricier half, so asking for shorter answers saves money and time." },
+    { "m": "tokens", "f": "Why do common words cost fewer tokens than rare ones?", "b": "Common words usually map to a single token; longer or unusual words get split into several pieces. That's also why token counts run a bit higher than word counts, spaces and punctuation count too." },
+    { "m": "context", "f": "What is the context window?", "b": "The maximum amount of text (in tokens) a model can look at in one go. It must hold the whole conversation, your message, any pasted files, and the answer, all at once. Think of it as the model's desk, with an edge." },
+    { "m": "context", "f": "Why does a model 'forget' something from early in a long chat?", "b": "The conversation grew past the context window, so the earliest messages were dropped from what the model is sent. It's not choosing to forget, it simply never receives those messages this turn. Restate the detail to bring it back." },
+    { "m": "context", "f": "Does the model remember the conversation on its own between turns?", "b": "No. It has no memory of its own. The app re-sends the whole history every turn, and the model only sees what fits in the window. The 'ongoing chat' feeling is the app, not the model remembering." },
+    { "m": "context", "f": "Is a bigger context window always better?", "b": "No. More room lets you include more, but a fuller window is slower, costs more, and can bury the important detail in noise. A focused, relevant context usually beats a giant one." },
+    { "m": "prompting", "f": "What is a prompt?", "b": "The text you give the model to work with: your instruction or question plus any context or examples. It's everything the model has, and it takes it literally, so whatever you leave out, it doesn't know." },
+    { "m": "prompting", "f": "What three things turn a vague prompt into a good one?", "b": "The task (what you want done), the context (audience, goal, background the model can't guess), and the format (length, tone, structure of a good answer). Add an example when you have one." },
+    { "m": "prompting", "f": "The first answer is close but not right. What's the move?", "b": "Refine, don't restart. Reply with one small instruction ('shorter', 'warmer', 'focus on point two'). Prompting is a back-and-forth, and your feedback steers the next try. Refining is usually faster than rewriting." },
+    { "m": "prompting", "f": "What's the right mindset for prompting?", "b": "Briefing a capable new assistant on day one: say the task, give the context they'd need, and describe a good result. It's clear instructions, not secret magic phrases. The model can't read your mind." },
+    { "m": "chat", "f": "What does 'stateless' mean for a model?", "b": "It keeps no memory between turns, each message is handled on its own, as if it were the first. Any sense of an ongoing conversation comes from outside the model, not the model itself." },
+    { "m": "chat", "f": "If the model has no memory, how does chat seem to remember?", "b": "The chat app re-sends the entire conversation so far, your messages and its replies, as one block every turn, with your new message added. The model re-reads that transcript each time. The memory is in the re-sent text, not the model." },
+    { "m": "chat", "f": "Why does a brand-new chat know nothing about your last one?", "b": "Each chat is its own transcript, and a new one starts empty (apart from a hidden system message). By default there's nothing from earlier chats for the model to see, unless a memory feature is turned on." },
+    { "m": "chat", "f": "What is a system message?", "b": "A hidden instruction most chat tools pin to the very top of the transcript, telling the model how to behave ('you are a helpful assistant'). You don't see it, but it shapes the tone and rules of every answer." },
+    { "m": "limits", "f": "What is a hallucination?", "b": "When the model states something false as if it were true, a fake quote, an invented statistic, a citation to a paper that doesn't exist. It fills gaps with plausible text instead of admitting it doesn't know, and no setting fully turns it off." },
+    { "m": "limits", "f": "What is the knowledge cutoff?", "b": "The date a model's training data stops. It knows nothing about events, prices, or releases after that point, and often can't tell where its own cutoff is, so it may answer recent questions confidently from an outdated world." },
+    { "m": "limits", "f": "Which answers most deserve a double-check?", "b": "Specific, copyable details, exact statistics, named quotes, citations, links, on niche or recent topics. That's where hallucination is most likely and most tempting to copy. Confidence is never a safety check." },
+    { "m": "limits", "f": "What is grounding, and why does it help?", "b": "Giving the model the real source to answer from (paste the document, or use a search tool) instead of asking from memory. The answer is then anchored to actual material, so it's far less likely to be made up." },
+    { "m": "tools", "f": "The core model only predicts text, so how can it see images or search the web?", "b": "Products bundle extra abilities (tools) around the engine. Think of the model as an engine and the app as a car built around it, vision, search, file reading, and math are features the car adds and calls when needed." },
+    { "m": "tools", "f": "What is a 'tool' in AI?", "b": "An outside helper the model can call when a task is beyond text prediction, a calculator, web search, file reader, code runner. The tool does the real work and hands the result back as text the model uses." },
+    { "m": "tools", "f": "Why does 'can this AI do X?' depend on the product, not just the model?", "b": "The engine is similar everywhere; what differs is which tools each product wires up (search, images, files). So the real question is 'does this product give the model a tool for X?', which is why two AI apps can have very different abilities." },
+    { "m": "using", "f": "What two questions decide how much care a task needs?", "b": "How capable does the model need to be, and how much does being wrong cost me? Cheap-and-fast for low stakes; stronger model, real sources, and verification for high stakes. That's the whole course as a quick habit." },
+    { "m": "using", "f": "When should you trust the model versus verify it?", "b": "Trust it to draft, brainstorm, explain, and rephrase. Verify it on facts, numbers, recent events, and citations. This single split prevents most AI mishaps." },
+    { "m": "using", "f": "Where does most everyday AI cost come from, and what's next after Foundations?", "b": "Cost tracks tokens, so big pasted inputs and long answers are the expense, trim both. When you're ready to build with these models, not just chat, the Engineering Mastery course picks up right where this ends." }
+  ],
+  "SCENARIOS": [
+    {
+      "id": "s1",
+      "block": "b1",
+      "title": "The confident wrong answer",
+      "sit": "A coworker is thrilled with an AI assistant. They asked it for three studies supporting a claim in a report, and it produced three, complete with authors, journals, and years. They're about to paste the citations straight into a document going to a client.",
+      "task": "Your coworker asks if it's safe to use as-is. What do you tell them, and why, in plain terms?",
+      "model": "Slow down before pasting. A language model generates likely-sounding text, it does not look up real sources unless a search feature is explicitly turned on. \"Three studies with authors and years\" is exactly the kind of confident, specific output it will happily invent, because that's what a real answer would look like. This is a hallucination, and the polished formatting makes it more dangerous, not less. The fix is simple: treat the AI's citations as a starting list, then verify each one actually exists (search the title, find the real paper) before anything goes to a client. The model is great for drafting and phrasing; it is not a source of truth.",
+      "pts": [
+        "The model generates text, it doesn't look up real sources by default",
+        "Specific, confident details (authors, years) are easy for it to fabricate",
+        "Polished formatting is not evidence of correctness",
+        "Verify each citation independently before it leaves the building",
+        "Use the model for drafting/phrasing, not as a source of truth"
+      ]
+    },
+    {
+      "id": "s2",
+      "block": "b1",
+      "title": "The surprise bill",
+      "sit": "A friend started using an AI tool that charges by usage. They mostly ask short questions, so they expected it to be nearly free. At the end of the month the bill is much bigger than they imagined. Looking back, most of their sessions involved pasting in long PDFs and email threads and asking the model to summarize or rewrite them, often getting back long, detailed answers.",
+      "task": "Your friend is baffled and asks why short questions led to a big bill. Explain it in plain terms, and give them two simple ways to spend less.",
+      "model": "The 'short question' is only a sliver of what they were paying for. These tools bill by tokens, the little chunks text gets sliced into, and every PDF and email thread they pasted in counts as input tokens, often thousands of them. On top of that, the long, detailed answers they got back are output tokens, which are billed too and are frequently the bigger half. So a one-line question wrapped around a twenty-page paste and a two-page answer is actually a very large request. Two easy fixes: first, paste in only the part that matters instead of the whole document, the token count drops immediately. Second, ask for shorter, more focused answers (\"summarize in five bullet points\"), since output is billed as well. Nothing here is broken, it's just that 'short question' and 'few tokens' aren't the same thing.",
+      "pts": [
+        "Billing is by tokens, not by number of questions",
+        "Pasted documents are input tokens, often the bulk of the cost",
+        "Long answers are output tokens and are billed too, often the bigger half",
+        "Fix one: paste only the relevant section, not the whole document",
+        "Fix two: ask for shorter, more focused answers to cut output tokens"
+      ]
+    },
+    {
+      "id": "s3",
+      "block": "b1",
+      "title": "The assistant that lost the thread",
+      "sit": "A colleague is using an AI chat to help plan a big event. Early on, they told it several key constraints: the venue holds 80 people, the budget is tight, and one guest has a severe nut allergy. After a long back-and-forth, dozens of messages about decorations, music, and scheduling, they ask it to finalize the catering. The AI confidently suggests a menu featuring a nut-heavy dish, for 150 people, with premium pricing. The colleague is alarmed and says the AI 'clearly can't be trusted.'",
+      "task": "Your colleague wants to abandon the tool. Explain what actually went wrong and how to use it more reliably, without overpromising what the AI can do.",
+      "model": "It's worth understanding before abandoning it, because this is predictable, not random. The model has no memory of its own; each turn it only sees what still fits in its context window. Those crucial early constraints, 80 people, tight budget, nut allergy, were near the start of a very long conversation, and as the chat grew, the earliest messages dropped off the edge of the window. By the time they asked about catering, the model genuinely no longer had those details in front of it, so it filled the gaps with plausible-sounding defaults. It wasn't ignoring the allergy; it simply couldn't see it anymore. The reliable way to work: when a detail truly matters, restate it right where it's needed (\"finalize catering for 80 people, tight budget, and absolutely nut-free\"). For something this important, a fresh chat with a short summary of the hard constraints up top works even better. And for a safety-critical detail like an allergy, treat the AI as a drafting aid and have a human double-check the final menu, no AI should be the last line of defense there.",
+      "pts": [
+        "The model has no memory of its own; it only sees what's in the context window now",
+        "Early constraints dropped off the edge as the long conversation grew",
+        "It wasn't ignoring the details, it literally no longer received them that turn",
+        "Restate critical details right where they're needed, or start fresh with a summary",
+        "For safety-critical facts (like an allergy), keep a human in the loop on the final check"
+      ]
+    },
+    {
+      "id": "s4",
+      "block": "b1",
+      "title": "The blah answer",
+      "sit": "A friend is frustrated. They asked an AI to \"write a bio for my LinkedIn\" and got back something generic and lifeless that could belong to anyone. They've concluded the AI \"just isn't good at writing\" and are about to give up on it.",
+      "task": "Your friend shows you the bland result. Without writing the bio for them, explain why it came out generic and coach them on a better prompt.",
+      "model": "The AI isn't bad at writing, it just had almost nothing to work with. The prompt 'write a bio for my LinkedIn' doesn't say who you are, who it's for, or what it should sound like, so the model did the only thing it could: produced the safe, average, could-be-anyone version. The fix isn't a magic phrase, it's giving it a proper brief, the way you'd brief a sharp assistant on day one. Tell it the task and the specifics: your role and years of experience, two or three things you're known for, the audience (recruiters? clients?), and the tone you want (warm and human, not corporate). Add the shape, too, 'three short sentences, first person.' And if the first draft is close but a little stiff, don't start over, just say 'good, make it warmer and cut the jargon.' Same model, completely different result, because now it actually knows what 'good' looks like. Vague in, vague out; specific in, specific out.",
+      "pts": [
+        "The generic answer came from a vague prompt, not a weak model",
+        "The model takes your words literally and can't guess what you didn't say",
+        "Give it the task, the specifics/context, the audience, and the tone",
+        "Specify the format and length (e.g. 'three short sentences, first person')",
+        "Refine in small steps instead of rewriting from scratch"
+      ]
+    },
+    {
+      "id": "s5",
+      "block": "b2",
+      "title": "The chat that started over",
+      "sit": "A colleague spent an hour yesterday in an AI chat working out a detailed plan for a project, the model knew all the context and was genuinely helpful. Today they opened the app, started typing in a fresh chat, and the AI acted like it had never heard of the project. They're convinced the tool 'deleted their work' or is broken.",
+      "task": "Your colleague is annoyed and a little worried their data is gone. Explain what's actually happening, reassure them, and tell them how to pick up where they left off.",
+      "model": "Nothing's broken and nothing's deleted. The key thing to know is that the model has no memory of its own, what felt like 'the AI knew the project' yesterday was really the app re-sending that whole conversation's transcript to the model on every turn. A new chat is a fresh, empty transcript, so today's model genuinely has nothing about the project in front of it. Yesterday's chat almost certainly still exists, look in the app's history or sidebar, and if they reopen it, all that context is right there and they can continue. If they'd rather work in a new chat, they just need to bring the context with them: paste in a short summary of the plan, or copy the key points from yesterday's conversation into the first message. Optionally, some products have a 'memory' feature that saves notes about you across chats, but that's an extra layer, not the default, and it only stores what it's set up to. The mental model to keep: each chat is its own transcript, and the AI only knows what's in the one you're currently in.",
+      "pts": [
+        "The model has no memory of its own; the app re-sends the transcript each turn",
+        "A new chat is a fresh, empty transcript, so it knows nothing about the old one",
+        "Nothing was deleted, yesterday's chat is in the history/sidebar; reopening it restores the context",
+        "To continue in a new chat, paste a short summary of the key points into the first message",
+        "A 'memory' feature can carry notes across chats, but it's an optional add-on, not the default"
+      ]
+    },
+    {
+      "id": "s6",
+      "block": "b2",
+      "title": "The too-good source",
+      "sit": "A student is writing a paper and asked an AI for recent statistics and sources on a niche topic. It produced exactly what they hoped: three specific figures, each with a named study, a journal, and a year, all from the last couple of years. It looks perfect, and they're about to cite it. They mention, almost in passing, that the topic is very current.",
+      "task": "The student asks whether they can cite these directly. Explain the two separate risks here and what to do, without telling them the AI is useless.",
+      "model": "Hold on before citing any of it, there are actually two different problems stacked here. First, hallucination: when you ask a model for specific statistics with named studies and years, it produces text shaped like real citations, and on a niche topic it will often invent the details, realistic author names, plausible journals, sources that simply don't exist. The polish makes it feel trustworthy, which is exactly what makes it dangerous. Second, the knowledge cutoff: you said the topic is very current, but the model's training stopped at some past date, so 'recent' figures may be guessed from an outdated world, and the model usually can't tell you that. So the two risks are 'these sources may be fabricated' and 'this info may be out of date,' and the model sounds equally confident either way. What to do: treat the AI's list as leads, not facts. Try to find each source independently, search the title and authors; if you can't verify it exists, don't use it. For current data, go to a real, up-to-date source (a database, the original studies, a search tool that actually browses) rather than the model's memory. The AI is great for getting oriented and drafting your prose, just not for being the source of truth on specific, recent facts.",
+      "pts": [
+        "Two separate risks: fabricated sources (hallucination) and out-of-date info (knowledge cutoff)",
+        "Specific citations on niche topics are exactly what models invent most convincingly",
+        "'Current' figures may be guessed from before the model's cutoff, and it won't reliably warn you",
+        "Confidence and polish are not evidence; verify each source exists independently before citing",
+        "For recent, factual data use a real up-to-date source; use the AI for drafting, not as the source of truth"
+      ]
+    },
+    {
+      "id": "s7",
+      "block": "b2",
+      "title": "Wrong app for the job",
+      "sit": "A friend tried two things with an AI assistant and got burned by both. They pasted a scanned image of a contract (a photo of the pages) and asked for a summary, it gave a vague, partly-wrong answer. Then they asked it for today's exchange rate for a trip, and it confidently gave a number that turned out to be stale. They're ready to declare AI 'overhyped and unreliable.'",
+      "task": "Your friend wants to write the whole thing off. Explain what went wrong in each case in plain terms, and tell them how to actually get what they wanted.",
+      "model": "Both failures make total sense once you see what the tool can and can't do on its own, and neither means AI is useless. Case one, the scanned contract: reading a file isn't the model 'looking' at your pages, a tool has to extract the text first and feed it in. A scanned photo is just an image, so if there's no real text to pull out (or the tool's text-reading is weak), the model is working from almost nothing, hence the vague, partly-invented summary. The fix: give it actual text, copy-paste the contract text if you have a digital version, or use a tool that does proper text recognition on images first, then summarize. Case two, the exchange rate: the plain model's knowledge is frozen at its training cutoff and it can't reach the internet by itself, so 'today's rate' was a stale guess. The fix: use a product (or mode) that actually has web search, and check that it really searched, look for a source or link, or honestly, for a live exchange rate, just use a finance site. The real lesson isn't 'AI is unreliable,' it's that abilities like reading images and searching the web are tools that a given product may or may not have. Match the tool to the task and both of these jobs are easy.",
+      "pts": [
+        "Reading a file means a tool extracted the text first; a scanned image may have no text to read",
+        "Fix for the contract: give it real text (digital copy), or use proper text-recognition first",
+        "The plain model can't reach the internet and is frozen at its cutoff, so 'today's rate' was a stale guess",
+        "Fix for the rate: use a product with web search and confirm it actually searched (look for a source)",
+        "Capabilities like image-reading and search are tools a product may or may not have; match the tool to the task"
+      ]
+    },
+    {
+      "id": "s8",
+      "block": "b2",
+      "title": "One tool for everything",
+      "sit": "A new colleague has just discovered AI and is using the biggest, most powerful (and most expensive) model for absolutely everything, drafting quick internal Slack messages, brainstorming, and also pasting in huge documents for long detailed summaries. They're proud of always using 'the best one,' but the team's bill is climbing and some quick tasks feel slow. They ask you whether they're doing it right.",
+      "task": "Without overwhelming them, help them build a simple habit for choosing a model and managing cost, and for deciding when to trust the output.",
+      "model": "You've got the instinct to do good work, let's just right-size it, because 'always the best model' is costing speed and money you don't need to spend. Two quick questions before any task will sort almost everything out. First, how capable does this actually need to be? A quick Slack message or a brainstorm doesn't need the heavyweight, a smaller, faster, cheaper model nails those and feels snappier. Save the big model for genuinely hard, high-stakes work. Second, how much does being wrong cost? For low-stakes throwaway stuff, move fast and accept good-enough. For anything important, use the stronger model, give it real sources, and check the output yourself. On the climbing bill: cost tracks tokens, and the big drivers are exactly what you're doing, pasting in huge documents (input) and asking for long detailed answers (output). Trim the pastes to the part that matters and ask for shorter summaries, and you'll see the cost drop fast. And one habit that prevents most mistakes: trust the model to draft, brainstorm, and rephrase, but verify it on facts, numbers, recent events, and citations. Do those things and you're using it like a pro. If you find you want to go further, automating this, wiring up tools, controlling cost in real systems, that's exactly what the Engineering Mastery course covers next.",
+      "pts": [
+        "Right-size the model: small/fast/cheap for easy tasks, the heavyweight only for hard, high-stakes work",
+        "Two deciding questions: how capable must it be, and what does being wrong cost?",
+        "Cost tracks tokens; big pasted inputs and long outputs are the bill, trim both",
+        "Trust it to draft/brainstorm/rephrase; verify it on facts, numbers, recent events, and citations",
+        "Ready to build, not just chat? The Engineering Mastery course is the next step"
+      ]
+    }
+  ]
+}
