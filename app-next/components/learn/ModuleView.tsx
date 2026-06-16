@@ -5,6 +5,7 @@ import { useCourseStore } from "./StoreProvider";
 import HtmlRaw from "./Html";
 import Paywall from "./Paywall";
 import SectionRail from "./SectionRail";
+import VideoPreface from "./VideoPreface";
 import {
   fmtMin,
   modMastered,
@@ -62,6 +63,14 @@ export default function ModuleView({ id }: { id: string }) {
   const mastered = modMastered(S, id);
   const plain = course.plain[id];
 
+  // Preface video, shown at the top of a module. On a locked module we only
+  // surface a "public" video — a free teaser; a "paid" one would 403 on play,
+  // so it stays hidden there. `key={id}` forces a fresh mount per module so the
+  // player resets (stops playback, clears the prior source) when switching lessons.
+  const video = course.videos[id];
+  const videoEl = video ? <VideoPreface key={id} id={id} meta={video} /> : null;
+  const teaserEl = video && (video.tier ?? "public") === "public" ? videoEl : null;
+
   const header = (
     <>
       <h2>{meta.title}</h2>{" "}
@@ -75,6 +84,7 @@ export default function ModuleView({ id }: { id: string }) {
     return (
       <div className="page">
         {header}
+        {teaserEl}
         {plain && (
           <div className="card" style={{ borderColor: "var(--teal)" }}>
             <b style={{ color: "var(--teal)" }}>In plain English</b>
@@ -123,6 +133,7 @@ export default function ModuleView({ id }: { id: string }) {
 
   const learn = (
     <>
+      {videoEl}
       {plain && (
         <div id="sec-why" className="card" style={{ borderColor: "var(--teal)" }}>
           <b style={{ color: "var(--teal)" }}>In plain English</b>

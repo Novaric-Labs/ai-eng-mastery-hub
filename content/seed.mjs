@@ -2,6 +2,7 @@
 // Splits the curriculum into PUBLIC (free preview/marketing) and PAID rows.
 // Run: node content/seed.mjs   ->   writes supabase/seed.sql
 import fs from 'fs';
+import { VIDEOS } from './videos.mjs';
 
 const d = JSON.parse(fs.readFileSync(new URL('./content.json', import.meta.url)));
 const SAMPLE = 'llm'; // the one module offered free as a sample
@@ -17,6 +18,7 @@ add('meta:catalog', 'public', d.MODULES.map(m => ({
 })));
 add('glossary', 'public', d.GLOSSARY);
 add('plain', 'public', d.PLAIN);
+add('videos', 'public', VIDEOS); // sparse preface-video registry (free teasers)
 
 // ---- per-module bundles (sample module is public, the rest are paid) ----
 for (const m of d.MODULES) {
