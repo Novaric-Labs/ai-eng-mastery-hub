@@ -44,7 +44,7 @@ export default function TutorBot() {
       const res = await fetch("/api/tutor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: q, history: turns.slice(-6) }),
+        body: JSON.stringify({ question: q, history: turns.slice(-6), course: courseSlug }),
       });
       const d = await res.json();
       setTurns([...next, { role: "assistant", content: res.ok ? d.answer : d.error || "Sorry, something went wrong." }]);
