@@ -55,7 +55,7 @@ export const COURSES: CourseMeta[] = [
     level: "Beginner",
     estHours: "6–8 hrs",
     moduleCount: 8,
-    status: "coming_soon",
+    status: "live",
     accent: "#7c6bff",
   },
 ];
