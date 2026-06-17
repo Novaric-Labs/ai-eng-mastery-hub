@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { PLANS } from "@/lib/plans";
+import { paymentsEnabled } from "@/lib/payments";
 
 // Renders the membership plans and starts Stripe Checkout for the chosen plan.
 // Not-signed-in users are bounced to /login (then back to pricing) so checkout
@@ -10,6 +11,20 @@ import { PLANS } from "@/lib/plans";
 export default function PlanPicker() {
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
+
+  // Invite/free mode (Stripe not yet configured): don't render checkout, which
+  // would fail. Point people at the free start + access codes instead.
+  if (!paymentsEnabled) {
+    return (
+      <div className="card" style={{ padding: 22, textAlign: "center", maxWidth: 460, margin: "0 auto" }}>
+        <b style={{ fontSize: 15 }}>Memberships are opening soon</b>
+        <p style={{ color: "var(--dim)", fontSize: 13.5, marginTop: 8 }}>
+          Novacademy is invite-only right now. Sign in to start free, then unlock the full course with an
+          access code. Paid membership ({PLANS[0].priceLabel}/mo) is coming shortly.
+        </p>
+      </div>
+    );
+  }
 
   async function choose(plan: string) {
     setBusy(plan);

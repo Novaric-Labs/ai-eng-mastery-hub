@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import PlanPicker from "@/components/PlanPicker";
+import { paymentsEnabled } from "@/lib/payments";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -37,7 +38,9 @@ export default function Pricing() {
           One membership. Every course.
         </h1>
         <p style={{ color: "var(--dim2)", marginBottom: 28, textAlign: "center" }}>
-          Unlock the whole platform for $35/month — or pay for longer and save. Cancel anytime.
+          {paymentsEnabled
+            ? "Unlock the whole platform for $35/month — or pay for longer and save. Cancel anytime."
+            : "One membership will unlock the whole platform. While we finish setting up payments, Novacademy is invite-only — start free and unlock with an access code."}
         </p>
 
         <PlanPicker />
@@ -56,8 +59,16 @@ export default function Pricing() {
           full sample module free. Have an access code? Enter it on the course page.
         </p>
         <p style={{ color: "var(--faint)", fontSize: 12.5, marginTop: 10, textAlign: "center" }}>
-          Cancel anytime from your account — access runs to the end of the period you paid for. By
-          subscribing you agree to our <Link href="/terms">Terms</Link>.
+          {paymentsEnabled ? (
+            <>
+              Cancel anytime from your account — access runs to the end of the period you paid for. By
+              subscribing you agree to our <Link href="/terms">Terms</Link>.
+            </>
+          ) : (
+            <>
+              Access is governed by our <Link href="/terms">Terms</Link>.
+            </>
+          )}
         </p>
       </main>
     </>
