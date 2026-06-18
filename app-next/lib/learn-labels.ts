@@ -63,6 +63,8 @@ export type LearnLabels = {
   scenLockedTagline: string;
   /** Unlocked intro tagline (plain text). */
   scenIntroTagline: string;
+  /** Per-block hint telling the learner when to attempt that block's scenarios. */
+  scenWhenHint: string;
 
   // ---- StartHere ----
   startTagline: string;
@@ -129,6 +131,8 @@ const DEFAULT_LABELS: LearnLabels = {
   scenLockedTagline: "Production-judgment challenges across all five blocks.",
   scenIntroTagline:
     "Production judgment under realistic conditions. Write or speak your answer BEFORE revealing the model answer — retrieval practice is where mastery forms. Then self-grade honestly against the key points.",
+  scenWhenHint:
+    "Attempt these once you've worked through this block's modules — they test whether the judgment stuck.",
 
   startTagline:
     "No AI background needed. Fifteen minutes of orientation, then the curriculum will make sense.",
@@ -198,6 +202,8 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
   scenLockedTagline: "Real-world situations to practice on, across both blocks.",
   scenIntroTagline:
     "Realistic situations to think through. Write or speak your answer BEFORE revealing a strong answer — trying it yourself first is where it really sinks in. Then grade yourself honestly against the key points.",
+  scenWhenHint:
+    "Try these once you've finished this block's lessons — they let you practice using the ideas on a real-world situation.",
 
   startTagline:
     "No AI background needed. Fifteen minutes of orientation, then the rest of the course will make sense.",

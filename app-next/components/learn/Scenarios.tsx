@@ -71,7 +71,8 @@ export default function Scenarios() {
       <p className="tagline">{L.scenIntroTagline}</p>
       {course.blocks.map((b) => (
         <div key={b.id}>
-          <h3>{b.name}</h3>
+          <h3 style={{ marginBottom: 2 }}>{b.name}</h3>
+          <p style={{ color: "var(--dim)", fontSize: 13, marginTop: 0, marginBottom: 12 }}>{L.scenWhenHint}</p>
           {course.scenarios!
             .filter((x) => x.block === b.id)
             .map((s) => {

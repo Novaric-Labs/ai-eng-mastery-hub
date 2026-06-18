@@ -40,18 +40,33 @@ export async function POST(req: Request) {
   const sc = scenarios.find((s) => s.id === scenarioId);
   if (!sc) return NextResponse.json({ error: "Scenario not found." }, { status: 404 });
 
+  // Grader persona + rubric scale to the course (encouraging beginner coach for
+  // Foundations, rigorous instructor for Mastery); default ai-eng.
+  const GRADERS: Record<string, { persona: string; rubric: string }> = {
+    "ai-eng": {
+      persona: "a senior AI-engineering instructor",
+      rubric: "production judgment",
+    },
+    "ai-foundations": {
+      persona: "a warm, encouraging tutor coaching a beginner",
+      rubric: "clear thinking and grasp of the core idea",
+    },
+  };
+  const grader = GRADERS[course] ?? GRADERS["ai-eng"];
+
   const system =
-    "You are a senior AI-engineering instructor grading a learner's answer to a production scenario. " +
-    "Grade ONLY against the situation, the model answer, and the key points provided. Be fair but rigorous. " +
+    `You are ${grader.persona} grading the user's answer to a practice scenario. ` +
+    "Grade ONLY against the situation, the model answer, and the key points provided. Be fair but rigorous, and encouraging. " +
+    "Address the user directly as 'you' throughout — say 'You correctly…', 'You could strengthen…' — never 'the learner', 'they', or 'the answer'. " +
     "Reply with ONLY a JSON object, no prose, no markdown fences, in exactly this shape: " +
     '{"score": <integer 0-10>, "summary": "<one or two sentences>", "strengths": ["..."], "improvements": ["..."]}. ' +
-    "score 0-10 reflects how well the answer covers the key points and production judgment. " +
-    "strengths = what they got right (specific). improvements = what they missed or should add (specific, actionable).";
+    `score 0-10 reflects how well your answer covers the key points and ${grader.rubric}. ` +
+    "summary speaks to you directly. strengths = what you got right (specific). improvements = what you missed or should add (specific, actionable).";
 
   const prompt =
     `SITUATION:\n${sc.sit}\n\nTASK:\n${sc.task}\n\n` +
-    `MODEL ANSWER:\n${sc.model}\n\nKEY POINTS THEY SHOULD HIT:\n${sc.pts.map((p) => `- ${p}`).join("\n")}\n\n` +
-    `LEARNER'S ANSWER:\n${answer}`;
+    `MODEL ANSWER:\n${sc.model}\n\nKEY POINTS THE ANSWER SHOULD HIT:\n${sc.pts.map((p) => `- ${p}`).join("\n")}\n\n` +
+    `THE USER'S ANSWER:\n${answer}`;
 
   try {
     const message = await client.messages.create({
