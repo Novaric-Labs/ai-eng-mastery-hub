@@ -1,13 +1,18 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCourseStore, celebrate } from "./StoreProvider";
 import Html from "./Html";
 import { PASS_EXAM, PASS_QUIZ, blockMastered } from "@/lib/course";
 
+// Per-question AI feedback for wrong EXAM answers: why your pick was wrong and
+// why the correct one is right. Keyed by question index for the current run.
+type AiExp = { loading: boolean; text?: string; failed?: boolean };
+
 export default function Quiz() {
-  const { course, S, Q, pick, nextQ, startQuiz, startExam, go } = useCourseStore((s) => ({
+  const { course, courseSlug, S, Q, pick, nextQ, startQuiz, startExam, go } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     Q: s.Q,
     pick: s.pick,
@@ -16,6 +21,41 @@ export default function Quiz() {
     startExam: s.startExam,
     go: s.go,
   }));
+
+  // AI "why" feedback, only fetched for wrong answers during an exam.
+  const [aiExp, setAiExp] = useState<Record<number, AiExp>>({});
+  // Reset the cache whenever a new run starts (new id/mode or back to question 0).
+  const runKey = Q ? `${Q.mode}:${Q.id}:${Q.items.length}` : "";
+  const lastRun = useRef(runKey);
+  if (runKey !== lastRun.current) {
+    lastRun.current = runKey;
+    if (Object.keys(aiExp).length) setAiExp({});
+  }
+
+  useEffect(() => {
+    if (!Q || Q.done || Q.mode !== "exam") return;
+    const idx = Q.i;
+    const it = Q.items[idx];
+    if (!it || it.sel === null || it.sel === it.a) return;
+    if (aiExp[idx]) return; // already fetching/fetched for this question
+    setAiExp((m) => ({ ...m, [idx]: { loading: true } }));
+    fetch("/api/explain", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        course: courseSlug,
+        question: it.q,
+        options: it.o,
+        correctIndex: it.a,
+        chosenIndex: it.sel,
+      }),
+    })
+      .then((r) => r.json())
+      .then((d) =>
+        setAiExp((m) => ({ ...m, [idx]: { loading: false, text: d.explanation || undefined, failed: !d.explanation } })),
+      )
+      .catch(() => setAiExp((m) => ({ ...m, [idx]: { loading: false, failed: true } })));
+  }, [Q, aiExp, courseSlug]);
 
   // keyboard: A–D / 1–9 to answer, Enter/Space to advance
   useEffect(() => {
@@ -114,7 +154,7 @@ export default function Quiz() {
                   <p style={{ color: "var(--green)", fontSize: 13.5 }}>
                     Correct: <Html as="span" html={it.o[it.a]} />
                   </p>
-                  <Html className="exp" html={it.exp} />
+                  <Html className="exp" html={aiExp[n]?.text ?? it.exp} />
                 </div>
               ) : null,
             )}
@@ -159,8 +199,16 @@ export default function Quiz() {
         {answered && (
           <>
             <div className="exp">
-              {it.sel === it.a ? "✓ Correct. " : "✗ "}
-              <Html as="span" html={it.exp} />
+              {it.sel === it.a ? (
+                <>✓ Correct. <Html as="span" html={it.exp} /></>
+              ) : Q.mode === "exam" && aiExp[Q.i]?.loading ? (
+                <>✗ <span style={{ opacity: 0.7 }}>Looking at why…</span></>
+              ) : Q.mode === "exam" && aiExp[Q.i]?.text ? (
+                <>✗ <Html as="span" html={aiExp[Q.i].text!} /></>
+              ) : (
+                // Quizzes, or exam fallback if the AI explanation failed.
+                <>✗ <Html as="span" html={it.exp} /></>
+              )}
             </div>
             <button className="btn" onClick={() => nextQ()}>
               {Q.i === Q.items.length - 1 ? "Finish" : "Next →"}
