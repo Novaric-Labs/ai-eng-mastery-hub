@@ -1375,121 +1375,121 @@
     {
       "id": "s1",
       "block": "b1",
-      "title": "The confident wrong answer",
-      "sit": "A coworker is thrilled with an AI assistant. They asked it for three studies supporting a claim in a report, and it produced three, complete with authors, journals, and years. They're about to paste the citations straight into a document going to a client.",
-      "task": "Your coworker asks if it's safe to use as-is. What do you tell them, and why, in plain terms?",
-      "model": "Slow down before pasting. A language model generates likely-sounding text, it does not look up real sources unless a search feature is explicitly turned on. \"Three studies with authors and years\" is exactly the kind of confident, specific output it will happily invent, because that's what a real answer would look like. This is a hallucination, and the polished formatting makes it more dangerous, not less. The fix is simple: treat the AI's citations as a starting list, then verify each one actually exists (search the title, find the real paper) before anything goes to a client. The model is great for drafting and phrasing; it is not a source of truth.",
+      "title": "Is this thing actually thinking?",
+      "sit": "Your aunt just started using a chat assistant and she's a little spooked. \"It writes back so fast and it sounds so sure of itself,\" she says. \"Is there a person on the other end? Does it understand me? Is it looking things up?\" She's half-convinced it's a tiny genius living in her phone.",
+      "task": "In plain, friendly words, tell your aunt what the AI actually is and how it produces its answers, so she can use it with the right expectations.",
+      "model": "No tiny genius, and no person typing on the other end, but it's still genuinely useful. What she's using is a language model: a program that has read an enormous amount of text and learned the patterns in how words tend to follow one another. When she types a question, it doesn't 'understand' it the way a friend would, and it isn't searching the web by default. It's predicting, one chunk at a time, what words would most naturally come next, given everything she wrote plus all the patterns it picked up in training. That's why it can sound so fluent and confident even when it's wrong, because sounding right and being right are two different things to a pattern-predictor. The good news: this makes it fantastic for things like rewriting an email, explaining an idea, or brainstorming, where 'natural and well-phrased' is exactly what you want. Just don't treat its confidence as proof. It's a brilliant writing helper, not an all-knowing oracle.",
       "pts": [
-        "The model generates text, it doesn't look up real sources by default",
-        "Specific, confident details (authors, years) are easy for it to fabricate",
-        "Polished formatting is not evidence of correctness",
-        "Verify each citation independently before it leaves the building",
-        "Use the model for drafting/phrasing, not as a source of truth"
+        "It's a language model (a program), not a person and not a tiny mind that understands you",
+        "It works by predicting likely next words from patterns it learned in training",
+        "It doesn't look things up by default, so confidence is not the same as being correct",
+        "It's great for writing, explaining, and brainstorming where good phrasing matters",
+        "Use it as a helper, not as an all-knowing source of truth"
       ]
     },
     {
       "id": "s2",
       "block": "b1",
-      "title": "The surprise bill",
-      "sit": "A friend started using an AI tool that charges by usage. They mostly ask short questions, so they expected it to be nearly free. At the end of the month the bill is much bigger than they imagined. Looking back, most of their sessions involved pasting in long PDFs and email threads and asking the model to summarize or rewrite them, often getting back long, detailed answers.",
-      "task": "Your friend is baffled and asks why short questions led to a big bill. Explain it in plain terms, and give them two simple ways to spend less.",
-      "model": "The 'short question' is only a sliver of what they were paying for. These tools bill by tokens, the little chunks text gets sliced into, and every PDF and email thread they pasted in counts as input tokens, often thousands of them. On top of that, the long, detailed answers they got back are output tokens, which are billed too and are frequently the bigger half. So a one-line question wrapped around a twenty-page paste and a two-page answer is actually a very large request. Two easy fixes: first, paste in only the part that matters instead of the whole document, the token count drops immediately. Second, ask for shorter, more focused answers (\"summarize in five bullet points\"), since output is billed as well. Nothing here is broken, it's just that 'short question' and 'few tokens' aren't the same thing.",
+      "title": "The mystery word count",
+      "sit": "A friend keeps hearing the word \"tokens\" in AI apps, and it's making no sense to her. The app told her a long email she pasted was \"about 1,500 tokens,\" even though it was only a few hundred words. She asks you, a little embarrassed, \"What even is a token, and why should I care?\"",
+      "task": "Explain what a token is in everyday terms, and give her one practical reason it's worth knowing about.",
+      "model": "Great question, and not embarrassing at all, almost nobody is told this up front. A token is just a small chunk of text the model reads. It's usually not a whole word: it's more like a piece of one. A short common word like 'cat' might be one token, while a longer word like 'unbelievable' might be split into a few pieces ('un', 'believ', 'able'), and spaces and punctuation count too. So 'a few hundred words' can easily come out to a thousand-plus tokens, which is exactly what she saw. Why care? Because tokens are the unit everything is measured in: how much text you can send at once, how fast you get an answer, and, if you're on a paid tool, what you're charged. So the practical takeaway is simple: the more text you pour in (long pastes, whole documents) and the longer the answers you ask for, the more tokens, which means slower and pricier. Knowing that, she can keep her pastes and her requests trim when it matters.",
       "pts": [
-        "Billing is by tokens, not by number of questions",
-        "Pasted documents are input tokens, often the bulk of the cost",
-        "Long answers are output tokens and are billed too, often the bigger half",
-        "Fix one: paste only the relevant section, not the whole document",
-        "Fix two: ask for shorter, more focused answers to cut output tokens"
+        "A token is a small chunk of text, usually a piece of a word, not a whole word",
+        "Spaces and punctuation count, so word count and token count don't match",
+        "Tokens are the unit for how much you can send, how fast it is, and what you pay",
+        "More text in and longer answers out means more tokens",
+        "Practical takeaway: keep pastes and requested answers trim when speed or cost matters"
       ]
     },
     {
       "id": "s3",
       "block": "b1",
-      "title": "The assistant that lost the thread",
-      "sit": "A colleague is using an AI chat to help plan a big event. Early on, they told it several key constraints: the venue holds 80 people, the budget is tight, and one guest has a severe nut allergy. After a long back-and-forth, dozens of messages about decorations, music, and scheduling, they ask it to finalize the catering. The AI confidently suggests a menu featuring a nut-heavy dish, for 150 people, with premium pricing. The colleague is alarmed and says the AI 'clearly can't be trusted.'",
-      "task": "Your colleague wants to abandon the tool. Explain what actually went wrong and how to use it more reliably, without overpromising what the AI can do.",
-      "model": "It's worth understanding before abandoning it, because this is predictable, not random. The model has no memory of its own; each turn it only sees what still fits in its context window. Those crucial early constraints, 80 people, tight budget, nut allergy, were near the start of a very long conversation, and as the chat grew, the earliest messages dropped off the edge of the window. By the time they asked about catering, the model genuinely no longer had those details in front of it, so it filled the gaps with plausible-sounding defaults. It wasn't ignoring the allergy; it simply couldn't see it anymore. The reliable way to work: when a detail truly matters, restate it right where it's needed (\"finalize catering for 80 people, tight budget, and absolutely nut-free\"). For something this important, a fresh chat with a short summary of the hard constraints up top works even better. And for a safety-critical detail like an allergy, treat the AI as a drafting aid and have a human double-check the final menu, no AI should be the last line of defense there.",
+      "title": "The assistant that forgot the rules",
+      "sit": "A colleague is using a chat assistant to help plan a big family reunion. Early on he told it the important stuff: the venue holds 80 people, the budget is tight, and his nephew has a serious peanut allergy. After a long back-and-forth, dozens of messages about decorations, music, and timing, he asks it to finalize the food. It cheerfully suggests a peanut-heavy menu, for 150 people, at fancy-restaurant prices. He's upset and says the AI \"clearly can't be trusted.\"",
+      "task": "Your colleague is ready to quit the tool. Explain what really went wrong, and how to use it more reliably, without pretending the AI is smarter than it is.",
+      "model": "Before he quits, it's worth knowing this was predictable, not the AI being flaky. The model can only 'see' a certain amount of recent conversation at once, picture a window that slides along and only holds so much text. That space is the context window. Those crucial early rules, 80 people, tight budget, peanut-free, were said way back at the start of a very long chat, and as the conversation kept growing, the oldest messages slid out of that window. By the time he asked about food, the model literally no longer had those rules in front of it, so it filled the gaps with normal-sounding guesses. It wasn't ignoring the allergy; it just couldn't see it anymore. The reliable habit: when something really matters, repeat it right where you need it ('finalize the menu for 80 people, tight budget, and absolutely peanut-free'). For a big task, starting a fresh chat with a short summary of the must-haves at the top works even better. And for something safety-critical like an allergy, let the AI draft, but have a human check the final menu. It's a helper, not the last line of defense.",
       "pts": [
-        "The model has no memory of its own; it only sees what's in the context window now",
-        "Early constraints dropped off the edge as the long conversation grew",
-        "It wasn't ignoring the details, it literally no longer received them that turn",
-        "Restate critical details right where they're needed, or start fresh with a summary",
-        "For safety-critical facts (like an allergy), keep a human in the loop on the final check"
+        "The model only sees a limited window of recent text, the context window",
+        "Early instructions slid out of that window as the long conversation grew",
+        "It wasn't ignoring the rules; they simply weren't in front of it anymore",
+        "Repeat critical details right where they matter, or start fresh with a short summary on top",
+        "For safety-critical facts (like an allergy), keep a human checking the final result"
       ]
     },
     {
       "id": "s4",
       "block": "b1",
-      "title": "The blah answer",
-      "sit": "A friend is frustrated. They asked an AI to \"write a bio for my LinkedIn\" and got back something generic and lifeless that could belong to anyone. They've concluded the AI \"just isn't good at writing\" and are about to give up on it.",
-      "task": "Your friend shows you the bland result. Without writing the bio for them, explain why it came out generic and coach them on a better prompt.",
-      "model": "The AI isn't bad at writing, it just had almost nothing to work with. The prompt 'write a bio for my LinkedIn' doesn't say who you are, who it's for, or what it should sound like, so the model did the only thing it could: produced the safe, average, could-be-anyone version. The fix isn't a magic phrase, it's giving it a proper brief, the way you'd brief a sharp assistant on day one. Tell it the task and the specifics: your role and years of experience, two or three things you're known for, the audience (recruiters? clients?), and the tone you want (warm and human, not corporate). Add the shape, too, 'three short sentences, first person.' And if the first draft is close but a little stiff, don't start over, just say 'good, make it warmer and cut the jargon.' Same model, completely different result, because now it actually knows what 'good' looks like. Vague in, vague out; specific in, specific out.",
+      "title": "The boring bio",
+      "sit": "A friend is annoyed. He typed \"write a bio for my LinkedIn\" into a chat assistant and got back something so generic it could describe literally anyone. He's decided the AI \"just can't write\" and is about to give up on it entirely.",
+      "task": "Without writing the bio for him, explain why the answer came out so bland, and coach him toward a prompt that would actually work.",
+      "model": "The AI can write, it just had nothing to write about. 'Write a bio for my LinkedIn' doesn't tell it who you are, who's reading it, or how you want to sound, so it did the only thing it could and gave you the safe, average, could-be-anyone version. The fix isn't some secret magic phrase. It's giving it a proper brief, the way you'd brief a new assistant on day one. Tell it the facts: your job and how long you've done it, two or three things you're genuinely known for, who it's for (recruiters? clients?), and the vibe you want (warm and human, not stiff corporate-speak). Tell it the shape too, like 'three short sentences, written in first person.' And here's the part people skip: if the first draft is close but a bit off, don't start over, just nudge it ('good, but make it warmer and drop the buzzwords'). Same AI, totally different result, because now it actually knows what you're going for. The rule of thumb: vague question, vague answer; specific question, specific answer.",
       "pts": [
-        "The generic answer came from a vague prompt, not a weak model",
-        "The model takes your words literally and can't guess what you didn't say",
-        "Give it the task, the specifics/context, the audience, and the tone",
-        "Specify the format and length (e.g. 'three short sentences, first person')",
-        "Refine in small steps instead of rewriting from scratch"
+        "The bland result came from a vague prompt, not a weak AI",
+        "It can't guess details you didn't tell it; it takes your words at face value",
+        "Give it the facts: who you are, who it's for, and the tone you want",
+        "Spell out the format and length (e.g. 'three short sentences, first person')",
+        "Refine with small follow-up nudges instead of starting from scratch"
       ]
     },
     {
       "id": "s5",
       "block": "b2",
-      "title": "The chat that started over",
-      "sit": "A colleague spent an hour yesterday in an AI chat working out a detailed plan for a project, the model knew all the context and was genuinely helpful. Today they opened the app, started typing in a fresh chat, and the AI acted like it had never heard of the project. They're convinced the tool 'deleted their work' or is broken.",
-      "task": "Your colleague is annoyed and a little worried their data is gone. Explain what's actually happening, reassure them, and tell them how to pick up where they left off.",
-      "model": "Nothing's broken and nothing's deleted. The key thing to know is that the model has no memory of its own, what felt like 'the AI knew the project' yesterday was really the app re-sending that whole conversation's transcript to the model on every turn. A new chat is a fresh, empty transcript, so today's model genuinely has nothing about the project in front of it. Yesterday's chat almost certainly still exists, look in the app's history or sidebar, and if they reopen it, all that context is right there and they can continue. If they'd rather work in a new chat, they just need to bring the context with them: paste in a short summary of the plan, or copy the key points from yesterday's conversation into the first message. Optionally, some products have a 'memory' feature that saves notes about you across chats, but that's an extra layer, not the default, and it only stores what it's set up to. The mental model to keep: each chat is its own transcript, and the AI only knows what's in the one you're currently in.",
+      "title": "Where did my conversation go?",
+      "sit": "A colleague spent an hour yesterday in a chat assistant working out a detailed plan for a trip, and it was genuinely helpful, it 'knew' everything they'd discussed. Today they opened the app, started typing in a new chat, and it acted like it had never heard of the trip. They're frustrated and a little worried, convinced the app 'deleted their work' or is broken.",
+      "task": "Reassure your colleague, explain what's actually going on, and tell them how to pick up where they left off.",
+      "model": "Take a breath, nothing's broken and nothing got deleted. Here's the thing that makes it click: the AI has no memory of its own between messages. What felt like 'it knew the trip' yesterday was really the app quietly re-sending the whole conversation back to the model every time you hit enter, so it always had the full thread in front of it. A brand-new chat is a blank page, there's no earlier conversation attached, so today's model genuinely has nothing about the trip to go on. The good news: yesterday's chat almost certainly still exists. Look for a history list or sidebar in the app, open that old conversation, and everything is right there, ready to continue. If you'd rather work in a fresh chat, just bring the context with you: paste a short summary, or copy the key points from yesterday into your first message. (Some apps also have a 'memory' setting that remembers a few things about you across chats, but that's an optional extra, not the default.) The mental model to keep: each chat is its own self-contained conversation, and the AI only knows what's in the one you're currently in.",
       "pts": [
-        "The model has no memory of its own; the app re-sends the transcript each turn",
-        "A new chat is a fresh, empty transcript, so it knows nothing about the old one",
-        "Nothing was deleted, yesterday's chat is in the history/sidebar; reopening it restores the context",
-        "To continue in a new chat, paste a short summary of the key points into the first message",
-        "A 'memory' feature can carry notes across chats, but it's an optional add-on, not the default"
+        "The AI has no memory of its own; the app re-sends the whole conversation each time",
+        "A brand-new chat is blank, so it knows nothing about an earlier one",
+        "Nothing was deleted, the old chat is in the app's history/sidebar; reopen it to continue",
+        "To continue in a new chat, paste a short summary or the key points into the first message",
+        "A 'memory' setting can carry a few things across chats, but it's optional, not the default"
       ]
     },
     {
       "id": "s6",
       "block": "b2",
-      "title": "The too-good source",
-      "sit": "A student is writing a paper and asked an AI for recent statistics and sources on a niche topic. It produced exactly what they hoped: three specific figures, each with a named study, a journal, and a year, all from the last couple of years. It looks perfect, and they're about to cite it. They mention, almost in passing, that the topic is very current.",
-      "task": "The student asks whether they can cite these directly. Explain the two separate risks here and what to do, without telling them the AI is useless.",
-      "model": "Hold on before citing any of it, there are actually two different problems stacked here. First, hallucination: when you ask a model for specific statistics with named studies and years, it produces text shaped like real citations, and on a niche topic it will often invent the details, realistic author names, plausible journals, sources that simply don't exist. The polish makes it feel trustworthy, which is exactly what makes it dangerous. Second, the knowledge cutoff: you said the topic is very current, but the model's training stopped at some past date, so 'recent' figures may be guessed from an outdated world, and the model usually can't tell you that. So the two risks are 'these sources may be fabricated' and 'this info may be out of date,' and the model sounds equally confident either way. What to do: treat the AI's list as leads, not facts. Try to find each source independently, search the title and authors; if you can't verify it exists, don't use it. For current data, go to a real, up-to-date source (a database, the original studies, a search tool that actually browses) rather than the model's memory. The AI is great for getting oriented and drafting your prose, just not for being the source of truth on specific, recent facts.",
+      "title": "Sources that look too perfect",
+      "sit": "A student is writing a paper and asked a chat assistant for recent statistics and sources on a fairly niche topic. It gave back exactly what she hoped for: three specific figures, each with a named study, a journal, and a year, all from the last year or two. It looks flawless, and she's about to drop the citations straight into her paper. In passing, she mentions the topic is changing fast right now.",
+      "task": "She asks if she can cite these directly. Explain the two separate risks at play and what to do instead, without telling her the AI is useless.",
+      "model": "Hold on before you cite any of those, there are actually two different traps stacked here. First, hallucination: when you ask for specific stats with named studies and years, the model produces text shaped like real citations, and on a niche topic it will often just invent the details, real-sounding author names, plausible journals, sources that don't actually exist. The fact that it looks flawless is exactly what makes it risky. Second, the knowledge cutoff: a model's training stops at some past date, so it only 'knows' the world up to then. You said this topic is changing fast right now, which means any 'recent' figure could be guessed from an out-of-date picture, and the model usually won't warn you. So the two risks are 'these sources might be made up' and 'this info might be stale', and it sounds equally confident either way. What to do: treat its list as leads, not facts. Search each title and author yourself; if you can't find the real source, don't use it. For anything current, go to an actual up-to-date source, the original studies, a real database, or an AI mode that genuinely searches the web. Lean on the AI to help you understand the topic and draft your writing, just not to be the final word on specific, recent facts.",
       "pts": [
-        "Two separate risks: fabricated sources (hallucination) and out-of-date info (knowledge cutoff)",
+        "Two separate risks: made-up sources (hallucination) and stale info (knowledge cutoff)",
         "Specific citations on niche topics are exactly what models invent most convincingly",
-        "'Current' figures may be guessed from before the model's cutoff, and it won't reliably warn you",
-        "Confidence and polish are not evidence; verify each source exists independently before citing",
-        "For recent, factual data use a real up-to-date source; use the AI for drafting, not as the source of truth"
+        "A model only knows up to its training cutoff, so 'recent' facts can be out of date",
+        "Looking flawless is not proof; verify each source actually exists before citing it",
+        "For current facts use a real up-to-date source; use the AI to understand and draft, not as the final word"
       ]
     },
     {
       "id": "s7",
       "block": "b2",
-      "title": "Wrong app for the job",
-      "sit": "A friend tried two things with an AI assistant and got burned by both. They pasted a scanned image of a contract (a photo of the pages) and asked for a summary, it gave a vague, partly-wrong answer. Then they asked it for today's exchange rate for a trip, and it confidently gave a number that turned out to be stale. They're ready to declare AI 'overhyped and unreliable.'",
-      "task": "Your friend wants to write the whole thing off. Explain what went wrong in each case in plain terms, and tell them how to actually get what they wanted.",
-      "model": "Both failures make total sense once you see what the tool can and can't do on its own, and neither means AI is useless. Case one, the scanned contract: reading a file isn't the model 'looking' at your pages, a tool has to extract the text first and feed it in. A scanned photo is just an image, so if there's no real text to pull out (or the tool's text-reading is weak), the model is working from almost nothing, hence the vague, partly-invented summary. The fix: give it actual text, copy-paste the contract text if you have a digital version, or use a tool that does proper text recognition on images first, then summarize. Case two, the exchange rate: the plain model's knowledge is frozen at its training cutoff and it can't reach the internet by itself, so 'today's rate' was a stale guess. The fix: use a product (or mode) that actually has web search, and check that it really searched, look for a source or link, or honestly, for a live exchange rate, just use a finance site. The real lesson isn't 'AI is unreliable,' it's that abilities like reading images and searching the web are tools that a given product may or may not have. Match the tool to the task and both of these jobs are easy.",
+      "title": "Right idea, wrong setup",
+      "sit": "A friend tried two things with a chat assistant and struck out both times. First, he took a photo of a printed contract and asked for a summary, and got a vague, partly-wrong answer. Then he asked for today's exchange rate for an upcoming trip, and it confidently gave a number that turned out to be days old. He's ready to declare the whole AI thing \"overhyped and useless.\"",
+      "task": "Talk him off the ledge. Explain in plain terms what went wrong in each case, and tell him how to actually get what he wanted.",
+      "model": "Both of these went sideways for understandable reasons, and neither means AI is useless, he just needs the right setup. The contract photo first: when an app 'reads' a file, it isn't really looking at your picture the way you do. Behind the scenes a tool has to pull the text out and hand it over. A photo of pages is just an image, so if nothing extracts the words well, the model is basically guessing from scraps, hence the vague, partly-made-up summary. The fix: give it real text. If you have a digital copy, copy-paste the actual words, or use an app that does proper text-from-image reading first, then ask for the summary. Now the exchange rate: a plain chat model can't reach the internet on its own and only knows the world up to its training cutoff, so 'today's rate' was a stale guess, not a live lookup. The fix: use an app or mode that actually searches the web, and check it really did (look for a link or source it cites), or honestly, for a live rate, just glance at a finance site. The real lesson isn't 'AI is unreliable.' It's that abilities like reading images and searching the web are extra tools a given app may or may not have, so match the setup to the task and both of these become easy.",
       "pts": [
-        "Reading a file means a tool extracted the text first; a scanned image may have no text to read",
-        "Fix for the contract: give it real text (digital copy), or use proper text-recognition first",
-        "The plain model can't reach the internet and is frozen at its cutoff, so 'today's rate' was a stale guess",
-        "Fix for the rate: use a product with web search and confirm it actually searched (look for a source)",
-        "Capabilities like image-reading and search are tools a product may or may not have; match the tool to the task"
+        "'Reading a file' means a tool extracted the text first; a photo may have no clean text to pull",
+        "Fix for the contract: give it real text (a digital copy) or use proper text-from-image reading first",
+        "A plain chat model can't browse the web and is frozen at its cutoff, so 'today's rate' was a stale guess",
+        "Fix for the rate: use an app/mode that actually searches, and check it cited a source",
+        "Image-reading and web search are extra tools an app may or may not have; match the setup to the task"
       ]
     },
     {
       "id": "s8",
       "block": "b2",
-      "title": "One tool for everything",
-      "sit": "A new colleague has just discovered AI and is using the biggest, most powerful (and most expensive) model for absolutely everything, drafting quick internal Slack messages, brainstorming, and also pasting in huge documents for long detailed summaries. They're proud of always using 'the best one,' but the team's bill is climbing and some quick tasks feel slow. They ask you whether they're doing it right.",
-      "task": "Without overwhelming them, help them build a simple habit for choosing a model and managing cost, and for deciding when to trust the output.",
-      "model": "You've got the instinct to do good work, let's just right-size it, because 'always the best model' is costing speed and money you don't need to spend. Two quick questions before any task will sort almost everything out. First, how capable does this actually need to be? A quick Slack message or a brainstorm doesn't need the heavyweight, a smaller, faster, cheaper model nails those and feels snappier. Save the big model for genuinely hard, high-stakes work. Second, how much does being wrong cost? For low-stakes throwaway stuff, move fast and accept good-enough. For anything important, use the stronger model, give it real sources, and check the output yourself. On the climbing bill: cost tracks tokens, and the big drivers are exactly what you're doing, pasting in huge documents (input) and asking for long detailed answers (output). Trim the pastes to the part that matters and ask for shorter summaries, and you'll see the cost drop fast. And one habit that prevents most mistakes: trust the model to draft, brainstorm, and rephrase, but verify it on facts, numbers, recent events, and citations. Do those things and you're using it like a pro. If you find you want to go further, automating this, wiring up tools, controlling cost in real systems, that's exactly what the Engineering Mastery course covers next.",
+      "title": "Using the Ferrari for everything",
+      "sit": "A new coworker just discovered AI and is using the biggest, most powerful (and priciest) model for absolutely everything, quick \"can you reword this\" messages, casual brainstorming, and also dumping in huge documents for long detailed summaries. He's proud of always picking 'the best one,' but the team's bill is creeping up and the quick little tasks feel weirdly slow. He asks you, sincerely, if he's doing it right.",
+      "task": "Without overwhelming him, give him a simple habit for choosing a model, keeping cost sane, and knowing when to double-check the answer.",
+      "model": "Love the instinct to do good work, let's just right-size it, because 'always the most powerful model' is costing you speed and money you don't need to spend. Two quick questions before any task will sort almost all of this out. First: how hard is this, really? A quick reword or a casual brainstorm doesn't need the heavyweight, a smaller, faster, cheaper model handles those beautifully and feels snappier. Save the big one for genuinely tricky, high-stakes work. Second: what happens if it's wrong? For low-stakes, throwaway stuff, move fast and accept good-enough. For anything that matters, use the stronger model, give it real sources, and check the output yourself. On the creeping bill: cost mostly tracks how much text goes in and out, and your big drivers are exactly the things you mentioned, dumping in huge documents (lots of text in) and asking for long detailed answers (lots of text out). Trim the pastes to the part that actually matters and ask for shorter summaries, and you'll watch the cost drop. And one habit that prevents most mistakes: trust it to draft, brainstorm, and reword, but double-check it on facts, numbers, recent events, and anything it cites. Do that and you're using it like a pro. And if you ever want to go further, building this into real tools, wiring it into your own apps, controlling cost at scale, that's exactly what the Engineering Mastery course picks up next.",
       "pts": [
-        "Right-size the model: small/fast/cheap for easy tasks, the heavyweight only for hard, high-stakes work",
-        "Two deciding questions: how capable must it be, and what does being wrong cost?",
-        "Cost tracks tokens; big pasted inputs and long outputs are the bill, trim both",
-        "Trust it to draft/brainstorm/rephrase; verify it on facts, numbers, recent events, and citations",
-        "Ready to build, not just chat? The Engineering Mastery course is the next step"
+        "Right-size it: small/fast/cheap for easy tasks, the powerful model only for hard, high-stakes work",
+        "Two quick questions: how hard is this, and what happens if it's wrong?",
+        "Cost mostly tracks text in and out; big pastes and long answers are the bill, so trim both",
+        "Trust it to draft, brainstorm, and reword; double-check facts, numbers, recent events, and citations",
+        "Want to build with it, not just chat? Engineering Mastery is the natural next step"
       ]
     }
   ]
