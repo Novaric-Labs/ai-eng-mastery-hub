@@ -411,6 +411,10 @@
           "If you need current info, choose a product with web search. If you work with images or PDFs, choose one that handles them. The 'best' AI is the one whose bundled capabilities match what you're actually doing."
         ],
         [
+          "The app is doing a lot for you",
+          "Every time you chat, the product is quietly working on your behalf: re-sending the whole conversation, slipping in a hidden system message, and routing your words to a model someone else chose. Builders do all of that themselves by calling the model directly through an API, a way for their own software to hand text to the model and get text back. You don't need to write a line of code to finish here, but seeing the chat app as a convenient wrapper around a raw model call is exactly the shift the Engineering Mastery course starts from."
+        ],
+        [
           "Where to go next",
           "If you want to go from using these models to building with them, designing prompts at scale, wiring up tools, controlling cost in real systems, that's the Engineering Mastery course. Everything here is the foundation it assumes."
         ]
@@ -1369,7 +1373,8 @@
     { "m": "tools", "f": "Why does 'can this AI do X?' depend on the product, not just the model?", "b": "The engine is similar everywhere; what differs is which tools each product wires up (search, images, files). So the real question is 'does this product give the model a tool for X?', which is why two AI apps can have very different abilities." },
     { "m": "using", "f": "What two questions decide how much care a task needs?", "b": "How capable does the model need to be, and how much does being wrong cost me? Cheap-and-fast for low stakes; stronger model, real sources, and verification for high stakes. That's the whole course as a quick habit." },
     { "m": "using", "f": "When should you trust the model versus verify it?", "b": "Trust it to draft, brainstorm, explain, and rephrase. Verify it on facts, numbers, recent events, and citations. This single split prevents most AI mishaps." },
-    { "m": "using", "f": "Where does most everyday AI cost come from, and what's next after Foundations?", "b": "Cost tracks tokens, so big pasted inputs and long answers are the expense, trim both. When you're ready to build with these models, not just chat, the Engineering Mastery course picks up right where this ends." }
+    { "m": "using", "f": "Where does most everyday AI cost come from, and what's next after Foundations?", "b": "Cost tracks tokens, so big pasted inputs and long answers are the expense, trim both. When you're ready to build with these models, not just chat, the Engineering Mastery course picks up right where this ends." },
+    { "m": "using", "f": "What is the chat app quietly doing for you that a builder does themselves?", "b": "Re-sending the whole conversation, adding the hidden system message, and picking and calling the model. Builders do all of it directly through an API, software that hands text to the model and gets text back. That shift, from using a chat app to making the call yourself, is where the Engineering Mastery course begins." }
   ],
   "SCENARIOS": [
     {
