@@ -96,7 +96,7 @@ export default function PlanPicker() {
             )}
             <div style={{ fontSize: 13, color: "var(--dim2)", fontWeight: 600 }}>{p.label}</div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 6, margin: "6px 0 2px" }}>
-              <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-.02em" }}>{p.priceLabel}</span>
+              <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: "-.02em", color: "var(--text)" }}>{p.priceLabel}</span>
             </div>
             <div style={{ fontSize: 12, color: "var(--dim)" }}>{p.cadence}</div>
             <div style={{ fontSize: 12.5, color: "var(--accent)", marginTop: 8, fontWeight: 600 }}>
