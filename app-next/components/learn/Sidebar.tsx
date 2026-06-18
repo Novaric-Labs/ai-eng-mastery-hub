@@ -19,9 +19,9 @@ import {
   ChevronDown,
   ChevronLeft,
   Pencil,
+  Settings,
 } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
-import ManageMembership from "@/components/ManageMembership";
 import RedeemDialog from "./RedeemDialog";
 import { useCourseStore } from "./StoreProvider";
 import { courseBySlug } from "@/lib/courses";
@@ -189,10 +189,9 @@ export default function Sidebar() {
             <RedeemDialog className="btn ghost" style={{ width: "100%", marginTop: 6 }} />
           </>
         ) : (
-          <ManageMembership
-            className="navbtn"
-            label="Manage membership"
-          />
+          <Link href="/account" className="navbtn">
+            <Settings size={16} strokeWidth={1.75} /> Manage membership
+          </Link>
         )}
         <button
           className="navbtn"

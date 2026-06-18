@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Check, Clock, BarChart3, Layers, Lock, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Clock, BarChart3, Layers, Lock, Sparkles, Settings } from "lucide-react";
 import NovaMark from "@/components/NovaMark";
 import SignOutLink from "@/components/SignOutLink";
-import ManageMembership from "@/components/ManageMembership";
 import { supabaseServer } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { hasActiveMembership } from "@/lib/entitlement";
@@ -187,7 +186,14 @@ function CatalogHeader({ email, member }: { email: string; member: boolean }) {
         </Link>
         <nav className="sh-nav" style={{ alignItems: "center", gap: 14 }}>
           {email && <span style={{ color: "var(--faint)", fontSize: 12.5 }}>{email}</span>}
-          {member && <ManageMembership />}
+          {member && (
+            <Link
+              href="/account"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "var(--dim)", fontSize: 13 }}
+            >
+              <Settings size={14} strokeWidth={1.75} /> Manage membership
+            </Link>
+          )}
           <SignOutLink />
         </nav>
       </div>
