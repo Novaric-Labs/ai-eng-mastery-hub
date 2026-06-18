@@ -29,24 +29,31 @@ export async function POST(request: Request) {
 
   const { data: sub } = await supabase
     .from("subscriptions")
-    .select("stripe_subscription_id, plan")
+    .select("stripe_subscription_id")
     .maybeSingle();
   if (!sub?.stripe_subscription_id) {
     return NextResponse.json({ error: "no_subscription" }, { status: 400 });
   }
-  if (sub.plan === plan.id) {
-    return NextResponse.json({ error: "same_plan" }, { status: 400 });
-  }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const current = await stripe.subscriptions.retrieve(sub.stripe_subscription_id);
-  const itemId = current.items.data[0]?.id;
-  if (!itemId) {
+  const item = current.items.data[0];
+  if (!item?.id) {
     return NextResponse.json({ error: "no_subscription_item" }, { status: 400 });
   }
 
+  // Same-plan guard compares against the LIVE Stripe price — the same source of
+  // truth the account page uses to show the current plan. The DB `plan` column
+  // lags behind a switch until the webhook syncs it, which previously rejected a
+  // valid switch *back* to the original plan as "same_plan".
+  const currentPriceId =
+    typeof item.price === "string" ? item.price : item.price?.id ?? null;
+  if (currentPriceId === newPrice) {
+    return NextResponse.json({ error: "same_plan" }, { status: 400 });
+  }
+
   await stripe.subscriptions.update(sub.stripe_subscription_id, {
-    items: [{ id: itemId, price: newPrice }],
+    items: [{ id: item.id, price: newPrice }],
     proration_behavior: "create_prorations",
     metadata: { user_id: user.id, plan: plan.id },
   });
