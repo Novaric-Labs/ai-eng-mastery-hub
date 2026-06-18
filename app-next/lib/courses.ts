@@ -58,6 +58,24 @@ export const COURSES: CourseMeta[] = [
     status: "live",
     accent: "#7c6bff",
   },
+  {
+    slug: "using-claude",
+    title: "Claude, Actually",
+    subtitle:
+      "Get real work done with AI — know which Claude to reach for, and how to get great results.",
+    blurb:
+      "A practical, no-jargon course for everyday users: when to use Chat, Cowork, or Code, and how to get great results from each. Decision drills, plain-English mental models, a reach-for-this cheat sheet, and real-task scenarios.",
+    bestFor: [
+      "Knowledge workers, writers & founders",
+      "Anyone who's tried the chat box and bounced",
+      "Non-engineers who want to actually use Claude",
+    ],
+    level: "Beginner",
+    estHours: "4–6 hrs",
+    moduleCount: 7,
+    status: "coming_soon",
+    accent: "#d97757",
+  },
 ];
 
 export const courseBySlug = (slug: string): CourseMeta | undefined =>

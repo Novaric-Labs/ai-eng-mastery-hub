@@ -1,0 +1,1312 @@
+{
+  "BLOCKS": [
+    { "id": "b1", "name": "Block 1 · Pick the right Claude" },
+    { "id": "b2", "name": "Block 2 · Use each surface well" }
+  ],
+  "MODULES": [
+    {
+      "id": "meet",
+      "block": "b1",
+      "title": "Meet Claude — and where it lives",
+      "tag": "One AI, several front doors: Chat, Cowork, and Code",
+      "why": "Most people meet Claude through a single chat window and assume that's all there is. It isn't. The exact same intelligence shows up in a few different places, called surfaces, and each one is shaped for a different kind of work. Once you know the surfaces exist and roughly what each is for, you stop forcing every task through the chat box, and you start reaching for the one that actually fits. This first lesson is just the lay of the land, the map you'll use for the rest of the course.",
+      "mental": "Picture Claude as one very capable colleague who can show up in <b>different rooms of your workspace</b>. In the <b>Chat</b> room, you sit across the desk and go back and forth, you ask, it answers, you ask again. In the <b>Cowork</b> room, you hand off a whole job and let your colleague go work on it across your files and tools, then come back with a finished result. In the <b>Code</b> room, that same colleague rolls up their sleeves inside actual software. Same colleague, same smarts, three rooms. Knowing which room you're in is the whole game: <b>you don't change who you're talking to, you change how much you hand over and how much you stay hands-on.</b>",
+      "concepts": [
+        [
+          "Surface",
+          "A place where you use Claude. There are three main ones, Chat, Cowork, and Code, plus a couple of smaller ones. They share the same underlying intelligence; what changes is how you work with it and how much it does on its own."
+        ],
+        [
+          "Chat (claude.ai and the apps)",
+          "The familiar back-and-forth window, on the web, the desktop app, and your phone. You ask, it answers, you steer every step. Best for questions, thinking something through, drafting, and looking at a file or image you upload."
+        ],
+        [
+          "Cowork",
+          "A mode in the Claude desktop app where you describe a finished deliverable once, then let Claude go do the work on its own, across folders you allow it to touch, the web, and tools you connect. It comes back with the actual thing: a formatted document, a built-out spreadsheet, a research summary. Made for non-coders."
+        ],
+        [
+          "Code (Claude Code)",
+          "The surface for building and changing real software. It lives in places engineers work, a terminal, code editors, and more. You don't need it to get value from Claude; if you're not living in a terminal, Cowork is the friendlier path to the same kind of hands-off help."
+        ],
+        [
+          "Same brain, different front doors",
+          "Cowork and Code actually run on the same hands-off engine under the hood, Cowork is just that engine made simple for everyday knowledge work. So the choice between surfaces isn't about which one is 'smarter', it's about which one fits how you want to work."
+        ],
+        [
+          "You're always in control",
+          "No matter the surface, the important calls stay with you. In Chat you drive every turn. In Cowork and Code, Claude works on its own but checks in on big decisions and lets you interrupt, redirect, or stop it at any point."
+        ]
+      ],
+      "mistakes": [
+        "Assuming the chat window is the only way to use Claude, there are whole surfaces built for handing off finished work, not just asking questions",
+        "Thinking Cowork or Code is 'more advanced Chat', they're a different way of working (hand off the job) not a smarter version of the same back-and-forth",
+        "Believing Code is only for programmers and writing off the hands-off surfaces entirely, Cowork gives non-coders the same kind of autonomous help",
+        "Worrying that a hands-off surface will run wild, you can watch it, redirect it, and stop it, and it pauses for the consequential decisions",
+        "Trying to force a big multi-step job through plain Chat one message at a time, when a hand-off surface would just do the whole thing"
+      ],
+      "flags": [
+        "\"I keep copy-pasting between Claude and my files for one task\", that's a sign the job wants Cowork, where Claude touches the files itself",
+        "\"This is just a quick question or a quick draft\", that's Chat's home turf; no need for anything fancier",
+        "\"Everyone says I need Claude Code but I don't write code\", you probably want Cowork, the friendly hands-off surface for non-coders",
+        "\"I'm nervous about letting AI loose on my stuff\", good instinct; the hands-off surfaces keep you in the loop and let you stop them anytime"
+      ],
+      "ask": [
+        "Am I asking a question or thinking out loud (Chat), or handing off a whole job to be finished for me (Cowork or Code)?",
+        "Does this task need Claude to actually touch my files, my browser, or a connected tool, or just talk with me?",
+        "If it's a hand-off, am I a coder working in software (Code) or a knowledge worker with documents and spreadsheets (Cowork)?",
+        "Do I know I can interrupt, redirect, or stop a hands-off surface at any time, so I can let it run without worry?"
+      ],
+      "estMin": 25
+    },
+    {
+      "id": "decide",
+      "block": "b1",
+      "title": "The Decision: Chat vs Cowork vs Code",
+      "tag": "Two questions tell you which surface to reach for, every time",
+      "why": "This is the most useful lesson in the course, the one you'll actually run in your head before every task. There's a simple way to decide which surface fits, and it comes straight from Anthropic's own framing. Get this decision right and everything feels smooth: quick things stay quick, big things get handled, and you never feel like you're fighting the tool. Get it wrong and even simple work turns into a slog. So we're going to make the choice almost automatic.",
+      "mental": "Two questions decide it nearly every time. First: <b>is there a clear deliverable, an actual thing you want produced and finished?</b> Second: <b>does the work touch your files, your browser, or your tools?</b> If the answer to both is yes, you've got a job to hand off, reach for <b>Cowork</b> (or <b>Code</b> if you live in software). If it's really a one-off question, or you just want a thinking partner to bounce ideas off, that's <b>Chat</b>. As Anthropic frames it: <b>reach for Chat when you have a one-off question or want a thought partner; reach for Cowork when there's a clear deliverable and the work touches your files or tools.</b> Memorize those two sentences and you've basically got the whole module.",
+      "concepts": [
+        [
+          "The deliverable question",
+          "Ask: is there a specific finished thing I want at the end, a built spreadsheet, a formatted report, a folder of renamed files? A clear deliverable points toward a hand-off surface. A loose 'help me think' or 'what do you reckon' points toward Chat."
+        ],
+        [
+          "The touch-my-stuff question",
+          "Ask: does getting this done require working across my actual files, folders, browser, or connected tools? If yes, you want a surface that can reach those things and act (Cowork or Code), not just talk about them (Chat)."
+        ],
+        [
+          "Reach for Chat when...",
+          "You have a one-off question, want to think something through, need a draft or a rewrite, or want to analyze a single file or image you upload. You stay in the driver's seat, steering each turn. It's quick, conversational, and where most people spend most of their time."
+        ],
+        [
+          "Reach for Cowork when...",
+          "There's a clear deliverable and the work spans your files, your browser, or your tools. You describe the finished result once, and Claude goes and produces it, working across everything you've allowed, then hands it back. It's the move for 'go make this whole thing for me.'"
+        ],
+        [
+          "Reach for Code when...",
+          "You're building or changing real software in an actual codebase, and you're comfortable in developer tools like a terminal or code editor. It runs on the same hands-off engine as Cowork, just aimed at software work. If you're not a coder, that same power is waiting for you in Cowork."
+        ],
+        [
+          "When in doubt, start in Chat",
+          "If you genuinely can't tell, start a conversation in Chat. It's the lowest-friction surface, and Claude can help you figure out whether your task is actually a hand-off job. You can always graduate to Cowork once the deliverable becomes clear."
+        ]
+      ],
+      "mistakes": [
+        "Defaulting to Chat for a big multi-file job and then copy-pasting forever, that's exactly the deliverable-plus-touches-your-files pattern that wants Cowork",
+        "Reaching for a hands-off surface for a quick one-off question, that's overkill; Chat answers it faster",
+        "Picking a surface by which sounds most powerful instead of by the two questions (deliverable? touches your stuff?)",
+        "Assuming you must choose Code for any hands-off work, Code is the coder's version; Cowork is the same idea for everyone else",
+        "Freezing because you can't decide, when unsure, just start in Chat and let the task reveal what it really needs"
+      ],
+      "flags": [
+        "\"There's a specific finished thing I want, and it lives across my files\", that's the Cowork signal, loud and clear",
+        "\"I just want to bounce an idea around or get one answer\", that's Chat; don't overthink it",
+        "\"I'm describing the same task in pieces over ten messages\", you've outgrown Chat for this job; hand it off to Cowork",
+        "\"This is about changing actual software code\", that's Code's lane, if you're not a coder, get a teammate or start in Cowork for the non-code parts"
+      ],
+      "ask": [
+        "Is there a clear, specific deliverable I want at the end, or am I really just asking or thinking?",
+        "Does finishing this require Claude to touch my files, my browser, or a connected tool?",
+        "If both are yes, am I a software person (Code) or a documents-and-spreadsheets person (Cowork)?",
+        "If I honestly can't tell, can I just start in Chat and let the task show me what it needs?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "chat",
+      "block": "b2",
+      "title": "Chat, Done Right",
+      "tag": "The everyday surface, and the features that make it shine",
+      "why": "Chat is where you'll spend most of your Claude time, so a little skill here pays off constantly. It's not just a question box; it has real tools tucked inside, ways to keep a topic organized, turn an answer into something you can actually use, hand it files and images, let it search the web, and even talk to it out loud. Knowing what's there, and when to use it, is the difference between 'a chatbot I poke at' and 'a genuinely useful thinking and drafting partner.'",
+      "mental": "Think of Chat as <b>sitting across the desk from a sharp, fast colleague who only knows what you put in front of them.</b> You lead every turn: you ask, they answer, you refine. Around that conversation are a few handy tools, a place to keep related chats together (Projects), a side panel where it can build you a real document or draft (Artifacts), the ability to hand over files and images, a web search for fresh facts, and even a voice mode for talking instead of typing. None of it is complicated. The mindset is simply: <b>you're in the driver's seat, and these features are the dashboard, reach for the one that fits what you're doing right now.</b>",
+      "concepts": [
+        [
+          "The back-and-forth, you drive",
+          "Chat is turn by turn. You ask, Claude responds, you steer with the next message. Nothing happens until you send something, which makes it perfect for questions, thinking out loud, and refining a draft until it's right."
+        ],
+        [
+          "Projects (keep related work together)",
+          "A Project is a folder for a topic or an ongoing piece of work. You can keep relevant files and instructions in it, so every chat inside that Project starts already knowing the background, no re-explaining your situation each time."
+        ],
+        [
+          "Artifacts (a workspace for the actual thing)",
+          "When Claude makes something substantial, a document, a draft, a structured list, it can appear in a side panel called an Artifact instead of buried in the chat. You can read it cleanly, ask for edits, and copy it out when it's ready."
+        ],
+        [
+          "Files and images you upload",
+          "You can hand Chat a document, a spreadsheet, a screenshot, or a photo and ask about it, summarize this, find the key points, what's wrong with this layout. It works from what you give it, so a clear, readable file gets you a better answer."
+        ],
+        [
+          "Web search and memory",
+          "Chat can search the web for current information when a question needs fresh facts, and it can remember useful things about you across chats so you don't repeat yourself. Both are there to help; both are worth understanding so the answers don't surprise you."
+        ],
+        [
+          "Voice mode",
+          "On the apps you can talk to Claude out loud and hear it respond, handy when your hands are busy, you're walking, or you just think better out loud. It's the same Claude, just spoken instead of typed."
+        ]
+      ],
+      "mistakes": [
+        "Re-explaining your whole situation in every new chat, when a Project would hold that background for you automatically",
+        "Letting a long document Claude wrote get lost in the scroll, instead of using the Artifact panel to read and edit it cleanly",
+        "Assuming Claude can see something on your screen, it only knows what you actually upload or type into the chat",
+        "Expecting a fresh, up-to-the-minute fact without web search, if the question is about something current, make sure search is in play",
+        "Treating Chat as a one-shot vending machine, its real power is the refining back-and-forth, the second and third passes are where it gets great"
+      ],
+      "flags": [
+        "\"I keep pasting the same background into every chat\", set up a Project so that context is always there",
+        "\"The thing it wrote is hard to read in the chat\", look for the Artifact side panel; it's meant to live there",
+        "\"It gave me old information\", the question may need fresh facts, prompt it to search the web and check it actually did",
+        "\"I'd rather just talk this through\", switch to voice mode in the app and think out loud"
+      ],
+      "ask": [
+        "Is this a question, a think-through, or a draft, the things Chat is built for, or is it really a job to hand off?",
+        "Do I keep repeating background that a Project could just hold for me?",
+        "Did I give Claude the file, image, or context it needs, since it only knows what I put in front of it?",
+        "Does this answer depend on something current, and if so, did web search actually run?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "cowork",
+      "block": "b2",
+      "title": "Cowork: Your AI Coworker",
+      "tag": "Describe the deliverable once, let Claude go produce it",
+      "why": "Cowork is the surface that feels like genuine magic the first time it works, and it's built specifically for people who don't code. Instead of guiding Claude message by message, you describe the finished thing you want, give it access to the files and tools it needs, and it goes off and does the whole job, then brings back the result. This lesson is about using that power well and safely: how to set it up for success, when it's the right call, and how to stay in control while it works on its own.",
+      "mental": "Chat is a colleague across the desk; <b>Cowork is a colleague you hand a project to and let go work.</b> You say, in plain language, 'here's the finished thing I need', and then Claude works on its own, opening the folders you allowed, browsing the web, using the tools you connected, taking many steps without checking in on every one. When it's done, it hands you the actual deliverable, a built spreadsheet, a formatted report, a synthesized pile of research. Your job shifts from <b>doing each step</b> to <b>describing the outcome clearly and reviewing the result.</b> And you're never locked out: there's a side panel where you can watch, nudge, redirect, or stop it, and it brings the big decisions back to you.",
+      "concepts": [
+        [
+          "Describe the deliverable, not the steps",
+          "Cowork works best when you tell it the finished result you want ('a one-page summary of every contract in this folder, flagging anything unusual'), not a click-by-click recipe. You define success; it figures out the steps."
+        ],
+        [
+          "It works across your files and folders",
+          "Within the folders you grant it, Cowork can open, read, and produce files, turning a folder of messy inputs into a clean deliverable. You decide what it's allowed to touch, so it only ever reaches what you've permitted."
+        ],
+        [
+          "It can use your browser and connected tools",
+          "Beyond your files, Cowork can browse the web and use tools you connect, so a job can span gathering information online and assembling it into your document or spreadsheet, all in one hand-off."
+        ],
+        [
+          "Same engine as Code, simplified",
+          "Under the hood, Cowork runs on the same autonomous engine as Claude Code, the surface engineers use, just reshaped for everyday knowledge work. You get that same go-do-the-whole-job capability without needing a terminal or any code."
+        ],
+        [
+          "You stay in control",
+          "A sidebar lets you watch Cowork work, interrupt it, redirect it, or stop it entirely, anytime. And the consequential decisions, anything risky or irreversible, are brought back to you rather than made on its own."
+        ],
+        [
+          "Where it lives (desktop app)",
+          "Cowork is part of the Claude desktop app on macOS and Windows. It needs to live on your computer because it works with your actual files and folders, which is exactly what makes the hand-off so powerful."
+        ]
+      ],
+      "mistakes": [
+        "Micromanaging Cowork with step-by-step instructions, it shines when you describe the outcome and let it find the path",
+        "Being vague about the deliverable, 'help with my contracts' gives it nothing to aim at; say exactly what finished thing you want",
+        "Forgetting to give it access to the right folder or tool, it can only work with what you've allowed it to reach",
+        "Walking away and never reviewing the result, hand-off doesn't mean no oversight; you still check the deliverable, especially for anything that matters",
+        "Assuming it'll make a big, irreversible decision on its own, it brings those back to you, so don't expect it to guess on the high-stakes calls"
+      ],
+      "flags": [
+        "\"I have a folder of inputs and I want one clean output\", that's the textbook Cowork job; describe the output and point it at the folder",
+        "\"It's not touching the file I meant\", check what folders and tools you actually granted it access to",
+        "\"It went a direction I didn't want\", open the sidebar and redirect or stop it, you're never locked out while it works",
+        "\"This deliverable is high-stakes\", let Cowork build it, then review carefully; it hands the consequential calls back to you for a reason"
+      ],
+      "ask": [
+        "Can I describe the finished deliverable clearly in a sentence or two, so Cowork knows exactly what success looks like?",
+        "Have I given it access to the right files, folders, and tools it'll need to do the job?",
+        "Is this really a hand-off (a deliverable across my stuff), or is it actually just a Chat question?",
+        "How will I review the result, and which decisions do I want to keep firmly in my own hands?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "code",
+      "block": "b2",
+      "title": "A Peek at Code — no fear",
+      "tag": "What Claude Code is, why it exists, and why you don't need to be scared of it",
+      "why": "You'll hear 'Claude Code' mentioned a lot, and if you're not a programmer it can feel like a locked door with a sign that says 'not for you.' This lesson takes the mystery out of it. You don't need to use Code to get enormous value from Claude, but understanding what it is, and why it's a sibling of Cowork rather than a different beast, makes the whole picture click. You'll leave knowing exactly where Code fits, why Cowork is your friendlier path to the same kind of help, and that there's nothing here to be afraid of.",
+      "mental": "Claude Code is the <b>same hands-off colleague from Cowork, but working inside actual software, in the places engineers spend their day.</b> Picture Cowork and Code as <b>twins raised in different rooms.</b> One twin (Cowork) grew up among documents, spreadsheets, and folders, and speaks plain language. The other (Code) grew up in developer tools, terminals, code editors, and speaks the language of software projects. Same intelligence, same go-do-the-whole-job ability, different home. So if you're not a coder, you're not missing out by skipping Code: <b>its power is already available to you in Cowork, just wearing everyday clothes.</b> Code isn't a higher level you have to graduate to; it's the version aimed at a different room you may simply never need to enter.",
+      "concepts": [
+        [
+          "What Claude Code actually is",
+          "Claude Code is the surface for building and changing real software. It can read a whole codebase, write and edit code, run commands, and carry out multi-step software tasks on its own, the way a developer would, but much faster."
+        ],
+        [
+          "Where it lives",
+          "It shows up in the tools engineers use: a terminal (a text-based control window for a computer), code editors like VS Code and JetBrains, a desktop app, the web, and even Slack. These are developer spaces, which is part of why it can feel intimidating from the outside."
+        ],
+        [
+          "Same engine as Cowork",
+          "Code and Cowork run on the very same autonomous engine. The difference is the surroundings and the kind of work: Code lives in software projects, Cowork lives in your documents and folders. Neither is 'smarter', they're aimed at different jobs."
+        ],
+        [
+          "A non-coder can use it, but doesn't need to",
+          "It's true that a determined non-engineer can use Code for some file and automation tasks. But it's the long way around for most people. If you're not living in a terminal, Cowork gives you the same hands-off help in a far friendlier package."
+        ],
+        [
+          "The rule of thumb",
+          "If you're not living in a terminal, reach for Cowork. That single line keeps you from ever feeling you 'should' be using Code. Code is for software work in developer tools; everything else hands off beautifully to Cowork."
+        ],
+        [
+          "Why it's worth knowing about",
+          "Even if you never open it, understanding Code completes the map. It explains where the hands-off power comes from, why Cowork can do so much, and lets you talk confidently with technical teammates about which surface fits a given job."
+        ]
+      ],
+      "mistakes": [
+        "Believing you must learn Code to use Claude seriously, you don't; Cowork delivers the same autonomous help without any code",
+        "Thinking Code is a more powerful, upgraded Claude, it's the same engine as Cowork, just aimed at software work in developer tools",
+        "Feeling intimidated and therefore avoiding hand-off surfaces altogether, the intimidating part is Code's developer home, not the capability, which Cowork shares",
+        "Forcing yourself into a terminal for a documents-and-folders task, that's the long way around; Cowork is built for exactly that",
+        "Assuming Code and Cowork are rivals, they're siblings; the right one just depends on whether your task is software or everyday work"
+      ],
+      "flags": [
+        "\"People keep telling me to use Claude Code\", if you're not writing software, they likely mean 'use the hands-off power', which for you is Cowork",
+        "\"I opened a terminal and panicked\", totally fine, that's a developer space; step back and use Cowork for non-code work",
+        "\"My task is about changing actual software\", that's Code's lane; if you're not a coder, pair with someone who is or scope the non-code parts to Cowork",
+        "\"I feel like I'm missing out by not using Code\", you're not, its capability lives in Cowork too, in plain clothes"
+      ],
+      "ask": [
+        "Is my task actually about building or changing software, or is it documents, folders, and everyday work?",
+        "Am I comfortable in developer tools like a terminal and a code editor, or would a plain-language surface serve me better?",
+        "If I'm reaching for Code out of FOMO, would Cowork give me the same hands-off result more easily?",
+        "Do I just need to understand Code to talk with technical teammates, rather than use it myself?"
+      ],
+      "estMin": 25
+    },
+    {
+      "id": "prompting",
+      "block": "b2",
+      "title": "Prompting & Working Effectively",
+      "tag": "Clear asks, the right context, and good habits that work on every surface",
+      "why": "The single biggest lever on how good Claude is for you isn't which surface you pick, it's how you ask. The good news is that getting great results doesn't require tricks or secret phrases. It takes a few plain habits: say clearly what you want, give the context Claude can't guess, describe what a good result looks like, and refine instead of starting over. These habits work everywhere, in Chat, in Cowork, in Code, and they're the difference between answers that miss and answers that nail it.",
+      "mental": "Whatever the surface, Claude only knows what you put in front of it, so think of every request as <b>briefing a brilliant new teammate on their first day.</b> They're capable and fast, but they can't read your mind, see your screen, or know your situation unless you tell them. A vague brief gets a vague result; a specific brief, the task, the context, and what 'good' looks like, gets a specific one. The one twist for the hands-off surfaces: with Cowork and Code you brief the <b>whole outcome</b> up front rather than nudging turn by turn, so a clear, complete description matters even more. <b>You're not casting a spell, you're writing a good set of instructions, and then refining them.</b>",
+      "concepts": [
+        [
+          "Say the task plainly",
+          "Tell Claude exactly what you want done. 'Help with my newsletter' and 'Write a friendly 150-word intro for this week's newsletter about our spring sale' produce wildly different results, because the second one actually says what success is."
+        ],
+        [
+          "Give the context it can't guess",
+          "Claude only knows what you provide. Who's the audience, what's the goal, what background matters, what's the deadline or constraint? Including the relevant context is usually the leap from a generic answer to one that fits your exact situation."
+        ],
+        [
+          "Describe a good result",
+          "Ask for the shape you want: a bulleted list, a short paragraph, a specific tone, a length, a table. Claude is happy to match it, but only if you say so, otherwise it has to guess, and it may guess differently than you'd like."
+        ],
+        [
+          "Show an example when you can",
+          "If you have a sample of the style or format you're after, share it and say 'like this.' One concrete example often communicates more, and more precisely, than a paragraph of description, because matching a pattern is something Claude does very well."
+        ],
+        [
+          "Refine, don't restart",
+          "Prompting is a conversation. If the first result is close but off, just say what to change ('shorter', 'warmer', 'focus on the second point'). Refining is normal and almost always faster than rewriting your request from scratch."
+        ],
+        [
+          "Brief the whole outcome for hand-off surfaces",
+          "In Cowork and Code, Claude works on its own across many steps, so a complete, clear description up front does more work than it does in Chat. Spell out the deliverable, the constraints, and what 'done well' looks like before you let it run."
+        ]
+      ],
+      "mistakes": [
+        "Being too vague, a one-line ask with no context gets a generic result on any surface; Claude fills the gaps with guesses",
+        "Assuming Claude can see what you see, it can't read your screen, your unspoken goal, or files you didn't share, only what's in front of it",
+        "Skipping the format and tone, then being annoyed it wrote five paragraphs when you wanted three bullets",
+        "Giving up after one so-so answer instead of refining, the second or third pass is usually where it gets genuinely good",
+        "Under-briefing a hand-off job, in Cowork and Code, a thin description up front means it guesses at the outcome you actually wanted"
+      ],
+      "flags": [
+        "\"The result is generic and bland\", the ask was probably too vague; add the task, the audience, and the format you want",
+        "\"It answered a slightly different question than I meant\", it took your wording literally; restate the ask more precisely",
+        "\"Right idea, wrong shape\", you likely didn't specify format or length; just ask for the shape you want",
+        "\"Cowork built the wrong thing\", the up-front brief was probably thin; describe the deliverable and constraints fully, then rerun"
+      ],
+      "ask": [
+        "Have I said plainly what I want, clearly enough that a new teammate could follow it?",
+        "Does Claude have the context it needs, or am I assuming it knows something I never told it?",
+        "Did I describe a good result, the format, length, and tone?",
+        "For a hand-off job, did I brief the whole outcome up front, not just the first step?"
+      ],
+      "estMin": 30
+    },
+    {
+      "id": "capstone",
+      "block": "b2",
+      "title": "Putting It Together",
+      "tag": "One habit, real workflows, and choosing your plan without overthinking it",
+      "why": "You now know the surfaces and how to ask well. This final lesson ties it into a single reflex you can run before any task, walks through what a few real workflows look like end to end, and clears up the practical stuff, plans, models, and the one shared usage limit, without drowning you in numbers. The goal isn't to memorize features. It's to leave feeling that you can confidently pick the right Claude for whatever lands on your plate, and know what you'd need to unlock more.",
+      "mental": "Everything collapses into one quick habit: <b>match the surface to the job, then ask clearly.</b> Before any task, run the two questions from the decision lesson, <b>is there a clear deliverable, and does it touch my files or tools?</b> Yes and yes means hand it off (Cowork, or Code if you're a coder); otherwise it's Chat. Then brief it well. That's the whole course as a five-second move. The practical layer underneath, which plan you're on, which model tier fits, how usage works, just shapes <b>what's available</b> when you run that habit. <b>Pick the surface, ask clearly, and let the plan and model details be a quiet background setting, not the thing you obsess over.</b>",
+      "concepts": [
+        [
+          "The one habit, end to end",
+          "Run the two questions (clear deliverable? touches my stuff?) to pick Chat, Cowork, or Code, then brief the task clearly. Surface first, then a good ask. Do that and the right way to work falls out almost automatically."
+        ],
+        [
+          "Plans, in plain terms",
+          "Free ($0) gives you Chat with web search, memory, and file creation, plenty to learn on, but not the hands-off surfaces, and only a handful of Projects. Pro ($20/month) unlocks Cowork and Claude Code, unlimited Projects, and deeper research. Higher tiers exist for heavier use and for teams and organizations."
+        ],
+        [
+          "One shared usage limit",
+          "Whatever you do across all the surfaces draws from a single shared usage allowance on your plan. So a heavy Cowork session and a long Chat both pull from the same bucket, worth knowing so a big hand-off job doesn't quietly use up your day's headroom."
+        ],
+        [
+          "The three model tiers",
+          "Claude comes in a few tiers you can think of simply: a fastest, lightweight tier (Haiku) for quick, simple work; a balanced default tier (Sonnet) that fits most tasks; and a most-capable tier (Opus) for the genuinely hard stuff. Right-size it, you don't need the heavyweight for a quick reword."
+        ],
+        [
+          "A couple of workflows, start to finish",
+          "A teacher building a quiz from a chapter: that's a clear deliverable touching a file, hand it to Cowork. A founder wanting to talk through a tricky email: that's a thought-partner moment, stay in Chat. Same person, different jobs, the two questions sort it instantly."
+        ],
+        [
+          "Where to go from here",
+          "You don't need more theory, you need reps. Run the two-question habit on your real tasks this week, start on Free, and upgrade to Pro the moment you have a genuine hand-off job that needs Cowork. The judgment you've built is the whole point."
+        ]
+      ],
+      "mistakes": [
+        "Obsessing over which model or plan before you've even asked the two surface questions, pick the surface first, the rest is a background setting",
+        "Always reaching for the most capable model tier, it's overkill and slower for everyday tasks; the balanced default fits most work",
+        "Forgetting that all surfaces share one usage limit, a big Cowork job and your Chats draw from the same bucket",
+        "Upgrading to Pro before you actually need a hand-off surface, learn the habit on Free, then unlock Cowork when a real deliverable shows up",
+        "Treating this as features to memorize rather than a habit to practice, the win is running the two questions on real tasks until it's a reflex"
+      ],
+      "flags": [
+        "\"I can't decide which model to use\", default to the balanced tier; reach for the most-capable one only when the work is genuinely hard",
+        "\"I want Cowork but I'm on Free\", that's the moment Pro pays for itself; the hands-off surfaces are the upgrade",
+        "\"My usage ran out faster than expected\", remember every surface shares one limit; a heavy hand-off job pulls from the same bucket as Chat",
+        "\"I still freeze on which surface\", run the two questions out loud, deliverable? touches my stuff? and let the answer decide"
+      ],
+      "ask": [
+        "Have I run the two questions, clear deliverable and does it touch my stuff, before worrying about anything else?",
+        "Am I right-sizing the model tier, balanced for most things, heavyweight only when it's truly hard?",
+        "Does this task need a hand-off surface I'd have to be on Pro for, and is now the moment to upgrade?",
+        "Am I practicing the habit on real tasks, rather than just collecting facts about features?"
+      ],
+      "estMin": 30
+    }
+  ],
+  "PLAIN": {
+    "meet": "Most people think Claude is just one chat window, but the same intelligence shows up in a few different places, called surfaces, each shaped for a different kind of work. Chat is the familiar back-and-forth where you ask and it answers and you stay in the driver's seat. Cowork is a mode in the Claude desktop app where you hand off a whole job, describe the finished thing you want, and Claude goes and produces it across your files, your browser, and connected tools, made for people who don't code. Code is the version aimed at building real software in developer tools. Same brain behind all of them; what changes is how much you hand over. This lesson is just the map, knowing the rooms exist so you stop forcing every task through the chat box.",
+    "decide": "This is the lesson you'll actually use before every task, and it comes down to two questions. First, is there a clear deliverable, an actual finished thing you want produced? Second, does the work touch your files, your browser, or your tools? If both are yes, you've got a job to hand off, reach for Cowork (or Code if you live in software). If it's a one-off question or you just want a thinking partner, that's Chat. As Anthropic frames it: reach for Chat when you have a one-off question or want a thought partner; reach for Cowork when there's a clear deliverable and the work touches your files or tools. And if you genuinely can't decide, start in Chat, it's the lowest-friction door, and the task will show you what it really needs.",
+    "chat": "Chat is where you'll spend most of your Claude time, so a little skill here pays off all day. It's the familiar back-and-forth, you ask, it answers, you refine, and you steer every turn. Around that conversation are a few genuinely useful tools: Projects keep related chats and background together so you don't re-explain yourself every time; Artifacts give a substantial document or draft its own clean side panel instead of burying it in the scroll; you can upload files and images and ask about them; web search pulls in fresh facts when a question needs them; a memory feature remembers handy things about you across chats; and voice mode lets you just talk it through. None of it is complicated. You're in the driver's seat, and these are the dashboard, reach for whichever fits what you're doing right now.",
+    "cowork": "Cowork is the surface that feels like magic, and it's built for people who don't code. Instead of guiding Claude message by message, you describe the finished thing you want, give it access to the files and tools it needs, and it goes off and does the whole job on its own, opening folders you allowed, browsing the web, using connected tools, then hands you the actual deliverable: a built spreadsheet, a formatted report, a pile of research synthesized into a summary. Your job shifts from doing each step to describing the outcome clearly and reviewing the result. It runs on the same autonomous engine as Claude Code, just simplified for everyday knowledge work, and it lives in the Claude desktop app because it works with your real files. You're never locked out: a sidebar lets you watch, redirect, or stop it, and it brings the big, consequential decisions back to you.",
+    "code": "You'll hear 'Claude Code' a lot, and if you don't program it can feel like a door marked 'not for you', so let's take the mystery out of it. Claude Code is the surface for building and changing real software. It lives where engineers work, terminals, code editors, and the like, and it can read a codebase, write and edit code, and carry out multi-step software tasks on its own. Here's the key: it runs on the very same autonomous engine as Cowork. Think of Code and Cowork as twins raised in different rooms, one grew up in documents and folders and speaks plain language (Cowork), the other grew up in developer tools (Code). Neither is smarter. So if you're not living in a terminal, you're not missing out by skipping Code, its power is already available to you in Cowork, just in everyday clothes. The rule of thumb: if you're not in a terminal, reach for Cowork.",
+    "prompting": "The biggest lever on how good Claude is for you isn't which surface you pick, it's how you ask, and that takes plain habits, not tricks. Whatever the surface, Claude only knows what you put in front of it, so treat every request like briefing a brilliant new teammate on their first day: say clearly what you want, give the context it can't guess (audience, goal, constraints), and describe what a good result looks like (format, length, tone). Show an example when you have one, and say 'like this.' If the first result is close but off, refine it with a small instruction instead of starting over. The one twist for the hands-off surfaces: with Cowork and Code you brief the whole outcome up front rather than nudging turn by turn, so a clear, complete description matters even more. You're not casting a spell, you're writing good instructions and then refining them.",
+    "capstone": "This final lesson ties everything into a single reflex: match the surface to the job, then ask clearly. Before any task, run the two questions, is there a clear deliverable, and does it touch my files or tools? Yes and yes means hand it off to Cowork (or Code if you're a coder); otherwise stay in Chat. Then brief it well. That's the whole course in five seconds. Underneath sits the practical stuff, kept simple: Free ($0) gives you Chat to learn on; Pro ($20/month) unlocks the hands-off surfaces, Cowork and Code; higher tiers cover heavier use and teams. Everything you do shares one usage limit across all surfaces. And models come in three tiers, fastest/lightweight (Haiku), balanced default (Sonnet), and most-capable (Opus), so right-size it instead of always grabbing the heavyweight. The real next step isn't more theory, it's running the two-question habit on your actual work this week."
+  },
+  "GLOSSARY": [
+    ["Claude", "Anthropic's AI assistant. The same Claude shows up across several surfaces, Chat, Cowork, and Code, sharing one underlying intelligence; what changes between them is how you work with it and how much it does on its own.", "meet"],
+    ["Surface", "A place where you use Claude. The three main ones are Chat, Cowork, and Code. They share the same intelligence; the difference is how hands-on you are and what the surface can reach (just the conversation, or your files and tools too).", "meet"],
+    ["Chat", "The familiar back-and-forth window, on the web (claude.ai), desktop, and mobile. You ask, Claude answers, you steer every turn. Best for one-off questions, thinking something through, drafting, and analyzing a file or image you upload.", "meet"],
+    ["Cowork", "A hands-off mode in the Claude desktop app, built for non-coders. You describe a finished deliverable once, and Claude works on its own across your files, browser, and connected tools to produce it, then hands it back.", "meet"],
+    ["Code (Claude Code)", "The surface for building and changing real software, used in developer tools like a terminal and code editors. It runs on the same autonomous engine as Cowork, aimed at software work; non-coders generally want Cowork instead.", "meet"],
+    ["Deliverable", "The specific finished thing you want at the end of a task, a built spreadsheet, a formatted report, a folder of cleaned-up files. A clear deliverable is the main signal that a job suits a hand-off surface like Cowork.", "decide"],
+    ["Hand-off", "Giving Claude a whole job to complete on its own, rather than guiding it message by message. Cowork and Code are the hand-off surfaces; Chat is the stay-and-steer surface.", "decide"],
+    ["Thought partner", "Using Claude to think something through, bouncing ideas, weighing options, talking out a decision, rather than to produce a finished artifact. This is a classic reason to reach for Chat.", "decide"],
+    ["Project", "In Chat, a folder for related work that holds background files and instructions, so every conversation inside it starts already knowing your context, no re-explaining your situation each time.", "chat"],
+    ["Artifact", "A side panel in Chat where Claude builds something substantial, a document, a draft, a structured list, so you can read it cleanly, ask for edits, and copy it out, instead of having it buried in the chat scroll.", "chat"],
+    ["Web search", "A Chat ability to look things up live on the internet when a question needs current information. It's there to keep answers fresh; worth confirming it actually ran when an answer depends on something recent.", "chat"],
+    ["Memory (feature)", "An optional Chat feature that remembers useful things about you across conversations, so you don't repeat yourself. You can usually see and edit what it has stored.", "chat"],
+    ["Voice mode", "Talking to Claude out loud and hearing it respond, available in the apps. The same Claude, just spoken instead of typed, handy when your hands are busy or you think better out loud.", "chat"],
+    ["Autonomous (hands-off) work", "When Claude carries out many steps of a task on its own, opening files, browsing, using tools, without checking in on every one, then returns a finished result. This is what Cowork and Code do; Chat does not.", "cowork"],
+    ["Access (folders and tools)", "What you grant Cowork permission to reach, specific folders, the browser, connected tools. Cowork can only work with what you've allowed, which is exactly what keeps you in control of its reach.", "cowork"],
+    ["Connected tool", "An outside app or service you link to Claude so it can use it as part of a job, for example pulling information from a service and assembling it into your document. Connecting tools widens what a Cowork hand-off can accomplish.", "cowork"],
+    ["Sidebar (Cowork control)", "The panel where you watch Cowork work and can interrupt, redirect, or stop it at any time. It's how a hands-off surface stays under your control while it runs on its own.", "cowork"],
+    ["Consequential decision", "A choice that's risky or hard to undo. Cowork brings these back to you rather than deciding on its own, so the important calls always stay in human hands.", "cowork"],
+    ["Terminal", "A text-based control window for a computer, where you type commands instead of clicking. It's a developer space and one of the homes of Claude Code; if you're not living in one, that's your cue to use Cowork instead.", "code"],
+    ["Codebase", "All the files that make up a piece of software. Claude Code can read and change a whole codebase to build or fix software, which is the kind of work that surface is built for.", "code"],
+    ["Claude in Chrome", "A browser-using version of Claude (a Chrome extension) that can navigate pages, click, and fill forms on your behalf. It's in beta on paid plans, a glimpse of Claude acting directly in your browser.", "code"],
+    ["Prompt", "The text you give Claude to work with: your instruction or question plus any context or examples. It's everything Claude has to go on, so whatever you leave out, it doesn't know, true on every surface.", "prompting"],
+    ["Context (in a prompt)", "The background Claude can't guess, audience, goal, constraints, relevant facts, that you include so it can fit the answer to your actual situation. Adding the right context is usually the biggest single upgrade to a result.", "prompting"],
+    ["Iterating (refining)", "Improving a result with a small follow-up instruction ('shorter', 'warmer', 'focus on this') instead of rewriting your whole request. Prompting is a back-and-forth, and refining is usually faster than starting over.", "prompting"],
+    ["Plan (Free / Pro / higher tiers)", "Your subscription level. Free ($0) gives you Chat to learn on; Pro ($20/month) unlocks the hands-off surfaces (Cowork and Code), unlimited Projects, and deeper research; higher tiers cover heavier use, teams, and organizations.", "capstone"],
+    ["Shared usage limit", "A single allowance on your plan that everything you do, across Chat, Cowork, and Code, draws from. A heavy hand-off job and your Chats pull from the same bucket, so a big task can use up your headroom.", "capstone"],
+    ["Model tier (Haiku / Sonnet / Opus)", "The three durable tiers of Claude: Haiku is fastest and lightweight for simple work, Sonnet is the balanced default that fits most tasks, and Opus is the most capable for genuinely hard problems. Right-size the tier to the task.", "capstone"]
+  ],
+  "DEEP": {
+    "meet": {
+      "worked": "Picture one person, a small-business owner named Priya, and one Tuesday. In the morning she opens Claude and types, 'What's a friendly way to tell a customer their order is delayed?' She goes back and forth a couple of times, tweaks the wording, and pastes the final version into an email. That was <b>Chat</b>, a quick question and a thinking partner, her steering every turn. In the afternoon she has a folder of forty supplier invoices and needs a single summary spreadsheet pulling out the totals and due dates. She doesn't want to do that by hand, and she doesn't want to paste forty files into a chat one at a time. So she opens <b>Cowork</b>, points it at the folder, says 'build me a spreadsheet with each supplier, total, and due date, and flag anything overdue,' and lets it work. It comes back with the finished sheet. <b>Same Claude, same person, same day, two completely different ways of working, and she picked each one by feel: one was a conversation, the other was a job to hand off.</b> That instinct, conversation versus hand-off, is the whole map.",
+      "good": [
+        "You recognize Claude shows up in different surfaces, not just one chat box",
+        "You reach for Chat when you want to ask, think, or draft with your hands on the wheel",
+        "You reach for a hand-off surface when there's a finished deliverable spanning your files or tools",
+        "You know Cowork is the non-coder's path to the same power Code gives engineers",
+        "You feel calm about hands-off surfaces because you know you can watch, redirect, and stop them"
+      ],
+      "build": "Spend five minutes mapping your own week. Grab a sheet of paper and jot down five things you did recently that you might use AI for, an email you struggled with, a folder of files you wished were organized, a question you googled, a report you had to assemble, a decision you talked through with a colleague. Now, beside each, write one word: 'ask' (a question or think-through) or 'hand-off' (a finished thing across your stuff). Don't worry about getting it perfect. The point is to feel, on your own real tasks, how naturally they split into 'conversation' and 'job to hand off.' That split is the surface map, and seeing it on your own work makes the rest of the course click.",
+      "res": [
+        ["Anthropic, \"Claude\" product overview", "https://www.anthropic.com/claude", "Browse after this lesson to see the surfaces presented together. A plain, friendly tour of where Claude lives and what each part is for."],
+        ["Anthropic Help Center", "https://support.anthropic.com/", "Your go-to for how-to questions as you start exploring, account setup, the apps, and getting your bearings across the surfaces."]
+      ]
+    },
+    "decide": {
+      "worked": "Watch the two questions sort three real tasks in seconds. Task one: a teacher wants to know, 'What's a good icebreaker for the first day of class?' Is there a clear deliverable to produce across her files? No, she just wants ideas. <b>That's Chat.</b> She'll brainstorm, pick a favorite, maybe ask for a variation. Task two: that same teacher has a chapter PDF and wants a ten-question quiz built from it, with an answer key, saved as a document. Clear deliverable? Yes, a quiz. Touches her files? Yes, the chapter. <b>That's Cowork,</b> she describes the quiz she wants, points it at the PDF, and lets it produce the finished thing. Task three: a developer on her school's IT team needs to fix a bug in the school's scheduling software. Deliverable across files? Yes, but the files are a codebase and the worker lives in a terminal. <b>That's Code.</b> Notice what happened: <b>the same two questions, asked in the same order, routed three different people to three different surfaces without any agonizing.</b> That's the entire decision, and once you've run it a few times it takes about two seconds.",
+      "good": [
+        "You run the two questions, clear deliverable? touches my stuff? before starting",
+        "You land on Chat for one-off questions and thought-partner moments",
+        "You land on Cowork when there's a deliverable across your files, browser, or tools",
+        "You reserve Code for actual software work in developer tools",
+        "You start in Chat whenever you genuinely can't decide, and let the task reveal itself"
+      ],
+      "build": "Take the same five tasks you mapped in the last lesson and run the two-question test on each, out loud if you can. For every one, ask: 'Is there a clear deliverable?' then 'Does it touch my files, browser, or tools?' Say the surface the answers point to, Chat, Cowork, or Code. You'll notice most quick stuff lands in Chat, a couple of the meatier jobs land in Cowork, and software-only tasks (if you have any) land in Code. The goal isn't a perfect score; it's to wear a groove in the habit so that next week, on a brand-new task, the two questions fire automatically before you even open the app.",
+      "res": [
+        ["Anthropic, \"Claude\" product overview", "https://www.anthropic.com/claude", "Revisit with the decision in mind, notice how the surfaces line up with 'ask vs hand off.' It reinforces the two-question habit."],
+        ["Anthropic Help Center", "https://support.anthropic.com/", "Use when you want the official word on what a given surface can do, helpful for settling any 'which one handles this?' question."]
+      ]
+    },
+    "chat": {
+      "worked": "Follow a freelance writer, Marcus, through one Chat session and watch the features earn their keep. He's writing a series of blog posts for a coffee roaster, so first he sets up a <b>Project</b> called 'Roaster Blog' and drops in the brand's style notes and a past post he likes. Now every chat in that Project already knows the voice, no re-explaining. He starts a new chat and asks for a draft of this week's post. The draft is long, so it lands in an <b>Artifact</b>, a clean side panel he can actually read, instead of getting lost in the scroll. He skims it and says 'tighten the intro and make the third paragraph warmer', and the Artifact updates in place. One claim needs a current statistic, so he asks Claude to <b>search the web</b>, and checks that it actually pulled a fresh source. Finally, he uploads a <b>photo</b> of the roaster's new bag design and asks whether the post's description matches it. <b>Every one of those moves, Project, Artifact, refine, search, upload, was the same conversation; he just reached for the right tool on the dashboard at the right moment.</b> That's Chat done well: not a fancier prompt, just knowing what's there.",
+      "good": [
+        "You set up a Project so recurring background is always loaded, no re-explaining",
+        "You let substantial drafts live in Artifacts where you can read and edit them cleanly",
+        "You upload the file or image Claude needs, since it only knows what you put in front of it",
+        "You invoke web search for anything current, and confirm it actually ran",
+        "You treat Chat as a refining back-and-forth, not a one-shot vending machine"
+      ],
+      "build": "Pick one ongoing thing in your life, a side project, a class, a recurring report, and set up a Project for it. Drop in one or two background files and a sentence of instructions about what you usually need. Then start a chat inside it and give it a real task without re-explaining your situation, and notice how much context it already has. While you're there, try one more feature on purpose: upload a file and ask about it, or trigger a web search and look for the source it cites. Spending ten minutes deliberately using two features turns Chat from 'a box I type into' into 'a workspace I know my way around.'",
+      "res": [
+        ["Anthropic Help Center, using Claude", "https://support.anthropic.com/", "Search here for step-by-step help on Projects, Artifacts, uploading files, and web search, the practical how-to behind this lesson."],
+        ["Anthropic, \"Claude\" product overview", "https://www.anthropic.com/claude", "A friendly tour of Chat's capabilities. Skim it to see the features named in this lesson laid out in one place."]
+      ]
+    },
+    "cowork": {
+      "worked": "Meet Dana, who runs operations at a small nonprofit and has never written a line of code. Every quarter she dreads the same chore: a folder of thirty donation reports, in different formats, that she has to comb through to build a board summary, who gave, how much, which are recurring, what changed since last quarter. By hand it eats an afternoon. This quarter she opens <b>Cowork</b> in the Claude desktop app, grants it access to that one folder, and types a single brief: 'Read every report in this folder and build me a one-page summary, total raised, top ten donors, which gifts are recurring, and anything notably different from last quarter, in a clean document.' Then she watches the <b>sidebar</b> as Claude opens file after file, pulls the numbers, and assembles the summary, <b>doing the whole multi-step job on its own.</b> Partway through it hits an ambiguous report and, rather than guess, flags it for her, a <b>consequential decision handed back.</b> She clarifies in one line, it continues, and a few minutes later she has the finished one-pager. <b>She didn't do the steps; she described the outcome and reviewed the result.</b> That shift, from doing to delegating, is what Cowork is for.",
+      "good": [
+        "You describe the finished deliverable clearly, then let Cowork find the steps",
+        "You grant access to exactly the folders and tools the job needs, and no more",
+        "You use the sidebar to watch, redirect, or stop it rather than walking away blind",
+        "You let it hand the consequential, ambiguous calls back to you and answer them",
+        "You always review the finished deliverable, especially when the stakes are real"
+      ],
+      "build": "Find one genuinely tedious, multi-file chore you'd normally grind through by hand, organizing a folder of documents, pulling key details out of several files into one list, drafting a summary across a pile of inputs. Before you touch Cowork, write the deliverable in one or two sentences: exactly what the finished thing should contain and look like. That sentence is most of the work. Then, if you're on a plan with Cowork, point it at the folder and let it run, watching the sidebar so you see how it works. (No access yet? Just writing that crisp deliverable sentence is the real skill, it's the same brief you'd hand a new assistant.) Feeling a chore get handed off and come back done is the moment Cowork clicks.",
+      "res": [
+        ["Anthropic, \"Claude\" product overview", "https://www.anthropic.com/claude", "See where Cowork fits among the surfaces and what kinds of jobs it's built for, the big-picture framing behind this lesson."],
+        ["Anthropic Help Center", "https://support.anthropic.com/", "Use for the practical side, getting the desktop app, granting access to folders and tools, and managing what Cowork can reach."]
+      ]
+    },
+    "code": {
+      "worked": "Let's defuse the fear with a side-by-side. Imagine two people give Claude nearly the same kind of job. Sam, a non-coder, opens <b>Cowork</b> and says, 'Go through this folder of client files, rename them to the format LastName_Date, and make a list of any that are missing a date.' Claude works across the folder and hands back the tidied files plus the list. Across town, Jordan, a developer, opens <b>Claude Code</b> in their code editor and says, 'Go through this software project, rename these functions to our new naming convention, and list any files that still use the old names.' Claude reads the codebase and does it. <b>Look at how similar those jobs are, read a bunch of files, make consistent changes, report the exceptions.</b> Same hands-off engine, same kind of work. The only real difference is the room: Sam's job lived in everyday files and plain language; Jordan's lived in a codebase and developer tools. <b>That's the entire relationship between Cowork and Code, twins in different rooms,</b> and seeing it this way is what makes Code stop feeling like a locked door. You're not missing a superpower; you already have it, in Cowork.",
+      "good": [
+        "You understand Code is the same autonomous engine as Cowork, aimed at software",
+        "You don't feel pressure to learn Code if your work isn't building software",
+        "You reach for Cowork for documents-and-folders hand-offs without a second thought",
+        "You can explain where Code fits when talking with technical teammates",
+        "You feel zero fear about Code, it's just a different room you may never need to enter"
+      ],
+      "build": "Do a quick reframing exercise, no terminal required. Think of one hands-off job you'd love Claude to do (organize files, pull data together, build something across inputs). Write it as a plain-language brief, the way you would for Cowork. Now, just as a thought experiment, imagine the exact same kind of job but inside software, 'rename these things consistently across a project and flag the exceptions.' Notice they're the same shape of task. That's the whole point: the capability is identical, only the setting differs. Doing this once, on paper, dissolves the idea that Code is some higher tier you're failing to reach. It isn't, it's Cowork's twin, and Cowork is yours.",
+      "res": [
+        ["Anthropic, \"Claude Code\" overview", "https://www.anthropic.com/claude-code", "Peek at what Code is for, even if you'll never use it. Seeing it described as software-focused makes 'use Cowork instead' obvious."],
+        ["Anthropic Help Center", "https://support.anthropic.com/", "Use to confirm which surface fits a task, especially if a teammate insists you 'need Code' for something Cowork could handle."]
+      ]
+    },
+    "prompting": {
+      "worked": "Watch one request improve in three steps, and notice the habit works on every surface. A small-shop owner wants help with a sale announcement. <b>Step one, the vague version:</b> 'Write something about our sale.' Claude has nothing to go on, so it produces generic could-be-any-shop text. <b>Step two, add the task and context:</b> 'Write a short, upbeat announcement for our weekend sale, 20% off all houseplants, aimed at our email subscribers who already love us.' Far better, it now knows what, for whom, and the vibe. <b>Step three, add the shape and a detail:</b> '...in about 60 words, warm and a little playful, ending with a clear call to come in this weekend.' Now it's nearly paste-ready. And if it's still a touch off, she doesn't start over, she says <b>'good, make the opening line punchier.'</b> Nothing clever happened; she just briefed a capable assistant clearly and then nudged. <b>The exact same arc, vague to specific to refined, is what you'd write at the top of a Cowork hand-off too,</b> except there you'd describe the whole finished deliverable up front, because Claude will run with it on its own.",
+      "good": [
+        "You state the task plainly, what you want done, not just the topic",
+        "You include the context Claude can't guess: audience, goal, constraints",
+        "You describe a good result, format, length, and tone",
+        "You paste an example when you have one and say 'like this'",
+        "You refine with small follow-ups instead of rewriting from scratch, and brief the whole outcome up front for hand-off jobs"
+      ],
+      "build": "Take any real task and run the three-step arc on it. Write the laziest one-line prompt first and note the result. Then rewrite it with three additions: the specific task, the context (who it's for, what it's about), and the format you want, and compare. Finally, refine that second result with one small instruction ('shorter', 'warmer', 'add a call to action'). Do it once in Chat to feel the arc. Then, for bonus practice, take a hand-off-shaped task and write the up-front brief you'd give Cowork, the full deliverable in two or three clear sentences. Feeling the difference between a thin ask and a complete one, on your own task, is what turns prompting from theory into a habit.",
+      "res": [
+        ["Anthropic, \"Prompting tips\" for everyday users", "https://support.anthropic.com/", "Search the help center for prompting guidance, plain, practical habits that reinforce 'task, context, format, refine.'"],
+        ["Anthropic, \"Claude\" product overview", "https://www.anthropic.com/claude", "A reminder of what each surface does, useful context for why you brief Cowork's whole outcome up front but steer Chat turn by turn."]
+      ]
+    },
+    "capstone": {
+      "worked": "Let's run the whole course as one habit across a single busy morning for a founder named Lena. <b>9:05,</b> she needs to talk through how to respond to a tricky investor email. Deliverable? Not really, she wants a thinking partner. <b>Chat.</b> They go back and forth and she lands on an approach. <b>9:30,</b> she has a folder of twelve customer-interview notes and wants them distilled into the top five themes with quotes, as a shareable doc. Clear deliverable? Yes. Touches her files? Yes. <b>Cowork.</b> She describes the doc, points it at the folder, and lets it build while she gets coffee. <b>10:15,</b> a quick factual question, 'what's a normal range for this kind of metric?', she just wants a fast answer. <b>Chat,</b> with web search, on the balanced model tier because it's nothing exotic. <b>11:00,</b> her cofounder, an engineer, needs a change in their app; that's <b>Code,</b> his lane, not hers. Notice the through-line: <b>Lena never agonized once. Two questions per task picked the surface, a clear brief did the rest, and the plan and model tiers just sat in the background.</b> That's not expertise you memorize; it's a reflex you've now built.",
+      "good": [
+        "You run the two questions to pick the surface, then brief the task clearly, automatically",
+        "You stay on Free to learn and upgrade to Pro exactly when a real hand-off job needs Cowork",
+        "You remember all surfaces share one usage limit and pace heavy hand-off jobs accordingly",
+        "You default to the balanced model tier and reserve the heavyweight for genuinely hard work",
+        "You treat plan and model choices as quiet background settings, not the main decision"
+      ],
+      "build": "Make yourself a tiny cheat card and actually use it for a week. On one side write the two questions: 'Is there a clear deliverable?' and 'Does it touch my files or tools?' Under them, the routing: both yes → Cowork (or Code if it's software); otherwise → Chat. On the other side, three model tiers, fast/simple, balanced default, most-capable, and one line: 'right-size it.' Keep the card by your screen and run it before real tasks all week. By Friday you won't need the card; the questions will fire on their own. That reflex, surface first, clear ask second, details in the background, is the entire course, and it's now yours to use on whatever lands on your plate.",
+      "res": [
+        ["Anthropic, \"Plans & pricing\"", "https://www.anthropic.com/pricing", "Check here when you're deciding whether to move from Free to Pro, it lays out what each plan unlocks in plain terms."],
+        ["Anthropic Help Center", "https://support.anthropic.com/", "Your ongoing reference as you put the habit into practice, account, plans, usage, and which surface handles a given job."]
+      ]
+    }
+  },
+  "DEPTH": {
+    "meet": {
+      "mech": "A little more on how the surfaces actually relate, because it explains why the choice matters. The same underlying Claude powers all three, so none is 'smarter' than another. What genuinely differs is <b>how much you hand over and what the surface can reach.</b> In <b>Chat</b>, you stay in the loop on every single turn, nothing happens unless you send a message, and Claude works only with what's in the conversation (your words, plus any files or images you upload). In <b>Cowork</b> and <b>Code</b>, you hand over a whole job and Claude works <b>autonomously</b>, taking many steps on its own across the things you've given it access to, your files, your browser, connected tools, before returning a result.<br><br>The crucial structural fact is that <b>Cowork and Code share one engine.</b> Cowork is that autonomous engine reshaped for everyday knowledge work; Code is the same engine aimed at software. That's why learning Cowork isn't a watered-down version of anything, it's the full hands-off capability, just in plain clothes. And across all of it, control stays human: Chat is hands-on by nature, while Cowork and Code let you watch, interrupt, and stop them, and route the consequential decisions back to you. So the real question is never 'which is most powerful?' It's 'how hands-on do I want to be, and does this need to touch my stuff?'",
+      "trade": [
+        ["Chat vs hand-off (Cowork/Code)", "Control every turn vs delegate the whole job", "Chat keeps you steering each step; hand-off surfaces do many steps on their own and return a finished result"],
+        ["Cowork vs Code", "Plain-language everyday work vs software in developer tools", "Same engine; pick by whether your job is documents-and-folders (Cowork) or building software (Code)"],
+        ["Stay hands-on vs let it run", "Oversight vs speed", "Watching each turn is safest for delicate work; letting it run is far faster for big multi-step jobs, and you can still interrupt"]
+      ],
+      "scale": [
+        "As your tasks get bigger and more multi-step, the value tips toward the hand-off surfaces, doing twenty steps yourself in Chat is slow; handing them off to Cowork is the point",
+        "The more a job spans your files, browser, and tools, the more a surface that can actually reach them (Cowork/Code) beats one that can only talk (Chat)",
+        "For quick, contained tasks, Chat stays the fastest, lightest option; not everything needs a hand-off"
+      ],
+      "sec": [
+        "Hand-off surfaces only reach what you grant them, so treat access like keys: give Cowork the specific folders and tools a job needs, not blanket run of everything",
+        "Because Cowork and Code can act on your files and tools, keep a human eye on consequential or irreversible steps, which is exactly why they hand those decisions back to you",
+        "Whatever you put in front of Claude on any surface, uploads, files it can read, is content you're sharing with the service, so don't expose secrets or others' private data you wouldn't want stored"
+      ],
+      "interview": "Here's how I'd explain it to a friend. Claude isn't just one chat window, it's one AI that shows up in a few places called surfaces. Chat is the back-and-forth where you ask and it answers and you steer every step. Cowork is where you hand off a whole job, you describe the finished thing you want and it goes and does it across your files and tools, and it's made for people who don't code. Code is the same hands-off power aimed at building software. Same brain everywhere; what changes is just how much you hand over."
+    },
+    "decide": {
+      "mech": "Here's why the two questions work so reliably: each one maps to a real capability difference between the surfaces. <b>Question one, is there a clear deliverable?</b> This separates 'I want to think or ask' from 'I want a finished thing produced.' Chat is optimized for the former, turn-by-turn conversation, while the hand-off surfaces are optimized for the latter, running many steps to produce an actual artifact. <b>Question two, does it touch my files, browser, or tools?</b> This separates work that can happen entirely inside a conversation (Chat only ever sees what you paste or upload) from work that requires reaching out and acting on your real stuff (which only Cowork and Code can do).<br><br>Put them on a simple grid and the answer falls out. <b>No clear deliverable</b> → it's a question or a think-through → <b>Chat.</b> <b>Clear deliverable, but it's self-contained</b> (a single draft, a rewrite, analyzing one uploaded file) → still comfortably <b>Chat.</b> <b>Clear deliverable that spans your files, browser, or tools</b> → that's the sweet spot for a hand-off → <b>Cowork,</b> or <b>Code</b> if the 'files' are a codebase and you're a developer. The reason this beats memorizing feature lists is that it's grounded in what each surface can actually do, so it keeps working even as features change. <b>When the two answers genuinely conflict or you can't tell, default to Chat,</b> it's the lowest-friction surface and it can help you discover whether your task is really a hand-off in disguise.",
+      "trade": [
+        ["Clear deliverable vs open question", "Produce a thing vs explore an idea", "A finished thing to produce leans hand-off; an open question or think-through leans Chat"],
+        ["Touches my files/tools vs self-contained", "Act on my stuff vs stay in the chat", "Work that must reach your files and tools needs Cowork/Code; work that fits inside the conversation is Chat"],
+        ["Commit to a surface vs start in Chat", "Decisiveness vs flexibility", "Committing is efficient when the two questions are clear; when they're not, starting in Chat lets the task reveal what it needs"]
+      ],
+      "scale": [
+        "The bigger and more multi-step the deliverable, the more decisively the two questions point to Cowork, small asks stay in Chat, large jobs graduate",
+        "If you find yourself describing one task across many Chat messages, that's the signal you've crossed from 'ask' into 'hand-off', let the size of the job move you to Cowork",
+        "For teams, the same two questions scale: route quick questions to Chat and recurring multi-file deliverables to Cowork, so people stop grinding big jobs by hand"
+      ],
+      "sec": [
+        "Choosing the right surface is itself a safety habit: handing a delicate, irreversible job to a hand-off surface means you should review its output, while a quick Chat carries far less risk",
+        "When a task touches sensitive files, prefer giving a hand-off surface access to just the needed folder, and keep the consequential decisions with yourself",
+        "If you're unsure whether a task is safe to hand off, start in Chat and reason it through first; you can always escalate to Cowork once the deliverable and the risks are clear"
+      ],
+      "interview": "The friend-version: there are two questions that pick the right Claude almost every time. First, is there a clear deliverable, an actual finished thing you want made? Second, does the work touch your files, your browser, or your tools? If both are yes, you've got a job to hand off, use Cowork (or Code if you're building software). If it's a one-off question or you just want to think out loud, that's Chat. And if you genuinely can't tell, start in Chat, it's the easiest door and the task will show you what it really needs."
+    },
+    "chat": {
+      "mech": "Under the friendly surface, Chat is a back-and-forth where <b>you supply everything Claude works from,</b> and the features are ways to supply it better or capture the result more usefully. <b>Projects</b> solve the 're-explaining yourself' problem: by storing background files and instructions in one place, they quietly add your context to every conversation in that Project, so you start each chat already understood. <b>Artifacts</b> solve the 'good output buried in scroll' problem: when Claude produces something substantial, it lives in a dedicated panel you can read, revise in place, and copy out cleanly. <b>Uploads</b> (files and images) are how you give Claude something specific to work on, it reasons over what you hand it, which is why a clear, readable file yields a better answer than a blurry screenshot.<br><br>Two features are worth understanding a touch more because they change what an answer means. <b>Web search</b> lets Chat pull in current information rather than relying only on what it already knows, so for anything recent, it's worth confirming search actually ran. The <b>memory</b> feature lets Chat carry useful facts about you across conversations, convenient, and worth knowing about so a remembered detail doesn't surprise you (you can usually view and edit what's stored). And <b>voice mode</b> is simply the same conversation, spoken. None of this changes that you're in the driver's seat: every feature is a tool on the dashboard, and the skill is reaching for the right one at the right moment, a Project for recurring context, an upload for a specific file, search for fresh facts.",
+      "trade": [
+        ["Project vs one-off chat", "Loaded context vs a clean slate", "A Project keeps your background ready every time; a plain chat starts blank, lighter, but you re-supply context"],
+        ["Artifact vs inline answer", "A clean workspace vs quick reply", "Substantial drafts are easier to read and edit as Artifacts; short answers are fine inline, no panel needed"],
+        ["Search on vs from existing knowledge", "Current vs instant", "Web search fetches fresh facts but adds a step; answering from what it already knows is instant but may be out of date"]
+      ],
+      "scale": [
+        "The more you reuse the same background, the more a Project pays off, set it up once and every future chat in it starts informed",
+        "Long, sprawling chats get harder to follow; for a big piece of work, a Project plus Artifacts keeps things organized far better than one endless thread",
+        "Uploading a huge file gives Claude a lot to chew on, sharing just the relevant part is usually faster and gets a sharper answer than dumping everything"
+      ],
+      "sec": [
+        "Anything you upload or paste into Chat is shared with the service, so avoid putting passwords, secrets, or other people's private data into a conversation",
+        "If the memory feature is on, periodically check what it has stored about you, it's adding those notes to your chats, and you can usually view, edit, or clear them",
+        "For anything that matters, especially answers that depend on current facts, confirm web search actually ran and glance at the source rather than trusting a fresh-sounding claim outright"
+      ],
+      "interview": "Here's the friend-explanation. Chat is the everyday Claude, you ask, it answers, you refine, and you steer every turn. The trick to using it well is knowing the few tools around the conversation: Projects keep your background loaded so you don't re-explain yourself, Artifacts give a big draft its own clean panel to read and edit, you can upload files and images to ask about them, web search pulls in fresh facts when you need them, and voice mode lets you just talk it through. It's not about clever prompts, it's about reaching for the right tool on the dashboard at the right moment."
+    },
+    "cowork": {
+      "mech": "Here's what's really happening when you hand a job to Cowork, and why it feels so different from Chat. You give it a <b>goal, a finished deliverable, in plain language, plus access to the files, browser, and tools it'll need.</b> From there, Cowork works <b>autonomously:</b> it plans an approach, then takes step after step, opening a file, reading it, opening the next, browsing for a missing piece, assembling the output, without pausing for your approval on each one. This is the same autonomous engine that powers Claude Code; Cowork is that engine fitted to everyday knowledge work instead of software. The reason it can replace an afternoon of manual grind is precisely that it strings together many steps on its own and only returns when there's a result to show.<br><br>Two things make this safe and usable rather than scary. First, <b>access is scoped by you:</b> Cowork can only reach the folders and tools you've granted, so its reach is exactly as wide as you allow, no more. Second, <b>control is preserved through the sidebar and the hand-back of consequential decisions.</b> You can watch it work in real time, interrupt to add a clarification, redirect it if it's heading the wrong way, or stop it outright, and when it hits something genuinely consequential or ambiguous, it brings that decision to you rather than guessing. So the mental shift Cowork asks of you is real but bounded: <b>you move from doing the steps to defining the outcome and reviewing the result,</b> while keeping a hand on the wheel for the moments that matter. Describe the deliverable well, grant the right access, glance at the sidebar, and check the finished thing, that's the whole discipline.",
+      "trade": [
+        ["Describe outcome vs direct each step", "Delegate vs control", "Describing the deliverable lets it do the whole job fast; directing every step is slower but is really just Chat in disguise"],
+        ["Broad access vs scoped access", "Capability vs caution", "More access lets it do more in one hand-off; scoping access tightly keeps its reach limited to what the job actually needs"],
+        ["Let it run vs supervise closely", "Speed vs oversight", "Letting it run is the point for routine jobs; supervising via the sidebar is wise for anything delicate or high-stakes"]
+      ],
+      "scale": [
+        "Cowork's payoff grows with the size of the chore, a three-file task barely needs it, but a thirty-file deliverable is exactly where handing off saves real time",
+        "Because everything shares one usage limit across surfaces, a big autonomous job can draw down your allowance faster than a quick Chat, worth pacing if you have several to run",
+        "The clearer and more complete your up-front brief, the less back-and-forth it needs mid-job, a crisp deliverable description scales your time better than babysitting it"
+      ],
+      "sec": [
+        "Grant Cowork access to the specific folders and tools a job needs, not blanket access, scoped permissions are your main safety lever on a surface that can act",
+        "Keep the consequential, irreversible decisions in your own hands; Cowork hands those back on purpose, so don't pressure it to just decide and move on",
+        "Always review the finished deliverable before you rely on it, especially for anything sensitive, hand-off means delegating the work, not abandoning oversight"
+      ],
+      "interview": "The friend-version: Cowork is like handing a whole project to a capable coworker and letting them go do it. Instead of guiding Claude message by message, you describe the finished thing you want, give it access to the right files and tools, and it works on its own, opening folders, browsing, using tools, then brings back the actual deliverable, a built spreadsheet, a report, a research summary. It runs on the same engine as Claude Code, just made simple for people who don't code, and it lives in the desktop app because it works with your real files. You stay in control the whole time: a sidebar lets you watch, redirect, or stop it, and it brings the big decisions back to you."
+    },
+    "code": {
+      "mech": "Here's the mechanism that makes Code feel less mysterious: it's the <b>same autonomous engine as Cowork, pointed at software instead of documents.</b> Give it a goal in a software project and it works on its own, reading across the whole codebase, writing and editing code, running commands, and carrying out multi-step changes, exactly the hands-off pattern you saw in Cowork, just in a developer setting. That's why neither is 'more advanced': they're the same capability in different surroundings. The intimidation people feel is almost entirely about the <b>rooms Code lives in</b>, terminals and code editors, which are unfamiliar developer spaces, not about the intelligence, which is identical to the Cowork you can already use comfortably.<br><br>This reframes the whole 'do I need Claude Code?' worry. The honest answer: a determined non-engineer <i>can</i> use Code for some file and automation work, but for almost everyone that's the long way around, because Cowork delivers the same autonomous help without ever opening a terminal. So the durable rule is simply: <b>if you're not living in a terminal, reach for Cowork.</b> Code earns its place when the job genuinely is software, changing a real codebase, where developer tools are the right home. Understanding this completes your map of the surfaces and, just as usefully, lets you talk confidently with technical teammates about which surface fits a job, without ever feeling you're failing to use the 'real' one. There's a separate small surface worth a passing mention too: <b>Claude in Chrome</b>, a browser-using version (a Chrome extension, in beta on paid plans) that can navigate, click, and fill forms, a glimpse of Claude acting directly in your browser.",
+      "trade": [
+        ["Code vs Cowork", "Software work vs everyday work", "Same engine; Code suits building/changing software in developer tools, Cowork suits documents-and-folders hand-offs"],
+        ["Use Code vs use Cowork (as a non-coder)", "The long way vs the friendly way", "A non-coder can force some jobs through Code, but Cowork gives the same hands-off result far more easily"],
+        ["Learn Code vs just understand it", "Hands-on skill vs a complete map", "Most non-coders never need to use Code; understanding where it fits is enough to choose surfaces well and talk to technical teammates"]
+      ],
+      "scale": [
+        "The more your work is genuinely software, the more Code is the right home; the more it's documents and folders, the more decisively it's Cowork, regardless of how big the job is",
+        "For a non-coder, scaling up your AI use means leaning harder on Cowork, not graduating to Code, the bigger hand-off jobs still belong in the friendlier surface",
+        "On a team, knowing the Code/Cowork split lets you route work cleanly: software tasks to the engineers' surface, everything else to Cowork, so nobody forces a job into the wrong room"
+      ],
+      "sec": [
+        "Because Code can change real software and run commands, it belongs with people who understand the codebase, the same review-the-consequential-steps discipline from Cowork applies, more so",
+        "If you're a non-coder tempted to use Code for a file chore, prefer Cowork, you get the same autonomy with guardrails designed for everyday work rather than software",
+        "Browser-using surfaces like Claude in Chrome act directly on web pages on your behalf, so treat them with the same caution as any hands-off surface: scope what they can do and review consequential actions"
+      ],
+      "interview": "Here's the friend-explanation. Claude Code is the version of Claude built for writing and changing actual software, and it lives in developer tools like a terminal and code editors, which is what makes it look scary from the outside. But here's the reassuring part: it runs on the exact same hands-off engine as Cowork. Think of them as twins raised in different rooms, one grew up in documents and plain language (Cowork), the other in software projects (Code). Neither is smarter. So if you're not living in a terminal, you're not missing a superpower by skipping Code, you already have it in Cowork. The rule of thumb is simply: not in a terminal? Reach for Cowork."
+    },
+    "prompting": {
+      "mech": "A little more on why a clear ask matters so much, and it's the same reason on every surface: <b>Claude works only from what you put in front of it.</b> It can't see your screen, your unspoken goal, or files you didn't share. So your prompt is the entire starting point, and a vague start leaves the result wide open, which is why 'write about our sale' drifts to bland, could-be-anyone text: with nothing to narrow it, the safe, average answer is the natural landing spot. A specific start, the task, the context Claude couldn't guess, and a description of a good result, narrows things dramatically, so the output lands close to what you pictured. Examples are powerful for the same reason: a concrete 'like this' sample is a pattern Claude can follow directly, often communicating tone and format faster than a paragraph of description. And refining works because your follow-up becomes part of the brief, steering the next try rather than rolling dice again.<br><br>The one real difference across surfaces is <b>where the briefing happens.</b> In <b>Chat</b>, you can brief lightly and then steer turn by turn, refining as you go, the conversation is forgiving. In <b>Cowork</b> and <b>Code</b>, Claude takes your brief and then runs many steps <b>on its own</b>, so an incomplete description has bigger consequences: it may produce the wrong whole deliverable before you can nudge it. That's why for hand-off surfaces you front-load the clarity, spell out the finished outcome, the constraints, and what 'done well' looks like, before letting it go. Same four habits everywhere (task, context, format, refine); you just pack more of them into the opening when you're handing off the entire job.",
+      "trade": [
+        ["Vague ask vs specific ask", "Less effort vs better result", "A quick vague ask is less typing but drifts to generic; a specific ask takes a moment longer and usually nails it"],
+        ["Telling vs showing", "Instructions vs an example", "Describing the format works; pasting one good 'like this' example often teaches the shape faster and more precisely"],
+        ["Light brief + steer (Chat) vs full brief up front (Cowork)", "Iterate live vs front-load clarity", "Chat forgives a thin start because you refine each turn; hand-off surfaces run on their own, so the up-front brief must carry the whole outcome"]
+      ],
+      "scale": [
+        "The bigger and more autonomous the job, the more a complete up-front brief pays off, in Chat you can fix course cheaply, but a Cowork hand-off acts on the whole brief before you see it",
+        "A reusable, well-worded prompt or brief is worth saving, if you do a task often, polishing the instructions once pays back every single time",
+        "Refining is cheap and fast in Chat, so don't agonize over a perfect first prompt there, get close, then nudge"
+      ],
+      "sec": [
+        "Include only the context a task needs, don't paste private or sensitive details just to be thorough, since everything you send is shared with the service",
+        "Tell Claude what you don't want, too ('use only the file I gave you', 'don't invent figures'), clear constraints meaningfully reduce off-target or made-up content, especially on hand-off jobs",
+        "For anything that must be accurate, say so in the brief and still review the result, a good prompt lowers the odds of a bad outcome but never guarantees one"
+      ],
+      "interview": "The friend-version: the biggest thing that decides how good Claude is for you isn't which surface you pick, it's how you ask, and it's not about tricks. Claude only knows what you put in front of it, so treat every request like briefing a sharp new teammate on day one: say plainly what you want, give the context they can't guess, like the audience and the goal, and describe what a good result looks like, the format, length, and tone. Show an example if you have one. And if the first result is close but off, just tell it what to change instead of starting over. The one twist: for hand-off surfaces like Cowork, you brief the whole finished outcome up front, because it'll go run with it on its own."
+    },
+    "capstone": {
+      "mech": "This lesson adds no new surface, it assembles everything you've learned into one <b>five-second habit</b> and clears the practical underbrush. The habit: before any task, run the <b>two questions</b>, is there a clear deliverable, and does it touch my files, browser, or tools? Both yes routes you to a <b>hand-off</b> surface (Cowork, or Code for software); otherwise it's <b>Chat.</b> Then <b>brief clearly,</b> lightly if you're steering in Chat, fully up front if you're handing off. That's it. Everything else, plan and model, just shapes what's <i>available</i> when you run the habit, and it's simpler than people fear.<br><br>On <b>plans:</b> Free ($0) gives you Chat, web search, memory, and file creation, more than enough to learn the whole habit, but not the hands-off surfaces, and only a handful of Projects. <b>Pro</b> ($20/month) is the meaningful upgrade: it unlocks <b>Cowork and Claude Code,</b> unlimited Projects, and deeper research. Beyond that are higher tiers for heavier use and plans for teams and organizations. A key practical fact: <b>everything you do shares one usage limit</b>, Chat, Cowork, and Code all draw from the same allowance, so a big autonomous job and a long chat pull from the same bucket. On <b>models,</b> keep the durable three-tier picture: <b>Haiku</b> (fastest, lightweight, for simple work), <b>Sonnet</b> (the balanced default that fits most tasks), and <b>Opus</b> (most capable, for genuinely hard problems). Right-size the tier rather than always grabbing the heavyweight. Put together, the practical layer is a quiet background setting: <b>pick the surface with the two questions, brief clearly, default to the balanced model, and upgrade to Pro the moment a real hand-off job needs Cowork.</b>",
+      "trade": [
+        ["Free vs Pro", "Learn on Chat vs unlock hand-off", "Free is plenty to build the habit on Chat; Pro unlocks Cowork and Code, the move when a real deliverable needs hand-off"],
+        ["Balanced model vs most-capable model", "Fast and sufficient vs maximum capability", "The balanced default fits most tasks and is quicker; reserve the heavyweight tier for genuinely hard work"],
+        ["One big hand-off vs many small Chats", "Convenience vs pacing your shared limit", "A hand-off does the whole job at once but draws more from your one shared usage bucket; small Chats sip from the same allowance"]
+      ],
+      "scale": [
+        "As your use grows, the two-question habit scales without effort, it's the same reflex whether you're doing one task or twenty, only the surfaces it points to change",
+        "Heavy or frequent hand-off jobs are what push you up the plans, if you're regularly running big Cowork deliverables, that's the signal you've outgrown Free",
+        "Because all surfaces share one usage limit, batching and pacing big autonomous jobs matters more as you scale, so a heavy morning doesn't exhaust your day's headroom"
+      ],
+      "sec": [
+        "Right-sizing the model and scoping a hand-off's access aren't just cost habits, they're caution habits: a smaller job with tight access is easier to review and harder to get wrong",
+        "Scale your care to the stakes, a quick Chat brainstorm needs little; a high-stakes Cowork deliverable deserves the stronger model, scoped access, and a careful human review",
+        "Keep the consequential decisions yours across every surface, the most reliable safety habit in the whole course is letting Claude do the work and keeping the important calls in human hands"
+      ],
+      "interview": "Here's the whole course in a friend-sized nutshell. Before any task, ask two questions: is there a clear deliverable, and does it touch my files or tools? Both yes means hand it off, use Cowork, or Code if it's software; otherwise just use Chat. Then brief it clearly. That's the entire decision. Underneath, keep it simple: Free gives you Chat to learn on, Pro unlocks the hands-off surfaces for twenty dollars a month, and everything shares one usage limit. Models come in three tiers, fast, balanced, and most-capable, so use the balanced one for most things and save the heavyweight for hard problems. Do that, and you're not just using Claude, you're picking the right Claude for the job, every time."
+    }
+  },
+  "PATTERNS": {},
+  "QUIZ": {
+    "meet": [
+      {
+        "q": "Your coworker says, \"Claude is just that chat window, right?\" What's the most accurate correction?",
+        "o": [
+          "Yes, the chat window is the only way to use Claude",
+          "No, the same Claude shows up in several surfaces, Chat, Cowork, and Code, each shaped for a different kind of work",
+          "No, each surface is a completely different and unrelated AI",
+          "Yes, but only on weekdays"
+        ],
+        "a": 1,
+        "exp": "The same underlying intelligence powers all the surfaces. Chat, Cowork, and Code share one Claude; what changes is how you work with it and how much it does on its own. Knowing the surfaces exist is the first step to picking the right one."
+      },
+      {
+        "q": "What best describes Cowork?",
+        "o": [
+          "A faster version of the Chat window",
+          "A mode where you describe a finished deliverable once and Claude works on its own across your files and tools to produce it",
+          "A tool only software engineers can use",
+          "A way to make Claude's answers shorter"
+        ],
+        "a": 1,
+        "exp": "Cowork is the hands-off surface for non-coders: you describe the deliverable, grant access to the files and tools it needs, and it works autonomously, then returns the finished thing. It's a different way of working, not a faster Chat."
+      },
+      {
+        "q": "Cowork and Claude Code are best described as...",
+        "o": [
+          "Completely different engines, with Code being far more powerful",
+          "The same autonomous engine, with Cowork aimed at everyday work and Code aimed at software",
+          "Two names for the exact same surface",
+          "Older and newer versions of Chat"
+        ],
+        "a": 1,
+        "exp": "They run on the same hands-off engine. Cowork is that engine reshaped for documents-and-folders work; Code is the same capability aimed at building software. Neither is 'smarter', they're built for different rooms."
+      },
+      {
+        "q": "You're a non-coder and you hear you 'should' be using Claude Code. What's the takeaway from this lesson?",
+        "o": [
+          "You must learn to use a terminal to get serious value from Claude",
+          "The same hands-off power is available to you in Cowork, so if you're not living in a terminal, reach for Cowork",
+          "You should avoid hands-off surfaces entirely",
+          "Code is the only surface that produces finished work"
+        ],
+        "a": 1,
+        "exp": "Code's power comes from the same engine as Cowork. If you're not a developer working in a terminal, Cowork gives you that same autonomous help in a friendly, plain-language package. You're not missing out by skipping Code."
+      },
+      {
+        "q": "Which statement about control on the hands-off surfaces is true?",
+        "o": [
+          "Once Cowork starts, you can't stop or redirect it",
+          "You can watch, interrupt, redirect, or stop it anytime, and it brings consequential decisions back to you",
+          "It makes all decisions on its own, including the risky ones",
+          "You have to approve every single step it takes"
+        ],
+        "a": 1,
+        "exp": "Even though Cowork works autonomously, you stay in control: a sidebar lets you watch, redirect, or stop it, and the consequential, hard-to-undo decisions are handed back to you rather than made on its own."
+      }
+    ],
+    "decide": [
+      {
+        "q": "What two questions best decide which surface to reach for?",
+        "o": [
+          "Which model is newest, and which is cheapest?",
+          "Is there a clear deliverable, and does the work touch my files, browser, or tools?",
+          "How fast can I type, and how long is the answer?",
+          "Is Claude online, and is my internet fast?"
+        ],
+        "a": 1,
+        "exp": "These two questions map directly to what the surfaces can do. A clear deliverable that touches your files or tools points to a hand-off surface (Cowork or Code); otherwise it's Chat. It's the whole decision in two questions."
+      },
+      {
+        "q": "A teacher just wants to brainstorm icebreaker ideas for the first day of class. Which surface fits?",
+        "o": [
+          "Cowork, because anything for a class is a deliverable",
+          "Chat, because it's an open question with no finished thing to produce across her files",
+          "Code, because she might save the ideas later",
+          "None, Claude can't help with brainstorming"
+        ],
+        "a": 1,
+        "exp": "There's no clear deliverable to produce across her files, she just wants ideas to think through. That's a thought-partner moment, which is exactly what Chat is for. The two questions both come back 'no', so Chat it is."
+      },
+      {
+        "q": "That same teacher has a chapter PDF and wants a 10-question quiz with an answer key built from it, saved as a document. Which surface fits?",
+        "o": [
+          "Chat, because she should paste the chapter in and do it turn by turn",
+          "Cowork, because there's a clear deliverable (the quiz) and it touches her file (the chapter)",
+          "Code, because building a quiz is software",
+          "None of the surfaces can make a quiz"
+        ],
+        "a": 1,
+        "exp": "Clear deliverable? Yes, the quiz. Touches her files? Yes, the chapter PDF. Both 'yes' points to a hand-off surface, and since she's a non-coder working with a document, that's Cowork. She describes the quiz and points it at the file."
+      },
+      {
+        "q": "In Anthropic's own framing, when should you reach for Chat?",
+        "o": [
+          "Only when you have a huge multi-file job",
+          "When you have a one-off question or want a thought partner",
+          "Whenever you want Claude to act on your files automatically",
+          "Never, Chat is being retired"
+        ],
+        "a": 1,
+        "exp": "Anthropic frames it as: reach for Chat when you have a one-off question or want a thought partner, and reach for Cowork when there's a clear deliverable and the work touches your files or tools. Chat is the ask-and-think surface."
+      },
+      {
+        "q": "You genuinely can't tell whether a task is a hand-off or just a question. What's the best move?",
+        "o": [
+          "Pick the most powerful surface to be safe",
+          "Start in Chat, it's the lowest-friction surface, and the task will reveal whether it's really a hand-off",
+          "Give up until you're certain",
+          "Always default to Cowork"
+        ],
+        "a": 1,
+        "exp": "When the two questions don't give a clear answer, default to Chat. It's the easiest door, and Claude can even help you figure out whether your task is a hand-off in disguise. You can always graduate to Cowork once the deliverable is clear."
+      }
+    ],
+    "chat": [
+      {
+        "q": "What problem does a Project solve in Chat?",
+        "o": [
+          "It makes Claude type faster",
+          "It holds your background files and instructions so every chat in it starts already knowing your context",
+          "It deletes your old conversations",
+          "It unlocks the most-capable model"
+        ],
+        "a": 1,
+        "exp": "A Project is a folder for related work that stores background and instructions, so you don't re-explain your situation in every new chat. Conversations inside it start already informed, which saves you from repeating yourself constantly."
+      },
+      {
+        "q": "Claude writes you a long document and it's hard to read in the chat scroll. What feature is meant for this?",
+        "o": [
+          "Voice mode",
+          "An Artifact, a side panel where substantial output lives so you can read, edit, and copy it cleanly",
+          "Web search",
+          "The memory feature"
+        ],
+        "a": 1,
+        "exp": "Artifacts give a substantial document or draft its own clean side panel instead of burying it in the conversation. You can read it properly, ask for edits in place, and copy it out when it's ready."
+      },
+      {
+        "q": "You ask Chat a question about something that happened this week. What should you make sure of?",
+        "o": [
+          "That you used the most expensive model",
+          "That web search actually ran, so the answer reflects current information rather than only what Claude already knew",
+          "That you typed in all capital letters",
+          "Nothing, Chat is always up to date"
+        ],
+        "a": 1,
+        "exp": "For anything recent, the answer should come from a live web search, not just Claude's existing knowledge. It's worth confirming search ran (look for a source) so a fresh-sounding answer is actually grounded in current information."
+      },
+      {
+        "q": "You want to ask Claude about a specific contract you have. What does Chat need from you?",
+        "o": [
+          "Nothing, it can already see the files on your computer",
+          "You need to upload the file (or paste the text), because Chat only knows what you put in front of it",
+          "You need to switch to Code first",
+          "You need to read it aloud in voice mode"
+        ],
+        "a": 1,
+        "exp": "Chat can't see your screen or your files on its own. To ask about a specific document, you upload it (or paste the text) so Claude has it to work from. A clear, readable file gets you a better answer."
+      },
+      {
+        "q": "Which best captures the right mindset for using Chat well?",
+        "o": [
+          "It's a one-shot vending machine, accept whatever the first answer is",
+          "You're in the driver's seat, and the features (Projects, Artifacts, uploads, search, voice) are a dashboard you reach into as needed",
+          "The more text you paste, the better, always",
+          "Memorize secret phrases to unlock better answers"
+        ],
+        "a": 1,
+        "exp": "Chat is a steer-every-turn surface, and its real power is the refining back-and-forth plus knowing which feature fits the moment, a Project for recurring context, an Artifact for a big draft, search for fresh facts. You're driving; they're the dashboard."
+      }
+    ],
+    "cowork": [
+      {
+        "q": "What's the best way to brief Cowork?",
+        "o": [
+          "Give it a click-by-click recipe for every step",
+          "Describe the finished deliverable you want and let it figure out the steps",
+          "Tell it as little as possible and hope",
+          "Only ever ask it yes-or-no questions"
+        ],
+        "a": 1,
+        "exp": "Cowork shines when you describe the outcome, the finished thing you want, rather than micromanaging each step. You define success; it plans and executes the steps on its own. A vague brief, though, gives it nothing to aim at, so be specific about the deliverable."
+      },
+      {
+        "q": "Cowork can only work with...",
+        "o": [
+          "Everything on your computer, automatically",
+          "The folders, browser access, and tools you've granted it",
+          "Files you read aloud to it",
+          "Nothing, it can't touch files at all"
+        ],
+        "a": 1,
+        "exp": "Cowork's reach is exactly what you allow. It works across the folders and tools you grant it access to, which is precisely what keeps you in control. If it's not touching a file you meant, check what access you actually gave it."
+      },
+      {
+        "q": "Why does Cowork live in the desktop app rather than only on the web?",
+        "o": [
+          "To make it harder to use",
+          "Because it works with your actual files and folders, which means it needs to be on your computer",
+          "Because the web version was discontinued",
+          "For no particular reason"
+        ],
+        "a": 1,
+        "exp": "Cowork's whole value is working across your real files and folders to produce a deliverable, so it lives in the Claude desktop app on your computer. That local access is exactly what makes the hand-off so powerful."
+      },
+      {
+        "q": "Cowork hits an ambiguous, high-stakes decision partway through a job. What does it do?",
+        "o": [
+          "Guesses and keeps going without telling you",
+          "Brings that consequential decision back to you rather than deciding on its own",
+          "Stops working forever",
+          "Deletes everything and starts over"
+        ],
+        "a": 1,
+        "exp": "Consequential, hard-to-undo decisions are handed back to you, not made autonomously. So don't expect Cowork to gamble on the big calls, it pauses for those, which is part of how it keeps you in control while working on its own."
+      },
+      {
+        "q": "What's the right way to think about your role when using Cowork?",
+        "o": [
+          "Do every step yourself and have Cowork watch",
+          "Describe the outcome clearly, then review the result, while keeping an eye on the sidebar",
+          "Hand it the job and never look at the result",
+          "Approve each individual action it takes"
+        ],
+        "a": 1,
+        "exp": "Cowork shifts you from doing the steps to defining the outcome and reviewing the deliverable. You stay involved, watching via the sidebar, answering the decisions it hands back, and checking the result, especially when the stakes are real."
+      }
+    ],
+    "code": [
+      {
+        "q": "What is Claude Code for?",
+        "o": [
+          "Making Chat answers shorter",
+          "Building and changing real software in developer tools like a terminal and code editors",
+          "Organizing your photos",
+          "Replacing Cowork for everyday documents"
+        ],
+        "a": 1,
+        "exp": "Claude Code is the surface for software work, it can read a codebase, write and edit code, run commands, and carry out multi-step software tasks. It lives in developer tools, which is what gives it that 'not for me' feel to non-coders."
+      },
+      {
+        "q": "How are Claude Code and Cowork related?",
+        "o": [
+          "They're unrelated products",
+          "They run on the same autonomous engine, Cowork aimed at everyday work, Code aimed at software",
+          "Code is a paid upgrade to Cowork",
+          "Cowork is an older version of Code"
+        ],
+        "a": 1,
+        "exp": "They share the same hands-off engine. Think of them as twins raised in different rooms: one grew up in documents and plain language (Cowork), the other in software projects (Code). Neither is smarter, they're aimed at different jobs."
+      },
+      {
+        "q": "You're not a programmer and your task is organizing a folder of documents. What's the rule of thumb?",
+        "o": [
+          "Learn to use a terminal and use Code",
+          "If you're not living in a terminal, reach for Cowork",
+          "Avoid all hands-off surfaces",
+          "Use Code because it's more powerful"
+        ],
+        "a": 1,
+        "exp": "The durable rule is: not in a terminal? Reach for Cowork. A non-coder can technically force some file work through Code, but it's the long way around, Cowork gives you the same autonomous help far more easily, in plain language."
+      },
+      {
+        "q": "Why is it still worth understanding Code even if you never use it?",
+        "o": [
+          "Because you must use it eventually",
+          "It completes the map, explains where the hands-off power comes from, and lets you talk confidently with technical teammates",
+          "It makes Chat faster",
+          "There's no reason to understand it"
+        ],
+        "a": 1,
+        "exp": "Even if you never open Code, knowing what it is rounds out your picture of the surfaces, shows where Cowork's power comes from, and lets you discuss which surface fits a job with technical colleagues, without ever feeling you're failing to use the 'real' one."
+      },
+      {
+        "q": "Which adjacent surface gets a brief mention as a browser-using agent?",
+        "o": [
+          "Claude in Chrome, a Chrome extension that can navigate, click, and fill forms (in beta on paid plans)",
+          "Claude in Email",
+          "Claude in Spreadsheets",
+          "Claude in Print"
+        ],
+        "a": 0,
+        "exp": "Claude in Chrome is a browser-using version of Claude, a Chrome extension that can navigate pages, click, and fill forms on your behalf. It's in beta on paid plans, and it's a glimpse of Claude acting directly inside your browser."
+      }
+    ],
+    "prompting": [
+      {
+        "q": "Why does 'write something about our sale' usually produce a bland result?",
+        "o": [
+          "Claude is being lazy",
+          "The ask is too vague, no task, audience, or format, so Claude fills the gaps with safe, average text",
+          "You need a secret command word",
+          "Claude can't write about sales"
+        ],
+        "a": 1,
+        "exp": "A vague prompt leaves the result wide open, so Claude lands on the generic, could-be-anyone version. Adding the specific task, the context (audience, goal), and the format you want narrows it and gets you something genuinely useful."
+      },
+      {
+        "q": "What three things turn a weak prompt into a strong one?",
+        "o": [
+          "Length, capital letters, and emojis",
+          "The task (what you want), the context (audience, goal, constraints), and the format (length, tone, shape) of a good result",
+          "A password, a model name, and a deadline",
+          "Flattery, repetition, and threats"
+        ],
+        "a": 1,
+        "exp": "Say the task plainly, give the context Claude can't guess, and describe what a good result looks like. Those three, plus an example when you have one, are the difference between a generic answer and one that fits your exact situation."
+      },
+      {
+        "q": "The first result is close but a bit too long and too formal. What's the best move?",
+        "o": [
+          "Start over with a brand-new, longer prompt",
+          "Refine with a small instruction, like 'shorter and a bit more casual'",
+          "Give up, Claude can't do it",
+          "Send the exact same prompt again"
+        ],
+        "a": 1,
+        "exp": "Prompting is a back-and-forth. When a result is close, a small refinement is faster and more reliable than rewriting from scratch, your feedback becomes part of the brief and steers the next attempt toward what you actually want."
+      },
+      {
+        "q": "Why does giving Claude an example ('like this') often work so well?",
+        "o": [
+          "It tricks Claude into trying harder",
+          "A concrete example is a pattern Claude can follow directly, often teaching the shape faster than a paragraph of description",
+          "Examples are required or Claude won't respond",
+          "It has no real effect"
+        ],
+        "a": 1,
+        "exp": "Claude is very good at following a concrete pattern, so one good 'like this' sample communicates tone and format precisely and fast, often better than describing them in words. Show it the shape you want when you can."
+      },
+      {
+        "q": "What's the one twist when prompting a hand-off surface like Cowork instead of Chat?",
+        "o": [
+          "You should give it less information",
+          "You brief the whole finished outcome up front, because it runs many steps on its own before you can nudge it",
+          "You must use voice mode",
+          "Prompting doesn't matter for Cowork"
+        ],
+        "a": 1,
+        "exp": "In Chat you can brief lightly and steer turn by turn. Cowork runs autonomously, so an incomplete brief can produce the wrong whole deliverable before you see it. Front-load the clarity: spell out the deliverable, constraints, and what 'done well' looks like."
+      }
+    ],
+    "capstone": [
+      {
+        "q": "What's the five-second habit this course boils down to?",
+        "o": [
+          "Always use the most powerful model",
+          "Run the two questions to pick the surface, then brief the task clearly",
+          "Paste as much text as possible into every prompt",
+          "Upgrade to the highest plan before doing anything"
+        ],
+        "a": 1,
+        "exp": "Surface first (via the two questions, clear deliverable? touches my stuff?), then a clear ask. That single move, pick the right Claude, then brief it well, is the whole course distilled into a reflex you run before any task."
+      },
+      {
+        "q": "Which plan unlocks the hands-off surfaces (Cowork and Claude Code)?",
+        "o": [
+          "Free ($0)",
+          "Pro ($20/month)",
+          "No plan, they're never available",
+          "Only enterprise plans"
+        ],
+        "a": 1,
+        "exp": "Free gives you Chat (with web search, memory, and file creation) to learn on, but the hands-off surfaces, Cowork and Claude Code, are unlocked by Pro at $20/month, along with unlimited Projects and deeper research. Higher tiers cover heavier use."
+      },
+      {
+        "q": "How does usage work across the surfaces?",
+        "o": [
+          "Each surface has its own separate, unlimited usage",
+          "Everything you do shares one usage limit, so a heavy Cowork job and your Chats draw from the same bucket",
+          "Only Chat counts toward usage",
+          "Usage resets every minute"
+        ],
+        "a": 1,
+        "exp": "There's a single shared usage allowance on your plan, and Chat, Cowork, and Code all draw from it. Worth knowing so a big autonomous hand-off job doesn't quietly use up the headroom you wanted for the rest of your day."
+      },
+      {
+        "q": "What's the durable way to think about the model tiers?",
+        "o": [
+          "Always pick the newest version number",
+          "Three tiers: Haiku (fastest, lightweight), Sonnet (balanced default), Opus (most capable), and right-size the tier to the task",
+          "There's only one model",
+          "Bigger is always better, so use the heaviest one"
+        ],
+        "a": 1,
+        "exp": "Keep the durable three-tier picture: Haiku for quick, simple work; Sonnet as the balanced default that fits most tasks; Opus for genuinely hard problems. Right-size it, the heavyweight is overkill and slower for everyday jobs."
+      },
+      {
+        "q": "When is the right moment to upgrade from Free to Pro?",
+        "o": [
+          "Immediately, before learning anything",
+          "When you have a genuine hand-off job that needs Cowork (or Code)",
+          "Never, Free does everything",
+          "Only when the most-capable model is required"
+        ],
+        "a": 1,
+        "exp": "Learn the two-question habit on Free, which gives you plenty of Chat to practice on. Upgrade to Pro the moment a real deliverable shows up that needs a hands-off surface, that's exactly when the hands-off surfaces, Cowork and Code, pay for themselves."
+      }
+    ]
+  },
+  "CARDS": [
+    { "m": "meet", "f": "Quick question or a draft, where you want to steer each turn", "b": "Reach for Chat. It's the back-and-forth surface, you ask, it answers, you refine. Perfect for one-off questions, thinking out loud, drafting, and analyzing a single file or image you upload." },
+    { "m": "meet", "f": "A whole finished deliverable that spans your files and tools, and you don't code", "b": "Reach for Cowork. Describe the finished thing once, grant access to the files and tools, and let Claude produce it on its own. It's the non-coder's hands-off surface in the desktop app." },
+    { "m": "meet", "f": "Building or changing actual software in a codebase", "b": "Reach for Code (Claude Code). It's the hands-off surface aimed at software, living in developer tools. Same engine as Cowork; if you're not a coder, use Cowork instead." },
+    { "m": "meet", "f": "Someone tells you 'just use Claude Code' but you don't program", "b": "They likely mean 'use the hands-off power', which for you is Cowork. Code and Cowork share one engine; if you're not living in a terminal, reach for Cowork." },
+    { "m": "meet", "f": "You're nervous about letting AI work on its own across your stuff", "b": "Use the hands-off surfaces anyway, you're in control. A sidebar lets you watch, redirect, or stop it anytime, and it brings the consequential, hard-to-undo decisions back to you." },
+    { "m": "decide", "f": "The two questions that pick your surface", "b": "1) Is there a clear deliverable? 2) Does the work touch my files, browser, or tools? Both yes → hand off (Cowork, or Code for software). Otherwise → Chat. When unsure, start in Chat." },
+    { "m": "decide", "f": "You just want to think something through or get one answer", "b": "That's Chat, a thought partner or a one-off question. No clear deliverable to produce across your files means you don't need a hand-off surface." },
+    { "m": "decide", "f": "You're describing the same task across ten Chat messages", "b": "You've crossed from 'ask' into 'hand-off'. That's the signal to move the whole job to Cowork, describe the deliverable once and let it run, instead of grinding it out turn by turn." },
+    { "m": "decide", "f": "You genuinely can't decide which surface to use", "b": "Default to Chat. It's the lowest-friction door, and Claude can help you work out whether the task is really a hand-off. You can always graduate to Cowork once the deliverable is clear." },
+    { "m": "chat", "f": "You keep re-pasting the same background into every chat", "b": "Set up a Project. It holds your background files and instructions, so every conversation inside it starts already knowing your context, no re-explaining your situation each time." },
+    { "m": "chat", "f": "Claude wrote a long doc that's hard to read in the scroll", "b": "Look for the Artifact side panel. Substantial drafts live there so you can read them cleanly, ask for edits in place, and copy them out when ready." },
+    { "m": "chat", "f": "You need a current, up-to-the-minute fact in Chat", "b": "Use web search and confirm it actually ran (look for a source). Without it, Claude answers from what it already knows, which may be out of date for anything recent." },
+    { "m": "chat", "f": "You want to ask about a specific file or photo", "b": "Upload it (or paste the text). Chat can't see your screen or files on its own, it only knows what you put in front of it, so a clear, readable file gets a better answer." },
+    { "m": "cowork", "f": "The best way to brief Cowork", "b": "Describe the finished deliverable, not the click-by-click steps. Say exactly what the result should contain and look like; Cowork plans and executes the steps on its own." },
+    { "m": "cowork", "f": "Cowork isn't touching the file you meant", "b": "Check the access you granted. Cowork can only reach the folders, browser, and tools you've allowed, that scoping is exactly what keeps you in control of its reach." },
+    { "m": "cowork", "f": "A folder of messy inputs you want turned into one clean output", "b": "Textbook Cowork job. Point it at the folder, describe the single clean deliverable (a summary, a spreadsheet, a report), and let it work, then review the result." },
+    { "m": "cowork", "f": "Your real job when using Cowork", "b": "Shift from doing the steps to describing the outcome clearly and reviewing the result. Keep an eye on the sidebar, answer the decisions it hands back, and always check high-stakes deliverables." },
+    { "m": "code", "f": "What Claude Code is actually for", "b": "Building and changing real software in a codebase, using developer tools like a terminal and code editors. It runs on the same autonomous engine as Cowork, just aimed at software." },
+    { "m": "code", "f": "The rule of thumb for non-coders", "b": "If you're not living in a terminal, reach for Cowork. Code's power is the same engine as Cowork; you already have that hands-off capability in plain-language form." },
+    { "m": "code", "f": "How to picture Cowork and Code's relationship", "b": "Twins raised in different rooms. Same intelligence and same hands-off ability; one grew up in documents and plain language (Cowork), the other in software projects (Code). Neither is smarter." },
+    { "m": "code", "f": "Claude in Chrome, in one line", "b": "A browser-using version of Claude (a Chrome extension) that can navigate pages, click, and fill forms on your behalf. It's in beta on paid plans, a glimpse of Claude acting in your browser." },
+    { "m": "prompting", "f": "The mindset for asking Claude anything", "b": "Brief it like a brilliant new teammate on day one. It can't read your mind or see your screen, only what you give it. Say the task, the context it can't guess, and what a good result looks like." },
+    { "m": "prompting", "f": "Three things that upgrade any prompt", "b": "Task (what you want done), context (audience, goal, constraints it can't guess), and format (length, tone, shape of a good answer). Add a 'like this' example when you have one." },
+    { "m": "prompting", "f": "First result is close but not quite right", "b": "Refine, don't restart. Reply with one small instruction ('shorter', 'warmer', 'focus on point two'). Your feedback steers the next try, and it's faster than rewriting your whole request." },
+    { "m": "prompting", "f": "The one twist when briefing Cowork instead of Chat", "b": "Brief the whole finished outcome up front. Cowork runs many steps on its own, so a thin brief can produce the wrong whole deliverable. Spell out the deliverable, constraints, and what 'done well' looks like." },
+    { "m": "capstone", "f": "The whole course as a five-second habit", "b": "Match the surface to the job (run the two questions), then ask clearly. Pick Chat, Cowork, or Code, brief it well, and let plan and model details sit quietly in the background." },
+    { "m": "capstone", "f": "Free vs Pro, in plain terms", "b": "Free ($0) gives you Chat to learn on (web search, memory, file creation, a few Projects). Pro ($20/month) unlocks the hands-off surfaces, Cowork and Code, plus unlimited Projects and deeper research." },
+    { "m": "capstone", "f": "How usage works across surfaces", "b": "One shared usage limit on your plan covers everything, Chat, Cowork, and Code all draw from the same bucket. A big hand-off job can use up the headroom you wanted for the rest of the day." },
+    { "m": "capstone", "f": "The three model tiers, and how to choose", "b": "Haiku (fastest, lightweight) for simple work, Sonnet (balanced default) for most tasks, Opus (most capable) for genuinely hard problems. Right-size it; the heavyweight is overkill for everyday jobs." },
+    { "m": "capstone", "f": "When to upgrade from Free to Pro", "b": "The moment you have a genuine hand-off job that needs Cowork (or Code). Learn the two-question habit on Free, then unlock the hands-off surfaces when a real deliverable shows up." }
+  ],
+  "SCENARIOS": [
+    {
+      "id": "s1",
+      "block": "b1",
+      "title": "Three jobs, one busy morning",
+      "sit": "Your friend Priya runs a small bakery and just started using Claude. In one morning she has three things on her plate: she wants to figure out a friendly way to tell a regular customer their cake order will be late; she has a folder of forty supplier invoices she needs boiled down into one summary spreadsheet with totals and due dates; and she has a quick question about how to store buttercream. She's overwhelmed and asks you, 'Do I just type all of this into the chat box?'",
+      "task": "Help Priya see that these are different kinds of jobs, and point each one to the right Claude surface, with a sentence on why.",
+      "model": "Great instinct to ask, because these really are three different kinds of jobs, and the chat box is only right for two of them. Here's the simple test I use: is there a finished thing I want produced, and does it touch my files? Run that on each. The buttercream question and the 'how do I word this delay' note are both just asking or thinking, no deliverable to build across your files, so those are Chat: type them in, go back and forth, refine the wording until it sounds like you. The forty invoices are different. There's a clear deliverable (one summary spreadsheet) and it spans a whole folder of your files. That's exactly the kind of job to hand off to Cowork, the hands-off surface in the desktop app. You'd point it at the folder, say 'build me a spreadsheet with each supplier, total, and due date, and flag anything overdue', and let it work while you do something else. So: two quick conversations in Chat, one job handed off to Cowork. Same Claude behind all of it, you're just choosing how much to hand over.",
+      "pts": [
+        "The test: is there a clear deliverable, and does it touch my files or tools?",
+        "The buttercream question and the wording help are asks/think-throughs → Chat",
+        "The folder of forty invoices into one spreadsheet is a deliverable across her files → Cowork",
+        "Cowork is the hands-off surface for non-coders; describe the outcome and let it work",
+        "Same Claude everywhere; the choice is just how much you hand over"
+      ]
+    },
+    {
+      "id": "s2",
+      "block": "b1",
+      "title": "The terminal panic",
+      "sit": "A colleague read online that 'serious' AI users use Claude Code, so he tried to open it, hit a terminal (that black text window where you type commands), and immediately felt out of his depth. He's not a programmer, he works in marketing. Now he's convinced he's 'too non-technical for real AI' and is thinking about giving up on the powerful stuff entirely.",
+      "task": "Talk him off the ledge. Explain what Code actually is, why he doesn't need it, and where the same power lives for someone like him.",
+      "model": "Please don't give up, you panicked at the wrong door, that's all. Claude Code is the version built for writing and changing actual software, and it lives in developer tools like that terminal, which is exactly why it felt like a wall. But here's the part that changes everything: Code isn't some smarter, higher tier of Claude. It runs on the very same hands-off engine as a surface called Cowork. Picture them as twins raised in different rooms, one grew up in software projects and speaks 'terminal' (Code), the other grew up in documents and folders and speaks plain English (Cowork). Same intelligence, same ability to go off and do a whole job on its own. So as a marketer, you are absolutely not 'too non-technical for real AI', the real, powerful, hands-off stuff is sitting right there for you in Cowork, no terminal required. The rule of thumb to remember: if you're not living in a terminal, reach for Cowork. You didn't fail at the powerful stuff. You just walked up to the engineer's entrance when yours is right next door.",
+      "pts": [
+        "Code is the surface for building software, and it lives in developer tools like the terminal",
+        "Code isn't a smarter Claude, it runs on the same hands-off engine as Cowork",
+        "Picture Cowork and Code as twins in different rooms: plain-language vs software",
+        "A non-coder isn't 'too non-technical', the same power is in Cowork, no terminal needed",
+        "Rule of thumb: not living in a terminal? Reach for Cowork"
+      ]
+    },
+    {
+      "id": "s3",
+      "block": "b1",
+      "title": "Stuck in the copy-paste loop",
+      "sit": "A friend has been using the chat window to clean up a big project: she has a folder of twenty event photos that need renaming, plus a dozen documents she wants key dates pulled out of. She's been doing it one file at a time, copy-pasting text into the chat, getting an answer, pasting it back, over and over, for an hour. She's exhausted and says 'this AI thing is more work than just doing it myself.'",
+      "task": "She's about to quit. Explain what went wrong with her approach and what she should have reached for instead.",
+      "model": "You're exhausted because you're using the wrong surface for this job, not because AI is more work, honestly, you've been doing the hard part by hand. Here's the tell: when you find yourself describing the same task across a dozen messages, copy-pasting files in and answers out, that's a flashing sign that you've outgrown the chat window for this. The chat box is for asking and thinking, where you steer every turn. But what you've actually got is a hand-off job: a clear deliverable (renamed photos, a list of key dates) that spans a whole folder of your files. That's exactly what Cowork is for. Instead of feeding it one file at a time, you'd point Cowork at the folder, say 'rename these photos to this format and pull the key dates out of these documents into one list', and let it work across everything on its own. It does the twenty-times-over grind for you and hands back the finished result. So the fix isn't to quit, it's to stop steering each tiny step and hand off the whole job. Run this quick check next time: is there a finished thing I want, and does it touch a bunch of my files? If yes, that's Cowork, not the chat box.",
+      "pts": [
+        "Repeating a task across many messages is the sign you've outgrown Chat for this job",
+        "Chat is for asking and thinking, steering each turn; this is a multi-file hand-off",
+        "Renamed photos plus a list of dates is a clear deliverable spanning her files → Cowork",
+        "Point Cowork at the folder, describe the outcome, and let it do the repetitive work",
+        "Quick check: clear deliverable that touches many files? Hand it off to Cowork"
+      ]
+    },
+    {
+      "id": "s4",
+      "block": "b1",
+      "title": "The thought partner vs the deliverable",
+      "sit": "A founder you know is prepping for a board meeting. He has two tasks and isn't sure how to approach either with Claude. First, he wants to talk through how to frame some disappointing quarterly numbers, he's genuinely unsure what angle to take and wants to reason it out. Second, he has a folder of a dozen customer-interview transcripts and wants them turned into a clean one-page summary of the top themes, with supporting quotes, that he can drop into his deck.",
+      "task": "Without overcomplicating it, route each of his two tasks to the right surface and explain the reasoning so he can do this himself next time.",
+      "model": "These two feel similar because they're both 'board prep', but they're actually opposite kinds of work, and the two questions sort them instantly. Question one: is there a clear deliverable? Question two: does it touch my files or tools? Run them on each task. Framing the disappointing numbers, you're not producing a finished artifact, you're thinking out loud, weighing angles, wanting a sounding board. No clear deliverable. That's a thought-partner moment, which is exactly what Chat is for: open a conversation, talk it through, let it push back, land on your angle. The transcripts are the mirror image. There's a clear deliverable (a one-page themes summary with quotes) and it spans a whole folder of your files. Both questions come back 'yes', so that's a hand-off to Cowork: point it at the folder, describe the one-pager you want, and let it read all twelve and assemble it while you work on the rest of the deck. So same meeting, two surfaces, one because you want to think, the other because you want a thing built. Next time, just ask yourself those two questions before you start, and the right Claude picks itself.",
+      "pts": [
+        "Both are 'board prep' but they're opposite kinds of work",
+        "Framing the numbers has no deliverable, it's thinking out loud → Chat (thought partner)",
+        "The transcripts into a one-pager is a clear deliverable across his files → Cowork",
+        "The two questions (deliverable? touches my stuff?) sort them instantly",
+        "Same goal, two surfaces: one to think, one to build"
+      ]
+    },
+    {
+      "id": "s5",
+      "block": "b2",
+      "title": "Re-explaining yourself every time",
+      "sit": "A freelance designer uses Chat constantly, but she's frustrated: every single time she starts a new conversation about her biggest client, she has to re-paste the brand's style guide, explain the project, and remind Claude of the tone they want. It's eating ten minutes at the start of every chat, and she's started to dread it. She asks whether she just has to live with this.",
+      "task": "She thinks this re-explaining is unavoidable. Show her the Chat feature that fixes it, and how she'd use it.",
+      "model": "You absolutely don't have to live with that, you're paying a ten-minute tax that a Project completely removes. Here's the thing most people miss about Chat: it has a feature called Projects, which is basically a folder for one client or one body of work that holds the background for you. So for this client, you'd make a Project, drop in the brand style guide, a note about the project, and a line about the tone they like, once. From then on, every chat you start inside that Project already knows all of it. No re-pasting, no reminding, you just open a new conversation and get straight to the actual ask, and Claude's already up to speed on the brand and tone. It's the difference between briefing a new temp every morning and working with someone who already knows the account. Two quick tips: keep the Project's background tidy and current (swap in the new style guide when it changes), and use a separate Project per major client so their context never bleeds together. Set it up once today and you'll claw back those ten minutes on every single chat from here on.",
+      "pts": [
+        "The re-explaining tax is avoidable, that's exactly what Projects fix",
+        "A Project is a folder for one client/body of work that holds background and instructions",
+        "Add the style guide, project notes, and tone once; every chat in it starts informed",
+        "No more re-pasting, open a new conversation and get straight to the ask",
+        "Use a separate Project per major client and keep its background current"
+      ]
+    },
+    {
+      "id": "s6",
+      "block": "b2",
+      "title": "The buried draft",
+      "sit": "A colleague asked Claude in Chat to write a detailed three-page proposal. It did a good job, but now the proposal is tangled up in the middle of a long conversation, with his follow-up questions and Claude's replies wrapped around it. Every time he wants to tweak one paragraph, he scrolls forever to find it, and he's losing track of which version is the latest. He's copy-pasting chunks into a separate document just to keep it straight.",
+      "task": "Explain the Chat feature he's not using, and how it would make editing this proposal painless.",
+      "model": "You're fighting the scroll, and there's a feature built to end exactly that fight, Artifacts. When Claude makes something substantial like your three-page proposal, it can live in its own side panel called an Artifact, separate from the chatter of the conversation. Instead of the proposal being buried between your questions and Claude's replies, it sits cleanly in that panel where you can actually read it like a document. And here's the part that fixes your tweaking pain: you don't scroll back and hunt for a paragraph, you just tell Claude in the chat 'make the second paragraph punchier' or 'tighten the pricing section', and the Artifact updates in place, so there's always one current version sitting right there, not five copy-pasted drafts scattered around. When it's done, you copy the whole clean thing out in one go. So you can stop maintaining that separate document by hand. Ask Claude to put the proposal in an Artifact (or look for it to pop into the side panel when output is big), and edit it by talking to it, while the clean, latest version stays put in the panel. Way less scrolling, zero version confusion.",
+      "pts": [
+        "The fix for a draft buried in the scroll is the Artifact side panel",
+        "Substantial output (like a 3-page proposal) lives there cleanly, separate from the chat",
+        "Edit by telling Claude what to change; the Artifact updates in place",
+        "There's always one current version, no scattered copy-pasted drafts",
+        "Copy the clean final out in one go when it's ready"
+      ]
+    },
+    {
+      "id": "s7",
+      "block": "b2",
+      "title": "The unclear hand-off",
+      "sit": "A small-business owner finally tried Cowork for a real job: she had a folder of customer feedback files and told it, simply, 'help me with my customer feedback.' Cowork did... something, it produced a summary, but it wasn't the format she needed, didn't flag the complaints she cared about most, and organized things in a way that wasn't useful to her. She's disappointed and wonders if Cowork just 'isn't that smart.'",
+      "task": "Explain what actually went wrong (it's not Cowork's intelligence), and coach her on how to brief a hand-off job properly.",
+      "model": "Cowork is plenty smart, the problem was the brief, not the brain. Here's the key difference from the chat window: in Chat you can start vague and steer turn by turn, nudging as you go. But Cowork takes your instruction and runs the whole job on its own, many steps, before it comes back. So 'help me with my customer feedback' gives it almost nothing to aim at, and it has to guess what 'help' and 'done well' even mean, which is why you got a summary that technically answered but missed everything you actually cared about. The fix is to brief the finished outcome up front, the way you'd brief a capable assistant you won't be checking in with for an hour. Tell it the deliverable exactly: 'Read every file in this folder and give me a one-page summary grouped by theme, with the top five complaints called out at the top, in a bulleted document I can share with my team.' Spell out the format, what to prioritize, and what a good result looks like, all before you let it run. Same Cowork, totally different result, because now it knows the target. Rule for hand-off jobs: the clarity you'd normally add by steering in Chat, you pack into the opening instead.",
+      "pts": [
+        "The problem was a vague brief, not Cowork's intelligence",
+        "Unlike Chat, Cowork runs the whole job on its own before returning, so it can't be nudged mid-step",
+        "A vague 'help me with X' gives it nothing to aim at; it has to guess the outcome",
+        "Brief the finished deliverable up front: format, priorities, and what 'done well' looks like",
+        "For hand-off jobs, front-load the clarity you'd otherwise add by steering in Chat"
+      ]
+    },
+    {
+      "id": "s8",
+      "block": "b2",
+      "title": "Letting Cowork run with no guardrails",
+      "sit": "An eager new user grants Cowork access to a big chunk of his computer and tells it to 'reorganize and clean up all my work files,' then walks away to get lunch without watching. He comes back worried: he's not sure what it changed, whether it touched files he didn't mean, or whether it made decisions he wouldn't have. Nothing's broken, but he feels like he lost control, and now he's scared to use Cowork at all.",
+      "task": "Reassure him, and teach him the habits that keep a hand-off surface both powerful and safely under control.",
+      "model": "Take a breath, nothing went wrong, you just skipped the guardrails that make hand-off feel safe instead of scary. Cowork is powerful precisely because it works on its own, but that means a few simple habits keep you firmly in control. First, scope the access. Don't hand it a big chunk of your computer; give it just the specific folder the job actually needs. Its reach is exactly what you grant, no more, so a tight grant is your main safety lever. Second, brief a narrow, clear deliverable instead of a sweeping 'clean up everything', vague plus broad access is what made you nervous. Something like 'in this one folder, rename files to this format and move anything older than a year into an Archive subfolder' is far easier to predict and check. Third, watch the sidebar while it works, at least the first few times. You can see what it's doing, redirect it, or stop it instantly, you're never actually locked out. And notice it already hands the truly consequential, hard-to-undo decisions back to you rather than guessing. Last, review the result before trusting it. So you don't have to fear Cowork, you just drive it like a powerful tool: scoped access, a clear narrow brief, an eye on the sidebar, and a quick review. Do that and the power feels like a gift, not a gamble.",
+      "pts": [
+        "Nothing broke, he just skipped the guardrails that make hand-off feel safe",
+        "Scope access tightly: give Cowork only the folder the job needs, its reach is what you grant",
+        "Brief a narrow, clear deliverable instead of a sweeping 'clean up everything'",
+        "Watch the sidebar, you can redirect or stop it anytime, and it hands back consequential decisions",
+        "Always review the result before relying on it"
+      ]
+    },
+    {
+      "id": "s9",
+      "block": "b2",
+      "title": "The Ferrari for every errand",
+      "sit": "A new coworker discovered the most-capable model tier and now uses it for absolutely everything, quick rewording, casual brainstorming, dashing off a one-line reply. He's proud of always picking 'the best one,' but his quick little tasks feel oddly slow, and he's burning through his usage faster than he expected. He asks you, sincerely, if he's doing it right.",
+      "task": "Without overwhelming him, give him a simple habit for choosing a model tier, and explain why his usage is draining.",
+      "model": "Love that you want to do things well, let's just right-size it, because 'always the most powerful model' is costing you speed and usage you don't need to spend. Think of the model tiers like vehicles for a trip. There's a fast, lightweight one (Haiku) that's perfect for quick, simple errands, rewording, a one-line reply, light brainstorming. There's a balanced default (Sonnet) that handles most tasks comfortably, this is your everyday pick. And there's the most-capable one (Opus) for the genuinely hard, high-stakes stuff. Using the heavyweight for a quick reword is like taking a moving truck to grab a coffee: slower to get going, and overkill. So the habit is just: default to the balanced tier, drop to the fast one for trivial stuff, and reach for the most-capable one only when the work is truly difficult. On your usage draining, that's worth knowing: everything you do across all the surfaces draws from one shared usage limit, and heavier model work pulls more from that bucket. So leaning on the heavyweight for everything quietly eats your allowance. Right-size the tier to the task and you'll feel things speed up and your usage stretch a lot further, no loss in quality where it actually matters.",
+      "pts": [
+        "Right-size the model tier instead of always grabbing the most-capable one",
+        "Three tiers: fast/lightweight (Haiku), balanced default (Sonnet), most-capable (Opus)",
+        "Default to balanced, drop to fast for trivial tasks, reserve the heavyweight for truly hard work",
+        "The heavyweight is slower and overkill for quick tasks",
+        "All surfaces share one usage limit, and heavier model work drains it faster"
+      ]
+    },
+    {
+      "id": "s10",
+      "block": "b2",
+      "title": "Free, and hitting a wall",
+      "sit": "A teacher has been happily using Claude on the free plan for weeks, asking questions, drafting parent emails, getting feedback on lesson ideas, all in Chat. Now she has a bigger job: a folder of student worksheets she wants turned into a single graded summary. She tried to find Cowork to hand it off, but it's not available to her, and she's confused about whether she's doing something wrong or the feature is broken.",
+      "task": "Explain why she can't access Cowork, whether she's done anything wrong, and how to think about whether to upgrade.",
+      "model": "Nothing's broken and you haven't done anything wrong, you've just hit the edge of what the free plan includes, and honestly, it's a sign you're ready for the next step. Here's the lay of the land: the free plan ($0) gives you Chat with the useful everyday stuff, web search, memory, drafting, which is exactly what you've been thriving on. But the hands-off surfaces, Cowork and Claude Code, are unlocked by Pro, which is $20 a month. So Cowork isn't hiding or glitchy; it's simply a Pro feature. Now, should you upgrade? Run the test: your worksheet job has a clear deliverable (one graded summary) and it spans a folder of your files, that's a textbook hand-off, and it's precisely the kind of task Cowork is built to save you hours on. That's exactly the moment Pro tends to pay for itself: when you've outgrown asking-and-drafting and you've got real deliverables to hand off. My suggestion: you've already learned the whole habit on Free, which is the smart way to do it. Now that a genuine hand-off job has shown up, Pro is the natural unlock. And if you do upgrade, remember everything shares one usage limit, so pace the big jobs.",
+      "pts": [
+        "She hasn't done anything wrong, Cowork is a Pro feature, not available on Free",
+        "Free ($0) gives Chat with web search, memory, and drafting, what she's been using",
+        "Pro ($20/month) unlocks the hands-off surfaces, Cowork and Code",
+        "Her worksheet job is a clear deliverable across her files, a textbook Cowork hand-off",
+        "Upgrading makes sense when a real hand-off job appears; then pace jobs since usage is shared"
+      ]
+    },
+    {
+      "id": "s11",
+      "block": "b2",
+      "title": "The blurry contract photo",
+      "sit": "A friend snapped a photo of a printed contract with his phone, uploaded it to Chat, and asked for a summary. The answer came back vague and partly wrong, missing key clauses and inventing a detail or two. He's annoyed and declares that Claude 'can't even read a simple document.' He's about to give up on using it for any of his paperwork.",
+      "task": "Explain in plain terms why the photo gave a poor result, and tell him how to actually get a good summary, without pretending the limitation doesn't exist.",
+      "model": "Hold on, this is a fixable setup problem, not Claude failing at reading. When you ask Claude to work from a file, it does best with clear, real text to read. A phone photo of a printed page is just an image, and if the words don't come through cleanly, maybe it's a bit blurry, angled, or low-contrast, Claude is left working from a poor capture, which is exactly how you get a vague summary with a couple of invented details filling the gaps. So the issue was the input quality, not its ability to understand a contract. Here's how to get a great summary instead. If you have a digital version of the contract (a PDF or a Word doc), upload that or paste the actual text, clean text in gives you a sharp, accurate summary out. If all you have is paper, take the clearest possible shot: flat, well-lit, straight-on, filling the frame, or better, use a scanning app that turns the page into real text first, then hand Claude that. Bottom line: give it good text and it'll summarize a contract beautifully. And one habit for anything that matters, like a contract: let Claude draft the summary, then check the key clauses yourself against the original. Better input, plus a quick human check on the important stuff, turns this from a frustration into a real time-saver.",
+      "pts": [
+        "Claude works best from clear, real text; a blurry photo is a poor-quality input",
+        "A vague, partly-invented summary came from the bad capture, not an inability to understand contracts",
+        "Best fix: upload a digital version (PDF/Word) or paste the actual text",
+        "If only paper exists, take a clean, flat, well-lit shot or scan it into real text first",
+        "For important documents, let it draft, then verify key clauses against the original yourself"
+      ]
+    },
+    {
+      "id": "s12",
+      "block": "b2",
+      "title": "Which Claude builds the newsletter?",
+      "sit": "A community organizer puts out a monthly newsletter. Her process is messy: she gathers updates from a shared folder of notes, looks up a couple of current local facts online, and assembles it all into a formatted newsletter document. She's heard she could 'use AI for this' but has no idea whether that means chatting, or something more hands-off, and she's worried about picking wrong.",
+      "task": "Walk her through which surface fits this job and why, including how the pieces of her messy process map onto it.",
+      "model": "Good news: this whole messy process is basically tailor-made for one surface, so you don't have to agonize. Run the two questions. Is there a clear deliverable? Yes, a finished, formatted newsletter document. Does the work touch your files, your browser, or tools? Yes, on all counts: it pulls from your folder of notes, it needs a couple of current facts from the web, and it produces a document. Both questions are a firm 'yes', which points you straight at Cowork, the hands-off surface. Here's the lovely part: the very things that make your process messy are exactly what Cowork is built to handle in one go. The folder of notes? Give it access and it reads them all. The current local facts? It can browse the web for those. The formatted document? That's the deliverable it assembles and hands back. So instead of doing the gather-look up-assemble shuffle yourself, you'd brief it once, 'using the notes in this folder, write this month's newsletter in our usual format, and look up these two current local facts to include', and let it pull the whole thing together. You'd review the draft, tweak anything, and you're done. One surface, one hand-off, your messiest monthly chore handled. (If you're on the free plan, Cowork is the Pro upgrade, and this is exactly the kind of job that makes it worth it.)",
+      "pts": [
+        "Both questions are yes: clear deliverable (the newsletter) and it touches files, web, and tools",
+        "Both yes points straight to Cowork, the hands-off surface",
+        "Her messy steps map onto Cowork's strengths: read the notes folder, browse for facts, assemble the doc",
+        "Brief it once with the outcome and the facts to include, then review the draft",
+        "Cowork is a Pro feature, and a multi-source deliverable like this is exactly what justifies it"
+      ]
+    },
+    {
+      "id": "s13",
+      "block": "b2",
+      "title": "Bouncing an idea, not building a thing",
+      "sit": "A writer friend is stuck on the plot of a short story. She wants to talk through a few possible directions, have something push back on her ideas, and think out loud until the next scene clicks. She's been told Cowork is 'the powerful one,' so she's about to set up a whole hands-off job for this, granting folder access and all. She asks if that's the right move.",
+      "task": "Gently steer her to the right surface and explain why the 'powerful one' is actually the wrong fit here.",
+      "model": "Hold off on the folder access, you're about to bring a forklift to a chess match. 'Powerful' isn't the same as 'right for this', and what you're describing isn't a hand-off job at all. Run the two questions: is there a clear deliverable, an actual finished thing you want produced? Not really, you want to think, explore, and be pushed back on. Does it need to touch your files or tools? No. Both answers are 'no', which points squarely at Chat. This is the classic thought-partner moment, and Chat is exactly built for it: open a conversation, lay out your possible directions, and go back and forth. Ask it to argue against your favorite option, to spot plot holes, to suggest a twist, and steer every turn until the next scene clicks. Cowork is wonderful when there's a finished deliverable spanning your files, like 'turn this folder of notes into a formatted outline', but for pure thinking-out-loud, all that hands-off machinery just gets in the way. So skip the setup, just start a chat and talk it through. Save Cowork for when you actually have a thing you want built, not a problem you want to think about.",
+      "pts": [
+        "'Powerful' isn't the same as the right fit; this isn't a hand-off job",
+        "Two questions both come back 'no': no clear deliverable, doesn't touch her files",
+        "Both 'no' points to Chat, the thought-partner surface",
+        "Use Chat to bounce ideas, get pushback, and steer turn by turn",
+        "Save Cowork for when there's an actual deliverable to build across your files"
+      ]
+    },
+    {
+      "id": "s14",
+      "block": "b2",
+      "title": "The thin brief, fixed",
+      "sit": "A manager wants to use Claude to draft a performance-review summary for one of her reports. She types into Chat: 'Write a performance review.' The result is generic and could apply to literally anyone, no specifics, wrong tone, missing everything that matters about this particular person. She's frustrated and assumes Claude just isn't capable of this kind of nuanced writing.",
+      "task": "Explain why the result was generic, and coach her to a prompt that would actually work, without writing the review for her.",
+      "model": "Claude is absolutely capable of nuanced writing, it just had nothing to be nuanced about. 'Write a performance review' tells it nothing: who the person is, what they did this year, the tone you want, or what a good summary looks like to you. With no specifics to work from, it does the only thing it can and hands back the safe, average, could-be-anyone version. The fix isn't a magic phrase, it's a proper brief, the way you'd brief a colleague writing it on your behalf. Give it the raw material: the person's role, two or three concrete things they did well, an area to grow, and any specific examples or feedback you've got. Give it the context: who's reading this and how candid it should be. And give it the shape: 'a warm but honest three-paragraph summary, first naming strengths with examples, then one growth area framed constructively.' Suddenly it has everything it needs to write something that actually sounds like this person. One more habit: if the first draft is close but a little off, don't start over, just nudge it ('make the growth area gentler', 'add the bit about the client project'). The rule that fixes almost everything: vague brief, generic result; specific brief, specific result. And for something this sensitive, always read and adjust it yourself before it goes anywhere.",
+      "pts": [
+        "The generic result came from a thin brief, not a lack of capability",
+        "'Write a performance review' gives no specifics, tone, or sense of what good looks like",
+        "Brief it properly: the person's role, concrete accomplishments, a growth area, real examples",
+        "Add context (audience, candor) and format (e.g. a three-paragraph structure)",
+        "Refine with small nudges, and for sensitive writing, always review and adjust it yourself"
+      ]
+    }
+  ]
+}

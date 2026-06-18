@@ -66,6 +66,20 @@ const LABELS_BY_COURSE: Record<string, SectionLabels> = {
     goodInProd: "What good looks like",
     loadBearing: "Why these lines matter",
   },
+  // General-user course on choosing/using Claude surfaces. Re-voices the same
+  // slots for a non-technical reader; the tradeoff table reads as an
+  // option/surface comparison ("How the options compare").
+  "using-claude": {
+    tradeoffs: "How the options compare",
+    scaleNotes: "Speed & cost notes",
+    secNotes: "Privacy & safety notes",
+    ask: "Questions to ask yourself",
+    articulate: "Explain it to a friend",
+    articulatePractice:
+      "Practice saying this out loud, in your own words. If you can tell a friend which Claude to reach for and why, it has clicked.",
+    goodInProd: "What great use looks like",
+    loadBearing: "Why these matter",
+  },
 };
 
 function labelsFor(courseSlug: string): SectionLabels {

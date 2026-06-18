@@ -8,6 +8,7 @@
 import fs from 'fs';
 import { VIDEOS as AI_ENG_VIDEOS } from './videos.mjs';
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from './videos-ai-foundations.mjs';
+import { VIDEOS as USING_CLAUDE_VIDEOS } from './videos-using-claude.mjs';
 
 const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.meta.url)));
 
@@ -16,6 +17,7 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.me
 const COURSES = [
   { course: 'ai-eng', json: 'content.json', sample: 'llm', videos: AI_ENG_VIDEOS },
   { course: 'ai-foundations', json: 'ai-foundations.json', sample: 'whatai', videos: AI_FOUNDATIONS_VIDEOS },
+  { course: 'using-claude', json: 'using-claude.json', sample: 'decide', videos: USING_CLAUDE_VIDEOS },
 ];
 
 // Build the flat (public/paid) row set for one course, same split the app's

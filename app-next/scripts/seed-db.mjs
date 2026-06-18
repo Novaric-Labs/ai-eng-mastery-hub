@@ -12,6 +12,7 @@
 import fs from "fs";
 import { VIDEOS as AI_ENG_VIDEOS } from "../../content/videos.mjs";
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from "../../content/videos-ai-foundations.mjs";
+import { VIDEOS as USING_CLAUDE_VIDEOS } from "../../content/videos-using-claude.mjs";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -27,6 +28,7 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL("../../content/" + fil
 const ALL_COURSES = [
   { course: "ai-eng", json: "content.json", sample: "llm", videos: AI_ENG_VIDEOS },
   { course: "ai-foundations", json: "ai-foundations.json", sample: "whatai", videos: AI_FOUNDATIONS_VIDEOS },
+  { course: "using-claude", json: "using-claude.json", sample: "decide", videos: USING_CLAUDE_VIDEOS },
 ];
 
 // Optional: SEED_COURSE=<slug> limits the payload to a single course, so you can
