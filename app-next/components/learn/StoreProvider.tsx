@@ -9,6 +9,23 @@ import { createCourseStore, type CourseState, type CourseStore, type StoreInit }
 
 const StoreContext = createContext<CourseStore | null>(null);
 const LOCAL_KEY = "aihub_v2026";
+// The offline cache is now per-course so progress in one course can't seed
+// another (module/scenario ids collide across courses). ai-eng keeps reading the
+// legacy un-suffixed key as a fallback so existing Mastery learners don't lose
+// their offline cache after this change.
+const localKey = (slug: string) => `${LOCAL_KEY}:${slug}`;
+
+function readCache(slug: string): ProgressState | null {
+  const tryKey = (k: string) => {
+    try {
+      const v = JSON.parse(localStorage.getItem(k) || "null");
+      return v && typeof v === "object" ? (v as ProgressState) : null;
+    } catch {
+      return null;
+    }
+  };
+  return tryKey(localKey(slug)) ?? (slug === "ai-eng" ? tryKey(LOCAL_KEY) : null);
+}
 
 function isEmptyProgress(s: ProgressState): boolean {
   const has = (o?: Record<string, unknown> | unknown[]) =>
@@ -28,10 +45,8 @@ export function StoreProvider({
     // Prefer server progress; fall back to the offline localStorage cache.
     let seed = init.initialProgress;
     if (typeof window !== "undefined" && isEmptyProgress(seed)) {
-      try {
-        const cached = JSON.parse(localStorage.getItem(LOCAL_KEY) || "null");
-        if (cached && typeof cached === "object") seed = cached;
-      } catch {}
+      const cached = readCache(init.courseSlug);
+      if (cached) seed = cached;
     }
     ref.current = createCourseStore({ ...init, initialProgress: seed });
   }
@@ -39,13 +54,15 @@ export function StoreProvider({
   useEffect(() => {
     const store = ref.current!;
     const supabase = supabaseBrowser();
+    const courseSlug = store.getState().courseSlug;
+    const cacheKey = localKey(courseSlug);
 
     // apply persisted theme
     document.documentElement.setAttribute("data-theme", store.getState().theme);
 
     const cacheLocal = (S: ProgressState) => {
       try {
-        localStorage.setItem(LOCAL_KEY, JSON.stringify(S));
+        localStorage.setItem(cacheKey, JSON.stringify(S));
       } catch {}
     };
     const persist = async (state: CourseState) => {
@@ -53,7 +70,10 @@ export function StoreProvider({
       try {
         await supabase
           .from("progress")
-          .upsert({ user_id: state.userId, state: state.S, updated_at: new Date().toISOString() });
+          .upsert(
+            { user_id: state.userId, course_id: state.courseSlug, state: state.S, updated_at: new Date().toISOString() },
+            { onConflict: "user_id,course_id" },
+          );
       } catch {}
     };
 

@@ -39,7 +39,7 @@ export default async function LearnCoursePage({
     contentClient.from("content").select("id,tier,data").eq("course_id", slug),
     supabase.from("entitlements").select("active").eq("course_id", slug).maybeSingle(),
     supabase.from("subscriptions").select("status, current_period_end").maybeSingle(),
-    supabase.from("progress").select("state").maybeSingle(),
+    supabase.from("progress").select("state").eq("course_id", slug).maybeSingle(),
   ]);
 
   // Access this course = active membership (unlocks everything) OR a per-course
