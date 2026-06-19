@@ -54,7 +54,10 @@ export async function POST(request: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!,
     );
   } catch (e) {
-    return new NextResponse(`bad signature: ${(e as Error).message}`, { status: 400 });
+    // Don't echo the verification error to the caller; log it server-side. A
+    // bare 400 is all Stripe (or an attacker probing the endpoint) should see.
+    console.error("stripe-webhook signature verification failed:", e);
+    return new NextResponse("invalid signature", { status: 400 });
   }
 
   try {
@@ -82,7 +85,10 @@ export async function POST(request: Request) {
       }
     }
   } catch (e) {
-    return new NextResponse(`handler error: ${(e as Error).message}`, { status: 500 });
+    // Log the detail; return a generic 500 so we don't leak DB/internal error
+    // text. Stripe retries on any non-2xx, which is what we want here.
+    console.error(`stripe-webhook handler error (${event.type}):`, e);
+    return new NextResponse("handler error", { status: 500 });
   }
 
   return NextResponse.json({ received: true });
