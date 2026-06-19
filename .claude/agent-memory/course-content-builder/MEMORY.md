@@ -1,0 +1,2 @@
+- [Course content schema](course-content-schema.md) — exact JSON shape + authoring conventions for content/*.json (matches ai-foundations.json); PATTERNS:{} hides code tab
+- [Claude, Actually course](using-claude-course.md) — content/using-claude.json: non-coder surface-picking course; scenarios-as-spine, evergreen fact constraints

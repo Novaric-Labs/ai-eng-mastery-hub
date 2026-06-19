@@ -1,0 +1,2 @@
+- [Course-aware UI labels](course-aware-labels.md) — how per-course copy is branched in ModuleView (courseSlug from store, default-to-ai-eng map)
+- [Account membership page](account-membership-page.md) — /account native billing UI: files, live-Stripe read pattern, entry points, proration
