@@ -14,12 +14,12 @@ vanilla single-file version:
 - **One repo, one deploy:** Stripe edge functions become Next route handlers.
 
 **Non-goals:** changing the curriculum/content, changing the data model
-(reuse `0001_init.sql`), or adding new product features beyond what exists.
+(reuse `20260101000000_init.sql`), or adding new product features beyond what exists.
 
 ## What's reused vs new
 | Reused as-is | Ported / new |
 |---|---|
-| `supabase/migrations/0001_init.sql` (tables, RLS, `redeem_access_code`, `grant_stripe_entitlement`) | Stripe edge fns → Next route handlers (`app/api/*`) |
+| `supabase/migrations/20260101000000_init.sql` (tables, RLS, `redeem_access_code`, `grant_stripe_entitlement`) | Stripe edge fns → Next route handlers (`app/api/*`) |
 | `content/content.json` + `extract.mjs` + `seed.mjs` (seeds the same `content` table) | The rendering engine → React components |
 | Stripe checkout/webhook **logic** (near-identical code) | Custom hash router → App Router file routes |
 | The CSS theme (`:root` vars + component styles) → `globals.css` | Auth wiring → `@supabase/ssr` (cookie sessions) |
@@ -70,7 +70,7 @@ lib/
   useProgress.ts             React hook: load/save progress via Supabase (+ local cache)
 middleware.ts                refresh Supabase session cookie on each request
 content/                     content.json + extract.mjs + seed.mjs  (reused)
-supabase/migrations/0001_init.sql                                   (reused, unchanged)
+supabase/migrations/20260101000000_init.sql                                   (reused, unchanged)
 .env.example  next.config.ts  tsconfig.json  package.json
 ```
 
@@ -151,7 +151,7 @@ until the Next app reaches parity (P1), then flip DNS.
   `stripe listen --forward-to localhost:3000/api/stripe-webhook`).
 - **Paywall:** view page source as a non-entitled user → **no paid content present**
   (the server-gate win); entitled user → full content.
-- **RLS:** unchanged from the validated `0001_init.sql` (already tested on Postgres).
+- **RLS:** unchanged from the validated `20260101000000_init.sql` (already tested on Postgres).
 - **SEO:** landing/pricing return server HTML with metadata (curl the routes).
 
 ## Risks / calls
