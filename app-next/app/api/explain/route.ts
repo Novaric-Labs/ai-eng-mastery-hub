@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { hasFullAccess } from "@/lib/entitlement";
-import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
+import { anthropic, HAIKU, textOf } from "@/lib/anthropic";
+import { rateLimit, tooManyRequests } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 
@@ -21,7 +22,8 @@ export async function POST(req: Request) {
   if (!(await hasFullAccess(supabase, user)))
     return NextResponse.json({ error: "This is part of the full course." }, { status: 403 });
 
-  if (tooSoon(user.id, 800)) return NextResponse.json({ error: "One moment — try again." }, { status: 429 });
+  const rl = await rateLimit(user.id, "explain");
+  if (!rl.ok) return tooManyRequests(rl.retryAfter, "One moment — try again.");
 
   const client = anthropic();
   if (!client) return NextResponse.json({ error: "Explanations aren't configured yet." }, { status: 503 });

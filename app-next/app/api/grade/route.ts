@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { hasFullAccess } from "@/lib/entitlement";
-import { anthropic, HAIKU, tooSoon, textOf } from "@/lib/anthropic";
+import { anthropic, HAIKU, textOf } from "@/lib/anthropic";
+import { rateLimit, tooManyRequests } from "@/lib/ratelimit";
 import type { Scenario } from "@/lib/course";
 
 export const runtime = "nodejs";
@@ -17,7 +18,8 @@ export async function POST(req: Request) {
   if (!(await hasFullAccess(supabase, user)))
     return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
 
-  if (tooSoon(user.id)) return NextResponse.json({ error: "Slow down a moment and try again." }, { status: 429 });
+  const rl = await rateLimit(user.id, "grade");
+  if (!rl.ok) return tooManyRequests(rl.retryAfter, "Slow down a moment and try again.");
 
   const client = anthropic();
   if (!client) return NextResponse.json({ error: "AI grading isn't configured yet." }, { status: 503 });
