@@ -12,7 +12,7 @@ content/
   extract.mjs       Pull content out of the HTML into content.json
   seed.mjs          Split content into public-preview vs paid -> supabase/seed.sql
 supabase/
-  migrations/0001_init.sql   Tables + Row-Level Security + redeem function
+  migrations/20260101000000_init.sql   Tables + Row-Level Security + redeem function
   seed.sql                   Content rows (generated; safe to re-run)
   functions/create-checkout  Stripe Checkout session (one-time purchase)
   functions/stripe-webhook   Payment -> grants entitlement

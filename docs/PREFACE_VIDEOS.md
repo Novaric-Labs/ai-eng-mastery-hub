@@ -16,7 +16,7 @@ only modules where a visual/narrative preface genuinely helps get one.
 - **Delivery:** `app-next/app/api/video/[id]/route.ts` — resolves the path from the trusted
   `videos` row, enforces access (`public` = free teaser, `paid` = entitled-only), returns a
   short-lived signed URL from the private `course-video` Storage bucket.
-- **Storage:** `supabase/migrations/0002_video_bucket.sql` — private bucket `course-video`.
+- **Storage:** `supabase/migrations/20260101000001_video_bucket.sql` — private bucket `course-video`.
 
 ### Feature flag (live-but-hidden)
 The player only renders for the **owner/admin** (`admin &&` guard in `ModuleView.tsx`). To
@@ -39,8 +39,8 @@ launch to everyone, delete that guard — the API access model already does the 
 
 ```bash
 # 1. Create the private bucket (once)
-supabase db push   # applies 0002_video_bucket.sql
-# (or run the SQL in supabase/migrations/0002_video_bucket.sql in the SQL editor)
+supabase db push   # applies 20260101000001_video_bucket.sql
+# (or run the SQL in supabase/migrations/20260101000001_video_bucket.sql in the SQL editor)
 
 # 2. Upload the files to the bucket at the paths in content/videos.mjs
 #    e.g. rag/preface.mp4, rag/preface.jpg, rag/preface.en.vtt

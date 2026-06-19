@@ -22,7 +22,7 @@ cover early usage. Budget ~30–45 min the first time.
 2. Link the CLI and apply the schema + content:
    ```bash
    supabase link --project-ref <your-project-ref>
-   supabase db push                      # runs supabase/migrations/0001_init.sql
+   supabase db push                      # runs supabase/migrations/20260101000000_init.sql
    psql "<your-db-connection-string>" -f supabase/seed.sql   # loads course content
    ```
    (DB connection string: Settings → Database → Connection string → URI.)
