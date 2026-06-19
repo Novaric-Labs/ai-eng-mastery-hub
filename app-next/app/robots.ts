@@ -1,14 +1,25 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
 
-const BASE = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-
+// Allow crawling of the public marketing + legal pages; disallow gated, private,
+// and non-indexable routes (the signed-in catalog, course reader, account/admin,
+// the sign-in page, auth callbacks, and the API).
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/courses", "/learn", "/admin", "/api/", "/auth/"],
+      disallow: [
+        "/courses",
+        "/learn",
+        "/account",
+        "/admin",
+        "/login",
+        "/api/",
+        "/auth/",
+      ],
     },
-    sitemap: `${BASE}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

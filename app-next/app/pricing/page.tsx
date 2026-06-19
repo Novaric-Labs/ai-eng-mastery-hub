@@ -3,10 +3,12 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import PlanPicker from "@/components/PlanPicker";
+import JsonLd from "@/components/JsonLd";
 import { paymentsEnabled } from "@/lib/payments";
+import { breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Pricing — One Membership, Every AI Course",
   description:
     "One membership unlocks every Novacademy course. $35/month, or save with a 3-month, 6-month, or annual plan. Cancel anytime.",
   alternates: { canonical: "/pricing" },
@@ -14,6 +16,11 @@ export const metadata: Metadata = {
     title: "Pricing — Novacademy",
     description: "One membership, every course. From $21/mo. Cancel anytime.",
     url: "/pricing",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pricing — Novacademy",
+    description: "One membership, every course. From $21/mo. Cancel anytime.",
   },
 };
 
@@ -31,6 +38,12 @@ const INCLUDES = [
 export default function Pricing() {
   return (
     <>
+      <JsonLd
+        schema={breadcrumbSchema([
+          ["Home", "/"],
+          ["Pricing", "/pricing"],
+        ])}
+      />
       <SiteHeader />
       <main className="wrap" style={{ paddingTop: 56, paddingBottom: 64, maxWidth: 720 }}>
         <p className="eyebrow" style={{ textAlign: "center" }}>MEMBERSHIP</p>
