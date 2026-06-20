@@ -86,8 +86,8 @@ $endUtc = [DateTimeOffset]::new([DateTime]::Parse($ExpiresOn).Date.AddDays(1).Ad
 $expiresAt = $endUtc.ToUnixTimeSeconds()
 $promo = Stripe-Json @(
   'promotion_codes', 'create',
-  '--coupon', $coupon.id,
-  '--code', $Code,
+  '-d', "coupon=$($coupon.id)",
+  '-d', "code=$Code",
   '-d', "expires_at=$expiresAt"
 )
 
