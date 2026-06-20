@@ -12,8 +12,8 @@
 export const FOUNDING = {
   code: "FOUNDING40",
   percentOff: 40,
-  /** Human-readable deadline shown on-site, e.g. "July 3". */
-  endsLabel: "July 3",
+  /** Human-readable deadline shown on-site, e.g. "July 4". */
+  endsLabel: "July 4",
   /** Machine deadline (matches the Stripe promo code's expires_at). */
-  endsAtISO: "2026-07-03",
+  endsAtISO: "2026-07-04",
 } as const;

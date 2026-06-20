@@ -24,7 +24,7 @@ param(
   [switch]$Live,
   [int]$PercentOff = 40,
   [string]$Code = 'FOUNDING40',
-  [string]$ExpiresOn = '2026-07-03'  # last day the code works (end of day UTC)
+  [string]$ExpiresOn = '2026-07-04'  # last day the code works (end of day UTC)
 )
 
 $ErrorActionPreference = 'Stop'
