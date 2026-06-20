@@ -12,7 +12,7 @@ export default function FoundingBanner() {
   return (
     <Link
       href="/pricing"
-      aria-label={`Founding offer: first ${FOUNDING.maxMembers} members get ${FOUNDING.percentOff}% off for life`}
+      aria-label={`Founding offer: ${FOUNDING.percentOff}% off for life, ends ${FOUNDING.endsLabel}`}
       style={{
         display: "flex",
         alignItems: "center",
@@ -30,9 +30,10 @@ export default function FoundingBanner() {
     >
       <Sparkles size={15} strokeWidth={1.75} style={{ color: "var(--accent)", flexShrink: 0 }} />
       <span>
-        <b>Founding offer</b> — the first {FOUNDING.maxMembers} members get{" "}
+        <b>Founding offer</b> —{" "}
         <b style={{ color: "var(--accent)" }}>{FOUNDING.percentOff}% off for life</b> with code{" "}
         <b style={{ fontFamily: "var(--mono, monospace)", letterSpacing: ".02em" }}>{FOUNDING.code}</b>
+        . Ends {FOUNDING.endsLabel}.
       </span>
       <ArrowRight size={14} strokeWidth={2} style={{ color: "var(--accent)", flexShrink: 0 }} />
     </Link>

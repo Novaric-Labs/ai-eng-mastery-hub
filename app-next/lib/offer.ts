@@ -5,10 +5,15 @@
 // member just enters FOUNDING.code on the Stripe Checkout page to redeem; the
 // 40% applies for the life of the subscription (coupon duration = forever).
 //
-// `maxMembers` here is only display copy ("first 100"); the real cap is enforced
-// by the promotion code's max_redemptions in Stripe.
+// The offer is time-boxed: it ends on `endsAtISO`. That window is enforced by the
+// promotion code's `expires_at` in Stripe — keep the script's expiry and the
+// `endsLabel`/`endsAtISO` here in sync so the on-site copy matches what Stripe
+// will actually honor.
 export const FOUNDING = {
   code: "FOUNDING40",
   percentOff: 40,
-  maxMembers: 100,
+  /** Human-readable deadline shown on-site, e.g. "July 3". */
+  endsLabel: "July 3",
+  /** Machine deadline (matches the Stripe promo code's expires_at). */
+  endsAtISO: "2026-07-03",
 } as const;

@@ -1,15 +1,16 @@
 <#
 .SYNOPSIS
   Create the Founding Member promotion in Stripe: a 40%-off-forever coupon and a
-  customer-facing promotion code (FOUNDING40) capped at the first 100 redemptions.
+  customer-facing promotion code (FOUNDING40) that expires on a set date.
 
 .DESCRIPTION
   Uses the Stripe CLI so no secret key is ever passed on the command line.
   Authorize once with `stripe login`, then run with -Live to target live mode.
 
   The coupon's duration is `forever`, so the 40% applies to every renewal for the
-  life of the subscription (the "for life" in the offer copy). The 100-member cap
-  is enforced by the promotion code's max_redemptions.
+  life of the subscription (the "for life" in the offer copy). The offer window is
+  time-boxed: the promotion code's expires_at stops it working after -ExpiresOn.
+  Keep -ExpiresOn in sync with FOUNDING.endsAtISO in app-next/lib/offer.ts.
 
   Idempotent: if a promotion code named FOUNDING40 already exists in the target
   mode, it is reused rather than duplicated.
@@ -22,8 +23,8 @@
 param(
   [switch]$Live,
   [int]$PercentOff = 40,
-  [int]$MaxRedemptions = 100,
-  [string]$Code = 'FOUNDING40'
+  [string]$Code = 'FOUNDING40',
+  [string]$ExpiresOn = '2026-07-03'  # last day the code works (end of day UTC)
 )
 
 $ErrorActionPreference = 'Stop'
@@ -74,19 +75,22 @@ $coupon = Stripe-Json @(
 )
 Write-Host "Created coupon $($coupon.id)  ($PercentOff% off, forever)"
 
-# 2) Public promotion code, capped at the first N redemptions.
+# 2) Public promotion code that stops working after the offer window.
+# expires_at is a unix timestamp — use end-of-day UTC for the chosen date.
+$endUtc = [DateTimeOffset]::new([DateTime]::Parse($ExpiresOn).Date.AddDays(1).AddSeconds(-1), [TimeSpan]::Zero)
+$expiresAt = $endUtc.ToUnixTimeSeconds()
 $promo = Stripe-Json @(
   'promotion-codes', 'create',
   '--coupon', $coupon.id,
   '--code', $Code,
-  '-d', "max_redemptions=$MaxRedemptions"
+  '-d', "expires_at=$expiresAt"
 )
 
 Write-Host ""
 Write-Host "=== $modeName Founding Member offer created ===" -ForegroundColor Green
 Write-Host ("  Code:            {0}" -f $promo.code)
 Write-Host ("  Discount:        {0}% off for life" -f $PercentOff)
-Write-Host ("  Cap:             first {0} redemptions" -f $MaxRedemptions)
+Write-Host ("  Ends:            {0} (end of day UTC)" -f $ExpiresOn)
 Write-Host ("  Promotion id:    {0}" -f $promo.id)
 Write-Host ""
 Write-Host "Checkout already sends allow_promotion_codes, so members can enter '$Code' now." -ForegroundColor Cyan

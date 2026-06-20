@@ -63,8 +63,8 @@ export default function Pricing() {
 
         {paymentsEnabled && (
           <p style={{ color: "var(--accent)", fontSize: 13, marginTop: 14, textAlign: "center", fontWeight: 600 }}>
-            Founding offer: enter code <b>{FOUNDING.code}</b> at checkout for {FOUNDING.percentOff}% off for life
-            (first {FOUNDING.maxMembers} members).
+            Founding offer: enter code <b>{FOUNDING.code}</b> at checkout for {FOUNDING.percentOff}% off for life.
+            Ends {FOUNDING.endsLabel}.
           </p>
         )}
 
