@@ -1,0 +1,3 @@
+- [AI Foundations course facts](ai-foundations-course.md) — source-of-truth and brittle-claim notes for content/ai-foundations.json + its prefaces
+- [Vendor doc URL currency](vendor-doc-urls.md) — known redirects/dead links for OpenAI + Anthropic docs cited in courses
+- [Using Claude course facts](using-claude-course.md) — verified source-of-truth for content/using-claude.json (Cowork/Code/Chat, plans, Chrome beta)

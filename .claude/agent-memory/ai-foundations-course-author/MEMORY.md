@@ -1,0 +1,4 @@
+- [Content format](content-format.md) — the content.json schema the platform consumes (BLOCKS/MODULES/DEEP/DEPTH/PATTERNS/QUIZ/CARDS/SCENARIOS/GLOSSARY/PLAIN) + seed pipeline
+- [Narration format](narration-format.md) — preface-video script shape (video/data/prefaces.mjs), 5-segment say/slide, clean-narration voice
+- [AI Foundations scope](ai-foundations-scope.md) — declared course meta, where content goes, module plan, written-vs-pending status
+- [Voice and tone](voice-tone.md) — Engineering Mastery vs AI Foundations reading-level calibration
