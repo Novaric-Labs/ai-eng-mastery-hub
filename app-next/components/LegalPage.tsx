@@ -25,7 +25,7 @@ export default function LegalPage({
         ])}
       />
       <SiteHeader />
-      <main className="wrap legal" style={{ paddingTop: 48, paddingBottom: 64, maxWidth: 760 }}>
+      <main className="wrap legal" style={{ paddingTop: 48, paddingBottom: 64, maxWidth: 720 }}>
         <h1 style={{ fontSize: 30, fontWeight: 600, letterSpacing: "-.02em", marginBottom: 6 }}>{title}</h1>
         <p style={{ color: "var(--faint)", fontSize: 13.5, marginBottom: 28 }}>Last updated: {updated}</p>
         {children}

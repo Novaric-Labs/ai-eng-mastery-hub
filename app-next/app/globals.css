@@ -5,11 +5,11 @@
    the ported course classes keep working; only values change.
    ============================================================ */
 :root {
-  /* surfaces */
-  --bg: #0a0a0b; --bg2: #111114; --bg3: #17171a; --bg-hover: #1d1d21;
-  --border: #232327; --border2: #2e2e34;
-  /* text */
-  --text: #ededee; --dim2: #c4c4cc; --dim: #a1a1aa; --faint: #71717a;
+  /* surfaces — lifted off pure black to cut halation during long reading */
+  --bg: #101114; --bg2: #16171b; --bg3: #1c1e23; --bg-hover: #23252b;
+  --border: #272930; --border2: #333640;
+  /* text — top end calmed to reduce glow, mutes nudged up to hold contrast */
+  --text: #e7e7ea; --dim2: #c8c8d0; --dim: #a6a6b0; --faint: #76767f;
   /* accent — one, restrained, cool */
   --accent: #5b8cff; --accent-press: #4575f0; --accent-soft: rgba(91,140,255,.12);
   /* quiet secondary + semantic (desaturated for the dark base) */
@@ -91,7 +91,7 @@ a:hover { text-decoration: underline; }
 .sh-logo:hover { text-decoration: none; }
 .sh-nav { display: flex; align-items: center; gap: 18px; }
 .sh-nav a { color: var(--dim2); font-size: 14px; }
-.siteheader-bar { position: sticky; top: 0; z-index: 40; background: rgba(10,10,11,.72); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.siteheader-bar { position: sticky; top: 0; z-index: 40; background: rgba(16,17,20,.72); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
 .siteheader-bar .siteheader { border-bottom: none; }
 
 /* ---------- marketing utilities ---------- */
@@ -146,12 +146,12 @@ a:hover { text-decoration: underline; }
 .dot.read { background: var(--amber); }
 .dot.mastered { background: var(--green); }
 #main { margin-left: 300px; flex: 1; padding: 42px 56px; max-width: 1180px; }
-.page { animation: fadein .25s ease; max-width: 880px; }
+.page { animation: fadein .25s ease; max-width: 780px; }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 h2 { font-size: var(--fs-2xl); font-weight: 600; margin-bottom: 4px; letter-spacing: -.02em; color: var(--text); }
 h3 { font-size: var(--fs-lg); font-weight: 600; margin: 24px 0 8px; color: var(--text); letter-spacing: -.01em; }
 h4 { font-size: 14.5px; font-weight: 600; margin: 16px 0 6px; color: var(--accent2); }
-.page p { margin-bottom: 10px; color: var(--dim2); }
+.page p { margin-bottom: 12px; color: var(--dim2); line-height: 1.68; }
 .tagline { color: var(--dim); font-size: 14px; margin-bottom: 16px; }
 .mental { border-left: 2px solid var(--accent2); background: linear-gradient(90deg, rgba(167,139,250,.08), transparent); padding: 12px 16px; border-radius: 0 var(--r-md) var(--r-md) 0; margin: 12px 0; font-size: 14.5px; }
 .worked { border-left: 2px solid var(--teal); background: linear-gradient(90deg, rgba(69,179,192,.07), transparent); padding: 14px 18px; border-radius: 0 var(--r-md) var(--r-md) 0; margin: 12px 0; font-size: 14.5px; color: var(--dim2); }
@@ -266,7 +266,7 @@ details.deep summary svg { width: 15px; height: 15px; }
 
 /* wayfinding rail */
 .mlw { display: flex; align-items: flex-start; gap: 24px; }
-.mlw > .page { flex: 1; min-width: 0; max-width: 940px; }
+.mlw > .page { flex: 1; min-width: 0; max-width: 820px; }
 .sec-rail { width: 148px; flex-shrink: 0; position: sticky; top: 32px; max-height: calc(100vh - 64px); overflow-y: auto; scrollbar-width: none; display: flex; flex-direction: column; gap: 2px; padding-top: 2px; }
 .sec-rail::-webkit-scrollbar { display: none; }
 .sr-item { display: block; padding: 5px 10px; border-radius: var(--r-sm); border: 1px solid transparent; font-size: 11.5px; color: var(--dim); text-decoration: none; line-height: 1.35; transition: color .15s, background .15s, border-color .15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; background: none; text-align: left; font-family: inherit; }
@@ -345,7 +345,7 @@ details.deep summary svg { width: 15px; height: 15px; }
 .lockcard h3 svg { flex-shrink: 0; }
 
 @media (max-width: 860px) {
-  #course-topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 40; background: rgba(17,17,20,.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 14px; }
+  #course-topbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 40; background: rgba(22,23,27,.85); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 10px 14px; }
   #navtoggle { display: inline-flex; align-items: center; justify-content: center; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); padding: 6px 10px; border-radius: var(--r-sm); cursor: pointer; }
   #course-topbar .tb-title { display: inline-flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; }
   #course-topbar .tb-title svg { color: var(--accent); }
