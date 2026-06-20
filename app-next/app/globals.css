@@ -146,12 +146,14 @@ a:hover { text-decoration: underline; }
 .dot.read { background: var(--amber); }
 .dot.mastered { background: var(--green); }
 #main { margin-left: 300px; flex: 1; padding: 42px 56px; max-width: 1180px; }
-.page { animation: fadein .25s ease; max-width: 780px; }
+/* Lesson body sits a little heavier than UI text — Geist at 400 reads thin on
+   dark for long stretches. Headings/bold keep their own explicit weights. */
+.page { animation: fadein .25s ease; max-width: 780px; font-weight: 440; }
 @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 h2 { font-size: var(--fs-2xl); font-weight: 600; margin-bottom: 4px; letter-spacing: -.02em; color: var(--text); }
 h3 { font-size: var(--fs-lg); font-weight: 600; margin: 24px 0 8px; color: var(--text); letter-spacing: -.01em; }
 h4 { font-size: 14.5px; font-weight: 600; margin: 16px 0 6px; color: var(--accent2); }
-.page p { margin-bottom: 12px; color: var(--dim2); line-height: 1.68; }
+.page p { margin-bottom: 12px; color: #d6d6dd; line-height: 1.68; }
 .tagline { color: var(--dim); font-size: 14px; margin-bottom: 16px; }
 .mental { border-left: 2px solid var(--accent2); background: linear-gradient(90deg, rgba(167,139,250,.08), transparent); padding: 12px 16px; border-radius: 0 var(--r-md) var(--r-md) 0; margin: 12px 0; font-size: 14.5px; }
 .worked { border-left: 2px solid var(--teal); background: linear-gradient(90deg, rgba(69,179,192,.07), transparent); padding: 14px 18px; border-radius: 0 var(--r-md) var(--r-md) 0; margin: 12px 0; font-size: 14.5px; color: var(--dim2); }
