@@ -81,14 +81,14 @@ if ($existing) {
 $durationArgs =
   if ($Months -eq 0) { @('--duration', 'once') }
   elseif ($Months -eq -1) { @('--duration', 'forever') }
-  else { @('--duration', 'repeating', '-d', "duration_in_months=$Months") }
+  else { @('--duration', 'repeating', '--duration-in-months', "$Months") }
 
-$couponArgs = @('coupons', 'create', '--percent-off', "$PercentOff", '--name', "Creator: $upper") + $durationArgs
+$couponArgs = @('coupons', 'create', '--percent-off', "$PercentOff", '--name', "Creator: $upper", '--confirm') + $durationArgs
 $coupon = Stripe-Json $couponArgs
 Write-Host "Created coupon $($coupon.id)"
 
-$promoArgs = @('promotion_codes', 'create', '-d', "coupon=$($coupon.id)", '-d', "code=$upper")
-if ($MaxRedemptions -gt 0) { $promoArgs += @('-d', "max_redemptions=$MaxRedemptions") }
+$promoArgs = @('promotion_codes', 'create', '--promotion.type', 'coupon', '--promotion.coupon', $coupon.id, '--code', $upper, '--confirm')
+if ($MaxRedemptions -gt 0) { $promoArgs += @('--max-redemptions', "$MaxRedemptions") }
 $promo = Stripe-Json $promoArgs
 
 $durText = if ($Months -eq 0) { 'first payment' } elseif ($Months -eq -1) { 'forever' } else { "first $Months months" }

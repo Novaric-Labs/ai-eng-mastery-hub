@@ -76,7 +76,8 @@ $coupon = Stripe-Json @(
   'coupons', 'create',
   '--percent-off', "$PercentOff",
   '--duration', 'forever',
-  '--name', 'Founding Member'
+  '--name', 'Founding Member',
+  '--confirm'
 )
 Write-Host "Created coupon $($coupon.id)  ($PercentOff% off, forever)"
 
@@ -86,9 +87,11 @@ $endUtc = [DateTimeOffset]::new([DateTime]::Parse($ExpiresOn).Date.AddDays(1).Ad
 $expiresAt = $endUtc.ToUnixTimeSeconds()
 $promo = Stripe-Json @(
   'promotion_codes', 'create',
-  '-d', "coupon=$($coupon.id)",
-  '-d', "code=$Code",
-  '-d', "expires_at=$expiresAt"
+  '--promotion.type', 'coupon',
+  '--promotion.coupon', $coupon.id,
+  '--code', $Code,
+  '--expires-at', "$expiresAt",
+  '--confirm'
 )
 
 Write-Host ""
