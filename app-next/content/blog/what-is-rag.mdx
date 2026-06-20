@@ -1,0 +1,60 @@
+---
+title: "What Is RAG? Retrieval-Augmented Generation, Explained"
+description: "A plain-English guide to retrieval-augmented generation — what RAG is, why it beats fine-tuning for most use cases, and how the pieces fit together."
+date: "2026-06-10"
+author: "Novacademy"
+tags: ["RAG", "LLM", "Fundamentals"]
+draft: false
+---
+
+Large language models are trained once, on data with a cutoff date, and they don't know anything about *your* documents. **Retrieval-augmented generation (RAG)** is the most common way to fix that: instead of retraining the model, you fetch relevant information at question time and hand it to the model as context.
+
+## The problem RAG solves
+
+Ask a raw LLM about your company's internal policy and it will either say it doesn't know or — worse — confidently make something up. You have two options:
+
+- **Fine-tuning** — keep training the model on your data. Expensive, slow to update, and it bakes facts into weights where they're hard to correct.
+- **Retrieval** — leave the model alone and *show* it the right documents at the moment you ask. Cheap, instantly updatable, and auditable.
+
+For knowledge that changes (docs, tickets, product data), retrieval wins almost every time.
+
+## How RAG works
+
+A RAG pipeline has two phases.
+
+**1. Indexing (done ahead of time)**
+
+1. Split your documents into chunks.
+2. Convert each chunk into an embedding — a vector that captures its meaning.
+3. Store those vectors in a vector database.
+
+**2. Retrieval + generation (at question time)**
+
+1. Embed the user's question.
+2. Find the chunks whose vectors are closest to it.
+3. Paste those chunks into the prompt and ask the model to answer *using only that context*.
+
+```text
+question ──▶ embed ──▶ search vector DB ──▶ top-k chunks
+                                                  │
+                              prompt = chunks + question
+                                                  │
+                                                  ▼
+                                            LLM answer
+```
+
+> The model isn't "remembering" your data. It's reading it, in the prompt, every time.
+
+## Where RAG goes wrong
+
+Most RAG failures aren't model failures — they're **retrieval** failures. If the right chunk never makes it into the prompt, no model can answer well. The usual culprits:
+
+- Chunks that are too big (noisy) or too small (missing context).
+- Embeddings that don't match how users actually phrase questions.
+- No re-ranking step, so mediocre matches crowd out the best one.
+
+That's why evaluating retrieval quality — not just eyeballing answers — is the difference between a demo and a product.
+
+---
+
+RAG is the backbone of most real-world LLM features today. If you want to build one end to end — chunking, embeddings, retrieval, and the evals that keep it honest — that's exactly what our [AI Engineering course](/pricing) walks through.

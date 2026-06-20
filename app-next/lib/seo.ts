@@ -95,6 +95,51 @@ export function breadcrumbSchema(items: Array<[name: string, path: string]>) {
   };
 }
 
+// ---- Blog ----
+
+type BlogPostLike = {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author?: string;
+};
+
+// Blog schema (the /blog index) listing its posts.
+export function blogSchema(posts: BlogPostLike[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${SITE_URL}/blog#blog`,
+    name: `${SITE_NAME} Blog`,
+    url: abs("/blog"),
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      description: p.description,
+      datePublished: p.date,
+      url: abs(`/blog/${p.slug}`),
+    })),
+  };
+}
+
+// BlogPosting schema for a single article.
+export function blogPostingSchema(post: BlogPostLike) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: post.author || SITE_NAME, url: abs("/") },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: abs(`/blog/${post.slug}`),
+    url: abs(`/blog/${post.slug}`),
+  };
+}
+
 // FAQPage from [question, answer] pairs. Only use with FAQ content rendered on
 // the page (Google requires the markup to match visible content).
 export function faqSchema(faqs: Array<[question: string, answer: string]>) {
