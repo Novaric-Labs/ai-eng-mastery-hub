@@ -11,14 +11,14 @@
   and -Months. Idempotent on the code value.
 
   Checkout already sends allow_promotion_codes, so the code works the moment it
-  exists — no code change or redeploy needed.
+  exists - no code change or redeploy needed.
 
 .PARAMETER Code
   The creator's code, e.g. FIRESHIP. Keep it recognizable so reporting is legible.
 
 .PARAMETER Months
   Discount duration: 0 = first payment only (default), N = first N months,
-  -1 = forever. (Forever is expensive on a recurring product — use sparingly.)
+  -1 = forever. (Forever is expensive on a recurring product - use sparingly.)
 
 .EXAMPLE
   ./scripts/create-creator-code.ps1 -Code FIRESHIP                       # 15% off first payment (TEST)
@@ -68,7 +68,7 @@ function Stripe-Json {
 $upper = $Code.ToUpper()
 $existing = (Stripe-Json @('promotion-codes', 'list', '--code', $upper, '--limit', '1')).data | Select-Object -First 1
 if ($existing) {
-  Write-Host "Promotion code '$upper' already exists ($($existing.id)) — nothing to do." -ForegroundColor Green
+  Write-Host "Promotion code '$upper' already exists ($($existing.id)) - nothing to do." -ForegroundColor Green
   return
 }
 

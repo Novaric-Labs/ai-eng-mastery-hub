@@ -62,7 +62,7 @@ function Stripe-Json {
 # Reuse an existing FOUNDING code if it's already there (idempotent re-runs).
 $existing = (Stripe-Json @('promotion-codes', 'list', '--code', $Code, '--limit', '1')).data | Select-Object -First 1
 if ($existing) {
-  Write-Host "Promotion code '$Code' already exists ($($existing.id)) — nothing to do." -ForegroundColor Green
+  Write-Host "Promotion code '$Code' already exists ($($existing.id)) - nothing to do." -ForegroundColor Green
   return
 }
 
@@ -76,7 +76,7 @@ $coupon = Stripe-Json @(
 Write-Host "Created coupon $($coupon.id)  ($PercentOff% off, forever)"
 
 # 2) Public promotion code that stops working after the offer window.
-# expires_at is a unix timestamp — use end-of-day UTC for the chosen date.
+# expires_at is a unix timestamp - use end-of-day UTC for the chosen date.
 $endUtc = [DateTimeOffset]::new([DateTime]::Parse($ExpiresOn).Date.AddDays(1).AddSeconds(-1), [TimeSpan]::Zero)
 $expiresAt = $endUtc.ToUnixTimeSeconds()
 $promo = Stripe-Json @(
