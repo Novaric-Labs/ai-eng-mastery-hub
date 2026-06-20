@@ -5,11 +5,12 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How Novacademy collects, uses, and protects your data.",
   alternates: { canonical: "/privacy" },
+  openGraph: { title: "Privacy Policy — Novacademy", url: "/privacy" },
 };
 
 export default function Privacy() {
   return (
-    <LegalPage title="Privacy Policy" updated="June 15, 2026">
+    <LegalPage title="Privacy Policy" updated="June 15, 2026" path="/privacy">
       <p>
         This Privacy Policy explains what data Novacademy (&ldquo;we&rdquo;, operated by{" "}
         <strong>[Novacademy — legal entity name]</strong>) collects and how we use it. We aim to collect

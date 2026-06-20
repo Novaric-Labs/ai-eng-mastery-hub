@@ -2,14 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Clock, BarChart3, Layers, Lock } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
+import JsonLd from "@/components/JsonLd";
 import { COURSES } from "@/lib/courses";
+import { coursesItemListSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
+  title: "Learn AI Skills Online — Courses on RAG, Agents & Evals",
+  description:
+    "Hands-on AI courses on the real job, not prompt tricks: RAG, agents, harnesses, evals, and the judgment to ship. One Novacademy membership unlocks every course — from $21/mo, cancel anytime.",
   alternates: { canonical: "/" },
-  openGraph: { url: "/" },
+  openGraph: {
+    title: "Novacademy — Learn AI Skills Online",
+    description:
+      "Hands-on AI courses on the real job: RAG, agents, evals, and the judgment to ship. One membership unlocks every course.",
+    url: "/",
+  },
 };
 
-const FAQ = [
+const FAQ: Array<[string, string]> = [
   ["Do I need an ML background?", "No — just basic programming and what an API is. No math or model training."],
   ["Is it up to date?", "Yes — courses are built for today's model landscape, and updates are included as the field moves."],
   ["What do I actually get?", "Concepts, mechanics, worked examples, runnable code patterns, quizzes, spaced-repetition flashcards, and production scenarios."],
@@ -19,6 +29,13 @@ const FAQ = [
 export default function Home() {
   return (
     <>
+      <JsonLd
+        schema={[
+          coursesItemListSchema(),
+          faqSchema(FAQ),
+          breadcrumbSchema([["Home", "/"]]),
+        ]}
+      />
       <SiteHeader />
       <main>
         {/* hero */}

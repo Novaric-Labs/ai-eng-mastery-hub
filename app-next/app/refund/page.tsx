@@ -6,11 +6,12 @@ export const metadata: Metadata = {
   description:
     "Novacademy membership billing, cancellation, and our 14-day money-back guarantee on your first payment.",
   alternates: { canonical: "/refund" },
+  openGraph: { title: "Refund Policy — Novacademy", url: "/refund" },
 };
 
 export default function Refund() {
   return (
-    <LegalPage title="Refund Policy" updated="June 16, 2026">
+    <LegalPage title="Refund Policy" updated="June 16, 2026" path="/refund">
       <p>
         Novacademy is a <strong>membership</strong> — a recurring subscription that unlocks every course
         on the platform while it&rsquo;s active. This policy explains cancellation, renewals, and refunds.

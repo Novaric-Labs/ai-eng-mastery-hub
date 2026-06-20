@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
@@ -8,6 +9,9 @@ import type { ContentRow, ProgressState } from "@/lib/types";
 
 // Dynamic: reads cookies + per-user data, never statically prerendered.
 export const dynamic = "force-dynamic";
+
+// Gated, per-user course reader (paid content behind the paywall) — never index.
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 // THE HARD PAYWALL: content is fetched server-side under the user's RLS scope,
 // now SCOPED TO ONE COURSE. Paid rows for this course are only returned for users

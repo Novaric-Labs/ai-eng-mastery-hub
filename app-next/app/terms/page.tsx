@@ -5,11 +5,12 @@ export const metadata: Metadata = {
   title: "Terms of Service",
   description: "The terms governing your use of Novacademy and its membership courses.",
   alternates: { canonical: "/terms" },
+  openGraph: { title: "Terms of Service — Novacademy", url: "/terms" },
 };
 
 export default function Terms() {
   return (
-    <LegalPage title="Terms of Service" updated="June 16, 2026">
+    <LegalPage title="Terms of Service" updated="June 16, 2026" path="/terms">
       <p>
         These Terms of Service (&ldquo;Terms&rdquo;) govern your access to and use of Novacademy
         (the &ldquo;Service&rdquo;), operated by <strong>[Novacademy — legal entity name]</strong>
