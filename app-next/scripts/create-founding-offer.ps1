@@ -49,10 +49,15 @@ function Stripe-Json {
   if ($modeFlag) { $allArgs += $modeFlag }
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
-  $raw = & $stripe @allArgs 2>$null
+  # Capture stderr to a temp file so a real failure surfaces the CLI's message
+  # (auth/permission/unknown-command) instead of a bare exit code.
+  $errFile = [System.IO.Path]::GetTempFileName()
+  $raw = & $stripe @allArgs 2>$errFile
   $code = $LASTEXITCODE
+  $stderr = (Get-Content $errFile -Raw -ErrorAction SilentlyContinue)
+  Remove-Item $errFile -ErrorAction SilentlyContinue
   $ErrorActionPreference = $prev
-  if ($code -ne 0) { throw "stripe $($CliArgs -join ' ') failed (exit $code)" }
+  if ($code -ne 0) { throw "stripe $($CliArgs -join ' ') failed (exit $code): $stderr" }
   $clean = ($raw | Where-Object { $_ -notmatch 'claude-code-hint' }) -join "`n"
   $obj = $clean | ConvertFrom-Json
   if ($obj.error) { throw "Stripe API error: $($obj.error.message)" }
@@ -60,7 +65,7 @@ function Stripe-Json {
 }
 
 # Reuse an existing FOUNDING code if it's already there (idempotent re-runs).
-$existing = (Stripe-Json @('promotion-codes', 'list', '--code', $Code, '--limit', '1')).data | Select-Object -First 1
+$existing = (Stripe-Json @('promotion_codes', 'list', '--code', $Code, '--limit', '1')).data | Select-Object -First 1
 if ($existing) {
   Write-Host "Promotion code '$Code' already exists ($($existing.id)) - nothing to do." -ForegroundColor Green
   return
@@ -80,7 +85,7 @@ Write-Host "Created coupon $($coupon.id)  ($PercentOff% off, forever)"
 $endUtc = [DateTimeOffset]::new([DateTime]::Parse($ExpiresOn).Date.AddDays(1).AddSeconds(-1), [TimeSpan]::Zero)
 $expiresAt = $endUtc.ToUnixTimeSeconds()
 $promo = Stripe-Json @(
-  'promotion-codes', 'create',
+  'promotion_codes', 'create',
   '--coupon', $coupon.id,
   '--code', $Code,
   '-d', "expires_at=$expiresAt"
