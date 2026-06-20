@@ -21,8 +21,8 @@ you read the funnel.
 | Activated → paid | ~15% | ~4% | ~6% |
 
 Effective revenue per member ≈ **$20/mo MRR** (blend of founding-discounted monthly +
-amortized annual). The Founding offer is **40% off for life, through July 3**
-(code `FOUNDING40`) — a time-boxed launch window to drive urgency.
+amortized annual). The Founding offer is **40% off for life, through July 4**
+(code `FOUNDING40`) — a time-boxed launch window (ends Independence Day) to drive urgency.
 
 ---
 
