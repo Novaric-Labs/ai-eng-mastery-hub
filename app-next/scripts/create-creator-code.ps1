@@ -87,7 +87,7 @@ $couponArgs = @('coupons', 'create', '--percent-off', "$PercentOff", '--name', "
 $coupon = Stripe-Json $couponArgs
 Write-Host "Created coupon $($coupon.id)"
 
-$promoArgs = @('promotion_codes', 'create', '--coupon', $coupon.id, '--code', $upper)
+$promoArgs = @('promotion_codes', 'create', '-d', "coupon=$($coupon.id)", '-d', "code=$upper")
 if ($MaxRedemptions -gt 0) { $promoArgs += @('-d', "max_redemptions=$MaxRedemptions") }
 $promo = Stripe-Json $promoArgs
 
