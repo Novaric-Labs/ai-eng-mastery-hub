@@ -55,10 +55,15 @@ function Stripe-Json {
   if ($modeFlag) { $allArgs += $modeFlag }
   $prev = $ErrorActionPreference
   $ErrorActionPreference = 'Continue'
-  $raw = & $stripe @allArgs 2>$null
+  # Capture stderr to a temp file so a real failure surfaces the CLI's message
+  # (auth/permission/unknown-command) instead of a bare exit code.
+  $errFile = [System.IO.Path]::GetTempFileName()
+  $raw = & $stripe @allArgs 2>$errFile
   $exit = $LASTEXITCODE
+  $stderr = (Get-Content $errFile -Raw -ErrorAction SilentlyContinue)
+  Remove-Item $errFile -ErrorAction SilentlyContinue
   $ErrorActionPreference = $prev
-  if ($exit -ne 0) { throw "stripe $($CliArgs -join ' ') failed (exit $exit)" }
+  if ($exit -ne 0) { throw "stripe $($CliArgs -join ' ') failed (exit $exit): $stderr" }
   $clean = ($raw | Where-Object { $_ -notmatch 'claude-code-hint' }) -join "`n"
   $obj = $clean | ConvertFrom-Json
   if ($obj.error) { throw "Stripe API error: $($obj.error.message)" }
@@ -66,7 +71,7 @@ function Stripe-Json {
 }
 
 $upper = $Code.ToUpper()
-$existing = (Stripe-Json @('promotion-codes', 'list', '--code', $upper, '--limit', '1')).data | Select-Object -First 1
+$existing = (Stripe-Json @('promotion_codes', 'list', '--code', $upper, '--limit', '1')).data | Select-Object -First 1
 if ($existing) {
   Write-Host "Promotion code '$upper' already exists ($($existing.id)) - nothing to do." -ForegroundColor Green
   return
@@ -82,7 +87,7 @@ $couponArgs = @('coupons', 'create', '--percent-off', "$PercentOff", '--name', "
 $coupon = Stripe-Json $couponArgs
 Write-Host "Created coupon $($coupon.id)"
 
-$promoArgs = @('promotion-codes', 'create', '--coupon', $coupon.id, '--code', $upper)
+$promoArgs = @('promotion_codes', 'create', '--coupon', $coupon.id, '--code', $upper)
 if ($MaxRedemptions -gt 0) { $promoArgs += @('-d', "max_redemptions=$MaxRedemptions") }
 $promo = Stripe-Json $promoArgs
 
