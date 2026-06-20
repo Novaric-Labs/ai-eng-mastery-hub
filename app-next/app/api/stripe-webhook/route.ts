@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
+import { subscriptionRow } from "@/lib/stripe-sync";
 
 export const runtime = "nodejs"; // raw body + signature verification need Node
 
@@ -30,15 +31,9 @@ async function syncSubscription(stripe: Stripe, sub: Stripe.Subscription) {
   }
   if (!userId) return; // can't attribute this subscription to a user yet
 
-  await db.from("subscriptions").upsert({
-    user_id: userId,
-    stripe_customer_id: customerId,
-    stripe_subscription_id: sub.id,
-    plan: (sub.metadata?.plan as string | undefined) ?? null,
-    status: sub.status,
-    current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
-    updated_at: new Date().toISOString(),
-  });
+  // Shared row builder — derives plan + period-end the same way the account page
+  // and the reconciliation endpoint do, and never throws on a missing period.
+  await db.from("subscriptions").upsert(subscriptionRow(sub, userId));
 }
 
 export async function POST(request: Request) {

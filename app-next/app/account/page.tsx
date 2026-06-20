@@ -8,7 +8,8 @@ import SignOutLink from "@/components/SignOutLink";
 import AccountActions from "@/components/AccountActions";
 import { supabaseServer } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
-import { PLANS, planById, type Plan } from "@/lib/plans";
+import { planById, type Plan } from "@/lib/plans";
+import { subscriptionPeriodEndISO, subscriptionPlanId } from "@/lib/stripe-sync";
 
 // Members-only billing management; never index.
 export const metadata: Metadata = { robots: { index: false, follow: false } };
@@ -38,12 +39,6 @@ const fmtDate = (iso: string | null): string | null => {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
   return d.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
-};
-
-// Map a Stripe price id back to one of our display plans.
-const planByPrice = (priceId: string | null): Plan | null => {
-  if (!priceId) return null;
-  return PLANS.find((p) => process.env[p.priceEnv] === priceId) ?? null;
 };
 
 export default async function AccountPage() {
@@ -76,15 +71,9 @@ export default async function AccountPage() {
       const s = await stripe.subscriptions.retrieve(sub.stripe_subscription_id, {
         expand: ["default_payment_method", "items.data.price"],
       });
-      const priceId =
-        typeof s.items.data[0]?.price === "string"
-          ? (s.items.data[0]?.price as unknown as string)
-          : s.items.data[0]?.price?.id ?? null;
-      // SDK 16 exposes current_period_end at the top level; fall back to the item.
-      const periodEnd =
-        (s as unknown as { current_period_end?: number }).current_period_end ??
-        (s.items.data[0] as unknown as { current_period_end?: number })?.current_period_end ??
-        null;
+      // Plan + period-end come from the same shared helpers the webhook uses, so
+      // the live view and the persisted row can't disagree.
+      const planId = subscriptionPlanId(s);
       const pm = s.default_payment_method;
       const card =
         pm && typeof pm !== "string" && pm.card
@@ -93,8 +82,10 @@ export default async function AccountPage() {
       live = {
         status: s.status,
         cancelAtPeriodEnd: s.cancel_at_period_end,
-        currentPeriodEnd: periodEnd ? new Date(periodEnd * 1000).toISOString() : sub.current_period_end,
-        plan: planByPrice(priceId) ?? (sub.plan ? planById(sub.plan) ?? null : null),
+        currentPeriodEnd: subscriptionPeriodEndISO(s) ?? sub.current_period_end,
+        plan:
+          (planId ? planById(planId) ?? null : null) ??
+          (sub.plan ? planById(sub.plan) ?? null : null),
         card,
         degraded: false,
       };
