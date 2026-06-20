@@ -15,9 +15,15 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/login?error=auth`);
   }
   const supabase = await supabaseServer();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
     return NextResponse.redirect(`${origin}/login?error=auth`);
   }
-  return NextResponse.redirect(`${origin}/courses`);
+
+  // Flag brand-new accounts so the catalog can fire a one-time "signup" funnel
+  // event (analytics runs client-side only). Heuristic: the user was created in
+  // the last 2 minutes — i.e. this code exchange is what just created them.
+  const createdAt = data.user?.created_at;
+  const isNew = !!createdAt && Date.now() - new Date(createdAt).getTime() < 120_000;
+  return NextResponse.redirect(`${origin}/courses${isNew ? "?welcome=1" : ""}`);
 }

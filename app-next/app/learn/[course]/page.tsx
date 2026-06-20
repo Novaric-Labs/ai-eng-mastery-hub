@@ -5,6 +5,7 @@ import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isAdmin } from "@/lib/admin";
 import { courseBySlug } from "@/lib/courses";
 import LearnApp from "@/components/LearnApp";
+import FunnelEvents from "@/components/FunnelEvents";
 import type { ContentRow, ProgressState } from "@/lib/types";
 
 // Dynamic: reads cookies + per-user data, never statically prerendered.
@@ -53,14 +54,20 @@ export default async function LearnCoursePage({
     (sub.status === "active" || sub.status === "trialing") &&
     (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
 
+  const entitled = admin || member || !!ent?.active;
+
   return (
-    <LearnApp
-      content={(content ?? []) as ContentRow[]}
-      courseSlug={slug}
-      entitled={admin || member || !!ent?.active}
-      admin={admin}
-      userId={user?.id ?? ""}
-      initialProgress={(prog?.state ?? {}) as ProgressState}
-    />
+    <>
+      {/* A non-entitled visitor opening a live course = a preview start (activation). */}
+      {!entitled && <FunnelEvents event="preview_started" course={slug} />}
+      <LearnApp
+        content={(content ?? []) as ContentRow[]}
+        courseSlug={slug}
+        entitled={entitled}
+        admin={admin}
+        userId={user?.id ?? ""}
+        initialProgress={(prog?.state ?? {}) as ProgressState}
+      />
+    </>
   );
 }

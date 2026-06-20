@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Clock, BarChart3, Layers, Lock } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
+import FoundingBanner from "@/components/FoundingBanner";
+import Testimonials from "@/components/Testimonials";
 import JsonLd from "@/components/JsonLd";
 import { COURSES } from "@/lib/courses";
 import { coursesItemListSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
@@ -36,6 +38,7 @@ export default function Home() {
           breadcrumbSchema([["Home", "/"]]),
         ]}
       />
+      <FoundingBanner />
       <SiteHeader />
       <main>
         {/* hero */}
@@ -105,6 +108,9 @@ export default function Home() {
             })}
           </div>
         </section>
+
+        {/* testimonials — renders only once real quotes exist */}
+        <Testimonials />
 
         {/* faq */}
         <section className="wrap" style={{ paddingTop: 40, paddingBottom: 28, maxWidth: 680 }}>

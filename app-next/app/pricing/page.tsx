@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
+import FoundingBanner from "@/components/FoundingBanner";
 import PlanPicker from "@/components/PlanPicker";
 import JsonLd from "@/components/JsonLd";
 import { paymentsEnabled } from "@/lib/payments";
+import { FOUNDING } from "@/lib/offer";
 import { breadcrumbSchema } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -44,6 +46,7 @@ export default function Pricing() {
           ["Pricing", "/pricing"],
         ])}
       />
+      <FoundingBanner />
       <SiteHeader />
       <main className="wrap" style={{ paddingTop: 56, paddingBottom: 64, maxWidth: 720 }}>
         <p className="eyebrow" style={{ textAlign: "center" }}>MEMBERSHIP</p>
@@ -57,6 +60,13 @@ export default function Pricing() {
         </p>
 
         <PlanPicker />
+
+        {paymentsEnabled && (
+          <p style={{ color: "var(--accent)", fontSize: 13, marginTop: 14, textAlign: "center", fontWeight: 600 }}>
+            Founding offer: enter code <b>{FOUNDING.code}</b> at checkout for {FOUNDING.percentOff}% off for life
+            (first {FOUNDING.maxMembers} members).
+          </p>
+        )}
 
         <div className="card" style={{ marginTop: 26, padding: 24, maxWidth: 460, marginLeft: "auto", marginRight: "auto" }}>
           <b style={{ fontSize: 15 }}>Every plan includes</b>
