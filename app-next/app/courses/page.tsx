@@ -5,6 +5,7 @@ import { ArrowRight, Check, Clock, BarChart3, Layers, Lock, Sparkles, Settings }
 import NovaMark from "@/components/NovaMark";
 import SignOutLink from "@/components/SignOutLink";
 import FunnelEvents from "@/components/FunnelEvents";
+import SubscriptionSync from "@/components/SubscriptionSync";
 import { supabaseServer } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/admin";
 import { hasActiveMembership } from "@/lib/entitlement";
@@ -34,6 +35,7 @@ export default async function CoursesPage() {
   return (
     <>
       <FunnelEvents />
+      <SubscriptionSync />
       <CatalogHeader email={user.email ?? ""} member={member} />
       <main className="wrap" style={{ paddingTop: 40, paddingBottom: 72, maxWidth: 880 }}>
         <p className="eyebrow">YOUR LIBRARY</p>
