@@ -1,0 +1,52 @@
+---
+title: "AI Agents vs. Workflows: When to Use Which"
+description: "Not every LLM feature needs an agent. A practical look at the difference between agents and workflows — and how to choose the right one for your task."
+date: "2026-06-17"
+author: "Novacademy"
+tags: ["Agents", "LLM", "Architecture"]
+draft: false
+---
+
+"Agent" is the most overused word in AI right now. A lot of what gets called an agent is really a **workflow** — and that distinction matters, because the two have very different costs, failure modes, and debugging stories.
+
+## The difference in one line
+
+- A **workflow** runs the LLM through steps *you* defined. The control flow is fixed.
+- An **agent** lets the LLM decide the steps — which tools to call, in what order, and when it's done. The control flow is dynamic.
+
+Both can use tools. Both can call the model multiple times. The difference is **who's driving**: your code, or the model.
+
+## When a workflow is the right call
+
+Reach for a workflow when the task is predictable enough to map out in advance:
+
+- Summarize a document, then extract fields from the summary.
+- Classify a ticket, then route it based on the label.
+- Generate a draft, then run it past a checker prompt.
+
+Workflows are easier to test, cheaper to run, and far easier to debug — when something breaks, you know exactly which step failed.
+
+## When you actually need an agent
+
+Agents earn their keep when you *can't* predict the steps ahead of time:
+
+- The number of steps depends on what the model discovers along the way.
+- The task needs open-ended tool use (search, then read, then search again).
+- A human would also have to improvise rather than follow a checklist.
+
+The tradeoff: agents are harder to evaluate, can loop or wander, and cost more because they make more model calls.
+
+> Rule of thumb: **start with a workflow.** Only reach for an agent when a fixed sequence genuinely can't express the task.
+
+## A quick decision table
+
+| Question | Workflow | Agent |
+| --- | --- | --- |
+| Are the steps known in advance? | Yes | No |
+| Is cost/latency sensitive? | Yes | Less so |
+| How easy is it to test? | Easy | Hard |
+| Does it need to improvise? | No | Yes |
+
+---
+
+Most teams over-reach for agents and end up with something slow and unpredictable when a three-step workflow would have shipped. If you want to learn how to design both — and the evals that tell you which one is actually working — that's the core of our [courses](/pricing). New here? Start with [what RAG is](/blog/what-is-rag).

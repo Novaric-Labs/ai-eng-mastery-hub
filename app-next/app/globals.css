@@ -405,6 +405,28 @@ button.blockhead:hover { color: var(--dim2); }
 .legal a { color: var(--accent); }
 .legal strong { color: var(--text); font-weight: 600; }
 
+/* blog article body (MDX-rendered) */
+.post-body { margin-top: 26px; color: var(--dim2); font-size: 16px; line-height: 1.72; }
+.post-body > *:first-child { margin-top: 0; }
+.post-body h2 { font-size: 23px; font-weight: 600; color: var(--text); letter-spacing: -.015em; margin: 34px 0 10px; scroll-margin-top: 80px; }
+.post-body h3 { font-size: 18px; font-weight: 600; color: var(--text); margin: 26px 0 8px; scroll-margin-top: 80px; }
+.post-body p { margin: 0 0 16px; }
+.post-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.post-body strong { color: var(--text); font-weight: 600; }
+.post-body ul, .post-body ol { margin: 0 0 16px 22px; }
+.post-body li { margin-bottom: 7px; }
+.post-body li::marker { color: var(--faint); }
+.post-body blockquote { margin: 18px 0; padding: 4px 18px; border-left: 2px solid var(--accent2); background: linear-gradient(90deg, rgba(167,139,250,.08), transparent); color: var(--dim2); border-radius: 0 var(--r-md) var(--r-md) 0; }
+.post-body blockquote p:last-child { margin-bottom: 0; }
+.post-body code { background: var(--bg3); padding: 1.5px 6px; border-radius: 5px; font-size: 14px; color: var(--teal); font-family: var(--font-mono); }
+.post-body pre { background: #08080a; border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px 18px; overflow-x: auto; margin: 0 0 18px; box-shadow: var(--hairline); }
+.post-body pre code { background: none; padding: 0; color: #c9d1d9; font-size: 13px; line-height: 1.65; }
+.post-body img { max-width: 100%; height: auto; border-radius: var(--r-md); border: 1px solid var(--border); margin: 8px 0 18px; }
+.post-body hr { border: 0; border-top: 1px solid var(--border); margin: 28px 0; }
+.post-body table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 14px; }
+.post-body th, .post-body td { border: 1px solid var(--border); padding: 8px 11px; text-align: left; }
+.post-body th { background: var(--bg3); color: var(--dim); font-size: 12.5px; text-transform: uppercase; letter-spacing: .03em; }
+
 /* guided tour (driver.js) — themed with our vars so it adapts to dark/light */
 .driver-popover.nova-tour {
   background: var(--bg2); color: var(--text);

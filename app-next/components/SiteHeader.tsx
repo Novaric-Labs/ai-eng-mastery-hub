@@ -11,6 +11,7 @@ export default function SiteHeader() {
           <span className="brand-word">Novacademy</span>
         </Link>
         <nav className="sh-nav">
+          <Link href="/blog">Blog</Link>
           <Link href="/pricing">Pricing</Link>
           <Link href="/login" className="btn sm">
             Sign in
