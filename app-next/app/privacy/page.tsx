@@ -13,7 +13,7 @@ export default function Privacy() {
     <LegalPage title="Privacy Policy" updated="June 15, 2026" path="/privacy">
       <p>
         This Privacy Policy explains what data Novacademy (&ldquo;we&rdquo;, operated by{" "}
-        <strong>[Novacademy — legal entity name]</strong>) collects and how we use it. We aim to collect
+        <strong>Novaric Labs LLC</strong>) collects and how we use it. We aim to collect
         as little as possible.
       </p>
 
@@ -43,7 +43,7 @@ export default function Privacy() {
         <li><strong>Supabase</strong> — authentication, database, and entitlement/progress storage.</li>
         <li><strong>Stripe</strong> — payment processing.</li>
         <li><strong>Vercel</strong> — application hosting and aggregate analytics.</li>
-        <li><strong>[Email provider]</strong> — delivery of sign-in and transactional email.</li>
+        <li><strong>Resend</strong> — delivery of sign-in and transactional email.</li>
       </ul>
 
       <h2>4. Cookies &amp; local storage</h2>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { PLANS } from "@/lib/plans";
 import { paymentsEnabled } from "@/lib/payments";
+import { trackEvent } from "@/lib/analytics";
 
 // Renders the membership plans and starts Stripe Checkout for the chosen plan.
 // Not-signed-in users are bounced to /login (then back to pricing) so checkout
@@ -29,6 +30,7 @@ export default function PlanPicker() {
   async function choose(plan: string) {
     setBusy(plan);
     setMsg(null);
+    trackEvent("checkout_started", { plan });
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
