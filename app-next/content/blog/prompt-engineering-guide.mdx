@@ -1,0 +1,103 @@
+---
+title: "Prompt Engineering: How to Write Prompts That Actually Work"
+description: "A practical guide to prompt engineering — the core techniques for getting reliable, high-quality outputs from LLMs without changing the model at all."
+date: "2026-06-23"
+author: "Novacademy"
+tags: ["Prompt Engineering", "LLM", "Fundamentals"]
+draft: false
+---
+
+The model isn't the problem. If an LLM keeps giving you vague, off-format, or wrong answers, the first place to look is your prompt. **Prompt engineering** is the practice of crafting inputs that get consistently useful outputs — and it's the cheapest, fastest lever you have for improving what an LLM does.
+
+No fine-tuning. No new model. Just better instructions.
+
+## Why prompts have such a big impact
+
+An LLM predicts what text should come next, based on everything it was trained on. The framing you give it, the context you provide, and the format you request all shape that prediction. A vague prompt produces vague output; a precise prompt produces precise output — same model, same cost, very different results.
+
+You don't need special syntax. You need to think like a careful communicator who is writing instructions for someone who will follow them literally.
+
+## Core technique 1: be explicit about what you want
+
+State the role, format, audience, length, and tone. Don't leave anything to inference.
+
+```
+# Vague
+Summarize this article.
+
+# Better
+Summarize this article in 3 bullet points. Each bullet should be one sentence
+and should identify a concrete takeaway for a software engineer reading this
+for the first time.
+```
+
+The second prompt is harder to misinterpret. That's the goal.
+
+## Core technique 2: show examples (few-shot prompting)
+
+Showing the model one or two examples of the input/output pair you want is often the single biggest quality lift from a prompt change. It's called few-shot prompting, and it works because examples communicate intent faster than instructions.
+
+```
+Classify the support message as BILLING, TECHNICAL, or OTHER.
+
+Message: "I can't log in after resetting my password."
+Class: TECHNICAL
+
+Message: "I was charged twice this month."
+Class: BILLING
+
+Message: "How do I export my data?"
+Class:
+```
+
+One or two well-chosen examples beat several paragraphs of explanation.
+
+## Core technique 3: chain-of-thought for hard problems
+
+For math, reasoning, or multi-step logic, ask the model to think through the problem before giving its final answer. This consistently improves accuracy on complex tasks because it forces the model to generate reasoning tokens rather than jumping straight to a conclusion.
+
+> Rule of thumb: add *"Think through this step by step before giving your final answer"* any time a task involves multiple dependent steps.
+
+## Core technique 4: constrain the output format
+
+If your code needs to parse the output, specify the format and give a schema. Models follow explicit format instructions reliably — and structured output removes a whole class of downstream bugs.
+
+```
+Respond ONLY with valid JSON matching this schema:
+{
+  "sentiment": "positive | negative | neutral",
+  "confidence": 0.0–1.0,
+  "key_phrase": "string"
+}
+Do not include any explanation or text outside the JSON.
+```
+
+## Core technique 5: use a system prompt for standing rules
+
+If you're calling the API directly, separate your standing instructions (persona, guardrails, output rules) from the user's content. The model sees the system prompt as authoritative, which makes it more consistent than burying rules inside a user message where they compete with other content.
+
+## Quick technique reference
+
+| Technique | Best for | Token cost |
+| --- | --- | --- |
+| Explicit instructions | Most tasks | None |
+| Few-shot examples | Classification, formatting | Small |
+| Chain-of-thought | Reasoning, multi-step logic | Moderate |
+| Structured output | Parsing, downstream code | None |
+| System prompt rules | Persona, guardrails, consistency | None |
+
+## What prompts can't fix
+
+Prompt engineering doesn't overcome bad context. If the facts aren't in the prompt or in retrieved documents, the model will guess — and often confidently. Prompts also can't rescue a fundamentally mismatched model (asking a small model to do something it lacks the capability for) or bad upstream data.
+
+If your prompts are clean and outputs are still wrong, the problem is usually the input, not the instructions. That's the point where you reach for [retrieval-augmented generation](/blog/what-is-rag) rather than a cleverer prompt.
+
+## Treat prompts like code
+
+Manual prompt tuning works — up to a point. The failure mode is writing prompts that look great on your test cases and break on inputs you didn't anticipate. The fix is **evals**: a set of labeled examples that let you measure whether a change improved things overall, not just on the cases in front of you.
+
+Teams that ship reliable LLM features version their prompts, test them against a suite of examples, and change them with evidence rather than intuition. Prompt engineering and evaluation go together; you can't do one well without the other.
+
+---
+
+The prompts in a real product are longer, interact with retrieved context, and need to hold up across the full range of what users actually send. If you want to build that skill systematically — from writing and testing prompts to the evaluation loops that tell you when they break — that's exactly what our [courses](/pricing) cover.
