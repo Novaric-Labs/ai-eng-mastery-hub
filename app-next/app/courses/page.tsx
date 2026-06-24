@@ -167,7 +167,7 @@ function CourseCard({
       </div>
 
       {accessible ? (
-        <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0 }}>
+        <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0, background: c.accent }}>
           {access ? "Continue" : "Start free preview"}{" "}
           <ArrowRight size={16} strokeWidth={1.75} />
         </Link>

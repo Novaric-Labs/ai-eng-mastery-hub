@@ -41,7 +41,7 @@ export const COURSES: CourseMeta[] = [
     estHours: "6–8 hrs",
     moduleCount: 8,
     status: "live",
-    accent: "#7c6bff",
+    accent: "#2dd4bf",
   },
   {
     slug: "ai-eng",
