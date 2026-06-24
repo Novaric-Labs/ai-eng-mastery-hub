@@ -11,8 +11,11 @@ export default function Loading() {
         gap: 14,
       }}
     >
-      <div className="spinner" />
-      <p style={{ color: "var(--dim)", fontSize: 13.5 }}>Loading your course…</p>
+      <div className="cosmic-loader" aria-hidden>
+        <span className="star" />
+        <span className="orbit"><span className="planet" /></span>
+      </div>
+      <p style={{ color: "var(--dim)", fontSize: 13.5 }}>Charting your course…</p>
     </div>
   );
 }
