@@ -154,7 +154,10 @@ function Shell() {
   if (!mounted) {
     return (
       <div style={{ display: "flex", justifyContent: "center", paddingTop: 120 }}>
-        <div className="spinner" />
+        <div className="cosmic-loader" aria-hidden>
+          <span className="star" />
+          <span className="orbit"><span className="planet" /></span>
+        </div>
       </div>
     );
   }

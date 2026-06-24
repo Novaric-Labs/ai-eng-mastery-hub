@@ -1,5 +1,6 @@
 "use client";
 
+import { Rocket, Star } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import {
   blockMastered,
@@ -39,28 +40,58 @@ export default function LearningPath() {
     if (!S.exams?.[b.id]?.passed) { next = { type: "exam", b }; break outer; }
   }
 
+  const launched = pct === 100;
+
   return (
     <div className="page">
       <h2>Learning Path</h2>
       <p className="tagline">
         {nM}/{total} modules mastered · {nB}/{course.blocks.length} blocks complete
       </p>
-      <div className="bar" style={{ height: 10, margin: "4px 0 22px" }}>
-        <i className={pct === 100 ? "g" : ""} style={{ width: `${pct}%` }} />
+
+      <div className="mission">
+        <span className="stars" aria-hidden />
+        <span className="stars2" aria-hidden />
+        <div className="mission-head">
+          <span className="mission-eyebrow">Mission progress</span>
+          <span className="mission-pct">{pct}% to the stars</span>
+        </div>
+        <div className="mission-track" role="img" aria-label={`${pct} percent of the way to course mastery`}>
+          <span className="mission-line" />
+          <span className="mission-line-fill" style={{ width: `${pct}%` }} />
+          <span className="mission-pad" aria-hidden><Rocket size={13} strokeWidth={2} style={{ transform: "rotate(45deg)", opacity: pct > 4 ? 0.25 : 0 }} /></span>
+          <span className={`mission-goal${launched ? " lit" : ""}`} aria-hidden>
+            <Star size={16} strokeWidth={2} fill={launched ? "currentColor" : "none"} />
+          </span>
+          <Rocket
+            className={`mission-rocket${launched ? " landed" : ""}`}
+            size={20}
+            strokeWidth={1.75}
+            style={{ left: `${pct}%` }}
+            aria-hidden
+          />
+        </div>
+        <p className="mission-caption">
+          {launched
+            ? "Touchdown among the stars — every module mastered and every exam passed. 🌟"
+            : nM === 0
+              ? "Pre-launch. Clear the first module to ignite the engines."
+              : `Engines lit — ${total - nM} module${total - nM === 1 ? "" : "s"} between you and orbit.`}
+        </p>
       </div>
 
       {next.type === "done" ? (
         <div className="card" style={{ borderColor: "var(--green)", padding: "14px 18px", marginBottom: 24 }}>
           <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: ".08em", color: "var(--green)", marginBottom: 6, fontWeight: 600 }}>
-            Complete
+            Mission complete
           </div>
-          <p style={{ marginBottom: 12 }}>All modules and exams finished. Keep the flashcards in rotation.</p>
+          <p style={{ marginBottom: 12 }}>All modules and exams finished. Keep the flashcards in rotation to stay in orbit.</p>
           <button className="btn green" onClick={() => go("cards")}>Review flashcards →</button>
         </div>
       ) : (
         <div className="card" style={{ borderColor: "var(--accent)", padding: "14px 18px", marginBottom: 24 }}>
           <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: ".08em", color: "var(--accent)", marginBottom: 6, fontWeight: 600 }}>
-            Next
+            Next launch
           </div>
           {next.type === "read" && (
             <>

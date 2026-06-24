@@ -80,6 +80,36 @@ a:hover { text-decoration: underline; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* ---------- cosmic loader (a planet orbiting a star) ---------- */
+.cosmic-loader { position: relative; width: 56px; height: 56px; }
+/* the orbit ring */
+.cosmic-loader::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  border: 1px dashed rgba(91,140,255,.35);
+}
+/* the central star — a soft glowing core that twinkles */
+.cosmic-loader .star {
+  position: absolute; top: 50%; left: 50%; width: 14px; height: 14px;
+  margin: -7px 0 0 -7px; border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, var(--accent) 55%, transparent 75%);
+  box-shadow: 0 0 10px 2px var(--accent-soft);
+  animation: cosmic-twinkle 1.6s ease-in-out infinite;
+}
+/* the orbiting planet — rotates a wrapper, planet sits on the rim */
+.cosmic-loader .orbit { position: absolute; inset: 0; animation: spin 1.2s linear infinite; }
+.cosmic-loader .planet {
+  position: absolute; top: -3px; left: 50%; width: 8px; height: 8px; margin-left: -4px;
+  border-radius: 50%; background: var(--accent2); box-shadow: 0 0 8px 1px rgba(167,139,250,.55);
+}
+@keyframes cosmic-twinkle {
+  0%, 100% { transform: scale(1); opacity: .85; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cosmic-loader .orbit { animation: none; }
+  .cosmic-loader .star { animation: none; }
+}
+
 /* ---------- marketing site header ---------- */
 .siteheader {
   display: flex; align-items: center; justify-content: space-between;
@@ -292,6 +322,70 @@ details.deep summary svg { width: 15px; height: 15px; }
 .pb-stat { font-size: 11.5px; color: var(--dim); flex-shrink: 0; white-space: nowrap; }
 .pb-stat-g { color: var(--green); }
 .pb-stat-a { color: var(--amber); }
+
+/* ---------- mission track (rocket → star journey on the Learning Path) ---------- */
+.mission {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(120% 140% at 8% 120%, rgba(91,140,255,.12), transparent 55%),
+    linear-gradient(180deg, #0c0c14, #0a0a10);
+  border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: 20px 22px 22px; margin-bottom: 22px;
+  box-shadow: var(--shadow-1), var(--hairline);
+}
+/* faint starfield — two layered radial-gradient star clusters that twinkle */
+.mission .stars, .mission .stars2 { position: absolute; inset: 0; pointer-events: none; }
+.mission .stars {
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.7), transparent),
+    radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 45% 65%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,.45), transparent),
+    radial-gradient(1px 1px at 32% 80%, rgba(255,255,255,.5), transparent);
+  animation: mission-twinkle 4s ease-in-out infinite;
+}
+.mission .stars2 {
+  background-image:
+    radial-gradient(1px 1px at 12% 60%, rgba(167,139,250,.5), transparent),
+    radial-gradient(1px 1px at 60% 78%, rgba(91,140,255,.55), transparent),
+    radial-gradient(1px 1px at 90% 32%, rgba(255,255,255,.4), transparent);
+  animation: mission-twinkle 6s ease-in-out infinite reverse;
+}
+.mission-head { position: relative; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+.mission-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--accent2); }
+.mission-pct { font-size: 12.5px; font-weight: 600; color: var(--dim2); font-variant-numeric: tabular-nums; }
+/* the track the rocket travels along */
+.mission-track { position: relative; height: 40px; margin: 0 4px; }
+.mission-line {
+  position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--border2), rgba(91,140,255,.5));
+}
+.mission-line-fill {
+  position: absolute; left: 0; top: 50%; height: 2px; margin-top: -1px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width .6s cubic-bezier(.4,1.2,.5,1);
+}
+/* launch pad (start) + destination star (end) */
+.mission-pad, .mission-goal {
+  position: absolute; top: 50%; display: grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 50%; transform: translate(-50%, -50%);
+}
+.mission-pad { left: 0; color: var(--dim2); }
+.mission-goal { right: 0; left: auto; transform: translate(50%, -50%); color: var(--amber); }
+.mission-goal.lit { color: #ffd66b; filter: drop-shadow(0 0 6px rgba(255,214,107,.7)); animation: cosmic-twinkle 2s ease-in-out infinite; }
+/* the rocket — positioned by inline left:% , nudged so its nose tracks progress */
+.mission-rocket {
+  position: absolute; top: 50%; transform: translate(-50%, -50%) rotate(45deg);
+  color: var(--accent); transition: left .6s cubic-bezier(.4,1.2,.5,1);
+  filter: drop-shadow(0 0 5px var(--accent-soft));
+}
+.mission-rocket.landed { color: #ffd66b; filter: drop-shadow(0 0 6px rgba(255,214,107,.6)); }
+.mission-caption { position: relative; margin: 14px 2px 0; font-size: 13px; color: var(--dim2); line-height: 1.5; }
+@keyframes mission-twinkle { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .mission .stars, .mission .stars2, .mission-goal.lit { animation: none; }
+  .mission-rocket, .mission-line-fill { transition: none; }
+}
 
 /* time estimates */
 .est-meta { display: block; font-size: 11.5px; color: var(--dim); margin: -2px 0 12px; font-weight: 400; }
