@@ -9,6 +9,49 @@ rested and responsive; reply fast in the first 2 hours (that's what decides HN/R
 
 ---
 
+## 🚀 Launch-day runbook (do this in order)
+
+Claude can't post to these platforms (no account access — and Reddit/HN reward a real human
+with history, replying live). This is the exact copy-paste sequence. Budget a half-day and
+stay at the keyboard for the first 2 hours after each post.
+
+**Step 0 — Pre-flight (night before or morning of):**
+1. **Merge PR #31** → publishes both `/blog` posts. Do this FIRST so the dev.to
+   `canonical_url` resolves to a live page.
+2. Confirm live: open `/blog/rag-what-breaks-in-production` and `/blog/context-windows-explained`
+   — check the code block, tables, and links render.
+3. Run the **Pre-launch checklist** below (verify `FOUNDING40` redeems; test the free
+   signup → Foundations path as a logged-out stranger).
+
+**Step 1 — dev.to (low risk, do it first to warm up):**
+4. New Post → paste `docs/week2-devto-rag-article.md` verbatim (frontmatter included).
+5. Add a cover image, flip `published: false` → `true`, publish. Verify the canonical
+   banner points to your site.
+
+**Step 2 — Show HN (the big swing — Tue–Thu, ~8–9am ET):**
+6. Post the §1 title + body. Then **do not leave** — refresh every few minutes and reply
+   to every comment for 2+ hours. Early engagement decides whether it climbs.
+
+**Step 3 — Reddit (staggered across the week — never all at once):**
+7. **Day 1 (after HN settles):** r/learnmachinelearning (§2a). Link in a **comment**, not
+   the post.
+8. **Day 2:** r/PromptEngineering (§2b) — the post body IS standalone value; link in a comment.
+9. **Day 3:** r/SideProject or r/EntrepreneurRideAlong (§2c).
+   - For each: read the sub's rules first, use your aged account, reply to every comment.
+
+**Step 4 — Indie Hackers (anytime Day 1–2):**
+10. Post the §3 build story. Promise to share numbers later (that's your Week 3–4 follow-up).
+
+**Step 5 — Watch the funnel (daily):**
+11. Check Vercel Analytics events per referrer (see the final section). The channel with the
+    best **visitor → free signup → paid** ratio is your Week 3+ wedge.
+
+> **If a step flops** (HN sinks, a subreddit removes you): don't panic-post elsewhere to
+> compensate. Note which channel it was, move to the next day's post as planned, and let
+> the funnel data — not one post's vanity metrics — pick your wedge.
+
+---
+
 ## Pre-launch checklist (do this BEFORE posting anything)
 
 - [ ] **Verify `FOUNDING40` actually redeems** — start a real checkout on the live site,
