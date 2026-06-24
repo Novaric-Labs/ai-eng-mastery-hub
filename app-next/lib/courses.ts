@@ -19,28 +19,13 @@ export type CourseMeta = {
   estHours: string;
   moduleCount: number;
   status: "live" | "coming_soon";
-  /** CSS accent (currently informational; cards use the global accent). */
+  /** Per-course accent color — the catalog card's left stripe and level label. */
   accent: string;
 };
 
+// Ordered for the learner's natural progression: the beginner on-ramp first,
+// then the deep course it leads into. Catalog and home pages render in this order.
 export const COURSES: CourseMeta[] = [
-  {
-    slug: "ai-eng",
-    title: "AI Engineering Mastery Hub",
-    subtitle: "The real production job — RAG, agents, harnesses, evals, and the judgment to ship.",
-    blurb:
-      "The deep, hands-on course: 21 modules across foundations, RAG, agents, and production. Concepts, mechanics, runnable code patterns, quizzes, spaced-repetition flashcards, and real production scenarios.",
-    bestFor: [
-      "Engineers & PMs who can code a little",
-      "People shipping LLM features at work",
-      "Anyone past prompt tricks who wants the real job",
-    ],
-    level: "Intermediate",
-    estHours: "20–30 hrs",
-    moduleCount: 21,
-    status: "live",
-    accent: "#5b8cff",
-  },
   {
     slug: "ai-foundations",
     title: "AI Foundations",
@@ -57,6 +42,23 @@ export const COURSES: CourseMeta[] = [
     moduleCount: 8,
     status: "live",
     accent: "#7c6bff",
+  },
+  {
+    slug: "ai-eng",
+    title: "AI Engineering Mastery Hub",
+    subtitle: "The real production job — RAG, agents, harnesses, evals, and the judgment to ship.",
+    blurb:
+      "The deep, hands-on course: 21 modules across foundations, RAG, agents, and production. Concepts, mechanics, runnable code patterns, quizzes, spaced-repetition flashcards, and real production scenarios.",
+    bestFor: [
+      "Engineers & PMs who can code a little",
+      "People shipping LLM features at work",
+      "Anyone past prompt tricks who wants the real job",
+    ],
+    level: "Intermediate",
+    estHours: "20–30 hrs",
+    moduleCount: 21,
+    status: "live",
+    accent: "#5b8cff",
   },
 ];
 
