@@ -109,6 +109,7 @@ function CourseCard({
         marginBottom: 0,
         padding: 24,
         opacity: live ? 1 : 0.92,
+        borderLeft: `3px solid ${c.accent}`,
         boxShadow: "var(--shadow-2), var(--hairline)",
       }}
     >
@@ -141,7 +142,7 @@ function CourseCard({
       </p>
 
       <div style={{ display: "flex", gap: 16, flexWrap: "wrap", margin: "0 0 16px", color: "var(--dim)", fontSize: 12.5 }}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: c.accent }}>
           <BarChart3 size={14} strokeWidth={1.75} /> {c.level}
         </span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
@@ -166,7 +167,7 @@ function CourseCard({
       </div>
 
       {accessible ? (
-        <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0 }}>
+        <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0, background: c.accent }}>
           {access ? "Continue" : "Start free preview"}{" "}
           <ArrowRight size={16} strokeWidth={1.75} />
         </Link>

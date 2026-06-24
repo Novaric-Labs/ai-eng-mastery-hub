@@ -19,11 +19,30 @@ export type CourseMeta = {
   estHours: string;
   moduleCount: number;
   status: "live" | "coming_soon";
-  /** CSS accent (currently informational; cards use the global accent). */
+  /** Per-course accent color — the catalog card's left stripe and level label. */
   accent: string;
 };
 
+// Ordered for the learner's natural progression: the beginner on-ramp first,
+// then the deep course it leads into. Catalog and home pages render in this order.
 export const COURSES: CourseMeta[] = [
+  {
+    slug: "ai-foundations",
+    title: "AI Foundations",
+    subtitle: "Zero to fluent — what LLMs, tokens, and prompts actually are, before the deep course.",
+    blurb:
+      "The gentle on-ramp for total beginners. Plain-English mental models for how LLMs work, what tokens and context windows are, and how to prompt well — so the Mastery Hub feels like the obvious next step.",
+    bestFor: [
+      "Total beginners to AI",
+      "Non-engineers who want to keep up",
+      "A primer before the Mastery Hub",
+    ],
+    level: "Beginner",
+    estHours: "6–8 hrs",
+    moduleCount: 8,
+    status: "live",
+    accent: "#2dd4bf",
+  },
   {
     slug: "ai-eng",
     title: "AI Engineering Mastery Hub",
@@ -40,23 +59,6 @@ export const COURSES: CourseMeta[] = [
     moduleCount: 21,
     status: "live",
     accent: "#5b8cff",
-  },
-  {
-    slug: "ai-foundations",
-    title: "AI Foundations",
-    subtitle: "Zero to fluent — what LLMs, tokens, and prompts actually are, before the deep course.",
-    blurb:
-      "The gentle on-ramp for total beginners. Plain-English mental models for how LLMs work, what tokens and context windows are, and how to prompt well — so the Mastery Hub feels like the obvious next step.",
-    bestFor: [
-      "Total beginners to AI",
-      "Non-engineers who want to keep up",
-      "A primer before the Mastery Hub",
-    ],
-    level: "Beginner",
-    estHours: "6–8 hrs",
-    moduleCount: 8,
-    status: "live",
-    accent: "#7c6bff",
   },
 ];
 
