@@ -423,8 +423,43 @@ details.deep summary svg { width: 15px; height: 15px; }
 .toast.show { opacity: 1; transform: translate(-50%,0); }
 .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 80; overflow: hidden; }
 .confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; opacity: .95; animation: conffall linear forwards; }
+/* every third piece is a 5-point star instead of a ribbon */
+.confetti i.star {
+  width: 13px; height: 13px; border-radius: 0;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
 @keyframes conffall { 0% { transform: translateY(-10px) rotate(0); opacity: 1; } 100% { transform: translateY(105vh) rotate(720deg); opacity: .9; } }
+/* rocket that launches up the screen on a big win (block mastered) */
+.rocket-launch { position: absolute; left: 50%; bottom: -48px; font-size: 40px; transform: translateX(-50%); animation: rocketlaunch 1.5s cubic-bezier(.3,.7,.4,1) forwards; }
+@keyframes rocketlaunch { 0% { bottom: -48px; opacity: 0; } 12% { opacity: 1; } 100% { bottom: 108vh; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .confetti { display: none; } }
+
+/* ---------- personality: cosmic rank + starlit cards ---------- */
+.hs-rank { color: var(--accent2); font-weight: 600; }
+.herostat.hs-cosmic { position: relative; overflow: hidden; }
+.herostat.hs-cosmic .hs-cell { position: relative; z-index: 1; }
+.herostat .stars, .quizresult-pass .stars {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(1px 1px at 18% 28%, rgba(255,255,255,.6), transparent),
+    radial-gradient(1px 1px at 72% 22%, rgba(167,139,250,.55), transparent),
+    radial-gradient(1.5px 1.5px at 46% 68%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1px 1px at 88% 60%, rgba(91,140,255,.5), transparent),
+    radial-gradient(1px 1px at 34% 82%, rgba(255,255,255,.45), transparent);
+  animation: mission-twinkle 5s ease-in-out infinite;
+}
+.quizresult-pass {
+  position: relative; overflow: hidden; border-color: rgba(63,178,127,.4) !important;
+  background: radial-gradient(120% 100% at 50% 0%, rgba(63,178,127,.09), transparent 60%), var(--bg2);
+}
+.quizresult-liftoff {
+  position: relative; z-index: 1; display: inline-flex; color: var(--green); margin-bottom: 2px;
+  filter: drop-shadow(0 0 6px rgba(63,178,127,.5)); animation: liftoff-bob 1.8s ease-in-out infinite;
+}
+@keyframes liftoff-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) {
+  .rocket-launch, .quizresult-liftoff, .herostat .stars, .quizresult-pass .stars { animation: none; }
+}
 
 /* quiz hints + scenario note */
 .qhint { font-size: 12px; color: var(--dim); margin: 10px 0 2px; }

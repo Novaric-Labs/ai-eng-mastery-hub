@@ -266,6 +266,18 @@ export function levelInfo(c: Course, S: ProgressState): LevelInfo {
   return { lvl, total, into: total - acc, need, pct: Math.round((100 * (total - acc)) / need) };
 }
 
+// A space-crew rank title derived from level — pure cosmetic flavor shown next
+// to the level number in the dashboard hero and sidebar.
+export function rankFor(lvl: number): string {
+  if (lvl >= 12) return "Admiral";
+  if (lvl >= 10) return "Voyager";
+  if (lvl >= 8) return "Captain";
+  if (lvl >= 6) return "Commander";
+  if (lvl >= 4) return "Navigator";
+  if (lvl >= 2) return "Pilot";
+  return "Cadet";
+}
+
 export function fmtMin(min: number): string {
   if (min < 60) return "~" + min + " min";
   const h = Math.floor(min / 60), m = min % 60;
@@ -276,4 +288,46 @@ export function blockRemaining(c: Course, S: ProgressState, b: string): number {
   return blockMods(c, b)
     .filter((m) => !modMastered(S, m.id))
     .reduce((s, m) => s + (m.estMin || 30), 0);
+}
+
+/* ----- course completion (certificate eligibility) ----- */
+
+// A course is "complete" only when EVERY block is mastered — i.e. every module
+// read + quiz passed AND every block mastery exam passed. This is proof of
+// graded work, the basis a certificate attests to (not mere attendance).
+export function courseComplete(c: Course, S: ProgressState): boolean {
+  return c.blocks.length > 0 && c.blocks.every((b) => blockMastered(c, S, b.id));
+}
+
+// A snapshot of what was demonstrated, frozen onto the certificate at issue time.
+export type CompletionSummary = {
+  modulesMastered: number;
+  modulesTotal: number;
+  examsPassed: number;
+  examsTotal: number;
+  /** Average best score across the passed block exams. */
+  examAvg: number;
+  scenariosCompleted: number;
+  level: number;
+  xp: number;
+};
+
+export function completionSummary(c: Course, S: ProgressState): CompletionSummary {
+  const passed = c.blocks.filter((b) => S.exams?.[b.id]?.passed);
+  const examAvg = passed.length
+    ? Math.round(
+        passed.reduce((sum, b) => sum + (S.exams![b.id].best || 0), 0) / passed.length,
+      )
+    : 0;
+  const li = levelInfo(c, S);
+  return {
+    modulesMastered: c.catalog.filter((m) => modMastered(S, m.id)).length,
+    modulesTotal: c.catalog.length,
+    examsPassed: passed.length,
+    examsTotal: c.blocks.length,
+    examAvg,
+    scenariosCompleted: Object.keys(S.scen ?? {}).length,
+    level: li.lvl,
+    xp: li.total,
+  };
 }
