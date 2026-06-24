@@ -25,9 +25,14 @@ export async function hasFullAccess(
   if (!user) return false;
   if (isAdmin(user.email)) return true;
   if (await hasActiveMembership(supabase)) return true;
+  // ANY active per-course grant (access code / comp) unlocks these global,
+  // course-agnostic features (tutor / grade / explain / video). Must tolerate
+  // multiple entitlement rows now that a user can own more than one course —
+  // .maybeSingle() would error on 2+ rows, so select-limit-1 and test presence.
   const { data } = await supabase
     .from("entitlements")
-    .select("active")
-    .maybeSingle();
-  return !!data?.active;
+    .select("course_id")
+    .eq("active", true)
+    .limit(1);
+  return !!data && data.length > 0;
 }
