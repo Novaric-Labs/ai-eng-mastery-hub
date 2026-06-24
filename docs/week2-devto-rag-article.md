@@ -1,0 +1,149 @@
+---
+title: "RAG, explained by what actually breaks in production"
+published: false
+description: "Naive RAG demos beautifully and fails in production. Here are the three things that break it — chunking, retrieval, and context bloat — and the mental model that fixes them."
+tags: ai, machinelearning, beginners, career
+canonical_url: https://www.novacademy.ai/blog/rag-what-breaks-in-production
+cover_image:
+---
+
+Everyone's first RAG system works on the first try. You embed some docs, drop them in a
+vector database, retrieve the top few chunks for each question, stuff them into the prompt,
+and the model answers like it read your whole knowledge base. It feels like magic.
+
+Then you point it at real documents and real users, and it starts confidently citing the
+wrong paragraph, missing answers that are *literally in the corpus*, and burning tokens to
+get dumber.
+
+I've watched this happen enough times — to myself and to people I teach — that I now think
+the only useful way to explain RAG is through its failure modes. So here's the naive version
+everyone ships first, the three things that break it, and the one mental shift that fixes
+most of it.
+
+## The naive RAG everyone builds first
+
+The starter recipe looks like this:
+
+```python
+# 1. Index (once)
+chunks = split_every_500_chars(documents)
+embeddings = embed(chunks)
+vector_db.add(chunks, embeddings)
+
+# 2. Answer (per question)
+query_vec = embed(user_question)
+top_k = vector_db.search(query_vec, k=3)
+prompt = f"Answer using this context: {top_k}\n\nQuestion: {user_question}"
+answer = llm(prompt)
+```
+
+Four moving parts: chunk, embed, retrieve, generate. The demo works because your test
+questions happen to be phrased like your documents and the answer happens to live in one
+clean paragraph. Production is where those two coincidences stop holding.
+
+## Break #1: Chunking — you sliced the answer in half
+
+Fixed-size chunking (every N characters or tokens) is the default, and it's the first thing
+to bite you. Splitting blindly does three bad things:
+
+- **It cuts ideas mid-thought.** The setup lands in chunk 7 and the conclusion in chunk 8,
+  so retrieval grabs one without the other and the model answers from half the picture.
+- **It mangles structure.** A table, a code block, or a numbered procedure gets guillotined
+  across a boundary and becomes noise.
+- **It strands context.** "The refund window is 30 days" is useless if *which product* it
+  refers to was three sentences up, in a different chunk.
+
+**A concrete example:** a policy doc says "Enterprise customers are exempt from this limit"
+two paragraphs after stating the limit. Fixed chunking separates them. Your bot now tells an
+enterprise customer they're subject to a limit they're explicitly exempt from. That's not a
+hallucination — the model faithfully answered from the broken context you handed it.
+
+**The fix is to chunk along meaning, not character count:** split on structural boundaries
+(headings, sections, list items), add a sentence or two of overlap so boundary context
+survives, and keep tables/code intact as single units. Chunking is retrieval's foundation —
+get it wrong and nothing downstream can recover.
+
+## Break #2: Retrieval — similarity is not relevance
+
+This is the big one, and the most counterintuitive. Vector search returns the chunks whose
+embeddings are *closest* to the query's embedding. People quietly assume "closest" means
+"most useful." It doesn't.
+
+- **Embeddings smear meaning.** Dense vectors are great at "these are about the same topic"
+  and bad at exact terms — product codes, error numbers, names, version strings. A user
+  asking about error `E-4021` may get chunks about errors *in general* while the one chunk
+  that names `E-4021` ranks fifth.
+- **Questions don't look like answers.** Your user writes a question ("how do I cancel?");
+  your docs are written as statements ("Cancellation is handled under Settings → Billing").
+  Question and answer can be semantically adjacent but not the *nearest* neighbors, so the
+  real answer doesn't make the top-k cut.
+- **Top-k is a guess, not a guarantee.** If the answer is the 6th most similar chunk and
+  you retrieve 5, it's simply gone. The model can't cite what it never received — and it
+  will happily fill the gap with something plausible instead.
+
+**The fixes, in order of leverage:**
+
+1. **Hybrid search** — run keyword/BM25 retrieval *and* vector retrieval, then merge. Keyword
+   catches the exact terms embeddings smear; vectors catch the paraphrases keyword misses.
+   This single change fixes a startling share of "it can't find the obvious answer" bugs.
+2. **Reranking** — over-retrieve (say, top 30) with cheap search, then use a cross-encoder
+   reranker to score each candidate against the query directly and keep the best 3–5. Far
+   more accurate than raw embedding distance, because the reranker actually reads the
+   query and the chunk together instead of comparing two pre-computed vectors.
+3. **Query rewriting** — rephrase the user's question into something shaped like your
+   documents (or generate a hypothetical answer and search with *that*) before retrieving.
+
+## Break #3: Context bloat — more chunks, worse answers
+
+The instinct after Break #2 is "just retrieve more — top 20 instead of top 3." That makes it
+worse, and this surprises everyone.
+
+- **The needle gets lost in the haystack.** Models attend unevenly to long contexts —
+  there's a well-documented "lost in the middle" effect where information buried in the
+  center of a long prompt gets ignored. Pad the context with 17 irrelevant chunks and you've
+  *hidden* the one good one.
+- **Irrelevant context actively distracts.** Off-topic chunks don't just waste space; they
+  pull the answer toward themselves. A tangentially-related paragraph becomes the thing the
+  model latches onto.
+- **You pay for the privilege.** Every junk chunk is tokens — real latency and real cost on
+  every single request, multiplied across all your traffic, to make the output *worse*.
+
+**The fix is precision over recall at the generation step:** retrieve broadly, then filter
+hard. Rerank down to the few genuinely relevant chunks, drop anything below a relevance
+threshold (returning "I don't have that" is a feature, not a failure), and use metadata to
+pre-filter the search space — restrict to the right product, the current doc version, the
+right customer tier — so you're not relying on the embedding to encode all of that.
+
+## The mental model that fixes most of this
+
+Here's the shift that made RAG click for me:
+
+> **RAG is a search problem wearing an LLM costume.**
+
+The generation step is the easy, reliable part. Modern models write a great answer *if* you
+hand them the right context. Almost every RAG failure in production is a **retrieval**
+failure — the model was asked to answer from context that was incomplete, irrelevant, or
+buried. When your RAG bot is wrong, your instinct will be to blame the model or tweak the
+prompt. It's almost always the pipeline that fed it.
+
+Which leads to the single most useful debugging habit: **evaluate retrieval separately from
+generation.** Before you judge an answer, look at what got retrieved. Ask: was the correct
+chunk even in the set? If no, it's a retrieval bug — fix chunking, search, or ranking, and
+no prompt engineering will save you. If yes but the answer is still wrong, *now* it's a
+generation or context-bloat problem. Most teams skip this split, stare at bad answers, and
+tune the wrong half of the system for weeks.
+
+Build a tiny eval set — 20–50 real questions with the chunk that *should* be retrieved — and
+measure retrieval hit rate as a number. The moment retrieval becomes something you measure
+instead of something you eyeball, RAG stops being magic and starts being engineering.
+
+---
+
+I go deep on this — chunking strategies, hybrid search, rerankers, and evaluating RAG like a
+real IR system — in the AI Engineering course I built at
+[Novacademy](https://www.novacademy.ai/courses). There's also a **free** beginner course if
+you're earlier on the path and want the mental models for tokens, context windows, and
+prompting first.
+
+Either way, I hope the production angle above saves you a debugging session. If you've hit a
+RAG failure mode I didn't cover here, I'd genuinely like to hear it in the comments.
