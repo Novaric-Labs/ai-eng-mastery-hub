@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // Listens for `aihub:celebrate` events (dispatched by `celebrate()`) and shows a
 // toast + confetti, respecting prefers-reduced-motion. Mounted once by LearnApp.
 type Toast = { id: number; msg: string };
-type Burst = { id: number };
+type Burst = { id: number; big?: boolean };
 
 export default function Celebrate() {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -21,7 +21,8 @@ export default function Celebrate() {
       setToasts((t) => [...t, { id, msg }]);
       setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3000);
       if (!reduce) {
-        setBursts((b) => [...b, { id }]);
+        // The first burst carries the rocket on a `big` win (block mastered).
+        setBursts((b) => [...b, { id, big }]);
         setTimeout(() => setBursts((b) => b.filter((x) => x.id !== id)), 3200);
         if (big) {
           const id2 = ++seq;
@@ -47,8 +48,11 @@ export default function Celebrate() {
       ))}
       {bursts.map((b) => (
         <div key={b.id} className="confetti" aria-hidden>
+          {b.big && <span className="rocket-launch">🚀</span>}
           {Array.from({ length: 90 }, (_, i) => (
             <i
+              // Every third piece is a star; the rest are the classic ribbons.
+              className={i % 3 === 0 ? "star" : ""}
               key={i}
               style={{
                 left: ((i * 37) % 100) + "vw",

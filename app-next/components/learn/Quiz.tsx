@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Rocket } from "lucide-react";
 import { useCourseStore, celebrate } from "./StoreProvider";
 import Html from "./Html";
 import { PASS_EXAM, PASS_QUIZ, blockMastered } from "@/lib/course";
@@ -93,10 +94,10 @@ export default function Quiz() {
     if (celebrated.current) return;
     celebrated.current = true;
     const score = Math.round((100 * Q.items.filter((x) => x.sel === x.a).length) / Q.items.length);
-    if (Q.mode === "quiz" && score >= PASS_QUIZ) celebrate("Quiz passed — " + score + "% 🎉");
+    if (Q.mode === "quiz" && score >= PASS_QUIZ) celebrate("Liftoff — quiz passed at " + score + "% 🚀");
     else if (Q.mode === "exam" && score >= PASS_EXAM) {
       const blk = blockMastered(course, S, Q.id);
-      celebrate(blk ? "Block mastered! 🏆" : "Exam passed — " + score + "%", blk);
+      celebrate(blk ? "Block mastered — another system charted! 🌟" : "Exam passed — " + score + "% 🚀", blk);
     }
   }, [Q, course, S]);
 
@@ -115,15 +116,21 @@ export default function Quiz() {
     return (
       <div className="page">
         <h2>{title}</h2>
-        <div className="card" style={{ textAlign: "center", padding: 28 }}>
-          <div style={{ fontSize: 42, fontWeight: 700, color: pass ? "var(--green)" : "var(--red)" }}>
+        <div className={`card${pass ? " quizresult-pass" : ""}`} style={{ textAlign: "center", padding: 28 }}>
+          {pass && <span className="stars" aria-hidden />}
+          {pass && (
+            <div className="quizresult-liftoff">
+              <Rocket size={26} strokeWidth={1.75} style={{ transform: "rotate(45deg)" }} />
+            </div>
+          )}
+          <div style={{ position: "relative", fontSize: 42, fontWeight: 700, color: pass ? "var(--green)" : "var(--red)" }}>
             {score}%
           </div>
-          <p>
+          <p style={{ position: "relative" }}>
             {correct}/{Q.items.length} correct{" "}
             {pass ? (
               <span className="badge pass">
-                {Q.mode === "quiz" ? "QUIZ PASSED" : "EXAM PASSED — BLOCK LOCKED IN"}
+                {Q.mode === "quiz" ? "LIFTOFF — QUIZ PASSED" : "EXAM PASSED — BLOCK LOCKED IN"}
               </span>
             ) : (
               <span className="badge fail">

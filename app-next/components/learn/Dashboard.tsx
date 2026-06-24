@@ -15,6 +15,7 @@ import {
   levelInfo,
   modMastered,
   modQuizBest,
+  rankFor,
   unlockedCards,
 } from "@/lib/course";
 
@@ -69,14 +70,15 @@ export default function Dashboard() {
       <h2>{S.name ? `Welcome back, ${S.name}` : L.dashTitle}</h2>
       <Html as="p" className="tagline" html={L.dashTagline(PASS_QUIZ, PASS_EXAM)} />
 
-      <div className="card herostat" data-tour="dash-hero">
+      <div className="card herostat hs-cosmic" data-tour="dash-hero">
+        <span className="stars" aria-hidden />
         <div className="hs-cell">
           <div className="hs-big" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Flame size={22} strokeWidth={1.75} /> {streak}</div>
           <div className="hs-lbl">day streak</div>
         </div>
         <div className="hs-cell">
           <div className="hs-big">Lv {li.lvl}</div>
-          <div className="hs-lbl">{li.total} XP total</div>
+          <div className="hs-lbl"><span className="hs-rank">{rankFor(li.lvl)}</span> · {li.total} XP</div>
         </div>
         <div className="hs-cell hs-grow">
           <div className="hs-lbl" style={{ marginBottom: 4 }}>

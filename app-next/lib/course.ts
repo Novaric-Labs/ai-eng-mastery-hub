@@ -266,6 +266,18 @@ export function levelInfo(c: Course, S: ProgressState): LevelInfo {
   return { lvl, total, into: total - acc, need, pct: Math.round((100 * (total - acc)) / need) };
 }
 
+// A space-crew rank title derived from level — pure cosmetic flavor shown next
+// to the level number in the dashboard hero and sidebar.
+export function rankFor(lvl: number): string {
+  if (lvl >= 12) return "Admiral";
+  if (lvl >= 10) return "Voyager";
+  if (lvl >= 8) return "Captain";
+  if (lvl >= 6) return "Commander";
+  if (lvl >= 4) return "Navigator";
+  if (lvl >= 2) return "Pilot";
+  return "Cadet";
+}
+
 export function fmtMin(min: number): string {
   if (min < 60) return "~" + min + " min";
   const h = Math.floor(min / 60), m = min % 60;

@@ -34,6 +34,7 @@ import {
   levelInfo,
   modMastered,
   moduleUnlocked,
+  rankFor,
 } from "@/lib/course";
 
 export default function Sidebar() {
@@ -104,7 +105,7 @@ export default function Sidebar() {
 
       <div className="xpbar">
         <span className="streak" title="Day streak"><Flame size={13} strokeWidth={1.75} /> {streak}</span>
-        <span className="lvl">Lv {li.lvl}</span>
+        <span className="lvl" title={`Rank: ${rankFor(li.lvl)}`}>Lv {li.lvl} · {rankFor(li.lvl)}</span>
         <div className="xptrack">
           <i style={{ width: `${li.pct}%` }} />
         </div>
