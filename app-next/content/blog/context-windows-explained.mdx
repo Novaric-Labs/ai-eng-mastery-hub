@@ -1,0 +1,67 @@
+---
+title: "Context Windows, Explained Without the Jargon"
+description: "Tokens, context windows, and why an AI 'forgets' things — explained in plain English with one analogy that makes the rest obvious."
+date: "2026-06-24"
+author: "Novacademy"
+tags: ["Foundations", "LLM", "Prompting"]
+draft: false
+---
+
+If you've used an AI chatbot for more than a few minutes, you've probably hit one of these: it forgets something you told it earlier, it ignores half of a long document you pasted, or it gives a worse answer the *longer* the conversation goes. None of that is a bug. It's all the same thing — the **context window** — and once you understand it, a lot of "why did the AI do that?" moments stop being mysterious.
+
+Here's the whole idea, without the jargon.
+
+## The one analogy: the model works at a desk
+
+Imagine the AI does all its thinking at a **desk of a fixed size**. Everything it can "see" right now has to fit on that desk: your question, the conversation so far, any document you pasted, and the instructions it was given. That desk is the context window.
+
+Two things follow immediately, and they explain almost everything:
+
+1. **If it's not on the desk, the model doesn't know it.** The AI has no memory of you, your last chat, or anything you didn't put in front of it this time.
+2. **The desk is finite.** Pile on too much and something has to give — older material slides off the edge, or gets buried under everything else.
+
+That's it. The rest is just consequences of those two facts.
+
+## Tokens: how we measure "how much fits on the desk"
+
+The desk isn't measured in words or pages — it's measured in **tokens**. A token is a chunk of text, roughly ¾ of a word on average. "Cat" is one token; "unbelievable" might be three or four. A context window of, say, 128,000 tokens means roughly 90,000–100,000 words can be on the desk at once.
+
+You don't need to count tokens by hand. You just need the instinct: **everything counts against the same budget** — your instructions, the conversation history, the document you pasted, *and* the answer it's about to write. They all share one desk.
+
+## Why the AI "forgets" the start of a long chat
+
+In a long back-and-forth, the conversation keeps growing. Eventually the earliest messages reach the edge of the desk. Depending on the tool, they either get pushed off entirely or get crowded out by everything newer.
+
+So when an AI "forgets" what you said twenty messages ago, it's usually not being dense — that information literally isn't on the desk anymore. The fix isn't to scold it; it's to **re-state the important bit** so it's back in front of the model.
+
+## Why pasting a huge document can backfire
+
+It's tempting to paste an entire 50-page manual and ask one question. But two things go wrong:
+
+- If the document is bigger than the desk, **part of it never gets read** — it didn't fit.
+- Even if it fits, your actual question is now a tiny note buried under a mountain of text. Models pay less attention to things stranded in the middle of a huge pile, so the one sentence you care about can get lost.
+
+The better move: paste only the relevant section, and put your question **right next to it** — ideally at the end, where it's freshest. Less on the desk, but the *right* things, beats a cluttered desk every time.
+
+## Why each new chat starts from nothing
+
+Open a fresh conversation and the desk is wiped clean. The model isn't ignoring your history — from its point of view, you've never met. That's why a brand-new chat needs context you might assume it "already knows."
+
+This is also the honest answer to "does the AI remember me?" By default, no. Some products bolt a memory feature on top, but underneath, every response is still the model reading whatever happens to be on the desk *this time*.
+
+## The mental model to keep
+
+> **The model only knows what's on the desk right now.**
+
+Carry that one sentence and the practical rules write themselves:
+
+- **Front-load what matters.** Put key instructions and your real question where they won't get buried.
+- **Re-state, don't assume.** If something scrolled out of a long chat, bring it back.
+- **Trim the desk.** Paste the relevant part, not the whole binder.
+- **Start fresh when you switch topics.** A clean desk beats one cluttered with an unrelated conversation.
+
+That's the entire concept. No math, no architecture — just a desk with a fixed amount of room.
+
+---
+
+This is the kind of mental model we build from the ground up in our **free** [AI Foundations course](/courses) — tokens, context windows, prompting, and how large language models actually work, in plain English. Already comfortable here and want the engineering side? That's what the [full courses](/pricing) are for.
