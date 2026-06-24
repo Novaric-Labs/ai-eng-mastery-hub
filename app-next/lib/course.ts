@@ -289,3 +289,45 @@ export function blockRemaining(c: Course, S: ProgressState, b: string): number {
     .filter((m) => !modMastered(S, m.id))
     .reduce((s, m) => s + (m.estMin || 30), 0);
 }
+
+/* ----- course completion (certificate eligibility) ----- */
+
+// A course is "complete" only when EVERY block is mastered — i.e. every module
+// read + quiz passed AND every block mastery exam passed. This is proof of
+// graded work, the basis a certificate attests to (not mere attendance).
+export function courseComplete(c: Course, S: ProgressState): boolean {
+  return c.blocks.length > 0 && c.blocks.every((b) => blockMastered(c, S, b.id));
+}
+
+// A snapshot of what was demonstrated, frozen onto the certificate at issue time.
+export type CompletionSummary = {
+  modulesMastered: number;
+  modulesTotal: number;
+  examsPassed: number;
+  examsTotal: number;
+  /** Average best score across the passed block exams. */
+  examAvg: number;
+  scenariosCompleted: number;
+  level: number;
+  xp: number;
+};
+
+export function completionSummary(c: Course, S: ProgressState): CompletionSummary {
+  const passed = c.blocks.filter((b) => S.exams?.[b.id]?.passed);
+  const examAvg = passed.length
+    ? Math.round(
+        passed.reduce((sum, b) => sum + (S.exams![b.id].best || 0), 0) / passed.length,
+      )
+    : 0;
+  const li = levelInfo(c, S);
+  return {
+    modulesMastered: c.catalog.filter((m) => modMastered(S, m.id)).length,
+    modulesTotal: c.catalog.length,
+    examsPassed: passed.length,
+    examsTotal: c.blocks.length,
+    examAvg,
+    scenariosCompleted: Object.keys(S.scen ?? {}).length,
+    level: li.lvl,
+    xp: li.total,
+  };
+}

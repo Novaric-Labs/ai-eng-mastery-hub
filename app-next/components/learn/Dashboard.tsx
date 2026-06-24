@@ -3,6 +3,7 @@
 import { Check, Flame } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
+import CertificateClaim from "./CertificateClaim";
 import { learnLabelsFor } from "@/lib/learn-labels";
 import {
   PASS_EXAM,
@@ -10,6 +11,7 @@ import {
   blockMastered,
   blockMods,
   blockRemaining,
+  courseComplete,
   currentStreak,
   fmtMin,
   levelInfo,
@@ -69,6 +71,8 @@ export default function Dashboard() {
 
       <h2>{S.name ? `Welcome back, ${S.name}` : L.dashTitle}</h2>
       <Html as="p" className="tagline" html={L.dashTagline(PASS_QUIZ, PASS_EXAM)} />
+
+      {courseComplete(course, S) && <CertificateClaim />}
 
       <div className="card herostat hs-cosmic" data-tour="dash-hero">
         <span className="stars" aria-hidden />
