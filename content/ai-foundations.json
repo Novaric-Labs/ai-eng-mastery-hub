@@ -889,10 +889,10 @@
       {
         "q": "Your friend says, \"The AI is basically a smart search engine, it looks up the answer and shows it to you.\" What's the most accurate correction?",
         "o": [
-          "It's the same as search, just with a nicer chat interface on top",
+          "It's really just search with a chat box on top, looking up the matching page",
           "It doesn't look anything up by default, it generates new text by predicting what comes next",
-          "It searches a private, secret database that only the company can see",
-          "It memorized every webpage word-for-word and recites the matching one"
+          "It quietly searches a private company database that's hidden from the public web",
+          "It memorized every webpage word-for-word and reads back the one that matches you"
         ],
         "a": 1,
         "exp": "A search engine finds existing pages; a language model generates fresh text by repeatedly predicting the most likely next chunk. That's why it can write something brand new, and also why it can make things up. Some products bolt search onto the model, but that's an added feature, not what the model does on its own."
@@ -900,10 +900,10 @@
       {
         "q": "A model gives you a beautifully written, confident answer about a niche topic. What does that confidence tell you about whether it's correct?",
         "o": [
-          "Confident, fluent wording means it's very likely correct",
-          "Confidence means it found a reliable source",
+          "Confident, fluent wording is a strong signal that the answer is very likely correct",
+          "Confidence means it pulled the answer from a reliable, checked-over source somewhere",
           "Almost nothing, fluency is the model's goal and is unrelated to accuracy",
-          "It means the answer was in its training data and is therefore verified"
+          "It means the fact was in its training data, so the answer is already verified for you"
         ],
         "a": 2,
         "exp": "The model is built to produce text that reads well, so it phrases a wrong answer just as smoothly as a right one. Confidence in the wording is not evidence. For anything that matters, you verify it independently."
@@ -911,10 +911,10 @@
       {
         "q": "Why might a model confidently invent a fact, like a fake statistic or a quote that was never said?",
         "o": [
-          "It's broken and needs to be restarted",
-          "Someone deliberately put false information into it",
+          "Something glitched inside the model, and a quick restart on your end would clear the made-up fact right up",
+          "A person deliberately loaded that exact false information into the model to trip you and other users up",
           "Its job is to produce likely-sounding text, so when it lacks the real answer it fills the gap with a plausible guess",
-          "It's lying on purpose to seem helpful"
+          "It actually knows the real truth but is bending it on purpose to come across as more helpful to you here"
         ],
         "a": 2,
         "exp": "This is called a hallucination. Because the model always tries to produce the most likely next text, a gap in what it learned gets filled with something that sounds right rather than something that is right. It's a side effect of how the engine works, not a fixable glitch."
@@ -922,10 +922,10 @@
       {
         "q": "You ask a model the same question twice and get two slightly different answers. What's going on?",
         "o": [
-          "One of the answers is a malfunction",
-          "The model is updating itself in real time as you chat",
+          "One of the two answers is simply a malfunction that you happened to catch this time",
+          "The model is quietly rewriting and updating itself in real time as the two of you chat",
           "Normal behavior, it makes fresh guesses each time, so wording can vary",
-          "It remembered you didn't like the first answer and changed it"
+          "It recalled that you weren't happy with the first reply and reworded it to please you"
         ],
         "a": 2,
         "exp": "The model assembles each answer on the spot, guess by guess, and there's deliberate variation built in. Getting two different-but-reasonable answers is expected, not a sign anything is wrong."
@@ -933,10 +933,10 @@
       {
         "q": "Which of these tasks plays directly to what a language model is genuinely good at?",
         "o": [
-          "Telling you today's weather without any added tools",
+          "Telling you today's local weather on its own, with no tools",
           "Rephrasing a rough email into a clear, polite version",
-          "Recalling exactly what you told it in a chat last week with no memory feature on",
-          "Giving you a precise, guaranteed-correct multiplication of two large numbers"
+          "Recalling word-for-word what you said last week, memory off",
+          "Multiplying two huge numbers with a guaranteed-exact result"
         ],
         "a": 1,
         "exp": "Rewriting and rephrasing is pure text generation, the model's home turf. The other three depend on things it can't do alone: live data, persistent memory, or exact arithmetic. Knowing the difference is the practical payoff of this whole lesson."
@@ -946,10 +946,10 @@
       {
         "q": "What is a token, in the way an AI model uses the word?",
         "o": [
-          "Exactly one English word",
+          "Always exactly one whole English word, no more and no less, every single time",
           "A small chunk of text, often a word-piece, that the model reads and writes",
-          "A single letter of the alphabet",
-          "A special password that unlocks the model"
+          "A single letter of the alphabet that the model lines up one after another",
+          "A secret password you have to enter before the model will unlock and respond"
         ],
         "a": 1,
         "exp": "A token is a small chunk of text, often a common word, a word-piece, a space, or a punctuation mark. As a rough rule it's about three-quarters of a word. The model reads and writes in these chunks rather than in whole words or individual letters."
@@ -957,10 +957,10 @@
       {
         "q": "Why does the word count of your message rarely match its token count?",
         "o": [
-          "Tokens are always exactly the same as words; the counts do match",
-          "The model randomly adds extra tokens to inflate the bill",
+          "They line up perfectly because one token is always exactly one word, so the two counts will match every single time",
+          "The model quietly slips in extra invisible tokens on purpose just to inflate the amount you end up billed",
           "Common words are one token, but longer or rarer words split into several, and spaces and punctuation count too",
-          "Token counting is broken and the numbers are meaningless"
+          "Token counting is buggy and unreliable on its own, so the numbers you actually see are basically meaningless"
         ],
         "a": 2,
         "exp": "Short common words map to a single token, but longer or unusual words get broken into pieces, and spaces and punctuation are their own tokens. So the token count is usually a bit higher than the word count, and the two rarely line up exactly."
@@ -968,10 +968,10 @@
       {
         "q": "A model struggles to tell you how many times the letter 's' appears in 'Mississippi.' What's the best explanation?",
         "o": [
-          "The model is broken and needs an update",
+          "Something is broken inside the model, and a fresh software update would fix the miscounting",
           "It reads text as tokens (chunks), not as individual letters, so letter-level tasks are genuinely hard for it",
-          "The word is too short for it to process",
-          "It's deliberately refusing to help"
+          "The word is simply too short for the model to take in and process properly the way it needs to",
+          "It actually can do this just fine but is choosing to refuse the small task only to be difficult"
         ],
         "a": 1,
         "exp": "The model sees chunks like 'Miss' and 'issippi', not the separate letters. Counting specific characters means reasoning about something it can't directly see, so it's a real weak spot. For letter-perfect tasks, use a tool that actually reads characters."
@@ -979,10 +979,10 @@
       {
         "q": "You have a short question but you paste a 20-page document along with it. What happens to the token count?",
         "o": [
-          "Only your question counts; pasted text is free",
+          "Only the words in your question count, and anything extra you paste in just rides along for free with it",
           "The pasted document is input tokens too, so the total is large even though your question is short",
-          "Pasting text reduces the token count",
-          "Tokens only apply to the model's answer, never to your input"
+          "Pasting a big block of text actually shrinks the count by giving the model a head start",
+          "Tokens only ever apply to the model's written answer, never to anything you send it"
         ],
         "a": 1,
         "exp": "Everything you send in is input tokens, including pasted documents. A short question with a big paste can use a lot of tokens, which means more cost and a slower response. Trimming to the part that matters is the fix."
@@ -990,10 +990,10 @@
       {
         "q": "Which statement about cost is accurate?",
         "o": [
-          "Only the text you type is counted; the model's reply is free",
-          "Only the model's reply is counted; your input is free",
+          "Only the text you type is counted, and the model's whole reply comes back to you for free",
+          "Only the model's reply gets counted, and everything you send into it costs you nothing",
           "Both your input and the model's reply count as tokens, and the reply is often the bigger half",
-          "Cost has nothing to do with tokens"
+          "Cost is a flat monthly fee and has nothing at all to do with how many tokens you use"
         ],
         "a": 2,
         "exp": "Both input tokens (what you send) and output tokens (what the model writes back) are counted, and the answer is frequently the larger and more expensive half. That's why asking for a shorter answer can meaningfully cut cost and time."
@@ -1003,10 +1003,10 @@
       {
         "q": "What is the context window?",
         "o": [
-          "A pop-up window in the chat app",
+          "A little pop-up box in the chat app where extra options and settings appear",
           "The maximum amount of text, in tokens, a model can look at in one go",
-          "The model's permanent, long-term memory of everything you've said",
-          "A setting that makes the model think harder"
+          "The model's permanent long-term memory holding everything you've ever told it",
+          "A setting you flip on to make the model slow down, think harder, and try more"
         ],
         "a": 1,
         "exp": "The context window is the cap on how much text the model can take in at once, measured in tokens. It has to hold the conversation so far, your current message, any pasted files, and the answer being written, all at the same time."
@@ -1014,10 +1014,10 @@
       {
         "q": "In a long conversation, the model 'forgets' something you said near the start. What most likely happened?",
         "o": [
-          "The model got bored and stopped paying attention",
+          "The model gradually lost interest in the chat partway through and just quietly stopped paying any real attention to you",
           "The conversation grew past the context window, so the earliest messages were dropped and the model no longer receives them",
-          "The model is punishing you for talking too much",
-          "Your internet connection deleted the message"
+          "The model is deliberately punishing you for sending it far too many long-winded messages in a row",
+          "A hiccup somewhere in your internet connection quietly wiped that earlier message before it ever arrived"
         ],
         "a": 1,
         "exp": "As a chat grows beyond the window, the oldest messages stop being included in what the model is sent. From its point of view this turn, those messages were never there, so it can't refer to them. Restating the detail brings it back."
@@ -1025,10 +1025,10 @@
       {
         "q": "Does the model remember your conversation on its own between turns?",
         "o": [
-          "Yes, it has a private memory of every message",
+          "Yes, it quietly keeps a private long-term memory of every single message you've ever exchanged with it",
           "No, the app re-sends the whole conversation each turn, and the model only sees what fits in the window",
-          "Yes, but only if you pay extra",
-          "No, it forgets your message the instant you send it and answers blindly"
+          "Yes, but that saved memory only switches on for you once you upgrade to one of the paid plans",
+          "No, it forgets each message the very instant you hit send and then answers you completely blindly"
         ],
         "a": 1,
         "exp": "The model has no memory of its own between turns. The feeling of an ongoing chat comes from the app gluing the whole history together and re-sending it every time. The model only ever works with the block of text it's handed, as long as it fits the window."
@@ -1036,10 +1036,10 @@
       {
         "q": "You paste an entire long report and ask a precise question about one line buried in it. Why might the answer disappoint you?",
         "o": [
-          "Pasting always breaks the model",
+          "Pasting any document in always overloads the model and breaks its ability to answer",
           "The key detail can get buried in a crowded window, so the model may latch onto the wrong thing",
-          "The model refuses to read documents",
-          "Long documents make the model faster and more accurate"
+          "The model flatly refuses to read documents and only handles short typed questions",
+          "Longer documents actually make the model both faster and more accurate every time"
         ],
         "a": 1,
         "exp": "More text isn't automatically better. When the window is packed with mostly-irrelevant material, the one line that matters is easy to miss. Giving the model just the relevant section, with your question right beside it, usually works far better."
@@ -1047,10 +1047,10 @@
       {
         "q": "A conversation has gotten very long and the model's answers are drifting. What's a reliable fix?",
         "o": [
-          "Keep going and hope it self-corrects",
-          "Type in all capital letters so it pays attention",
+          "Just keep the same chat going and trust that it will quietly steer itself back on track",
+          "Type your next message in all capital letters so the model finally pays proper attention",
           "Start a fresh chat and paste in a short summary of what actually matters",
-          "Ask the same question many times until it gets it right"
+          "Ask the very same question over and over in a row until one of the tries comes out right"
         ],
         "a": 2,
         "exp": "Drift happens as early context drops off and noise piles up in the window. Starting a clean chat with a concise summary puts just the relevant information back in front of the model, which usually restores accuracy. You control what's in the window."
@@ -1060,10 +1060,10 @@
       {
         "q": "What is a prompt?",
         "o": [
-          "A secret password that unlocks better answers",
+          "A secret password phrase that quietly unlocks the model's better, hidden answers it keeps in reserve",
           "The text you give the model to work with, your instruction plus any context you include",
-          "A setting that makes the model smarter",
-          "The model's reply to your question"
+          "A hidden setting you switch on that makes the model itself smarter and more capable",
+          "The model's finished reply, the answer it hands back after reading your question"
         ],
         "a": 1,
         "exp": "A prompt is simply the input you send the model: your question or instruction, plus any context or examples. It's everything the model has to work from, so whatever you leave out, it doesn't know. Writing clear prompts is the highest-leverage skill in the course."
@@ -1071,10 +1071,10 @@
       {
         "q": "Your prompt is just \"write something about our app.\" Why is the result likely to be generic?",
         "o": [
-          "The model is being lazy",
+          "The model is just feeling lazy this time and isn't really putting in its full effort for you here",
           "The prompt is too vague, with no task, audience, or format, so the model fills the gaps with safe, average text",
-          "You need to use special command words",
-          "The model can't write about apps"
+          "You forgot to include the special command words the model needs before it will actually begin writing",
+          "The model simply doesn't know nearly enough about apps to write anything genuinely useful about one"
         ],
         "a": 1,
         "exp": "A vague prompt leaves the most-likely continuation wide open, so the model drifts toward bland, could-be-anything text. Adding the specific task, the audience and goal, and the format you want narrows it down and gets you a far more useful answer."
@@ -1082,10 +1082,10 @@
       {
         "q": "The first answer is close to what you wanted but a bit too long and too formal. What's the best next move?",
         "o": [
-          "Start over with a brand-new, longer prompt",
-          "Give up, the model clearly can't do it",
+          "Throw the reply out and start fresh with a brand-new, much fuller prompt",
+          "Just give up on it, since this proves the model can't handle the task",
           "Reply with a small refinement, like 'shorter and a bit more casual'",
-          "Send the exact same prompt again and hope for better luck"
+          "Send the very same prompt again and simply hope for better luck this time"
         ],
         "a": 2,
         "exp": "Prompting is a back-and-forth. When an answer is close, refining with a small instruction is faster and more reliable than rewriting from scratch. Your feedback becomes part of the prompt and steers the next attempt toward what you actually want."
@@ -1093,10 +1093,10 @@
       {
         "q": "Why does pasting in one good example of the format you want often work so well?",
         "o": [
-          "It tricks the model into trying harder",
+          "It quietly tricks the model into deciding to try a good deal harder than it normally bothers to",
           "Continuing a concrete pattern is exactly what the model is best at, so an example teaches it the shape fast",
-          "Examples are required or the model won't respond",
-          "It has no real effect; only written instructions matter"
+          "Examples are flat-out required every time, and without one the model simply won't send you any reply",
+          "It makes no real difference to the result at all, since only your written instructions actually matter"
         ],
         "a": 1,
         "exp": "The model predicts text by continuing patterns, so a concrete example dropped into the prompt is a pattern it can follow directly. One good 'like this' sample often communicates format and tone more precisely than a paragraph of description."
@@ -1104,10 +1104,10 @@
       {
         "q": "Which mindset best describes good prompting?",
         "o": [
-          "Memorizing magic phrases that force good answers",
-          "Arguing with the model until it gives in",
+          "Collecting magic phrases that you recite to force the model into giving you its good answers",
+          "Arguing and pushing back at the model over and over until it finally gives in to you",
           "Briefing a capable new assistant: say the task, give the context, describe a good result",
-          "Keeping prompts as short as possible no matter what"
+          "Keeping every prompt as short as you possibly can, no matter what you're asking for"
         ],
         "a": 2,
         "exp": "The model takes your words literally and can't read your mind, so the winning mindset is briefing a sharp assistant on day one: state the task, supply the context they'd need, and describe what a good answer looks like. It's clear instructions, not secret tricks."
@@ -1117,10 +1117,10 @@
       {
         "q": "What does it mean that a language model is 'stateless'?",
         "o": [
-          "It keeps a permanent record of every chat you've ever had",
+          "It keeps a permanent file of every chat you've had, ready to recall on its own",
           "It keeps no memory between turns, each message is handled on its own",
-          "It can only handle one topic at a time",
-          "It runs on a special kind of computer"
+          "It can follow only one topic at a time, forgetting the moment you switch",
+          "It runs on a special computer that quietly saves your history for later"
         ],
         "a": 1,
         "exp": "Stateless means the model remembers nothing between turns, each request is handled as if it were the first thing you'd ever said. Any sense of an ongoing conversation comes from outside the model, not from the model itself."
@@ -1128,10 +1128,10 @@
       {
         "q": "If the model has no memory, how does a chat seem to 'remember' what you said earlier?",
         "o": [
-          "The model secretly stores your messages in its brain",
+          "The model quietly tucks each of your earlier messages away inside its own private memory",
           "The chat app re-sends the entire conversation so far, as one block, every turn",
-          "It guesses what you probably said before",
-          "It doesn't, every reply is completely random"
+          "It makes an educated guess about what you most likely said earlier",
+          "It doesn't really remember, each reply is just picked at random"
         ],
         "a": 1,
         "exp": "The chat app keeps a transcript and re-sends the whole thing, your messages and the model's replies, each turn, with your new message added. The model re-reads that transcript every time. The continuity is in the re-sent text, not in the model recalling anything."
@@ -1139,10 +1139,10 @@
       {
         "q": "You start a brand-new chat and it knows nothing about your previous conversation. Why?",
         "o": [
-          "Something is broken",
-          "A new chat starts with an empty transcript, so by default there's nothing about earlier chats for the model to see",
-          "The model is choosing to ignore you",
-          "You forgot to log in"
+          "Something is broken and the app failed to load your earlier history",
+          "A new chat starts with an empty transcript, so by default there's nothing about your earlier chats to see",
+          "The model has quietly decided to ignore the things you told it in your earlier conversations",
+          "You forgot to log in, so the app hasn't linked any of your past conversations to this one yet"
         ],
         "a": 1,
         "exp": "Each chat is its own separate transcript. A new one starts empty (apart from a hidden system message), so the model has no information about your other conversations. That's the default behavior, not a bug, unless a memory feature is turned on."
@@ -1150,10 +1150,10 @@
       {
         "q": "A product's 'memory' feature remembers your name and preferences across chats. What's actually happening?",
         "o": [
-          "The model permanently learned new facts and changed itself",
-          "An extra feature saves notes about you and slips them into the transcript, the model itself still didn't change",
-          "The model is reading your mind",
-          "Nothing, memory features don't really work"
+          "The model permanently learned those new facts and rewrote part of itself to keep them around",
+          "An extra feature saves notes about you and slips them into the transcript, the model itself didn't change",
+          "The model is quietly reading your mind each time to recall your name and your saved details",
+          "Nothing real is happening at all, these memory features only pretend to remember you across chats"
         ],
         "a": 1,
         "exp": "A memory feature is a layer built on top of the model: it stores notes about you and quietly inserts them into the conversation. The model didn't learn anything, the app just put the note in front of it. You can usually view and edit what it saved."
@@ -1161,10 +1161,10 @@
       {
         "q": "Many chat tools add a hidden instruction at the very top of the transcript. What is it for?",
         "o": [
-          "To slow the model down",
+          "To slow the model down on purpose so that its answers arrive a little more slowly and carefully",
           "To tell the model how to behave (its role, tone, and rules), shaping every answer in the chat",
-          "To store your password",
-          "It's just decoration with no effect"
+          "To store your account password safely, pinned right at the very top of the chat",
+          "It's just leftover text from setup that has no real effect on the answers you get"
         ],
         "a": 1,
         "exp": "That's the system message: a behind-the-scenes instruction pinned to the top of every turn, telling the model how to act ('you are a helpful assistant'). You don't see it, but it's part of the transcript each turn and shapes the tone and rules of the whole conversation."
@@ -1174,10 +1174,10 @@
       {
         "q": "What is a hallucination, in AI terms?",
         "o": [
-          "A rare glitch that a software update will fix",
+          "A rare one-off glitch that the next routine software update will quietly hunt down and patch for good",
           "When the model states something false as if it were true, filling a gap with plausible-sounding text",
-          "When the model refuses to answer",
-          "A feature that makes answers more creative on purpose"
+          "When the model flatly refuses to answer and tells you it simply doesn't know the answer",
+          "A deliberate built-in feature that makes the model's answers more creative and colorful on purpose"
         ],
         "a": 1,
         "exp": "A hallucination is the model presenting something false, an invented quote, a fake statistic, a citation to a paper that doesn't exist, as if it were fact. It happens because the model fills gaps with likely-sounding text rather than admitting it doesn't know."
@@ -1185,10 +1185,10 @@
       {
         "q": "Why can't hallucination simply be switched off completely?",
         "o": [
-          "The companies don't care enough to fix it",
+          "The companies behind these models simply don't care quite enough to bother actually fixing the problem",
           "It comes from the same machinery that makes the model useful, always producing likely-sounding text",
-          "It only happens on cheap models",
-          "It can be, there's a setting that guarantees no mistakes"
+          "It only ever shows up on the cheap free models, never on the expensive flagship ones",
+          "It already can be, there's a single setting that guarantees the model never makes a mistake"
         ],
         "a": 1,
         "exp": "Hallucination is a side effect of the core behavior: always generating the most plausible next text. You can reduce it with better prompts, real sources, and asking for citations, but there's no setting that guarantees the model never makes anything up."
@@ -1196,10 +1196,10 @@
       {
         "q": "What is the knowledge cutoff?",
         "o": [
-          "A daily limit on how many questions you can ask",
+          "A daily limit on how many questions you're allowed to ask the model before the count finally resets again",
           "The date a model's training data stops, after which it knows nothing unless a tool feeds it fresh info",
-          "The point where the model gets tired",
-          "A premium feature you pay to unlock"
+          "The point in a long chat where the model gets tired and its answers start slipping in quality",
+          "A premium upgrade you pay extra each month to unlock sharper, fuller, more detailed answers"
         ],
         "a": 1,
         "exp": "The knowledge cutoff is the date the model's training data ends. It knows nothing about events, prices, or releases after that point, and often can't tell exactly when its own cutoff is, so it may answer recent questions confidently from an outdated world."
@@ -1207,10 +1207,10 @@
       {
         "q": "A model gives you a confident answer about something that happened last week. What's the safest assumption?",
         "o": [
-          "If it sounds confident, it's current and correct",
-          "It may be past the model's knowledge cutoff, so it could be guessing from old data unless a search tool actually ran",
-          "Models are always up to date",
-          "It refreshed its training overnight"
+          "If it sounds this confident and specific, the answer is almost certainly current and correct",
+          "It may be past the model's knowledge cutoff, so it could be guessing from old data unless a search tool ran",
+          "Models stay automatically up to date behind the scenes, so any recent answer is always safe to trust",
+          "It quietly refreshed its own training overnight, so it now knows everything that happened last week"
         ],
         "a": 1,
         "exp": "Recent events may fall after the model's cutoff, where it has no real data, yet it still answers confidently. Unless you can confirm a search tool fetched fresh information, treat anything recent as possibly out of date and verify it against a current source."
@@ -1218,10 +1218,10 @@
       {
         "q": "Which type of answer most deserves a careful double-check?",
         "o": [
-          "A rough brainstorm of creative ideas",
-          "A request to rephrase your own paragraph",
+          "A loose brainstorm of creative ideas where being a little off the mark costs you nothing",
+          "A simple request to reword, shorten, or tidy up a paragraph you have already written yourself by hand",
           "Specific, copyable details, exact statistics, named quotes, citations, links, on a niche or recent topic",
-          "A general explanation of a well-known concept"
+          "A plain-language explanation of a common, well-known concept most people already understand"
         ],
         "a": 2,
         "exp": "Hallucination is most likely and most dangerous on precise, verifiable details about obscure or recent topics, exactly the things that look authoritative and are tempting to copy. Those are the answers to verify first. Drafting and rephrasing carry far less risk."
@@ -1231,10 +1231,10 @@
       {
         "q": "The core language model only predicts text. So how can an AI app look at a photo or search the web?",
         "o": [
-          "The model secretly has every ability built in",
+          "The model secretly has every one of those abilities already built inside it",
           "Modern products bundle extra abilities (tools) around the text engine",
-          "It can't, those features are fake",
-          "It downloads a new brain each time"
+          "It can't really, those photo and web features are just clever fakes",
+          "It quietly downloads a fresh, more capable brain for each new task"
         ],
         "a": 1,
         "exp": "Think of the model as an engine and the product as a car built around it. Seeing images, reading files, browsing the web, and doing math are features the product adds. When the model needs one, it calls a tool that does the real work and returns the result as text."
@@ -1242,10 +1242,10 @@
       {
         "q": "You attach a PDF and the AI summarizes it. What actually happened?",
         "o": [
-          "The model physically opened and looked at the file",
+          "The model physically opened up the file itself and carefully looked over each of the pages on its own",
           "A tool extracted the text from the file and slipped it into the prompt for the model to read",
-          "The model memorized the PDF permanently",
-          "The PDF was emailed to a human who summarized it"
+          "The model memorized the whole PDF permanently so it can answer questions about it later",
+          "The PDF was quietly emailed off to a human assistant who wrote the summary for you"
         ],
         "a": 1,
         "exp": "Reading a file means a tool pulled the text out and added it to the prompt. The model is reading that extracted text, not 'opening' the document, which is exactly why a scanned, image-only PDF with no real text can stump it."
@@ -1253,10 +1253,10 @@
       {
         "q": "What is a 'tool,' in the sense used in this lesson?",
         "o": [
-          "A button in the app's settings menu",
-          "An outside helper the model can call, like a calculator, web search, or file reader, that does the real work and returns text",
-          "Another word for the model itself",
-          "A physical device you plug in"
+          "A button tucked away somewhere deep inside the app's own settings menu that you flip on to turn its features on",
+          "An outside helper the model can call, like a calculator, web search, or file reader, that returns text",
+          "Just another name people use when they mean the underlying language model itself",
+          "A physical device you plug into your computer to give the AI more raw power"
         ],
         "a": 1,
         "exp": "A tool is any external helper the model can call when a task is beyond plain text prediction: a calculator, a search engine, a code runner, a database. The model requests it, the tool does the exact work, and the result comes back as text the model uses."
@@ -1264,10 +1264,10 @@
       {
         "q": "Why does giving the model a calculator tool make it more reliable at math?",
         "o": [
-          "It makes the model think harder about numbers",
+          "It nudges the model to slow right down and think much harder about each of the numbers it sees",
           "The calculator does the exact arithmetic, replacing the model's shaky guess with a real answer",
-          "It doesn't, tools make math worse",
-          "It teaches the model to do math next time"
+          "It doesn't actually help at all, and adding tools like this tends to make the math worse",
+          "It teaches the model the arithmetic for good, so it gets the math right on its own next time"
         ],
         "a": 1,
         "exp": "On its own, the text engine only guesses a plausible-looking number. A calculator tool actually computes the exact result and hands it back. Tools are how products patch over the model's weak spots, math, fresh info, exact lookups, without changing the engine itself."
@@ -1275,10 +1275,10 @@
       {
         "q": "A feature you love in one AI app isn't available in another. What's the most likely reason?",
         "o": [
-          "The second app uses a fundamentally different, worse engine",
+          "The second app simply runs on a fundamentally different and clearly much worse underlying engine",
           "Different products bundle different tools, the capability isn't part of every model",
-          "You're using the second app wrong",
-          "The feature was removed from the internet"
+          "You're simply using the second app the wrong way and missing it",
+          "That feature was taken down from the internet and no longer exists"
         ],
         "a": 1,
         "exp": "The underlying text engine is similar across products; what differs is which tools and capabilities each one wires up (search, image input, file reading). So 'can this AI do X?' really means 'does this product give the model a tool for X?'"
@@ -1288,10 +1288,10 @@
       {
         "q": "For a quick, low-stakes task like brainstorming names, which model is usually the smart choice?",
         "o": [
-          "Always the biggest, most powerful model available",
+          "Always reach for the biggest, most powerful model you can possibly get",
           "A smaller, faster, cheaper model, it's plenty for simple work",
-          "It doesn't matter, all models cost the same",
-          "Whichever one is most expensive, to be safe"
+          "It honestly doesn't matter, every model costs about the same to run",
+          "Pick whichever one is most expensive, just to be on the safe side"
         ],
         "a": 1,
         "exp": "Bigger models are smarter but slower and pricier, and they're overkill for simple tasks. Right-sizing, using a small, fast, cheap model for easy work and saving the heavyweight for genuinely hard problems, is the core habit of using AI well."
@@ -1299,10 +1299,10 @@
       {
         "q": "Where does most of the cost in everyday AI use actually come from?",
         "o": [
-          "The number of separate questions you ask",
+          "The sheer number of separate questions you fire off in a session",
           "Big pasted inputs and long generated answers, since cost tracks tokens",
-          "How fast you type",
-          "Cost is fixed and unrelated to what you send"
+          "How quickly you type your messages into the chat box each time",
+          "Cost is basically fixed and has nothing to do with what you send"
         ],
         "a": 1,
         "exp": "Cost tracks tokens, both what you send and what comes back. Short chats are nearly free; the expense shows up with large pasted documents (input tokens) and long answers (output tokens). Trimming both is your main everyday cost lever."
@@ -1310,10 +1310,10 @@
       {
         "q": "What two questions best decide how much care a task needs?",
         "o": [
-          "How fast can I type, and how long is the answer?",
+          "How fast can I type this out, and roughly how long will the model's answer run on for?",
           "How capable does the model need to be, and how much does being wrong cost me?",
-          "Which model is newest, and which is cheapest?",
-          "Is the AI online, and is my internet fast?"
+          "Which model is the newest release, and which one is the cheapest?",
+          "Is the AI service online right now, and is my internet fast enough?"
         ],
         "a": 1,
         "exp": "These two questions, capability needed and cost of being wrong, right-size both your model choice and your caution. Cheap-and-fast for low stakes; stronger model, real sources, and verification for high stakes. That's the whole course as a five-second habit."
@@ -1321,10 +1321,10 @@
       {
         "q": "Which split best captures when to trust the model versus when to verify it?",
         "o": [
-          "Trust it for math; verify its grammar",
-          "Trust it to draft, brainstorm, explain, and rephrase; verify it on facts, numbers, recent events, and citations",
-          "Trust everything it says; never verify",
-          "Verify everything equally, all the time"
+          "Trust it completely for any math you give it; double-check only its spelling and grammar",
+          "Trust it to draft, brainstorm, explain, and rephrase; verify it on facts, numbers, and citations",
+          "Trust every single word it tells you as true, and never waste your time verifying anything",
+          "Verify every answer equally and just as carefully, no matter how trivial or low-stakes the task"
         ],
         "a": 1,
         "exp": "The model shines at generation, drafting, brainstorming, explaining, rephrasing, so you can lean on it there. It's least reliable on facts, numbers, recent events, and citations, so verify those. This single split prevents the great majority of AI mishaps."
@@ -1332,10 +1332,10 @@
       {
         "q": "You've finished this course and want to go from using these models to building real things with them. What's the next step?",
         "o": [
-          "There's nothing more to learn",
+          "Nothing more, you've already learned everything that these models could ever possibly offer you",
           "The Engineering Mastery course, which picks up exactly where Foundations ends",
-          "Just keep chatting until you figure it out",
-          "Start over with this same course"
+          "Just keep chatting away until you eventually figure the rest out",
+          "Start this same Foundations course over again from the beginning"
         ],
         "a": 1,
         "exp": "Foundations gave you the mental models for using AI; building with it, designing prompts at scale, wiring up tools, controlling cost in real systems, is the Engineering Mastery course, which assumes everything you learned here. It's the natural next step."

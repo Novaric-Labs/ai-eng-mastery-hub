@@ -6,8 +6,19 @@
 // byte identical to the single-course era (it's already in production); ai-
 // foundations rows are appended alongside with the same row-id / tier conventions.
 import fs from 'fs';
+import { execSync } from 'child_process';
 import { VIDEOS as AI_ENG_VIDEOS } from './videos.mjs';
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from './videos-ai-foundations.mjs';
+
+// Guardrail: refuse to regenerate the seed if any quiz is unbalanced (e.g. the
+// correct option is a length outlier or always the longest). Keeps the "you can
+// guess the answer by its length" regression from ever reaching the DB.
+try {
+  execSync('node ' + new URL('./validate-quizzes.mjs', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), { stdio: 'inherit' });
+} catch {
+  console.error('\nseed aborted: quiz validation failed (see flags above). Run `node content/validate-quizzes.mjs`.');
+  process.exit(1);
+}
 
 const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.meta.url)));
 
