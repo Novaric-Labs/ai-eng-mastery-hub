@@ -10,8 +10,21 @@
 // each row tagged with its course_id. The actual POST is done by scripts/seed-db.sh
 // (Node's fetch/undici can't reliably establish the connection in some local envs).
 import fs from "fs";
+import { execSync } from "child_process";
 import { VIDEOS as AI_ENG_VIDEOS } from "../../content/videos.mjs";
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from "../../content/videos-ai-foundations.mjs";
+
+// Guardrail: refuse to build/seed if any quiz is unbalanced (correct option a
+// length outlier or always the longest). Mirrors content/seed.mjs so the prod
+// seed path (seed-db.sh -> seed-db.mjs -> curl) is gated too, not just the
+// supabase/seed.sql generator.
+try {
+  const validator = new URL("../../content/validate-quizzes.mjs", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
+  execSync(`node "${validator}"`, { stdio: "inherit" });
+} catch {
+  console.error("\nseed aborted: quiz validation failed (see flags above). Run `node content/validate-quizzes.mjs`.");
+  process.exit(1);
+}
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
