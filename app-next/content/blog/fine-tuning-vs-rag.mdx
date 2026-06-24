@@ -1,0 +1,87 @@
+---
+title: "Fine-Tuning vs. RAG: How to Choose the Right Approach"
+description: "Fine-tuning and RAG both make LLMs more useful — but they solve different problems. Here's how to think through the choice for your use case."
+date: "2026-06-20"
+author: "Novacademy"
+tags: ["RAG", "Fine-Tuning", "LLM"]
+draft: false
+---
+
+Both fine-tuning and RAG promise to make a generic LLM work better for your specific problem. They're often mentioned in the same breath, but they solve **fundamentally different problems** — and picking the wrong one wastes money, time, and a lot of debugging hours.
+
+## What each one actually does
+
+**Fine-tuning** continues training a pre-trained model on new examples. You give it hundreds or thousands of input/output pairs, run more gradient steps, and end up with a model whose weights have shifted to reflect your data.
+
+**RAG** (retrieval-augmented generation) leaves the model weights untouched. Instead, it fetches relevant documents at query time, injects them into the prompt, and lets the model answer from that context. If you're new to the concept, [What Is RAG?](/blog/what-is-rag) is a good starting point.
+
+The core difference is where the knowledge lives: **in the weights** (fine-tuning) or **in the prompt** (RAG).
+
+## When RAG is the right choice
+
+RAG wins when:
+
+- **Your knowledge changes.** Product docs, support tickets, company policies — anything that updates frequently is a poor candidate for fine-tuning. Updating a fine-tuned model means running another training job every time facts change. With RAG, you update the index and you're done.
+- **You need sources.** RAG can cite the exact chunks it retrieved. Fine-tuning bakes information into weights where you can't trace it back to a specific document.
+- **You have a lot of data to search.** Thousands of documents don't fit in a context window, but they do fit in a vector database.
+- **You're moving fast.** A retrieval pipeline can be prototyped in hours. Fine-tuning requires curating a training set, running a job, evaluating the result, and iterating — a process that typically takes days to weeks.
+
+> Rule of thumb: if the question is "what should the model *know*?", reach for RAG first.
+
+## When fine-tuning is the right choice
+
+Fine-tuning wins when:
+
+- **You need a different style or output format.** If you want the model to always respond with a specific JSON schema, always match your brand's tone, or follow a very particular structure, fine-tuning can reliably teach that. System prompts can nudge behavior, but fine-tuning locks it in.
+- **The knowledge is stable.** Medical coding rules, legal clause definitions, or technical standards that change rarely are reasonable to encode in weights.
+- **Latency or cost matters at scale.** A fine-tuned smaller model can sometimes match a larger general model's accuracy on a narrow task, at a fraction of the per-call cost.
+- **You have a large set of labeled examples.** Fine-tuning is a supervised learning problem. Without enough high-quality input/output pairs, the model won't improve in any meaningful way.
+
+## A quick decision table
+
+| Question | RAG | Fine-Tuning |
+| --- | --- | --- |
+| Does the knowledge change often? | Yes | No |
+| Do you need source citations? | Yes | No |
+| Is output style/format the problem? | No | Yes |
+| Do you have labeled training pairs? | Not required | Required |
+| Time to first working version | Hours | Days–weeks |
+| Easy to update? | Yes | No |
+
+## They're not mutually exclusive
+
+The most capable production systems often use both. Fine-tune a smaller model to reliably output structured JSON, then layer RAG on top to supply the knowledge that changes over time. Or fine-tune for domain vocabulary and terminology, then use RAG to retrieve the specific facts needed at query time.
+
+The layering looks like this:
+
+```text
+user question
+     │
+     ▼
+retrieve top-k chunks from vector DB   ← RAG supplies live knowledge
+     │
+     ▼
+prompt = chunks + question
+     │
+     ▼
+fine-tuned model                       ← fine-tuning enforces format/style
+     │
+     ▼
+structured, domain-accurate answer
+```
+
+## Where most teams go wrong
+
+The most common mistake is reaching for fine-tuning too early. Teams spend days curating training data and running jobs, only to discover the real problem was a bad chunking strategy or a weak retrieval step — neither of which fine-tuning can fix.
+
+A better sequence for most teams:
+
+1. **Start with RAG.** It's faster to build, easier to update, and gives you retrieval traces for debugging.
+2. **Add prompt engineering** to shape the output format before anything else.
+3. **Consider fine-tuning** once you have a clear, repeating failure mode — usually style or formatting — *and* enough examples to address it.
+
+Fine-tuning is an advanced tool, not a starting point. The teams that treat it that way ship faster and spend far less time chasing problems that were never model problems to begin with.
+
+---
+
+If you want to build a production-grade RAG pipeline — chunking, embeddings, retrieval, and the evals that separate a demo from a real product — that's exactly what our courses cover. See [what's included](/pricing).
