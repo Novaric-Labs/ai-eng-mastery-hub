@@ -1,0 +1,81 @@
+---
+title: "Hallucinations Explained: Why LLMs Make Things Up and How to Reduce Them"
+description: "LLMs sometimes generate confident-sounding answers that are simply wrong. Here's why hallucinations happen and the practical techniques that actually reduce them."
+date: "2026-06-30"
+author: "Novacademy"
+tags: ["LLM", "Hallucinations", "Fundamentals"]
+draft: false
+---
+
+An LLM confidently tells you that a court ruling happened in 2021 — except it didn't. Or it invents an API method that doesn't exist, attributes a quote to the wrong person, or adds a citation that looks real but leads nowhere. This is a **hallucination**: an output that sounds authoritative and is wrong.
+
+If you're building anything with LLMs, hallucinations aren't an edge case. They're a design constraint you need to plan around.
+
+## Why hallucinations happen
+
+LLMs don't retrieve facts. They predict the next token, given everything that came before it. During training, the model saw enormous amounts of text and learned patterns: what kinds of words follow what other kinds of words, in what contexts.
+
+When you ask a question, the model generates an answer that *fits the pattern* of a good answer — not one that's verified against a source. There's no lookup table, no database check, no internal alarm that fires when it's guessing. The model produces fluent, confident text either way.
+
+A few specific failure modes:
+
+- **Knowledge gaps.** If the fact wasn't in the training data, or was poorly represented, the model fills the gap with something plausible.
+- **Cutoff blindness.** The model doesn't know what happened after its training cutoff. It can't say "I don't know" reliably — it just answers from whatever it does know.
+- **Conflation.** Two similar-sounding things (authors, companies, papers) get merged into one.
+- **Sycophancy.** If you push back, some models will revise their answer toward whatever you seem to want — even if the first answer was correct.
+
+## Techniques that actually help
+
+No technique eliminates hallucinations entirely. But several reduce them substantially, and the right combination depends on your use case.
+
+### Ground the model in source text
+
+The most reliable fix is **retrieval-augmented generation (RAG)**: you find the relevant documents and paste them into the prompt, then instruct the model to answer *only from that context*. When the answer is grounded in a real source, the model can't freely invent. If you're not using RAG yet, [this primer on RAG](/blog/what-is-rag) is the place to start.
+
+### Use explicit instructions
+
+Tell the model, in clear language, to say when it doesn't know:
+
+```
+Answer using only the context provided. If the answer is not in the context,
+respond with: "I don't have enough information to answer that."
+```
+
+This sounds too simple to matter — but it works, especially for factual Q&A tasks. Models follow instructions; the problem is that most prompts don't give them explicit permission to be uncertain.
+
+### Lower the temperature
+
+Temperature controls how "creative" the model is when sampling its next token. A higher temperature means more varied (and more surprising) outputs. For factual tasks, lower temperature — typically 0 or close to it — makes the model stick to higher-probability, less risky answers.
+
+> Rule of thumb: use temperature 0 for factual tasks where you want consistency. Reserve higher temperatures for creative or brainstorming tasks.
+
+### Verify outputs programmatically
+
+For structured data (names, dates, codes, JSON), you can catch a lot of hallucinations with simple validation:
+
+| Output type | Verification approach |
+| --- | --- |
+| JSON | Parse and schema-validate |
+| Named entities | Check against a known list |
+| Citations / URLs | Fetch and confirm existence |
+| Calculations | Re-compute independently |
+
+This doesn't work for open-ended prose, but for anything structured it's one of the highest-leverage checks you can add.
+
+### Self-consistency and chains of thought
+
+Asking the model to reason step-by-step before giving a final answer reduces hallucinations on reasoning tasks. A related technique — running the same query multiple times and looking for consistent answers — helps surface cases where the model is uncertain (inconsistent answers are a warning sign).
+
+## What you can't fix at the prompt level
+
+Some hallucinations come from gaps or errors in the training data itself. Prompting can't fix that. If accuracy on a specific narrow domain matters, you need:
+
+- **RAG with authoritative sources** — so the model is always reading from verified material.
+- **Human review** for high-stakes outputs.
+- **Evals** — automated tests that catch regressions when your prompts or models change.
+
+The last point is underrated. Most teams discover hallucinations through user complaints. Running evals on a representative set of queries before and after any model or prompt change is how you turn "we hope it's not worse" into something you can actually measure.
+
+---
+
+Hallucinations are manageable — but only if you treat them as an engineering problem, not a model flaw you're waiting for someone else to fix. Grounding, instructions, validation, and evals cover most of the problem space. If you want to learn how to build systems that are accurate *and* fast — including end-to-end RAG pipelines and the evals that keep them honest — that's exactly what our courses cover at [Novacademy](/pricing).
