@@ -1,0 +1,92 @@
+---
+title: "What Are Vector Databases? The Missing Piece of Every RAG System"
+description: "Vector databases make semantic search possible — and they're the infrastructure layer every RAG system depends on. Here's what they do, how they fit in, and which one to reach for."
+date: "2026-07-14"
+author: "Novacademy"
+tags: ["RAG", "Vector Databases", "Fundamentals"]
+draft: false
+---
+
+If you've started building a RAG system, someone told you you'd need a vector database. Probably in the same breath as "embeddings." You nodded along, then quietly searched "what is a vector database actually" — because the phrase sounds more complicated than it is.
+
+Here's the short version: a vector database stores numbers that represent *meaning*, and it lets you search by similarity instead of by exact match. That's it. Everything else is implementation detail.
+
+## Why a regular database won't cut it
+
+Relational databases are built around equality. Give me all rows where `user_id = 42`. Find the document where `title = "Q3 Report"`. That works great for structured data.
+
+But when you want to search by *meaning* — "find me documents about budget cuts, even if they don't use those exact words" — equality-based search breaks down. You'd need to hand-craft synonym lists, keyword rules, and search index tricks that still miss a lot.
+
+Embeddings change the game. An embedding model converts text into a list of numbers — a vector — where semantically similar content ends up numerically close together. "Budget cuts," "cost reductions," and "downsizing" all land near each other in that space. "Dog grooming" doesn't.
+
+A vector database is purpose-built to store those vectors and answer one question efficiently: *which stored vectors are closest to this query vector?*
+
+## What "closest" actually means
+
+When you query a vector database, you're asking for the `k` stored vectors with the smallest distance to your query. The three most common distance measures are:
+
+| Metric | What it measures | Common use case |
+|---|---|---|
+| Cosine similarity | Angle between vectors | Text search (direction matters, not magnitude) |
+| Euclidean distance | Straight-line distance | Image and numeric feature embeddings |
+| Dot product | Projection overlap | Normalized vectors (equivalent to cosine) |
+
+For text-based RAG, cosine similarity is the standard default — and it works well.
+
+## Where a vector database fits in a RAG pipeline
+
+Here's the full picture:
+
+```text
+Your documents
+      │
+      ▼
+Embedding model  →  [0.23, -0.47, 0.89, …]   (one vector per chunk)
+      │
+      ▼
+Vector database  (stores vectors + the original text they came from)
+      │
+      ▼
+At query time: embed question → search DB → return top-k chunks
+      │
+      ▼
+Prompt = chunks + question  →  LLM answer
+```
+
+The vector database handles the search step — the "find relevant chunks" part. It is not storing the LLM's knowledge. It's storing yours, encoded as vectors, so you can retrieve the right pieces at the right time. For the full picture of how this pipeline works end to end, see [What Is RAG?](/blog/what-is-rag).
+
+## Options worth knowing about
+
+There are several vector databases in active use, each with different trade-offs:
+
+- **Pinecone** — fully managed, zero ops overhead, good starting point for teams that want to move fast
+- **Weaviate** — open-source, supports hybrid search (keyword + vector in one query), can self-host or use the cloud service
+- **Qdrant** — open-source, fast, flexible metadata filtering, designed to handle large collections
+- **Chroma** — lightweight and easy to set up locally, popular for prototyping and small-scale apps
+- **pgvector** — a PostgreSQL extension; if you're already running Postgres, this adds vector search without spinning up a new service
+
+For production systems, the main split is between managed services (less ops, more cost) and self-hosted options (more control, more responsibility). For local development, Chroma removes almost all friction.
+
+## What vector databases don't do
+
+A common misconception: vector databases don't understand your content. They store the numeric representations that an embedding model produced. The quality of retrieval depends almost entirely on three things you control:
+
+1. **The embedding model** — a weak model produces coarse vectors; a better model captures nuance
+2. **Your chunking strategy** — a vector of a 3,000-word document is noisy; a vector of a coherent 300-word passage is sharp
+3. **Metadata filtering** — most vector databases let you combine similarity search with hard filters (e.g., "results similar to this query AND `doc_type = \"policy\"`"). Using those filters dramatically reduces irrelevant results.
+
+> Rule of thumb: if your vector search keeps surfacing irrelevant results, look at your chunk size before blaming the database.
+
+## A quick note on cost at scale
+
+Vectors take storage, and search at scale takes compute. A few things worth knowing before you go to production:
+
+- **Dimensions matter**: embedding models output vectors of different sizes (common sizes are in the hundreds to low thousands of dimensions). More dimensions generally means better quality but higher storage cost and slower search.
+- **Approximate search is the norm**: most production vector databases use approximate nearest-neighbor (ANN) indexes that are extremely fast but trade a small amount of exact precision for speed. In practice, you won't notice the difference for retrieval tasks.
+- **Filtering narrows the search space**: adding metadata filters before the vector search reduces how many candidates the index has to evaluate — which helps both speed and accuracy.
+
+---
+
+Vector databases are infrastructure, not intelligence. They don't make your RAG system smart; they make the retrieval step fast and scalable. Get your embeddings right, keep chunks coherent, and use metadata filters to narrow the field — then the database does exactly what it's supposed to.
+
+If you want to build a complete RAG system from scratch — chunking, embeddings, vector search, and the evals that tell you if it's actually working — that's exactly what our [AI Engineering courses](/pricing) cover.
