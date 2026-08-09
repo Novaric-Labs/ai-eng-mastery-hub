@@ -538,7 +538,7 @@
       ],
       "build": "Pick any real task you'd actually use AI for, an email, a summary, a list of ideas. Write the laziest one-line prompt for it and note the answer. Then rewrite the prompt with three additions: the specific task, the context (who it's for, what it's about), and the format you want. Send it again and compare. Finally, take that second answer and refine it once with a single instruction ('shorter', 'warmer', 'add a call to action'). In five minutes you'll have felt the whole arc, vague to specific to refined, on a task you care about, which is the fastest way to make prompting a habit instead of a theory.",
       "res": [
-        ["OpenAI, \"Prompt engineering\" guide (beginner-friendly parts)", "https://platform.openai.com/docs/guides/prompt-engineering", "Skim the early, plain-English sections after this lesson. Ignore the advanced bits for now; the basics reinforce exactly what you just learned."],
+        ["OpenAI, \"Prompt engineering\" guide (beginner-friendly parts)", "https://developers.openai.com/api/docs/guides/prompt-engineering", "Skim the early, plain-English sections after this lesson. Ignore the advanced bits for now; the basics reinforce exactly what you just learned."],
         ["Anthropic, \"Prompt engineering overview\"", "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview", "A clear vendor explainer of the same habits, clarity, context, examples. Read it for a second angle on writing good instructions."]
       ]
     },
@@ -554,7 +554,7 @@
       "build": "Do a quick two-part test in any chat AI. Part one: tell it a fact in a fresh chat ('I'm planning a trip to Lisbon'), then ask a couple of follow-ups, and watch it carry the detail, that's the transcript at work. Part two: open a brand-new, separate chat and immediately ask, 'Where am I planning to travel?' It won't know, because the new transcript is empty. Seeing it 'remember' in one window and draw a total blank in another, with no setting changed, makes statelessness click: the continuity lived in the conversation, not in the model.",
       "res": [
         ["OpenAI Help Center, \"Memory and new controls in ChatGPT\"", "https://help.openai.com/en/articles/8590148-memory-faq", "Read after the lesson to see how one product's optional memory feature works, and how to view or clear what it stored. A concrete example of the 'extra layer' idea."],
-        ["Anthropic, \"System prompts\" explainer", "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/system-prompts", "Skim to see the hidden 'system message' that sits atop the transcript and shapes how an assistant behaves every turn."]
+        ["Anthropic, \"System prompts\" explainer", "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices", "Skim to see the hidden 'system message' that sits atop the transcript and shapes how an assistant behaves every turn."]
       ]
     },
     "limits": {
@@ -584,7 +584,7 @@
       "build": "Explore what your AI tool can and can't do. Try giving it an image (a screenshot or photo) and asking what it sees, does it have vision, or does it say it can't? Attach a PDF and ask for a summary, did it read the text? Ask it something that needs today's information and watch for whether it searches (look for a source link) or answers from memory. Ask it a tricky multiplication and check the result. In a few minutes you'll have mapped your specific tool's real capabilities, and you'll stop assuming every AI can do everything you've seen somewhere.",
       "res": [
         ["ChatGPT Capabilities Overview", "https://help.openai.com/en/articles/9260256-chatgpt-capabilities-overview", "Read to see, in one product, exactly which abilities (browsing, image input, file reading) are features layered on the model, a concrete version of this lesson."],
-        ["Anthropic, \"Tool use\" overview", "https://platform.claude.com/docs/en/build-with-claude/tool-use/overview", "Optional, slightly more technical. Skim the intro to see how a model 'calls a tool' and gets a result back, the mechanism behind every example here."]
+        ["Anthropic, \"Tool use\" overview", "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview", "Optional, slightly more technical. Skim the intro to see how a model 'calls a tool' and gets a result back, the mechanism behind every example here."]
       ]
     },
     "using": {
@@ -598,8 +598,8 @@
       ],
       "build": "Make your own one-page cheat sheet, it'll cement everything. Jot two columns: 'go fast' and 'slow down and verify.' Under each, list the kinds of tasks from your own life that belong there (go fast: brainstorming, rough drafts, rephrasing; slow down: anything client-facing, medical, legal, financial, or with specific facts and numbers). Then add your two deciding questions at the top: 'How capable does the model need to be?' and 'What does being wrong cost me?' Keep it nearby for a week and actually run it before tasks. By the end it won't be a sheet, it'll be a reflex, which is exactly the judgment the rest of this course was building toward.",
       "res": [
-        ["OpenAI's model lineup page (other providers have equivalent pages)", "https://platform.openai.com/docs/models", "Use when choosing: each provider lists its models from largest to smallest with rough speed and cost notes. Skim to see the trade-off this lesson describes, made concrete."],
-        ["Novacademy, \"Engineering Mastery\" course", "#", "Your next step. When you're ready to go from using these models to building real things with them, prompts at scale, tools, cost control in live systems, this course picks up exactly where Foundations ends."]
+        ["OpenAI's model lineup page (other providers have equivalent pages)", "https://developers.openai.com/api/docs/models", "Use when choosing: each provider lists its models from largest to smallest with rough speed and cost notes. Skim to see the trade-off this lesson describes, made concrete."],
+        ["Novacademy, \"Engineering Mastery\" course", "https://www.novacademy.ai/courses", "Your next step. When you're ready to go from using these models to building real things with them, prompts at scale, tools, cost control in live systems, this course picks up exactly where Foundations ends."]
       ]
     }
   },
