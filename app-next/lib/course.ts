@@ -29,10 +29,40 @@ export type ModuleFull = ModuleMeta & {
   ask: string[];
 };
 
+// One step of a guided lab. The teaching lives inside the doing: `code` is
+// what the learner writes/runs, `check` is the exact observable result that
+// proves it worked, `why` names the concept the step just demonstrated.
+export type LabStep = {
+  do: string;
+  code?: string;
+  check: string;
+  why: string;
+  hint?: string;
+};
+
+// A guided, checkpointed build exercise. `starter` is a COMPLETE runnable
+// file (offline-first — stub/mock mode by default, marked plug-in points for
+// real API keys), so step 1 is always "run it and see it work", never
+// "stare at a blank editor".
+export type Lab = {
+  goal: string;
+  time: string;
+  needs: string;
+  starter: string;
+  /** Language of starter/step code, for display + CI compile gate. Default python. */
+  lang?: string;
+  steps: LabStep[];
+  done: string;
+  stretch?: string;
+};
+
 export type Deep = {
   worked: string;
   good: string[];
+  /** Legacy one-paragraph exercise; kept as fallback (and for web/ legacy). */
   build: string;
+  /** Guided lab — when present the app renders this instead of `build`. */
+  lab?: Lab;
   res: [string, string, string][];
 };
 

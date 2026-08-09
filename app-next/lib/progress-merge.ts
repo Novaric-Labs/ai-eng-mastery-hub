@@ -75,6 +75,17 @@ export function mergeProgress(server: ProgressState, local: ProgressState): Prog
   if (has("scen")) merged.scen = { ...(server.scen ?? {}), ...(local.scen ?? {}) };
   if (has("scennote")) merged.scennote = { ...(server.scennote ?? {}), ...(local.scennote ?? {}) };
 
+  // guided-lab steps: per-step, local wins (a deliberate un-check on this
+  // device must stick — same reasoning as scen); steps recorded only on the
+  // other side survive the merge.
+  if (has("labs")) {
+    const labs: NonNullable<ProgressState["labs"]> = { ...(server.labs ?? {}) };
+    for (const [mod, steps] of Object.entries(local.labs ?? {})) {
+      labs[mod] = { ...(labs[mod] ?? {}), ...steps };
+    }
+    merged.labs = labs;
+  }
+
   // day stamps: set union, sorted for stable output.
   if (has("visits"))
     merged.visits = [...new Set([...(server.visits ?? []), ...(local.visits ?? [])])].sort();
