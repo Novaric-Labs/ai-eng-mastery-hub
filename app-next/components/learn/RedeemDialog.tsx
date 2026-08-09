@@ -10,6 +10,8 @@ const ERRORS: Record<string, string> = {
   expired: "That code has expired.",
   exhausted: "That code has been fully used.",
   not_authenticated: "Please sign in first.",
+  too_many_attempts: "Too many tries — wait an hour and try again.",
+  revoked: "This code was already used and its access has been revoked. Contact support if that seems wrong.",
 };
 
 // Access-code redemption as a clean inline modal (replaces prompt()/alert()).

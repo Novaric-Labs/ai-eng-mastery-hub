@@ -8,9 +8,10 @@ import { tooSoon } from "@/lib/anthropic";
 //
 // FALLBACK: if UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN are NOT set
 // (dev/preview, or prod before infra is provisioned), this module NO-OPs the
-// Redis layer and falls back to the existing in-memory per-user cooldown
-// (`tooSoon`). It NEVER throws on missing env, and a Redis outage fails OPEN to
-// the cooldown so the app keeps working. Merging this before infra exists is safe.
+// Redis layer and falls back to an in-memory per-user sliding window at the
+// same limits, plus the legacy cooldown spacing. It NEVER throws on missing
+// env, and a Redis outage degrades to the per-instance window (worst case:
+// limit × instance count) so the app keeps working without unbounded spend.
 
 export type Kind = "tutor" | "explain" | "grade";
 
@@ -87,6 +88,40 @@ function getLimiters(): Partial<Record<Kind, Limiter>> | null {
  * - Without Upstash (or on Redis error): falls back to the in-memory per-user
  *   cooldown and never throws.
  */
+// Fallback sliding windows, per instance: `${kind}:${userId}` -> request
+// timestamps inside the current window. Enforces the SAME tokens/window as the
+// Redis path, so losing Redis degrades to "limit × instance count" instead of
+// "unbounded minus a 1.5s spacing" — spacing alone allowed ~40 req/min/user
+// per instance on the most expensive endpoint.
+const fallbackWindows = new Map<string, number[]>();
+
+function fallbackLimit(userId: string, kind: Kind): RateResult {
+  const { tokens, window } = LIMITS[kind];
+  const windowMs = parseInt(window) * 60_000;
+  const key = `${kind}:${userId}`;
+  const now = Date.now();
+
+  // Occasional sweep so the map can't grow unbounded on a long-lived instance.
+  if (fallbackWindows.size > 5000) {
+    for (const [k, arr] of fallbackWindows) {
+      if (!arr.length || now - arr[arr.length - 1] > windowMs) fallbackWindows.delete(k);
+    }
+  }
+
+  const hits = (fallbackWindows.get(key) ?? []).filter((t) => now - t < windowMs);
+  if (hits.length >= tokens) {
+    fallbackWindows.set(key, hits);
+    return { ok: false, retryAfter: Math.max(1, Math.ceil((hits[0] + windowMs - now) / 1000)) };
+  }
+  if (tooSoon(userId, COOLDOWN_MS[kind])) {
+    fallbackWindows.set(key, hits);
+    return { ok: false, retryAfter: Math.ceil(COOLDOWN_MS[kind] / 1000) };
+  }
+  hits.push(now);
+  fallbackWindows.set(key, hits);
+  return { ok: true };
+}
+
 export async function rateLimit(userId: string, kind: Kind): Promise<RateResult> {
   const ls = getLimiters();
   if (ls && ls[kind]) {
@@ -96,15 +131,12 @@ export async function rateLimit(userId: string, kind: Kind): Promise<RateResult>
       const retryAfter = Math.max(1, Math.ceil((reset - Date.now()) / 1000));
       return { ok: false, retryAfter };
     } catch {
-      // Redis hiccup: fail open to the cooldown rather than blocking users.
+      // Redis hiccup: degrade to the in-memory window rather than blocking users.
     }
   }
 
-  // Fallback: in-memory per-user cooldown (per serverless instance).
-  if (tooSoon(userId, COOLDOWN_MS[kind])) {
-    return { ok: false, retryAfter: Math.ceil(COOLDOWN_MS[kind] / 1000) };
-  }
-  return { ok: true };
+  // Fallback: per-instance sliding window + cooldown spacing.
+  return fallbackLimit(userId, kind);
 }
 
 /** Standard 429 JSON response with a Retry-After header. */

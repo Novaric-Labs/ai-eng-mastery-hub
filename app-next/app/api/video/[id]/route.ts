@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { hasFullAccess } from "@/lib/entitlement";
+import { hasCourseAccess } from "@/lib/entitlement";
 import type { VideoMeta } from "@/lib/course";
 
 export const runtime = "nodejs";
@@ -44,11 +44,13 @@ export async function GET(
   const meta = videos[id];
   if (!meta?.src) return NextResponse.json({ error: "No video." }, { status: 404 });
 
-  // Paid videos require entitlement; public videos are open teasers.
+  // Paid videos require entitlement to THIS course (membership unlocks all;
+  // a per-course grant only its own — same scoping as grade/certificate, so a
+  // single-course code can't pull another course's paid videos).
   if ((meta.tier ?? "public") === "paid") {
     const supabase = await supabaseServer();
     const { data: { user } } = await supabase.auth.getUser();
-    if (!(await hasFullAccess(supabase, user)))
+    if (!(await hasCourseAccess(supabase, user, course)))
       return NextResponse.json({ error: "This video is part of the full course." }, { status: 403 });
   }
 

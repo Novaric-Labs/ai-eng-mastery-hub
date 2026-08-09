@@ -16,8 +16,31 @@ export async function hasActiveMembership(
   return paying && live;
 }
 
+// Access to ONE course's paid content: a membership unlocks every course; a
+// per-course grant (access code / comp) unlocks only its own. Use this — not
+// hasFullAccess — for anything that reads or derives from a specific course's
+// paid rows (scenario grading, certificates), so an ai-foundations code can't
+// pull ai-eng's paid content through a service-role fetch.
+export async function hasCourseAccess(
+  supabase: SupabaseClient,
+  user: { email?: string | null } | null,
+  course: string,
+): Promise<boolean> {
+  if (!user || !course) return false;
+  if (isAdmin(user.email)) return true;
+  if (await hasActiveMembership(supabase)) return true;
+  const { data } = await supabase
+    .from("entitlements")
+    .select("course_id")
+    .eq("course_id", course)
+    .eq("active", true)
+    .limit(1);
+  return !!data && data.length > 0;
+}
+
 // Full access = an active membership, a per-course grant (access code/comp), OR
-// an admin/owner. Used by server features that gate on payment (tutor, grading).
+// an admin/owner. Used by server features that gate on payment but not on a
+// specific course's content (tutor, explain).
 export async function hasFullAccess(
   supabase: SupabaseClient,
   user: { email?: string | null } | null,

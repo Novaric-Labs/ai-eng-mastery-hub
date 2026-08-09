@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { buildCourse, courseComplete, completionSummary } from "@/lib/course";
-import { hasActiveMembership } from "@/lib/entitlement";
-import { isAdmin } from "@/lib/admin";
+import { hasCourseAccess } from "@/lib/entitlement";
 import type { ContentRow, ProgressState } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -35,20 +34,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  // Gate 1: entitlement, scoped to the course being certified. A membership
-  // unlocks the whole platform; otherwise the caller needs an active grant for
-  // this specific course (access code / comp). RLS scopes both reads to the
-  // caller's own rows.
-  if (!isAdmin(user.email) && !(await hasActiveMembership(supabase))) {
-    const { data: grant } = await supabase
-      .from("entitlements")
-      .select("course_id")
-      .eq("course_id", course)
-      .eq("active", true)
-      .limit(1);
-    if (!grant || grant.length === 0) {
-      return NextResponse.json({ error: "not entitled" }, { status: 403 });
-    }
+  // Gate 1: entitlement, scoped to the course being certified (membership
+  // unlocks all courses; a per-course grant only its own).
+  if (!(await hasCourseAccess(supabase, user, course))) {
+    return NextResponse.json({ error: "not entitled" }, { status: 403 });
   }
 
   const admin = supabaseAdmin();

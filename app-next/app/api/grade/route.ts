@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { hasFullAccess } from "@/lib/entitlement";
+import { hasCourseAccess } from "@/lib/entitlement";
 import { anthropic, HAIKU, textOf } from "@/lib/anthropic";
 import { rateLimit, tooManyRequests } from "@/lib/ratelimit";
 import type { Scenario } from "@/lib/course";
@@ -15,15 +15,6 @@ export async function POST(req: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not signed in." }, { status: 401 });
 
-  if (!(await hasFullAccess(supabase, user)))
-    return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
-
-  const rl = await rateLimit(user.id, "grade");
-  if (!rl.ok) return tooManyRequests(rl.retryAfter, "Slow down a moment and try again.");
-
-  const client = anthropic();
-  if (!client) return NextResponse.json({ error: "AI grading isn't configured yet." }, { status: 503 });
-
   const body = await req.json().catch(() => ({}));
   const scenarioId = String(body.scenarioId ?? "");
   const answer = String(body.answer ?? "").slice(0, 4000).trim(); // cap input
@@ -31,6 +22,18 @@ export async function POST(req: Request) {
   // ai-eng for back-compat with clients that don't send it.
   const course = String(body.course ?? "ai-eng") || "ai-eng";
   if (!scenarioId || !answer) return NextResponse.json({ error: "Missing scenario or answer." }, { status: 400 });
+
+  // Entitlement must be scoped to the course whose scenario we're about to
+  // fetch with the service role — a grant for one course must not let the
+  // caller pull another course's paid scenarios.
+  if (!(await hasCourseAccess(supabase, user, course)))
+    return NextResponse.json({ error: "This is a paid feature." }, { status: 403 });
+
+  const rl = await rateLimit(user.id, "grade");
+  if (!rl.ok) return tooManyRequests(rl.retryAfter, "Slow down a moment and try again.");
+
+  const client = anthropic();
+  if (!client) return NextResponse.json({ error: "AI grading isn't configured yet." }, { status: 503 });
 
   // Fetch the scenario server-side (don't trust the client for the model answer).
   // Read via the service role: access is already authorized by hasFullAccess
