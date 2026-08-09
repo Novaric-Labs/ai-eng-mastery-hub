@@ -5,6 +5,7 @@ import { useStore } from "zustand";
 import { useShallow } from "zustand/react/shallow";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import type { ProgressState } from "@/lib/types";
+import { mergeProgress, stableStringify } from "@/lib/progress-merge";
 import { createCourseStore, type CourseState, type CourseStore, type StoreInit } from "@/lib/store";
 
 const StoreContext = createContext<CourseStore | null>(null);
@@ -65,13 +66,52 @@ export function StoreProvider({
         localStorage.setItem(cacheKey, JSON.stringify(S));
       } catch {}
     };
+    // Merge with the live server row before every write. Sync is whole-blob,
+    // so an unmerged upsert from a stale tab — or from a session whose initial
+    // progress fetch failed and seeded empty — would erase progress made on
+    // another device. With the union-merge a write can only add. If the merge
+    // brings in progress this tab didn't know about, adopt it into the UI too.
+    // `adopting` tells the subscriber below that a state change is sync, not
+    // the user studying — it must never stamp an activity day.
+    let adopting = false;
     const persist = async (state: CourseState) => {
       cacheLocal(state.S);
       try {
+        const { data, error } = await supabase
+          .from("progress")
+          .select("state")
+          .eq("course_id", state.courseSlug)
+          .maybeSingle();
+        // supabase-js reports failures via `error`, not by throwing — and a
+        // failed read is NOT "no row yet". Writing unmerged over a row we
+        // couldn't read is exactly the clobber this merge exists to prevent,
+        // so skip this round; localStorage has the state and the next
+        // debounced persist retries.
+        if (error) return;
+        const server = (data?.state ?? null) as ProgressState | null;
+        let toWrite = state.S;
+        if (server) {
+          toWrite = mergeProgress(server, state.S);
+          if (stableStringify(toWrite) !== stableStringify(state.S)) {
+            // Adopt cross-device progress, re-merged against the store's
+            // CURRENT state so nothing the user did during the fetch
+            // round-trip is lost.
+            adopting = true;
+            try {
+              store.setState((s) => {
+                toWrite = mergeProgress(toWrite, s.S);
+                return { S: toWrite };
+              });
+            } finally {
+              adopting = false;
+            }
+            cacheLocal(toWrite);
+          }
+        }
         await supabase
           .from("progress")
           .upsert(
-            { user_id: state.userId, course_id: state.courseSlug, state: state.S, updated_at: new Date().toISOString() },
+            { user_id: state.userId, course_id: state.courseSlug, state: toWrite, updated_at: new Date().toISOString() },
             { onConflict: "user_id,course_id" },
           );
       } catch {}
@@ -88,9 +128,10 @@ export function StoreProvider({
     let timer: ReturnType<typeof setTimeout> | undefined;
     const unsub = store.subscribe((state, prev) => {
       if (state.S === prev.S) return; // only react to progress changes
-      // stamp a genuine study action for today's streak/goal
+      // stamp a genuine study action for today's streak/goal — but never for
+      // a sync adoption, which is progress arriving, not the user studying
       const t = new Date().toISOString().slice(0, 10);
-      if (!(state.S.act ?? []).includes(t)) {
+      if (!adopting && !(state.S.act ?? []).includes(t)) {
         store.setState({ S: { ...state.S, act: [...(state.S.act ?? []), t] } });
         return; // re-enters with act stamped; persistence runs on that pass
       }

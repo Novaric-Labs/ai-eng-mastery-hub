@@ -225,7 +225,10 @@ export function createCourseStore(init: StoreInit) {
     setName: (name) => set((s) => ({ S: { ...s.S, name: name.trim().slice(0, 40), nameAsked: true } })),
     markNameAsked: () => set((s) => (s.S.nameAsked ? {} : { S: { ...s.S, nameAsked: true } })),
 
-    resetProgress: () => set({ S: emptyProgress() }),
+    // The `reset` stamp is a tombstone for the sync layer: progress writes are
+    // union-merged with the server row (a write can only add), so without it
+    // the very next persist would resurrect everything a reset just wiped.
+    resetProgress: () => set({ S: { ...emptyProgress(), reset: new Date().toISOString() } }),
   }));
 }
 
