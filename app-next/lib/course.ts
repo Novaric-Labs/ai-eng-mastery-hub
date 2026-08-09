@@ -212,6 +212,11 @@ export function lockedCardCount(c: Course, S: ProgressState): number {
   return c.cards.filter((card) => !S.read?.[card.m]).length;
 }
 
+export function masteredCardCount(c: Course, S: ProgressState): number {
+  if (!c.cards) return 0;
+  return c.cards.filter((card, i) => S.read?.[card.m] && (S.cards?.[i]?.box ?? 0) >= 3).length;
+}
+
 /* ----- streak / XP / level (audit 3.2 parity) ----- */
 
 export function currentStreak(S: ProgressState, now: Date): number {

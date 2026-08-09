@@ -16,6 +16,25 @@ export async function hasActiveMembership(
   return paying && live;
 }
 
+// Shared access chain for both gates below: admin/owner, then active
+// membership, then an active per-course grant (filtered to `course` when given,
+// ANY course otherwise). Must tolerate multiple entitlement rows now that a
+// user can own more than one course — .maybeSingle() would error on 2+ rows,
+// so select-limit-1 and test presence.
+async function entitled(
+  supabase: SupabaseClient,
+  user: { email?: string | null } | null,
+  course?: string,
+): Promise<boolean> {
+  if (!user) return false;
+  if (isAdmin(user.email)) return true;
+  if (await hasActiveMembership(supabase)) return true;
+  let q = supabase.from("entitlements").select("course_id").eq("active", true);
+  if (course) q = q.eq("course_id", course);
+  const { data } = await q.limit(1);
+  return !!data && data.length > 0;
+}
+
 // Access to ONE course's paid content: a membership unlocks every course; a
 // per-course grant (access code / comp) unlocks only its own. Use this — not
 // hasFullAccess — for anything that reads or derives from a specific course's
@@ -26,36 +45,16 @@ export async function hasCourseAccess(
   user: { email?: string | null } | null,
   course: string,
 ): Promise<boolean> {
-  if (!user || !course) return false;
-  if (isAdmin(user.email)) return true;
-  if (await hasActiveMembership(supabase)) return true;
-  const { data } = await supabase
-    .from("entitlements")
-    .select("course_id")
-    .eq("course_id", course)
-    .eq("active", true)
-    .limit(1);
-  return !!data && data.length > 0;
+  if (!course) return false;
+  return entitled(supabase, user, course);
 }
 
-// Full access = an active membership, a per-course grant (access code/comp), OR
-// an admin/owner. Used by server features that gate on payment but not on a
+// Full access = an active membership, ANY per-course grant (access code/comp),
+// OR an admin/owner. Used by server features that gate on payment but not on a
 // specific course's content (tutor, explain).
 export async function hasFullAccess(
   supabase: SupabaseClient,
   user: { email?: string | null } | null,
 ): Promise<boolean> {
-  if (!user) return false;
-  if (isAdmin(user.email)) return true;
-  if (await hasActiveMembership(supabase)) return true;
-  // ANY active per-course grant (access code / comp) unlocks these global,
-  // course-agnostic features (tutor / grade / explain / video). Must tolerate
-  // multiple entitlement rows now that a user can own more than one course —
-  // .maybeSingle() would error on 2+ rows, so select-limit-1 and test presence.
-  const { data } = await supabase
-    .from("entitlements")
-    .select("course_id")
-    .eq("active", true)
-    .limit(1);
-  return !!data && data.length > 0;
+  return entitled(supabase, user);
 }

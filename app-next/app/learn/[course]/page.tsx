@@ -4,6 +4,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { isAdmin } from "@/lib/admin";
 import { courseBySlug } from "@/lib/courses";
+import { hasActiveMembership } from "@/lib/entitlement";
 import LearnApp from "@/components/LearnApp";
 import FunnelEvents from "@/components/FunnelEvents";
 import type { ContentRow, ProgressState } from "@/lib/types";
@@ -40,20 +41,15 @@ export default async function LearnCoursePage({
   // query is scoped to this course's rows.
   const contentClient = admin ? supabaseAdmin() : supabase;
 
-  const [{ data: content }, { data: ent }, { data: sub }, { data: prog }] = await Promise.all([
+  const [{ data: content }, { data: ent }, member, { data: prog }] = await Promise.all([
     contentClient.from("content").select("id,tier,data").eq("course_id", slug),
     supabase.from("entitlements").select("active").eq("course_id", slug).maybeSingle(),
-    supabase.from("subscriptions").select("status, current_period_end").maybeSingle(),
+    hasActiveMembership(supabase),
     supabase.from("progress").select("state").eq("course_id", slug).maybeSingle(),
   ]);
 
   // Access this course = active membership (unlocks everything) OR a per-course
   // grant (access code / comp) OR admin. Mirrors the is_entitled() RLS gate.
-  const member =
-    !!sub &&
-    (sub.status === "active" || sub.status === "trialing") &&
-    (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
-
   const entitled = admin || member || !!ent?.active;
 
   return (

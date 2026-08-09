@@ -64,5 +64,3 @@ export const COURSES: CourseMeta[] = [
 
 export const courseBySlug = (slug: string): CourseMeta | undefined =>
   COURSES.find((c) => c.slug === slug);
-
-export const LIVE_COURSES = COURSES.filter((c) => c.status === "live");

@@ -62,10 +62,8 @@ export async function GET(
     return data?.signedUrl ?? null;
   };
 
-  const url = await sign(meta.src);
+  const [url, poster, vtt] = await Promise.all([sign(meta.src), sign(meta.poster), sign(meta.vtt)]);
   if (!url) return NextResponse.json({ error: "Video not available." }, { status: 404 });
-
-  const [poster, vtt] = await Promise.all([sign(meta.poster), sign(meta.vtt)]);
 
   // Let the browser/CDN cache for a fraction of the URL lifetime.
   return NextResponse.json(

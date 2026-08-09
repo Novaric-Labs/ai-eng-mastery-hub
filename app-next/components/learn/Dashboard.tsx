@@ -15,9 +15,11 @@ import {
   currentStreak,
   fmtMin,
   levelInfo,
+  masteredCardCount,
   modMastered,
   modQuizBest,
   rankFor,
+  todayStr,
   unlockedCards,
 } from "@/lib/course";
 
@@ -31,15 +33,13 @@ export default function Dashboard() {
   }));
   const L = learnLabelsFor(courseSlug);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr(new Date());
   const total = course.catalog.length;
   const mastered = course.catalog.filter((m) => modMastered(S, m.id)).length;
   const read = course.catalog.filter((m) => S.read?.[m.id]).length;
   const examsPassed = course.blocks.filter((b) => S.exams?.[b.id]?.passed).length;
   const unlockedTotal = unlockedCards(course, S).length;
-  const cardsKnown = (course.cards ?? []).filter(
-    (c, i) => S.read?.[c.m] && (S.cards?.[i]?.box ?? 0) >= 3,
-  ).length;
+  const cardsKnown = masteredCardCount(course, S);
   const scenDone = Object.keys(S.scen ?? {}).length;
   const scenTotal = course.scenarios?.length ?? 0;
   const pct = Math.round((100 * mastered) / total);

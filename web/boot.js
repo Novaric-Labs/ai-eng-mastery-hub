@@ -13,6 +13,8 @@
   var sb = null;          // supabase client
   var ENTITLED = false;   // does the current user have access?
   var USER = null;
+  var gatesInstalled = false; // wrapper installers must run once — re-auth
+  var syncInstalled = false;  // events would otherwise stack the wrappers
 
   // ---------- overlay ----------
   function cover(html) {
@@ -94,11 +96,6 @@
     });
   }
 
-  function isLocked(id) {
-    var m = MODULES.find(function (x) { return x.id === id; });
-    return !!(m && m.__locked);
-  }
-
   // ---------- paywall ----------
   function buy() {
     cover('<div class="bc-card"><div class="bc-spin"></div><p class="bc-sub">Opening secure checkout…</p></div>');
@@ -144,11 +141,17 @@
   }
 
   // Wrap the engine's renderers to enforce the paywall for non-entitled users.
+  // Idempotent: onAuthed fires on every auth event (sign-in, code redemption via
+  // reloadEntitled), and re-wrapping would stack wrappers (duplicate upserts,
+  // duplicate sidebar buttons). renderMod checks ENTITLED dynamically, so a
+  // single install keeps gating correct across entitlement changes.
   function installGates() {
+    if (gatesInstalled) return;
+    gatesInstalled = true;
     var __rm = renderMod;
     renderMod = function (id) {
-      if (!ENTITLED && isLocked(id)) {
-        var m = MODULES.find(function (x) { return x.id === id; }) || {};
+      var m = MODULES.find(function (x) { return x.id === id; });
+      if (!ENTITLED && m && m.__locked) {
         return '<h2>' + (m.title || "Module") + "</h2>" +
           '<p class="tagline">' + (m.tag || "") + "</p>" +
           (m.why ? '<div class="card"><b>Why this matters</b><p style="margin-top:6px;color:var(--dim)">' + m.why + "</p></div>" : "") +
@@ -157,35 +160,42 @@
       }
       return __rm(id);
     };
-    if (!ENTITLED) {
-      var __rcards = renderCards;
-      renderCards = function () {
-        if (!CARDS.length) return "<h2>Flashcards</h2>" + paywallCard("Flashcards",
-          "Spaced-repetition flashcards unlock with full access.");
-        return __rcards();
-      };
-      var __rscen = renderScen;
-      renderScen = function () {
-        if (!SCENARIOS.length) return "<h2>Scenario Challenges</h2>" + paywallCard("Scenarios",
-          "Production-judgment scenarios unlock with full access.");
-        return __rscen();
-      };
-      // upsell button in the sidebar
-      var __rs = renderSide;
-      renderSide = function () {
-        __rs();
-        var side = document.getElementById("side");
-        var b = document.createElement("button");
-        b.className = "navbtn"; b.style.cssText = "color:var(--accent2);font-weight:600";
-        b.textContent = "🔓 Unlock full access";
-        b.onclick = buy;
-        side.insertBefore(b, side.firstChild);
-      };
-    }
+    // Like renderMod above, these check ENTITLED at CALL time, not install
+    // time — installing them conditionally would freeze the first user's
+    // entitlement into the wrappers (sign-out -> different user sign-in in
+    // the same tab would then show the wrong paywall/upsell state).
+    var __rcards = renderCards;
+    renderCards = function () {
+      if (!ENTITLED && !CARDS.length) return "<h2>Flashcards</h2>" + paywallCard("Flashcards",
+        "Spaced-repetition flashcards unlock with full access.");
+      return __rcards();
+    };
+    var __rscen = renderScen;
+    renderScen = function () {
+      if (!ENTITLED && !SCENARIOS.length) return "<h2>Scenario Challenges</h2>" + paywallCard("Scenarios",
+        "Production-judgment scenarios unlock with full access.");
+      return __rscen();
+    };
+    // upsell button in the sidebar
+    var __rs = renderSide;
+    renderSide = function () {
+      __rs();
+      if (ENTITLED) return;
+      var side = document.getElementById("side");
+      var b = document.createElement("button");
+      b.className = "navbtn"; b.style.cssText = "color:var(--accent2);font-weight:600";
+      b.textContent = "🔓 Unlock full access";
+      b.onclick = buy;
+      side.insertBefore(b, side.firstChild);
+    };
   }
 
   // ---------- progress sync (replaces localStorage) ----------
+  // Idempotent for the same reason as installGates: a stacked save wrapper
+  // means one debounced upsert per stack level on every save().
   function installProgressSync() {
+    if (syncInstalled) return;
+    syncInstalled = true;
     var saveTimer = null;
     var __save = save;
     save = function () {

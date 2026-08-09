@@ -5,6 +5,7 @@ import { Rocket } from "lucide-react";
 import { useCourseStore, celebrate } from "./StoreProvider";
 import Html from "./Html";
 import { PASS_EXAM, PASS_QUIZ, blockMastered } from "@/lib/course";
+import { runScore } from "@/lib/store";
 
 // Per-question AI feedback for wrong EXAM answers: why your pick was wrong and
 // why the correct one is right. Keyed by question index for the current run.
@@ -93,7 +94,7 @@ export default function Quiz() {
     }
     if (celebrated.current) return;
     celebrated.current = true;
-    const score = Math.round((100 * Q.items.filter((x) => x.sel === x.a).length) / Q.items.length);
+    const score = runScore(Q);
     if (Q.mode === "quiz" && score >= PASS_QUIZ) celebrate("Liftoff — quiz passed at " + score + "% 🚀");
     else if (Q.mode === "exam" && score >= PASS_EXAM) {
       const blk = blockMastered(course, S, Q.id);
@@ -110,7 +111,7 @@ export default function Quiz() {
 
   if (Q.done) {
     const correct = Q.items.filter((x) => x.sel === x.a).length;
-    const score = Math.round((100 * correct) / Q.items.length);
+    const score = runScore(Q);
     const pass = Q.mode === "quiz" ? score >= PASS_QUIZ : score >= PASS_EXAM;
     const missed = Q.items.filter((x) => x.sel !== x.a);
     return (

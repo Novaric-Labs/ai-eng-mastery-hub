@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
-import { dueCards, lockedCardCount, unlockedCards } from "@/lib/course";
+import { dueCards, lockedCardCount, masteredCardCount, todayStr, unlockedCards } from "@/lib/course";
 
 type QItem = { c: { m: string; f: string; b: string }; i: number };
-type Sess = { knew: number; missed: number; n: number; done: boolean };
+type Sess = { knew: number; missed: number; n: number };
 
 export default function Flashcards() {
   const { course, S, gradeCard } = useCourseStore((s) => ({
@@ -20,9 +20,9 @@ export default function Flashcards() {
   const [flipped, setFlipped] = useState(false);
   const [sess, setSess] = useState<Sess | null>(null);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr(new Date());
 
-  const start = useCallback(() => {
+  function start() {
     const due = dueCards(course, S, today);
     // shuffle
     const q = due.slice();
@@ -32,8 +32,8 @@ export default function Flashcards() {
     }
     setQueue(q);
     setFlipped(false);
-    setSess({ knew: 0, missed: 0, n: 0, done: false });
-  }, [course, S, today]);
+    setSess({ knew: 0, missed: 0, n: 0 });
+  }
 
   // Two answers only. Behind the scenes this still drives the Leitner schedule:
   // "knew it" promotes the card a box (longer interval), "missed" sends it back
@@ -50,7 +50,6 @@ export default function Flashcards() {
               n: p.n + 1,
               knew: p.knew + (knew ? 1 : 0),
               missed: p.missed + (knew ? 0 : 1),
-              done: queue.length === 1,
             }
           : p,
       );
@@ -67,7 +66,7 @@ export default function Flashcards() {
         e.preventDefault();
         setFlipped((f) => !f);
       } else if (flipped && (e.key === "1" || e.key === "x" || e.key === "X")) grade(false);
-      else if (flipped && (e.key === "2" || e.key === "Enter")) grade(true);
+      else if (flipped && e.key === "2") grade(true);
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -88,13 +87,11 @@ export default function Flashcards() {
   const locked = lockedCardCount(course, S);
   const totalMods = course.catalog.length;
   const readMods = Object.keys(S.read ?? {}).filter((k) => S.read?.[k]).length;
-  const mastered = course.cards.filter(
-    (c, i) => S.read?.[c.m] && (S.cards?.[i]?.box ?? 0) >= 3,
-  ).length;
+  const mastered = masteredCardCount(course, S);
   const pct = Math.round((readMods / totalMods) * 100);
 
   // session summary
-  if (sess && sess.done && !queue.length) {
+  if (sess && !queue.length) {
     const tile = (n: number, l: string, c: string) => (
       <div className="stat">
         <div className="big" style={{ color: c }}>{n}</div>

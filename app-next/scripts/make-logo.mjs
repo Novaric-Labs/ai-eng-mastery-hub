@@ -3,6 +3,7 @@
 // Brand tokens mirror video/src/theme.ts. Run from app-next/:  node scripts/make-logo.mjs
 import sharp from "sharp";
 import fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const STAR =
   "M12 1.5C12.9 8 16 11.1 22.5 12C16 12.9 12.9 16 12 22.5C11.1 16 8 12.9 1.5 12C8 11.1 11.1 8 12 1.5Z";
@@ -27,6 +28,6 @@ fs.mkdirSync(dir, { recursive: true });
 
 for (const size of [512, 120]) {
   const out = new URL(`novacademy-logo-${size}.png`, dir);
-  await sharp(Buffer.from(svg)).resize(size, size).png().toFile(out.pathname.replace(/^\//, ""));
+  await sharp(Buffer.from(svg)).resize(size, size).png().toFile(fileURLToPath(out));
   console.log(`✓ wrote brand/novacademy-logo-${size}.png`);
 }

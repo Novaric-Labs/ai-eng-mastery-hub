@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { pickPrimarySubscription, subscriptionRow } from "@/lib/stripe-sync";
 
 export const runtime = "nodejs"; // raw body + signature verification need Node
-
-// Service-role client bypasses RLS to upsert subscription state.
-function admin() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  );
-}
 
 // Mirror a customer's membership into our `subscriptions` table. Keyed by
 // user_id (carried in metadata at checkout); falls back to matching an existing
@@ -29,7 +21,8 @@ function admin() {
 // already stored on the row, covering users whose history spans two Stripe
 // customers; /api/subscription/sync (email-based) remains the wider net.
 async function syncSubscription(stripe: Stripe, sub: Stripe.Subscription) {
-  const db = admin();
+  // Service-role client bypasses RLS to upsert subscription state.
+  const db = supabaseAdmin();
   const eventCustomerId =
     typeof sub.customer === "string" ? sub.customer : sub.customer.id;
   let userId = sub.metadata?.user_id as string | undefined;
