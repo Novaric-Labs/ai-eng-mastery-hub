@@ -11,6 +11,11 @@ const BOOT = new URL("./boot.js", import.meta.url);
 let html = fs.readFileSync(SRC, "utf8");
 const before = html.length;
 
+// The HTM's line endings depend on git autocrlf (LF in-repo, CRLF in a
+// Windows working tree). Build every multi-line anchor with the file's own
+// flavor so the build works from either checkout.
+const NL = html.includes("\r\n") ? "\r\n" : "\n";
+
 // --- string-aware bracket matcher (handles ' " ` strings + escapes) ---
 function bracketEnd(src, openIdx) {
   const pair = { "[": "]", "{": "}", "(": ")" };
@@ -59,12 +64,12 @@ for (const [marker, repl] of strips) html = replaceDecl(html, marker, repl);
 html = replaceDecl(html, "Object.assign(", "");
 
 // --- inject external deps before the engine <script>, boot after it ---
-const ENGINE_OPEN = "<script>\n/* ================= DATA ================= */";
+const ENGINE_OPEN = "<script>" + NL + "/* ================= DATA ================= */";
 if (!html.includes(ENGINE_OPEN)) throw new Error("engine <script> anchor not found");
 html = html.replace(
   ENGINE_OPEN,
-  '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>\n' +
-  '<script src="config.js"></script>\n' +
+  '<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>' + NL +
+  '<script src="config.js"></script>' + NL +
   ENGINE_OPEN
 );
 
@@ -82,10 +87,10 @@ const bootStyle = `<style>
 #bootcover .bc-spin{width:34px;height:34px;border:3px solid var(--border,#2d333b);border-top-color:var(--accent,#58a6ff);border-radius:50%;animation:bcspin .8s linear infinite;margin:0 auto}
 @keyframes bcspin{to{transform:rotate(360deg)}}
 </style>`;
-html = html.replace("</head>", bootStyle + "\n</head>");
+html = html.replace("</head>", bootStyle + NL + "</head>");
 html = html.replace(
-  "</script>\n</body>",
-  "</script>\n<script>\n" + bootSrc + "\n</script>\n</body>"
+  "</script>" + NL + "</body>",
+  "</script>" + NL + "<script>" + NL + bootSrc + NL + "</script>" + NL + "</body>"
 );
 
 fs.writeFileSync(OUT, html);
