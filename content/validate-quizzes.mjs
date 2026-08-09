@@ -15,14 +15,9 @@
 //
 // Run: node content/validate-quizzes.mjs   (exit code 1 if anything fails)
 import fs from 'fs';
+import { COURSES } from './courses.mjs';
 
 const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.meta.url)));
-
-// Keep in sync with seed.mjs COURSES.
-const COURSES = [
-  { course: 'ai-eng', json: 'content.json' },
-  { course: 'ai-foundations', json: 'ai-foundations.json' },
-];
 
 const LEN_RATIO = 1.15; // correct option may not exceed this x the longest distractor
 const MIN_GAP = 10;     // ...and only if the absolute gap is at least this many chars

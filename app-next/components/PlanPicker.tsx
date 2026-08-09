@@ -42,6 +42,11 @@ export default function PlanPicker() {
         location.href = "/login?next=/pricing";
         return;
       }
+      if (res.status === 409) {
+        setBusy(null);
+        setMsg("You already have a membership on file (it may be waiting on a payment retry) — manage it from your account page.");
+        return;
+      }
       if (d.url) {
         location.href = d.url;
         return;

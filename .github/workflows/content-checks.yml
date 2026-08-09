@@ -1,0 +1,30 @@
+# Content quality gates. The seed scripts run these same validators locally
+# before any DB write; this workflow runs them on every push/PR that touches
+# content so a broken pattern or unbalanced quiz can't merge unnoticed.
+name: content-checks
+
+on:
+  push:
+    paths:
+      - "content/**"
+      - ".github/workflows/content-checks.yml"
+  pull_request:
+    paths:
+      - "content/**"
+      - ".github/workflows/content-checks.yml"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Quiz balance
+        run: node content/validate-quizzes.mjs
+      - name: Pattern code compiles
+        run: node content/validate-patterns.mjs
