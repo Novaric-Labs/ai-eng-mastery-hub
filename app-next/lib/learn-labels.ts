@@ -111,7 +111,7 @@ const DEFAULT_LABELS: LearnLabels = {
   tourOverallTitle: "Overall mastery",
   tourOverallDesc:
     "A module counts as <b>mastered</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
-  tourBlocksTitle: "21 modules, 5 blocks",
+  tourBlocksTitle: "23 modules, 5 blocks",
   tourBlocksDesc: (isMobile) =>
     isMobile
       ? "The course is grouped into 5 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
@@ -138,7 +138,7 @@ const DEFAULT_LABELS: LearnLabels = {
     "No AI background needed. Fifteen minutes of orientation, then the curriculum will make sense.",
   startWhatTitle: "What this field actually is",
   startWhatBody:
-    "Companies like Anthropic, OpenAI, and Google spend months and billions training <b>large language models</b> — programs that predict the next word so well they can write, reason, and code. You will never train one. <b>AI engineering is building products on top of finished models</b>: you send them text over the internet, get text back, and everything else — making answers accurate, fast, affordable, safe, and connected to your data — is your job. That 'everything else' is exactly what the 21 modules here teach.",
+    "Companies like Anthropic, OpenAI, and Google spend months and billions training <b>large language models</b> — programs that predict the next word so well they can write, reason, and code. You will never train one. <b>AI engineering is building products on top of finished models</b>: you send them text over the internet, get text back, and everything else — making answers accurate, fast, affordable, safe, and connected to your data — is your job. That 'everything else' is exactly what the 23 modules here teach.",
   startInteractionTitle: "The one interaction that underlies everything",
   startPathTitle: "Your path through this hub",
   startPathItems: [
@@ -148,7 +148,7 @@ const DEFAULT_LABELS: LearnLabels = {
     "<b>Block 4 (Production & Leadership)</b> is shipping for real: testing, safety, architecture, judgment.",
   ],
   startPathNote:
-    "Each module starts with an <b style=\"color:var(--teal)\">In plain English</b> box — read just those across all 21 modules first if you want a fast aerial view. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a 'How it actually works' section feels deep on a first pass, skip it and return after the quiz — the layers are designed for multiple passes.",
+    "Each module starts with an <b style=\"color:var(--teal)\">In plain English</b> box — read just those across all 23 modules first if you want a fast aerial view. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a 'How it actually works' section feels deep on a first pass, skip it and return after the quiz — the layers are designed for multiple passes.",
   startBeginBtn: "Begin Block 1: LLM Fundamentals →",
   startBeginMod: "llm",
 

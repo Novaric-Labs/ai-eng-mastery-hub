@@ -48,7 +48,7 @@ export const COURSES: CourseMeta[] = [
     title: "AI Engineering Mastery Hub",
     subtitle: "The real production job — RAG, agents, harnesses, evals, and the judgment to ship.",
     blurb:
-      "The deep, hands-on course: 21 modules across foundations, RAG, agents, and production. Concepts, mechanics, runnable code patterns, quizzes, spaced-repetition flashcards, and real production scenarios.",
+      "The deep, hands-on course: 23 modules across foundations, RAG, agents, and production. Concepts, mechanics, runnable code patterns, quizzes, spaced-repetition flashcards, and real production scenarios.",
     bestFor: [
       "Engineers & PMs who can code a little",
       "People shipping LLM features at work",
@@ -56,7 +56,7 @@ export const COURSES: CourseMeta[] = [
     ],
     level: "Intermediate",
     estHours: "20–30 hrs",
-    moduleCount: 21,
+    moduleCount: 23,
     status: "live",
     accent: "#5b8cff",
   },

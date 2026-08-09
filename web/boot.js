@@ -133,7 +133,7 @@
       '<div class="card" style="border-color:var(--accent2)">' +
       '<b style="color:var(--accent2)">🔒 ' + (title || "Full course") + "</b>" +
       '<p style="color:var(--dim);margin:6px 0 12px">' + (blurb ||
-        "This is part of the full curriculum. Unlock lifetime access to all 21 modules, quizzes, flashcards, scenarios, and code patterns.") + "</p>" +
+        "This is part of the full curriculum. Unlock lifetime access to all 23 modules, quizzes, flashcards, scenarios, and code patterns.") + "</p>" +
       '<button class="btn" onclick="window.__buy()">Unlock full access</button>' +
       '<button class="btn ghost" onclick="var c=prompt(\'Enter your access code\');if(c)window.__redeemCode(c)">I have a code</button>' +
       "</div>"
