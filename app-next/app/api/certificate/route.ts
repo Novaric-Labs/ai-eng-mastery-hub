@@ -2,14 +2,24 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { buildCourse, courseComplete, completionSummary } from "@/lib/course";
+import { hasActiveMembership } from "@/lib/entitlement";
+import { isAdmin } from "@/lib/admin";
 import type { ContentRow, ProgressState } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 // Issue (or return the already-issued) completion certificate for a course.
-// The server NEVER trusts the client about completion: it rebuilds the course
-// from content + the caller's own progress row and re-checks courseComplete()
-// before issuing. Idempotent — one certificate per (user, course, tier).
+// Two gates before issuing, both server-side:
+//  1. Entitlement — the caller must actually own access to THIS course (active
+//     membership, a per-course grant, or admin). Certificates are publicly
+//     verifiable, so issuance must never be reachable from a free account.
+//  2. Completion — the course is rebuilt from content + the caller's progress
+//     row and courseComplete() is re-checked. Note the progress row is
+//     client-reported (the app syncs it from the browser), so this gate stops
+//     accidents, not determined forgery; the entitlement gate is the hard one.
+//     Server-authoritative completion needs server-graded assessments (tracked
+//     in docs/CURRICULUM_AUDIT_2026-08.md).
+// Idempotent — one certificate per (user, course, tier).
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as { course?: unknown } | null;
   const course = typeof body?.course === "string" ? body.course : "";
@@ -23,6 +33,22 @@ export async function POST(req: Request) {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  // Gate 1: entitlement, scoped to the course being certified. A membership
+  // unlocks the whole platform; otherwise the caller needs an active grant for
+  // this specific course (access code / comp). RLS scopes both reads to the
+  // caller's own rows.
+  if (!isAdmin(user.email) && !(await hasActiveMembership(supabase))) {
+    const { data: grant } = await supabase
+      .from("entitlements")
+      .select("course_id")
+      .eq("course_id", course)
+      .eq("active", true)
+      .limit(1);
+    if (!grant || grant.length === 0) {
+      return NextResponse.json({ error: "not entitled" }, { status: 403 });
+    }
   }
 
   const admin = supabaseAdmin();

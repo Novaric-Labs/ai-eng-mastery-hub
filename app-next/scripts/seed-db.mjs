@@ -13,17 +13,21 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { VIDEOS as AI_ENG_VIDEOS } from "../../content/videos.mjs";
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from "../../content/videos-ai-foundations.mjs";
+import { COURSES as COURSE_MANIFEST } from "../../content/courses.mjs";
 
-// Guardrail: refuse to build/seed if any quiz is unbalanced (correct option a
-// length outlier or always the longest). Mirrors content/seed.mjs so the prod
+// Guardrails: refuse to build/seed if any quiz is unbalanced (correct option a
+// length outlier or always the longest) or any code pattern is broken (doesn't
+// compile / stripped-escape corruption). Mirrors content/seed.mjs so the prod
 // seed path (seed-db.sh -> seed-db.mjs -> curl) is gated too, not just the
 // supabase/seed.sql generator.
-try {
-  const validator = new URL("../../content/validate-quizzes.mjs", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
-  execSync(`node "${validator}"`, { stdio: "inherit" });
-} catch {
-  console.error("\nseed aborted: quiz validation failed (see flags above). Run `node content/validate-quizzes.mjs`.");
-  process.exit(1);
+for (const check of ["validate-quizzes.mjs", "validate-patterns.mjs"]) {
+  try {
+    const validator = new URL("../../content/" + check, import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1");
+    execSync(`node "${validator}"`, { stdio: "inherit" });
+  } catch {
+    console.error(`\nseed aborted: ${check} failed (see flags above). Run \`node content/${check}\`.`);
+    process.exit(1);
+  }
 }
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -35,12 +39,17 @@ if (!url || !key || /placeholder/i.test(`${url}${key}`)) {
 
 const read = (file) => JSON.parse(fs.readFileSync(new URL("../../content/" + file, import.meta.url)));
 
-// One descriptor per course (mirrors content/seed.mjs). `sample` = the single
-// module offered free; every other module is paid.
-const ALL_COURSES = [
-  { course: "ai-eng", json: "content.json", sample: "llm", videos: AI_ENG_VIDEOS },
-  { course: "ai-foundations", json: "ai-foundations.json", sample: "whatai", videos: AI_FOUNDATIONS_VIDEOS },
-];
+// Course registry lives in content/courses.mjs (shared with content/seed.mjs
+// and the validators). Attach each course's preface-video registry here.
+const VIDEO_REGISTRY = { "ai-eng": AI_ENG_VIDEOS, "ai-foundations": AI_FOUNDATIONS_VIDEOS };
+const ALL_COURSES = COURSE_MANIFEST.map((c) => {
+  const videos = VIDEO_REGISTRY[c.course];
+  if (!videos) {
+    console.error(`✗ no video registry for course '${c.course}' — add it to VIDEO_REGISTRY in seed-db.mjs`);
+    process.exit(1);
+  }
+  return { ...c, videos };
+});
 
 // Optional: SEED_COURSE=<slug> limits the payload to a single course, so you can
 // upsert just one course's rows without touching the others. Unset = both.

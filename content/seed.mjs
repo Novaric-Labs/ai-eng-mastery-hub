@@ -9,25 +9,35 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import { VIDEOS as AI_ENG_VIDEOS } from './videos.mjs';
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from './videos-ai-foundations.mjs';
+import { COURSES as COURSE_MANIFEST } from './courses.mjs';
 
-// Guardrail: refuse to regenerate the seed if any quiz is unbalanced (e.g. the
-// correct option is a length outlier or always the longest). Keeps the "you can
-// guess the answer by its length" regression from ever reaching the DB.
-try {
-  execSync('node ' + new URL('./validate-quizzes.mjs', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), { stdio: 'inherit' });
-} catch {
-  console.error('\nseed aborted: quiz validation failed (see flags above). Run `node content/validate-quizzes.mjs`.');
-  process.exit(1);
+// Guardrails: refuse to regenerate the seed if any quiz is unbalanced ("guess
+// the answer by its length") or any code pattern is broken (doesn't compile /
+// contains stripped-escape corruption). Keeps those regressions from ever
+// reaching the DB.
+for (const check of ['validate-quizzes.mjs', 'validate-patterns.mjs']) {
+  try {
+    execSync('node ' + new URL('./' + check, import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), { stdio: 'inherit' });
+  } catch {
+    console.error(`\nseed aborted: ${check} failed (see flags above). Run \`node content/${check}\`.`);
+    process.exit(1);
+  }
 }
 
 const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.meta.url)));
 
-// One descriptor per course. `sample` = the single module offered free (public);
-// every other module is paid. `videos` = that course's preface-video registry.
-const COURSES = [
-  { course: 'ai-eng', json: 'content.json', sample: 'llm', videos: AI_ENG_VIDEOS },
-  { course: 'ai-foundations', json: 'ai-foundations.json', sample: 'whatai', videos: AI_FOUNDATIONS_VIDEOS },
-];
+// Course registry lives in courses.mjs (shared with the validators, so a new
+// course is validated the moment it is seedable). Attach each course's
+// preface-video registry here.
+const VIDEO_REGISTRY = { 'ai-eng': AI_ENG_VIDEOS, 'ai-foundations': AI_FOUNDATIONS_VIDEOS };
+const COURSES = COURSE_MANIFEST.map((c) => {
+  const videos = VIDEO_REGISTRY[c.course];
+  if (!videos) {
+    console.error(`✗ no video registry for course '${c.course}' — add it to VIDEO_REGISTRY in seed.mjs`);
+    process.exit(1);
+  }
+  return { ...c, videos };
+});
 
 // Build the flat (public/paid) row set for one course, same split the app's
 // client-side reassembly relies on (row-id prefixes: meta:, module:, quiz:, ...).

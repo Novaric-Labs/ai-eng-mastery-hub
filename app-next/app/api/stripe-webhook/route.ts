@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createClient } from "@supabase/supabase-js";
-import { subscriptionRow } from "@/lib/stripe-sync";
+import { pickPrimarySubscription, subscriptionRow } from "@/lib/stripe-sync";
 
 export const runtime = "nodejs"; // raw body + signature verification need Node
 
@@ -13,27 +13,67 @@ function admin() {
   );
 }
 
-// Mirror a Stripe subscription into our `subscriptions` table. Keyed by user_id
-// (carried in metadata at checkout); falls back to matching an existing row by
-// customer id for events that lack it (renewals, cancels).
+// Mirror a customer's membership into our `subscriptions` table. Keyed by
+// user_id (carried in metadata at checkout); falls back to matching an existing
+// row by customer id for events that lack it (renewals, cancels).
+//
+// The event's subscription object is used only to identify the customer/user —
+// never persisted directly. Stripe does not guarantee event ordering, retries
+// can deliver a stale snapshot hours after the state changed, and a customer
+// can briefly hold two subscriptions (cancel -> re-subscribe), where mirroring
+// the old subscription's terminal event would clobber the row that represents
+// the new, paid-for one (the table keys one row per user). Re-listing the
+// subscriptions and persisting the primary means every event — including a
+// stale, duplicated, or out-of-order one — converges the row toward live
+// Stripe truth. We list across both the event's customer AND the customer
+// already stored on the row, covering users whose history spans two Stripe
+// customers; /api/subscription/sync (email-based) remains the wider net.
 async function syncSubscription(stripe: Stripe, sub: Stripe.Subscription) {
   const db = admin();
-  const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
+  const eventCustomerId =
+    typeof sub.customer === "string" ? sub.customer : sub.customer.id;
   let userId = sub.metadata?.user_id as string | undefined;
+  let storedCustomerId: string | undefined;
 
-  if (!userId) {
+  if (userId) {
     const { data } = await db
       .from("subscriptions")
-      .select("user_id")
-      .eq("stripe_customer_id", customerId)
+      .select("stripe_customer_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+    storedCustomerId = data?.stripe_customer_id as string | undefined;
+  } else {
+    const { data } = await db
+      .from("subscriptions")
+      .select("user_id, stripe_customer_id")
+      .eq("stripe_customer_id", eventCustomerId)
       .maybeSingle();
     userId = data?.user_id as string | undefined;
+    storedCustomerId = data?.stripe_customer_id as string | undefined;
   }
   if (!userId) return; // can't attribute this subscription to a user yet
 
+  const customerIds = [...new Set([eventCustomerId, storedCustomerId])].filter(
+    (c): c is string => !!c,
+  );
+  const live: Stripe.Subscription[] = [];
+  for (const cid of customerIds) {
+    live.push(
+      ...(await stripe.subscriptions
+        .list({ customer: cid, status: "all", limit: 100 })
+        .autoPagingToArray({ limit: 100 })),
+    );
+  }
+  const primary =
+    pickPrimarySubscription(live) ??
+    // No usable membership left: persist the newest terminal state (canceled /
+    // expired) so access actually ends, rather than leaving a stale row.
+    [...live].sort((a, b) => b.created - a.created)[0] ??
+    sub;
+
   // Shared row builder — derives plan + period-end the same way the account page
   // and the reconciliation endpoint do, and never throws on a missing period.
-  await db.from("subscriptions").upsert(subscriptionRow(sub, userId));
+  await db.from("subscriptions").upsert(subscriptionRow(primary, userId));
 }
 
 export async function POST(request: Request) {
