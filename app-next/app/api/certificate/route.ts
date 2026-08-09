@@ -41,11 +41,20 @@ export async function POST(req: Request) {
   }
 
   const admin = supabaseAdmin();
-  const [{ data: rows }, { data: prog }] = await Promise.all([
+  const tier = "completion";
+  const [{ data: rows }, { data: prog }, { data: existing }] = await Promise.all([
     // Content (blocks + catalog are public; admin read also covers paid rows).
     admin.from("content").select("id,tier,data").eq("course_id", course),
     // The caller's own progress for this course.
     supabase.from("progress").select("state").eq("course_id", course).maybeSingle(),
+    // Any already-issued certificate for (user, course, tier) — checked below.
+    admin
+      .from("certificates")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("course_id", course)
+      .eq("tier", tier)
+      .maybeSingle(),
   ]);
 
   if (!rows || rows.length === 0) {
@@ -58,16 +67,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "course not complete" }, { status: 400 });
   }
 
-  const tier = "completion";
-
   // Idempotent: hand back the existing certificate if already issued.
-  const { data: existing } = await admin
-    .from("certificates")
-    .select("id")
-    .eq("user_id", user.id)
-    .eq("course_id", course)
-    .eq("tier", tier)
-    .maybeSingle();
   if (existing) {
     return NextResponse.json({ id: existing.id });
   }

@@ -5,75 +5,14 @@
 // Multi-course: emits BOTH courses into one seed.sql. ai-eng must stay byte-for-
 // byte identical to the single-course era (it's already in production); ai-
 // foundations rows are appended alongside with the same row-id / tier conventions.
+// Row assembly + validators are shared with app-next/scripts/seed-db.mjs via
+// build-rows.mjs.
 import fs from 'fs';
-import { execSync } from 'child_process';
-import { VIDEOS as AI_ENG_VIDEOS } from './videos.mjs';
-import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from './videos-ai-foundations.mjs';
-import { COURSES as COURSE_MANIFEST } from './courses.mjs';
+import { runValidators, loadCourses, buildRows } from './build-rows.mjs';
 
-// Guardrails: refuse to regenerate the seed if any quiz is unbalanced ("guess
-// the answer by its length") or any code pattern is broken (doesn't compile /
-// contains stripped-escape corruption). Keeps those regressions from ever
-// reaching the DB.
-for (const check of ['validate-quizzes.mjs', 'validate-patterns.mjs']) {
-  try {
-    execSync('node ' + new URL('./' + check, import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'), { stdio: 'inherit' });
-  } catch {
-    console.error(`\nseed aborted: ${check} failed (see flags above). Run \`node content/${check}\`.`);
-    process.exit(1);
-  }
-}
+runValidators();
 
-const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.meta.url)));
-
-// Course registry lives in courses.mjs (shared with the validators, so a new
-// course is validated the moment it is seedable). Attach each course's
-// preface-video registry here.
-const VIDEO_REGISTRY = { 'ai-eng': AI_ENG_VIDEOS, 'ai-foundations': AI_FOUNDATIONS_VIDEOS };
-const COURSES = COURSE_MANIFEST.map((c) => {
-  const videos = VIDEO_REGISTRY[c.course];
-  if (!videos) {
-    console.error(`✗ no video registry for course '${c.course}' — add it to VIDEO_REGISTRY in seed.mjs`);
-    process.exit(1);
-  }
-  return { ...c, videos };
-});
-
-// Build the flat (public/paid) row set for one course, same split the app's
-// client-side reassembly relies on (row-id prefixes: meta:, module:, quiz:, ...).
-function buildRows({ json, sample, videos }) {
-  const d = read(json);
-  const rows = [];
-  const add = (id, tier, data) => rows.push({ id, tier, data });
-
-  // ---- PUBLIC: browsable catalog + marketing copy + one full sample module ----
-  add('meta:blocks', 'public', d.BLOCKS);
-  add('meta:catalog', 'public', d.MODULES.map(m => ({
-    id: m.id, block: m.block, title: m.title, tag: m.tag, why: m.why,
-    isNew: !!m.isNew, isUpd: !!m.isUpd, estMin: m.estMin
-  })));
-  add('glossary', 'public', d.GLOSSARY);
-  add('plain', 'public', d.PLAIN);
-  add('videos', 'public', videos); // sparse preface-video registry (free teasers)
-
-  // ---- per-module bundles (sample module is public, the rest are paid) ----
-  for (const m of d.MODULES) {
-    const tier = m.id === sample ? 'public' : 'paid';
-    add('module:' + m.id, tier, {
-      mod: m,
-      deep: d.DEEP[m.id] || null,
-      depth: d.DEPTH[m.id] || null,
-      patterns: d.PATTERNS[m.id] || null
-    });
-    add('quiz:' + m.id, tier, d.QUIZ[m.id] || []);
-  }
-
-  // ---- shared paid collections ----
-  add('cards', 'paid', d.CARDS);
-  add('scenarios', 'paid', d.SCENARIOS);
-
-  return rows;
-}
+const COURSES = loadCourses();
 
 // ---- emit SQL (both courses) ----
 const sqlVal = obj => "'" + JSON.stringify(obj).replace(/'/g, "''") + "'::jsonb";

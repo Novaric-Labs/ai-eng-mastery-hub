@@ -8,6 +8,19 @@ import type { Scenario } from "@/lib/course";
 
 export const runtime = "nodejs";
 
+// Grader persona + rubric scale to the course (encouraging beginner coach for
+// Foundations, rigorous instructor for Mastery); default ai-eng.
+const GRADERS: Record<string, { persona: string; rubric: string }> = {
+  "ai-eng": {
+    persona: "a senior AI-engineering instructor",
+    rubric: "production judgment",
+  },
+  "ai-foundations": {
+    persona: "a warm, encouraging tutor coaching a beginner",
+    rubric: "clear thinking and grasp of the core idea",
+  },
+};
+
 // AI grading of a scenario response: returns a 0–10 score with what the learner
 // got right and where to improve. Entitled-users-only; tight token cap.
 export async function POST(req: Request) {
@@ -36,7 +49,7 @@ export async function POST(req: Request) {
   if (!client) return NextResponse.json({ error: "AI grading isn't configured yet." }, { status: 503 });
 
   // Fetch the scenario server-side (don't trust the client for the model answer).
-  // Read via the service role: access is already authorized by hasFullAccess
+  // Read via the service role: access is already authorized by hasCourseAccess
   // above, and the row's tier RLS would otherwise hide a course the user can use
   // but isn't DB-entitled to (e.g. an admin/owner, who is app-level not row-level
   // entitled). The model answer is used only to grade and never returned.
@@ -45,18 +58,6 @@ export async function POST(req: Request) {
   const sc = scenarios.find((s) => s.id === scenarioId);
   if (!sc) return NextResponse.json({ error: "Scenario not found." }, { status: 404 });
 
-  // Grader persona + rubric scale to the course (encouraging beginner coach for
-  // Foundations, rigorous instructor for Mastery); default ai-eng.
-  const GRADERS: Record<string, { persona: string; rubric: string }> = {
-    "ai-eng": {
-      persona: "a senior AI-engineering instructor",
-      rubric: "production judgment",
-    },
-    "ai-foundations": {
-      persona: "a warm, encouraging tutor coaching a beginner",
-      rubric: "clear thinking and grasp of the core idea",
-    },
-  };
   const grader = GRADERS[course] ?? GRADERS["ai-eng"];
 
   const system =

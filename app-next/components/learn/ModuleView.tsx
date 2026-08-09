@@ -88,6 +88,27 @@ function Html(props: React.ComponentProps<typeof HtmlRaw>) {
   return <HtmlRaw {...props} html={linkifyTabs(props.html)} />;
 }
 
+const RAIL_BASE = [
+  { id: "sec-why", label: "Why" },
+  { id: "sec-mental", label: "Mental model" },
+  { id: "sec-concepts", label: "Concepts" },
+  { id: "sec-mistakes", label: "Mistakes" },
+  { id: "sec-flags", label: "Red flags" },
+  { id: "sec-ask", label: "Ask" },
+];
+
+const RAIL_DEEP = [
+  { id: "sec-why", label: "Why" },
+  { id: "sec-mental", label: "Mental model" },
+  { id: "sec-mech", label: "How it works" },
+  { id: "sec-concepts", label: "Concepts" },
+  { id: "sec-tradeoffs", label: "Tradeoffs" },
+  { id: "sec-mistakes", label: "Mistakes" },
+  { id: "sec-flags", label: "Red flags" },
+  { id: "sec-ask", label: "Ask" },
+  { id: "sec-artic", label: "Articulation" },
+];
+
 export default function ModuleView({ id }: { id: string }) {
   const { course, courseSlug, S, tab, go, goTab, startQuiz, markRead } = useCourseStore((s) => ({
     course: s.course,
@@ -173,17 +194,7 @@ export default function ModuleView({ id }: { id: string }) {
     </button>
   );
 
-  const railSections = [
-    { id: "sec-why", label: "Why" },
-    { id: "sec-mental", label: "Mental model" },
-    ...(dp ? [{ id: "sec-mech", label: "How it works" }] : []),
-    { id: "sec-concepts", label: "Concepts" },
-    ...(dp ? [{ id: "sec-tradeoffs", label: "Tradeoffs" }] : []),
-    { id: "sec-mistakes", label: "Mistakes" },
-    { id: "sec-flags", label: "Red flags" },
-    { id: "sec-ask", label: "Ask" },
-    ...(dp ? [{ id: "sec-artic", label: "Articulation" }] : []),
-  ];
+  const railSections = dp ? RAIL_DEEP : RAIL_BASE;
 
   const learn = (
     <>
@@ -405,7 +416,11 @@ export default function ModuleView({ id }: { id: string }) {
     return (
       <div className="mlw">
         {inner}
-        <SectionRail sections={railSections} />
+        {/* key remounts the rail per module: its scroll-spy effect keys on the
+            sections array, which is now a stable constant shared across
+            same-depth modules — without the key the spy wouldn't re-run on
+            navigation and could highlight a section from the previous module */}
+        <SectionRail key={id} sections={railSections} />
       </div>
     );
   }

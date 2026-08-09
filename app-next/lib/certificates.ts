@@ -3,6 +3,7 @@
 // and the public verification page can import it.
 
 import type { CompletionSummary } from "./course";
+import { SITE_URL } from "./seo";
 
 export type CertTier = "completion" | "verified";
 
@@ -22,15 +23,8 @@ export type CertificateRecord = {
   issued_at: string;
 };
 
-export function siteUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "https://www.novacademy.ai"
-  );
-}
-
 export function certUrl(id: string): string {
-  return `${siteUrl()}/cert/${id}`;
+  return `${SITE_URL}/cert/${id}`;
 }
 
 // The credential's name, e.g. "AI Engineering Mastery Hub — Certificate of Completion".

@@ -35,6 +35,7 @@ import {
   modMastered,
   moduleUnlocked,
   rankFor,
+  todayStr,
 } from "@/lib/course";
 
 export default function Sidebar() {
@@ -55,7 +56,7 @@ export default function Sidebar() {
     location.href = "/";
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayStr(new Date());
   const mTot = course.catalog.length;
   const mDone = course.catalog.filter((m) => modMastered(S, m.id)).length;
   const due = dueCards(course, S, today).length;
@@ -156,7 +157,7 @@ export default function Sidebar() {
             </button>
             {!isCollapsed && (
               <>
-                {blockMods(course, b.id).map((m) => {
+                {bmods.map((m) => {
                   const dot = modMastered(S, m.id) ? "mastered" : S.read?.[m.id] ? "read" : "";
                   const locked = !moduleUnlocked(course, m.id);
                   return (

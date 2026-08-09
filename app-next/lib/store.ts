@@ -12,6 +12,7 @@ import {
   PASS_QUIZ,
   blockMods,
   cardState,
+  todayStr,
 } from "./course";
 
 export type QItem = { q: string; o: string[]; a: number; exp: string; sel: number | null };
@@ -22,6 +23,9 @@ export type QuizRun = {
   i: number;
   done: boolean;
 };
+
+export const runScore = (Q: QuizRun) =>
+  Math.round((100 * Q.items.filter((x) => x.sel === x.a).length) / Q.items.length);
 
 function shuffle<T>(a: T[]): T[] {
   const r = a.slice();
@@ -147,7 +151,7 @@ export function createCourseStore(init: StoreInit) {
         set({ Q: { ...Q, i: Q.i + 1 } });
         return;
       }
-      const score = Math.round((100 * Q.items.filter((x) => x.sel === x.a).length) / Q.items.length);
+      const score = runScore(Q);
       if (Q.mode === "quiz") get().recordQuiz(Q.id, score);
       else get().recordExam(Q.id, score);
       set({ Q: { ...Q, done: true } });
@@ -205,7 +209,7 @@ export function createCourseStore(init: StoreInit) {
         const d = new Date(today + "T00:00:00Z");
         d.setUTCDate(d.getUTCDate() + INTERVALS[box]);
         return {
-          S: { ...s.S, cards: { ...s.S.cards, [idx]: { box, due: d.toISOString().slice(0, 10) } } },
+          S: { ...s.S, cards: { ...s.S.cards, [idx]: { box, due: todayStr(d) } } },
         };
       }),
 

@@ -43,13 +43,15 @@ export async function POST() {
   }
 
   // Gather subscriptions across the matched customers and pick the primary one.
-  const all: Stripe.Subscription[] = [];
-  for (const cid of customerIds) {
-    const subs = await stripe.subscriptions
-      .list({ customer: cid, status: "all", limit: 100 })
-      .autoPagingToArray({ limit: 100 });
-    all.push(...subs);
-  }
+  const all = (
+    await Promise.all(
+      customerIds.map((cid) =>
+        stripe.subscriptions
+          .list({ customer: cid, status: "all", limit: 100 })
+          .autoPagingToArray({ limit: 100 }),
+      ),
+    )
+  ).flat();
   const primary = pickPrimarySubscription(all);
   if (!primary) {
     return NextResponse.json({ ok: true, synced: false });

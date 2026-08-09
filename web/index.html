@@ -1464,7 +1464,11 @@ render();
   }
 
   // Wrap the engine's renderers to enforce the paywall for non-entitled users.
+  var gatesInstalled = false; // wrapper installers must run once — re-auth
+  var syncInstalled = false;  // events would otherwise stack the wrappers
   function installGates() {
+    if (gatesInstalled) return;
+    gatesInstalled = true;
     var __rm = renderMod;
     renderMod = function (id) {
       if (!ENTITLED && isLocked(id)) {
@@ -1477,35 +1481,36 @@ render();
       }
       return __rm(id);
     };
-    if (!ENTITLED) {
-      var __rcards = renderCards;
-      renderCards = function () {
-        if (!CARDS.length) return "<h2>Flashcards</h2>" + paywallCard("Flashcards",
-          "Spaced-repetition flashcards unlock with full access.");
-        return __rcards();
-      };
-      var __rscen = renderScen;
-      renderScen = function () {
-        if (!SCENARIOS.length) return "<h2>Scenario Challenges</h2>" + paywallCard("Scenarios",
-          "Production-judgment scenarios unlock with full access.");
-        return __rscen();
-      };
-      // upsell button in the sidebar
-      var __rs = renderSide;
-      renderSide = function () {
-        __rs();
-        var side = document.getElementById("side");
-        var b = document.createElement("button");
-        b.className = "navbtn"; b.style.cssText = "color:var(--accent2);font-weight:600";
-        b.textContent = "🔓 Unlock full access";
-        b.onclick = buy;
-        side.insertBefore(b, side.firstChild);
-      };
-    }
+    var __rcards = renderCards;
+    renderCards = function () {
+      if (!ENTITLED && !CARDS.length) return "<h2>Flashcards</h2>" + paywallCard("Flashcards",
+        "Spaced-repetition flashcards unlock with full access.");
+      return __rcards();
+    };
+    var __rscen = renderScen;
+    renderScen = function () {
+      if (!ENTITLED && !SCENARIOS.length) return "<h2>Scenario Challenges</h2>" + paywallCard("Scenarios",
+        "Production-judgment scenarios unlock with full access.");
+      return __rscen();
+    };
+    // upsell button in the sidebar (ENTITLED checked at call time)
+    var __rs = renderSide;
+    renderSide = function () {
+      __rs();
+      if (ENTITLED) return;
+      var side = document.getElementById("side");
+      var b = document.createElement("button");
+      b.className = "navbtn"; b.style.cssText = "color:var(--accent2);font-weight:600";
+      b.textContent = "🔓 Unlock full access";
+      b.onclick = buy;
+      side.insertBefore(b, side.firstChild);
+    };
   }
 
   // ---------- progress sync (replaces localStorage) ----------
   function installProgressSync() {
+    if (syncInstalled) return;
+    syncInstalled = true;
     var saveTimer = null;
     var __save = save;
     save = function () {
