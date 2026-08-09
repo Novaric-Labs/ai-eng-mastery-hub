@@ -1,0 +1,388 @@
+[
+  {
+    "id": "gq-001",
+    "query": "What does Meridian charge per card transaction on the Growth plan?",
+    "relevant_doc_ids": ["pricing-core-2026.md"],
+    "expected_answer_keypoints": [
+      "2.6% + USD 0.25 per successful card charge",
+      "Growth also costs USD 99 per month",
+      "Only successful charges are billed; declines are free"
+    ],
+    "hard": false,
+    "notes": "Warm-up single-doc lookup. Any pipeline that misses this has an ingestion bug, not a retrieval-strategy problem."
+  },
+  {
+    "id": "gq-002",
+    "query": "How long do we have to submit evidence after a chargeback is filed?",
+    "relevant_doc_ids": ["policy-disputes-chargebacks.md"],
+    "expected_answer_keypoints": [
+      "5 calendar days from notification",
+      "Missing the deadline auto-accepts the dispute and counts as a loss",
+      "Meridian forwards evidence to the card network within 7 calendar days"
+    ],
+    "hard": false,
+    "notes": "Single-doc. The 7-day network submission window is a plausible wrong answer inside the same document - watch for answers that quote 7 days as the merchant deadline."
+  },
+  {
+    "id": "gq-003",
+    "query": "Our entity is registered in Amsterdam. How fast do payouts land, and can we get paid out instantly?",
+    "relevant_doc_ids": ["payouts-standard-eu-sepa.md", "payouts-instant-us.md"],
+    "expected_answer_keypoints": [
+      "EU payouts are T+1 business day with a 15:00 Europe/Amsterdam cutoff",
+      "Sent as SEPA Credit Transfer; SEPA Instant is not used",
+      "Instant Payouts are US-only and are not available to EU-domiciled accounts",
+      "Business days follow the TARGET2 calendar"
+    ],
+    "hard": true,
+    "notes": "Near-miss trap. payouts-instant-us.md scores highly on 'instantly' but the correct answer is that it does not apply. Retrieving it is required precisely so the model can say no."
+  },
+  {
+    "id": "gq-004",
+    "query": "We are on Scale and got a dispute notification this morning. What is the absolute latest we can file evidence, and what does it cost us if we lose?",
+    "relevant_doc_ids": ["policy-disputes-chargebacks.md", "support-tiers-sla.md", "pricing-core-2026.md"],
+    "expected_answer_keypoints": [
+      "Base deadline is 5 calendar days from notification",
+      "Scale and Enterprise may request one 3-calendar-day extension, so 8 calendar days maximum",
+      "The extension must be requested through support before the original deadline; no retroactive extensions",
+      "Losing costs the disputed amount plus the USD 15.00 dispute fee, both already withdrawn at dispute creation"
+    ],
+    "hard": true,
+    "notes": "Three-doc synthesis: the base window (disputes policy), the tier entitlement (support tiers), and the fee (pricing). Partial credit answers usually miss that the extension is tier-gated."
+  },
+  {
+    "id": "gq-005",
+    "query": "We refunded a card charge three days after taking it. Do we get the processing fees back?",
+    "relevant_doc_ids": ["policy-refunds-cards.md", "pricing-core-2026.md"],
+    "expected_answer_keypoints": [
+      "No percentage fee is returned: the percentage comes back only on refunds issued within 48 hours of the charge",
+      "The fixed per-transaction fee is never returned, regardless of timing",
+      "Three days is outside the 48-hour window, so Meridian keeps both fee components"
+    ],
+    "hard": true,
+    "notes": "Requires applying a conditional rule to a specific timeline rather than quoting it. A correct-sounding but wrong answer is 'fees are always refunded pro rata'."
+  },
+  {
+    "id": "gq-006",
+    "query": "What is the longest we can wait before refunding a customer?",
+    "relevant_doc_ids": ["policy-refunds-cards.md", "policy-refunds-bank-debit.md"],
+    "expected_answer_keypoints": [
+      "It depends on the payment method - the question is under-specified",
+      "Card charges: 120 calendar days",
+      "Bank debit (ACH debit): 60 calendar days, and full refunds only - no partials",
+      "Bank debit cannot be refunded at all until the 3-business-day settlement window closes"
+    ],
+    "hard": true,
+    "notes": "Ambiguous query with two near-identical policy docs. A single-doc answer is wrong even if it quotes its source correctly. Good probe for whether the agent surfaces the ambiguity instead of guessing."
+  },
+  {
+    "id": "gq-007",
+    "query": "How many times does Meridian retry a webhook before giving up, and over what period?",
+    "relevant_doc_ids": ["product-webhooks-v2.md"],
+    "expected_answer_keypoints": [
+      "Up to 21 attempts over 72 hours on v2",
+      "Exponential backoff: 10s, 30s, 1m, 5m, 15m, 30m, then hourly",
+      "The endpoint is disabled automatically after 72 hours of continuous failure",
+      "Endpoints must return 2xx within 10 seconds or the delivery counts as failed"
+    ],
+    "hard": true,
+    "notes": "Distractor test. legacy-webhooks-v1-deprecated.md gives 8 attempts over 24 hours and is lexically very close. Retrieving v1 is not penalised; answering with v1 numbers is."
+  },
+  {
+    "id": "gq-008",
+    "query": "Our webhook signature checks started failing right after we migrated. What hash and header should we be using?",
+    "relevant_doc_ids": ["product-webhooks-v2.md", "legacy-webhooks-v1-deprecated.md"],
+    "expected_answer_keypoints": [
+      "v2 uses the Meridian-Signature header with HMAC-SHA256 over the string '{t}.{raw_body}'",
+      "v1 used X-Meridian-Sig-V1 with HMAC-SHA1 - leaving SHA-1 verification in place is the classic post-migration failure",
+      "Clock tolerance tightened from 15 minutes (v1) to 5 minutes (v2)",
+      "Verify the raw request body; re-serialising the JSON invalidates the signature",
+      "v1 sunsets 2026-12-31"
+    ],
+    "hard": true,
+    "notes": "Both the current and the deprecated doc are genuinely required: the answer is a diff between them. runbook-webhook-delivery-failures.md is an acceptable bonus retrieval."
+  },
+  {
+    "id": "gq-009",
+    "query": "At what ownership percentage do we have to disclose a beneficial owner?",
+    "relevant_doc_ids": ["policy-kyc-kyb-onboarding.md"],
+    "expected_answer_keypoints": [
+      "25% or more ownership",
+      "Plus one control person (officer or director with signing authority) regardless of ownership",
+      "Name, date of birth, residential address, government ID, and tax identifier are collected for each"
+    ],
+    "hard": false,
+    "notes": "Single-doc lookup with a crisp numeric answer."
+  },
+  {
+    "id": "gq-010",
+    "query": "Can we start taking payments before our account finishes verification, and what happens to the money in the meantime?",
+    "relevant_doc_ids": ["policy-kyc-kyb-onboarding.md", "faq-merchant-onboarding.md"],
+    "expected_answer_keypoints": [
+      "Yes - the account runs as charges_enabled / payouts_disabled",
+      "A USD 5,000 cumulative processing cap applies until verification clears",
+      "No payouts are released while pending; funds sit on the Meridian balance",
+      "Once verified, held funds pay out on the normal schedule, still subject to the 7-calendar-day first payout hold"
+    ],
+    "hard": true,
+    "notes": "Two docs state the cap; the first-payout-hold interaction is the part most answers drop. payouts-standard-us-ach.md or payouts-standard-eu-sepa.md are acceptable alternative sources for the hold and should not be scored as noise."
+  },
+  {
+    "id": "gq-011",
+    "query": "How long does Meridian keep API request logs?",
+    "relevant_doc_ids": ["policy-data-retention-deletion.md"],
+    "expected_answer_keypoints": [
+      "13 months for API request logs",
+      "Webhook delivery logs and payloads are only kept 90 days",
+      "Transaction and financial records are kept 7 years after account closure"
+    ],
+    "hard": false,
+    "notes": "Single-doc table lookup. The three retention numbers sit in adjacent rows, so chunking that splits the table mid-way shows up here first."
+  },
+  {
+    "id": "gq-012",
+    "query": "We are moving to another processor and closing our account. How long do our records stay on file, and can we take the cards we saved in Vault with us?",
+    "relevant_doc_ids": ["policy-data-retention-deletion.md", "product-vault-tokenization.md"],
+    "expected_answer_keypoints": [
+      "Transaction, financial, and KYC records are retained 7 years after account closure",
+      "Vault tokens are scoped to one Meridian merchant account and are not portable as-is",
+      "Migration goes through a card data export request; Meridian sends PANs only to a PCI-attested destination processor, never to the merchant",
+      "The export takes 7 business days"
+    ],
+    "hard": true,
+    "notes": "Two-doc synthesis across a policy and a product doc that share almost no vocabulary - a pure dense-retrieval pipeline often gets one and not the other."
+  },
+  {
+    "id": "gq-013",
+    "query": "Which PCI SAQ applies to us if we use hosted Checkout?",
+    "relevant_doc_ids": ["compliance-pci-dss-scope.md"],
+    "expected_answer_keypoints": [
+      "SAQ A for hosted Checkout (redirect or iframe) and for Vault.js hosted fields",
+      "SAQ D applies only if raw PANs are posted to merchant servers via the Core API",
+      "Meridian itself is a PCI DSS v4.0.1 Level 1 service provider; the AOC is in the Trust Center"
+    ],
+    "hard": false,
+    "notes": "Single-doc lookup. product-checkout-overview.md repeats the SAQ A claim, so a second retrieval here is corroboration, not error."
+  },
+  {
+    "id": "gq-014",
+    "query": "We run a Scale-tier marketplace. What is the total Meridian cost on a $100 charge to a US seller that we then pay out to them?",
+    "relevant_doc_ids": ["pricing-connect-platform-2026.md", "pricing-core-2026.md"],
+    "expected_answer_keypoints": [
+      "Core processing at the platform's Scale rate: 2.3% + USD 0.20 = USD 2.50",
+      "Connect platform routing fee 0.4% = USD 0.40",
+      "US connected-account payout fee = USD 0.25",
+      "Per-transaction total USD 3.15, plus USD 2.00 that month for that seller's active-account fee",
+      "Core rates are billed at the platform's tier, not the seller's"
+    ],
+    "hard": true,
+    "notes": "Arithmetic over two pricing sheets. Common failure: applying the seller's tier, or forgetting that Connect fees are additive to Core processing."
+  },
+  {
+    "id": "gq-015",
+    "query": "Can our marketplace sellers get instant payouts?",
+    "relevant_doc_ids": ["product-connect-marketplaces.md", "payouts-instant-us.md"],
+    "expected_answer_keypoints": [
+      "No - Instant Payouts are not available to connected accounts in any country or tier",
+      "Connected accounts use standard rails: T+2 ACH in the US, T+1 SEPA in the EU",
+      "The recommended workaround is a daily automatic payout schedule"
+    ],
+    "hard": true,
+    "notes": "Near-miss trap with a negative answer. Both docs state the exclusion; retrieving only payouts-instant-us.md tends to produce a wrong yes-with-conditions answer built from the tier eligibility list."
+  },
+  {
+    "id": "gq-016",
+    "query": "What is the rate limit on the Core API?",
+    "relevant_doc_ids": ["product-core-api-v2.md"],
+    "expected_answer_keypoints": [
+      "100 requests per second sustained per account",
+      "Burst allowance of 200",
+      "429 rate_limit_exceeded with a Retry-After header in seconds",
+      "Back off with exponential backoff and jitter; never retry faster than Retry-After"
+    ],
+    "hard": false,
+    "notes": "Single-doc lookup."
+  },
+  {
+    "id": "gq-017",
+    "query": "Our client timed out mid-charge and we are not sure whether the customer was billed. How do we make retries safe, and how should our webhook consumer behave?",
+    "relevant_doc_ids": ["product-core-api-v2.md", "product-webhooks-v2.md"],
+    "expected_answer_keypoints": [
+      "Send an Idempotency-Key (UUIDv4) on every POST; Meridian replays the original response for 24 hours",
+      "Reusing a key with a different body returns 400 idempotency_key_reuse",
+      "Webhook delivery is at-least-once and unordered, so the consumer must deduplicate on the event id",
+      "Do not assume charge.succeeded arrives before checkout.session.completed"
+    ],
+    "hard": true,
+    "notes": "Two-doc synthesis of the two halves of exactly-once behaviour. Answers that cover idempotency but not consumer-side dedupe are incomplete."
+  },
+  {
+    "id": "gq-018",
+    "query": "A US merchant says their payout never arrived. What do we check, in what order?",
+    "relevant_doc_ids": ["runbook-delayed-payout.md", "payouts-standard-us-ach.md"],
+    "expected_answer_keypoints": [
+      "Confirm the payout object state first - in_transit before its expected arrival date is normal",
+      "Check the 7-calendar-day first payout hold, which support cannot waive",
+      "Check for charges_enabled / payouts_disabled, meaning verification is incomplete",
+      "Check for a failed payout with a bank return code; Meridian retries once the next business day, then pauses payouts",
+      "Check the 17:00 America/New_York cutoff and the Federal Reserve holiday calendar",
+      "Escalate to Treasury if in_transit for more than 2 business days past expected arrival"
+    ],
+    "hard": true,
+    "notes": "Procedural multi-hop. Ordering matters in the answer, not just fact coverage - a good probe for whether the model preserves runbook sequence."
+  },
+  {
+    "id": "gq-019",
+    "query": "A merchant's payouts are paused for a risk review and they are demanding to know why. What are we allowed to tell them?",
+    "relevant_doc_ids": ["policy-aml-transaction-monitoring.md", "runbook-delayed-payout.md"],
+    "expected_answer_keypoints": [
+      "Tipping-off is prohibited: do not confirm an investigation, a SAR, or which transaction triggered an alert",
+      "Approved wording only - the account is under review, no further detail is available, Risk Ops will make contact if needed",
+      "Do not speculate about timelines",
+      "In review status, charges may continue but payouts are paused and the balance is held",
+      "Escalate to Risk Ops; reviews are never resolved by front-line support"
+    ],
+    "hard": true,
+    "notes": "Safety-shaped question: the correct answer is mostly a refusal to disclose. Watch for a helpful-sounding answer that invents an explanation for the merchant."
+  },
+  {
+    "id": "gq-020",
+    "query": "What triggers Meridian's card-testing detection?",
+    "relevant_doc_ids": ["policy-aml-transaction-monitoring.md"],
+    "expected_answer_keypoints": [
+      "More than 50 declines in 10 minutes from a single IP address or a single card BIN",
+      "Alerts go to Risk Ops with a 1-business-day triage SLA",
+      "Related velocity rules: over USD 50,000 in 24 hours on Starter, or over 3x the trailing 30-day daily average on any tier"
+    ],
+    "hard": false,
+    "notes": "Single-doc lookup inside a bulleted rule list."
+  },
+  {
+    "id": "gq-021",
+    "query": "Is there anything special we need to handle for European buyers at checkout?",
+    "relevant_doc_ids": ["product-checkout-overview.md", "policy-data-retention-deletion.md"],
+    "expected_answer_keypoints": [
+      "3-D Secure is applied automatically for EEA and UK issued cards to satisfy PSD2 Strong Customer Authentication",
+      "Meridian attempts a Transaction Risk Analysis exemption for eligible transactions up to EUR 500",
+      "US-issued cards are not subject to SCA and are not challenged by default",
+      "EU legal entities are processed and stored in the EU region; a DPA with Standard Contractual Clauses is available"
+    ],
+    "hard": true,
+    "notes": "Deliberately vague question. The SCA half is easy to retrieve; the data-residency half requires the model to interpret 'anything special' broadly. Retrieving only the checkout doc is a partial pass."
+  },
+  {
+    "id": "gq-022",
+    "query": "What does it cost to get money into our bank account the same day?",
+    "relevant_doc_ids": ["payouts-instant-us.md", "pricing-core-2026.md"],
+    "expected_answer_keypoints": [
+      "Instant Payouts cost 1.25% of the amount, minimum USD 0.50, deducted from the payout",
+      "US only, Growth tier and above; Starter and connected accounts are excluded",
+      "Destination must be an eligible US debit card - a bank account alone cannot receive one",
+      "Limits: USD 25,000 per payout and USD 100,000 per rolling 24 hours",
+      "Standard payouts remain free on every tier"
+    ],
+    "hard": true,
+    "notes": "The phrase 'into our bank account' is the trap - instant payouts require a debit card, so a literal reading of the question has no product answer. Strong answers flag that."
+  },
+  {
+    "id": "gq-023",
+    "query": "A customer opened a chargeback but now says they will drop it if we just refund them. Can we do that?",
+    "relevant_doc_ids": ["policy-refunds-cards.md", "policy-disputes-chargebacks.md"],
+    "expected_answer_keypoints": [
+      "No - a charge with an open dispute cannot be refunded",
+      "The only paths are to submit evidence or accept the dispute",
+      "Funds and the USD 15.00 fee were already withdrawn when the dispute opened",
+      "Paying the customer outside Meridian risks paying them twice, since the dispute can still resolve in their favour"
+    ],
+    "hard": true,
+    "notes": "Both docs assert the rule from opposite sides. Tests whether the agent gives a firm negative answer with the reason rather than hedging."
+  },
+  {
+    "id": "gq-024",
+    "query": "One of our subscribers got issued a replacement card. Will the card we saved still work?",
+    "relevant_doc_ids": ["product-vault-tokenization.md"],
+    "expected_answer_keypoints": [
+      "Usually yes - if the stored card is backed by a network token, the network updates the credentials automatically with no action needed",
+      "Cards without network token support fall back to the card updater, which refreshes expiry dates nightly",
+      "A vault token is the merchant-facing identifier; the network token sits underneath it",
+      "Merchants on network tokens see roughly 1.4 percentage points higher authorisation rates"
+    ],
+    "hard": false,
+    "notes": "Single-doc, but the answer requires distinguishing two token types defined in the same document."
+  },
+  {
+    "id": "gq-025",
+    "query": "Yesterday's settlement total does not match what our own ledger says we sold. Where do we start?",
+    "relevant_doc_ids": ["runbook-settlement-mismatch.md", "pricing-fx-crossborder.md"],
+    "expected_answer_keypoints": [
+      "Check the cutoff boundary first - late-evening charges fall into the next settlement batch",
+      "FX converts at the settlement date's rate, not the authorisation date's; refunds convert at the refund date's rate",
+      "Look for the fx_adjustment line in the settlement file",
+      "Money that leaves mid-cycle: disputes plus the USD 15.00 fee at dispute creation, refunds after cutoff, Instant Payout fees deducted from the payout, Connect fees invoiced monthly rather than netted",
+      "Refunded charges retain the fixed fee, and the percentage fee unless refunded within 48 hours"
+    ],
+    "hard": true,
+    "notes": "Reconciliation multi-hop. The FX timing rule is the single most load-bearing fact and lives in the pricing sheet, not the runbook."
+  },
+  {
+    "id": "gq-026",
+    "query": "A customer says the ACH debit we took this morning was never authorised and wants their money back today. What are our options?",
+    "relevant_doc_ids": ["policy-refunds-bank-debit.md", "policy-disputes-chargebacks.md"],
+    "expected_answer_keypoints": [
+      "Cannot refund yet - an ACH debit is not final for 3 business days and refunds before settlement return charge_not_settled",
+      "Cancel the charge instead of refunding it if the money should not be taken",
+      "An unauthorised claim is an R10 return: up to 60 calendar days for a consumer, 2 business days for a corporate account",
+      "R10 returns count toward the dispute rate and follow the disputes policy, including the 5-calendar-day evidence deadline",
+      "Bank debit supports full refunds only - no partials - and returns cost USD 2.50"
+    ],
+    "hard": true,
+    "notes": "Cross-policy synthesis where the card refund doc is a strong distractor with an entirely wrong answer (120 days, partials allowed). pricing-core-2026.md is an acceptable supporting retrieval for the USD 2.50 return fee."
+  },
+  {
+    "id": "gq-027",
+    "query": "Does Meridian support settling our payouts in USDC or other stablecoins?",
+    "relevant_doc_ids": [],
+    "expected_answer_keypoints": [
+      "ABSTAIN: state that the documentation provided does not cover crypto or stablecoin settlement",
+      "Do not infer support from the multi-currency or FX documentation",
+      "Correct behaviour is to name the gap and point the user at a human, not to answer from general knowledge about payment processors"
+    ],
+    "hard": true,
+    "notes": "Unanswerable. pricing-fx-crossborder.md lists 8 settlement currencies and is a strong lexical match for 'settling'. An answer that says 'no, only these 8 fiat currencies' is a reasonable near-pass, but asserting a crypto roadmap is a hard fail."
+  },
+  {
+    "id": "gq-028",
+    "query": "Who audits Meridian's SOC 2 report and when was the most recent one issued?",
+    "relevant_doc_ids": [],
+    "expected_answer_keypoints": [
+      "ABSTAIN: no SOC 2 auditor or report date appears anywhere in the corpus",
+      "Do not substitute the PCI DSS Level 1 assessment or the Trust Center AOC as if it answered the question",
+      "Naming any audit firm is a fabrication"
+    ],
+    "hard": true,
+    "notes": "Unanswerable. compliance-pci-dss-scope.md mentions annual assessment, an AOC, and a Trust Center, which is exactly the kind of adjacent evidence that induces a confident wrong answer."
+  },
+  {
+    "id": "gq-029",
+    "query": "What uptime percentage does Meridian guarantee and what service credits apply if they miss it?",
+    "relevant_doc_ids": [],
+    "expected_answer_keypoints": [
+      "ABSTAIN: uptime commitments and service credits are not in the provided documentation",
+      "Support response targets are explicitly not an availability commitment and must not be quoted as one",
+      "Correct pointer: those terms live in the master services agreement, which is negotiated per account and not published here"
+    ],
+    "hard": true,
+    "notes": "The strongest trap in the set. support-tiers-sla.md is full of the words SLA, target, hours, and Sev-1, so it tends to rank at or near the top. The document itself contains the sentence that makes the question unanswerable, which only helps if the answer step actually reads it."
+  },
+  {
+    "id": "gq-030",
+    "query": "How do we onboard Indian sellers to our marketplace using UPI?",
+    "relevant_doc_ids": [],
+    "expected_answer_keypoints": [
+      "ABSTAIN: the corpus covers connected accounts in the US and 12 SEPA countries only",
+      "No India, UPI, or local payment method coverage exists in the documentation",
+      "Do not generalise the SEPA or US onboarding flow to an unsupported market"
+    ],
+    "hard": true,
+    "notes": "Unanswerable. product-connect-marketplaces.md answers the onboarding half of the question convincingly, which makes partial-answer fabrication likely."
+  }
+]

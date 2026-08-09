@@ -1,0 +1,17 @@
+# Secrets
+.env
+
+# Built index - regenerate with `python starter/pipeline.py ingest`
+.data/
+
+# Eval output
+eval-results.json
+reports/
+.promptfoo/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/

@@ -1,0 +1,107 @@
+# Capstone 1 eval harness.
+#
+# The golden set in data/golden-queries.json is the source of truth. This file wires it
+# to the pipeline and to the graders; it does not restate it. Adding a query means
+# editing the JSON, nothing here.
+#
+# Thresholds shown below are the PER-QUERY floors. The aggregate release gate lives in
+# starter/gate_config.py and is enforced by starter/check_gate.py after the run - see the
+# README's "Eval gate" section. If you change a number, change it in gate_config.py and
+# let this file follow, not the other way round.
+#
+# Run:
+#   npx promptfoo eval -c promptfooconfig.yaml -o eval-results.json
+#   python starter/check_gate.py eval-results.json
+#
+# Pin the promptfoo version you actually used in your submission README
+# (npx promptfoo@x.y.z ...) so a reviewer can reproduce your numbers exactly.
+
+description: "Agentic RAG over the Meridian Pay corpus - 30 golden queries, 26 answerable, 4 must-abstain"
+
+prompts:
+  - "{{query}}"
+
+providers:
+  - id: file://starter/promptfoo_provider.py
+    label: agentic-rag
+
+# Generated from data/golden-queries.json. Per-test assertions (must-answer vs
+# must-abstain) are attached there; the assertions every query shares live below.
+tests: file://starter/golden_tests.py:load_golden_tests
+
+defaultTest:
+  options:
+    # EXAMPLE ONLY - replace with the grading provider you actually use, and verify the
+    # current model id in your provider's documentation before spending anything. The
+    # judge does not need to be your most expensive model; a fast tier is usually a
+    # better judge per dollar, and you should test that claim rather than assume it.
+    # Requires the matching API key in your environment (see .env.example).
+    provider: anthropic:messages:claude-opus-5
+
+  assert:
+    # --- deterministic, free, no model involved -------------------------------------
+    - type: python
+      value: file://starter/asserts.py:assert_recall_at_5
+      metric: recall_at_5
+
+    - type: python
+      value: file://starter/asserts.py:assert_citations_resolve
+      metric: citation_validity
+
+    # --- judged ----------------------------------------------------------------------
+    - type: llm-rubric
+      metric: faithfulness
+      threshold: 0.9
+      value: |
+        The submission is a JSON object from a retrieval-augmented assistant with these
+        fields:
+          "answer"    - the text shown to the user
+          "context"   - the ONLY source material the assistant was given
+          "abstained" - true if it declined to answer
+
+        The user asked: {{query}}
+
+        Score how faithful "answer" is to "context". Judge ONLY against "context". You may
+        know things about payment processing; ignore all of it. A claim that is true in the
+        real world but absent from "context" is unfaithful here, because the assistant had
+        no way to know it.
+
+        Be strict about specifics. Numbers, deadlines, percentages, tier names, and country
+        restrictions must match "context" exactly. "5 business days" when the context says
+        "5 calendar days" is wrong. A rule stated without its stated exception is wrong.
+
+        Scoring:
+          1.0  every factual claim in "answer" is directly supported by "context"
+          0.7  supported overall, but one claim is vaguer or broader than the source
+          0.3  one unsupported claim, or a specific value that does not match the source
+          0.0  a claim that contradicts "context", or a confident answer built from
+               material that is not in "context" at all
+
+        If "abstained" is true and "answer" only states that it cannot answer from the
+        available documentation, score 1.0 - declining is a faithful response.
+
+        Return the score and one sentence naming the specific claim that cost points.
+
+    - type: llm-rubric
+      metric: keypoint_coverage
+      # Effectively non-blocking: only a total miss (score 0) turns this query red.
+      # Answer completeness is softer and more subjective than groundedness, so it is
+      # reported and trended rather than gated. See gate_config.KEYPOINT_COVERAGE_TARGET.
+      threshold: 0.01
+      value: |
+        The submission is a JSON object with an "answer" field, produced in response to:
+        {{query}}
+
+        A correct answer should cover these points:
+        {{keypoints}}
+
+        Score the fraction of those points that "answer" substantively covers. Wording may
+        differ freely - judge meaning, not phrasing. A point stated with the wrong value
+        does not count as covered.
+
+        If the points begin with "ABSTAIN:", the expected behaviour is a refusal: score 1.0
+        only if the answer declines and does not smuggle in a partial answer anyway.
+
+        Return the fraction as the score, plus one sentence listing what was missed.
+
+outputPath: eval-results.json

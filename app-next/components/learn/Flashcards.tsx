@@ -76,7 +76,7 @@ export default function Flashcards() {
     return (
       <div className="page">
         <h2>Flashcards</h2>
-        <p className="tagline">Spaced-repetition flashcards across all 21 modules.</p>
+        <p className="tagline">Spaced-repetition flashcards across all 23 modules.</p>
         <Paywall heading="Flashcards are part of the full course" />
       </div>
     );

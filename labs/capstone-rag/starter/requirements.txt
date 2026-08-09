@@ -1,0 +1,34 @@
+# Capstone 1 - Python dependencies.
+#
+# The shipped skeleton deliberately runs on the standard library alone: sqlite3 for the
+# store, a hashing embedder for vectors, no SDK anywhere. That is why `make ingest` works
+# on a laptop with no API key and no network.
+#
+# Everything below is a choice YOU make. Uncomment what your design actually uses, pin the
+# versions you tested against, and delete the rest. A requirements file listing four
+# vector databases and three model SDKs tells a reviewer you did not decide anything.
+#
+#   pip install -r starter/requirements.txt
+
+# --- used by the deliverable, not optional -------------------------------------------
+pytest>=8.0            # the edge-case tests are a graded deliverable
+python-dotenv>=1.0     # load .env in your own scripts (promptfoo reads .env itself)
+
+# --- local embeddings + reranking (no API cost, CPU is fine at this corpus size) ------
+# sentence-transformers>=3.0   # bi-encoder embeddings AND CrossEncoder reranking
+# torch                        # pulled in by sentence-transformers; large download
+
+# --- pgvector path (the production target; see README "Retrieval backend") ------------
+# psycopg[binary]>=3.1
+# pgvector>=0.3
+
+# --- sqlite-vec path (drop-in ANN index for the local store) --------------------------
+# sqlite-vec>=0.1
+
+# --- provider SDKs: pick the one you wire into call_llm(), not all of them ------------
+# anthropic>=0.40
+# openai>=1.40
+
+# --- if you serve the API deliverable from this repo ----------------------------------
+# fastapi>=0.115
+# uvicorn>=0.30
