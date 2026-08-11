@@ -1,0 +1,112 @@
+---
+title: "Structured Outputs: How to Get LLMs to Return Reliable JSON"
+description: "LLMs are natural language machines — but most apps need data, not prose. Here's how structured outputs work and how to use them without the fragile string-parsing hacks."
+date: "2026-08-11"
+author: "Novacademy"
+tags: ["LLM", "Prompt Engineering", "Production"]
+draft: false
+---
+
+The model gives you a paragraph. Your app needs a JSON object with three specific keys. You write a regex, it breaks on the first response that uses single quotes, you write a better regex, and two weeks later someone asks the model to "explain each field" and the whole thing falls apart.
+
+This is the structured-output trap, and almost every team walks into it. Here's how to get out.
+
+## Why plain text breaks pipelines
+
+LLMs generate text token by token. Nothing in the model naturally stops it from including an explanation before the JSON, a trailing comment, or a slightly different key name than the one your code expects. Even a model that follows instructions reliably will fail eventually — because "reliably" isn't "always," and parsing fragile output at volume means failures pile up fast.
+
+The core problem: you need a **contract** between the model and your code, and natural-language instructions aren't a contract.
+
+## The three tools for the job
+
+### 1. JSON mode
+
+Most major LLM APIs offer a "JSON mode" or "response format" option. When enabled, the model is constrained to only output valid JSON — it cannot produce anything that doesn't parse.
+
+```python
+response = client.chat.completions.create(
+    model="claude-sonnet-5",
+    messages=[{"role": "user", "content": "Extract name and email from: 'Alice at alice@example.com'"}],
+    response_format={"type": "json_object"},
+)
+data = json.loads(response.choices[0].message.content)
+```
+
+This guarantees parseable output, but it doesn't guarantee the *shape*. You might get `{"name": "Alice", "email_address": "..."}` when you wanted `{"name": "...", "email": "..."}`. JSON mode is a floor, not a roof.
+
+### 2. Schema-constrained generation
+
+Some APIs let you pass a JSON Schema, and the model is forced — at the token level — to produce output that matches it. This is a much stronger guarantee: you define the exact keys, types, and required fields, and the model cannot deviate.
+
+This is worth preferring over JSON mode wherever your API supports it, especially for production pipelines where downstream code will break on unexpected shapes.
+
+### 3. Prompt-only + validation
+
+When neither option is available, the next-best approach is prompt-level instruction combined with validation in your code:
+
+1. Tell the model to return JSON with the exact schema you need (and nothing else — no markdown fences, no explanation).
+2. Parse the output.
+3. Validate it against your schema (Pydantic, Zod, or a JSON Schema validator).
+4. If validation fails, re-prompt with the failed response and the error message.
+
+This is less reliable than native schema support but more reliable than pure regex parsing.
+
+> Rule of thumb: **use schema constraints when available, validation-plus-retry when not.** Never regex-parse LLM output in production.
+
+## Writing prompts that help
+
+Even with JSON mode enabled, the prompt still matters. A few things that consistently help:
+
+- **Name the schema explicitly.** "Return a JSON object with exactly two keys: `name` (string) and `confidence` (number from 0 to 1)." Don't just say "return JSON."
+- **Give an example.** One concrete example output in the prompt does more than a paragraph of instructions.
+- **Forbid prose.** "Do not include any explanation, markdown, or code fences — just the raw JSON object." Models will add explanations if you don't rule it out.
+- **Keep schemas flat when possible.** Deeply nested structures with many optional fields are harder for models to get right consistently. Flatten where you can.
+
+## A practical schema for extraction
+
+Here's a pattern that works well for information-extraction tasks:
+
+```python
+SCHEMA = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "email": {"type": "string"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+    },
+    "required": ["name", "email", "confidence"],
+    "additionalProperties": False
+}
+```
+
+`additionalProperties: false` is underused. It prevents the model from adding keys you didn't ask for — which matters when you're writing `data["name"]` and the model decides `data["full_name"]` is more descriptive.
+
+## When structured output is overkill
+
+Not every LLM call needs a schema. If you're:
+
+- Generating a draft for a human to read
+- Summarizing text for display
+- Answering a conversational question
+
+...you don't need structured output. The overhead of schema design, validation logic, and re-try handling is real. Apply it where your code needs to *consume* the output programmatically, not where a human is reading it.
+
+| Use case | Structured output? |
+| --- | --- |
+| Extract fields from a document | Yes |
+| Classify text into categories | Yes (enum schema) |
+| Generate a summary for a user | No |
+| Drive UI state from model output | Yes |
+| Answer a support question | No |
+
+## What to do when it still fails
+
+Schema constraints don't guarantee semantically correct output — they guarantee structurally valid output. If the model returns `{"confidence": 0.99}` for something it hallucinated, the schema won't catch that.
+
+For high-stakes pipelines, pair structured output with:
+
+- A **confidence field** (have the model self-report uncertainty — it's not always right, but it's a signal)
+- A **validation step** that checks whether the values make sense (email format, non-empty strings, numeric ranges)
+- **Evals** that test extraction accuracy on a labeled dataset so you know when the pipeline degrades
+
+That last one — evals — is the move that separates demos from production systems. Our [courses](/pricing) cover how to build them. And if you're new to the space, [what RAG is](/blog/what-is-rag) is a good place to start seeing how structured output fits into real pipelines.
