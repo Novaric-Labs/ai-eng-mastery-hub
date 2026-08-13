@@ -8,3 +8,4 @@ app-next/scripts/seed-payload.json
 
 # Local Claude Code settings / secrets (committed agents + memory are fine)
 .claude/settings.local.json
+content/link-report.json

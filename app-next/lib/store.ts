@@ -86,6 +86,7 @@ export type CourseState = {
   gradeCard: (idx: number, grade: number, today: string) => void;
   setScen: (id: string, grade: "nailed" | "partial" | "missed") => void;
   setScenNote: (id: string, note: string) => void;
+  toggleLabStep: (id: string, step: number) => void;
   markTour: (key: string) => void;
   setName: (name: string) => void;
   markNameAsked: () => void;
@@ -218,6 +219,13 @@ export function createCourseStore(init: StoreInit) {
 
     setScenNote: (id, note) =>
       set((s) => ({ S: { ...s.S, scennote: { ...s.S.scennote, [id]: note } } })),
+
+    toggleLabStep: (id, step) =>
+      set((s) => {
+        const mod = { ...(s.S.labs?.[id] ?? {}) };
+        mod[step] = !mod[step];
+        return { S: { ...s.S, labs: { ...(s.S.labs ?? {}), [id]: mod } } };
+      }),
 
     markTour: (key) =>
       set((s) =>

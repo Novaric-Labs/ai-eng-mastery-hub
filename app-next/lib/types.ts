@@ -8,6 +8,8 @@ export type ProgressState = {
   cards?: Record<number, { box: number; due: string }>;
   scen?: Record<string, "nailed" | "partial" | "missed">;
   scennote?: Record<string, string>;
+  /** Guided-lab step completion: module id -> step index -> done. */
+  labs?: Record<string, Record<number, boolean>>;
   visits?: string[];
   act?: string[];
   toured?: boolean; // legacy single-tour flag (superseded by `tours`)

@@ -98,6 +98,41 @@ for (const { course, json, patterns } of COURSES) {
     }
   }
 
+  // 3.5 Guided-lab starters: same gates as PATTERNS code. The starter must be
+  // a complete runnable file — a lab whose step 1 is "run this" cannot ship
+  // code that doesn't compile. Step `code` fields are fragments (diffs the
+  // learner applies), so they get the control-char scan but not the compiler.
+  for (const [id, deep] of Object.entries(d.DEEP || {})) {
+    const lab = deep?.lab;
+    if (!lab) continue;
+    const where = `${course} / ${id} (lab)`;
+    const codes = [['starter', lab.starter], ...(lab.steps || []).map((s, i) => [`step ${i + 1}`, s.code])];
+    for (const [label, code] of codes) {
+      if (typeof code !== 'string' || !code.trim()) continue;
+      const ctl = code.match(CONTROL);
+      if (ctl) {
+        fails++;
+        const cp = ctl[0].codePointAt(0).toString(16).padStart(2, '0');
+        console.log(`  ✗ ${where} ${label}: control character 0x${cp} in code`);
+      }
+    }
+    if ((lab.lang ?? 'python') === 'python' && typeof lab.starter === 'string' && lab.starter.trim()) {
+      if (!python) {
+        fails++;
+        console.log(`  ✗ ${where}: no Python 3 found to compile the starter with`);
+      } else {
+        const file = path.join(tmp, `${course}-${id}-lab.py`);
+        fs.writeFileSync(file, lab.starter);
+        const r = spawnSync(python[0], [...python.slice(1), '-m', 'py_compile', file], { stdio: 'pipe', shell: false });
+        if (r.status !== 0) {
+          fails++;
+          const err = String(r.stderr).trim().split(/\r?\n/).pop();
+          console.log(`  ✗ ${where}: starter does not compile — ${err}`);
+        }
+      }
+    }
+  }
+
   // 4. Placeholder resource links in DEEP res lists (warn only).
   for (const [id, deep] of Object.entries(d.DEEP || {})) {
     for (const r of deep?.res || []) {

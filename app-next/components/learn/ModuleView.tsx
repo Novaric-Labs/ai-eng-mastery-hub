@@ -3,6 +3,7 @@
 import { BookOpen, Wrench, Library, Code, Lock, Zap, ArrowRight, Check } from "lucide-react";
 import { useCourseStore } from "./StoreProvider";
 import HtmlRaw from "./Html";
+import LabView from "./LabView";
 import Paywall from "./Paywall";
 import SectionRail from "./SectionRail";
 import VideoPreface from "./VideoPreface";
@@ -314,10 +315,14 @@ export default function ModuleView({ id }: { id: string }) {
         <ul className="flat checks">{d.good.map((x, i) => <li key={i}><Html as="span" html={x} /></li>)}</ul>
       </div>
       <h3>Build it</h3>
-      <div className="buildbox">
-        <b>Hands-on exercise — </b>
-        <Html as="span" html={d.build} />
-      </div>
+      {d.lab ? (
+        <LabView modId={id} lab={d.lab} />
+      ) : (
+        <div className="buildbox">
+          <b>Hands-on exercise — </b>
+          <Html as="span" html={d.build} />
+        </div>
+      )}
       <p style={{ color: "var(--dim)", fontSize: 13.5 }}>
         Building is where concepts become intuition. A pipeline you struggled with teaches more than one you read about three times.
       </p>
