@@ -1,0 +1,98 @@
+---
+title: "How to Evaluate LLM Outputs: A Practical Guide to Evals"
+description: "LLM outputs look convincing even when they're wrong. Here's how to build a proper eval suite — the tests that catch failures before your users do."
+date: "2026-08-18"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Testing"]
+draft: false
+---
+
+LLMs don't error. They just confidently give you the wrong thing. Which means the tests you'd use for normal software — assert this returns 200, assert this string equals "foo" — mostly don't apply. You need **evals**: a principled way to measure whether your AI feature is actually working.
+
+## Why normal tests don't cut it
+
+Regular software is deterministic. Given the same input, you get the same output every time. LLMs are not. A prompt can return ten different phrasings of the right answer, or one confident wrong one. Two problems follow:
+
+- **You can't use exact-match assertions.** "The capital of France is Paris" and "Paris is France's capital" are the same answer. A string comparison would call one wrong.
+- **Correctness is often subjective.** Is this summary good? Is this code appropriate? Only a rubric — or a human — can say.
+
+Evals are the solution. Think of them as the test suite for your prompt pipeline.
+
+## The three levels of evals
+
+Not all evals are equal. They sit on a rough spectrum from cheap and fast to expensive and accurate.
+
+**1. Deterministic checks**
+
+For anything with an exact right answer:
+
+- Does the output contain the required fields?
+- Is the JSON valid and parseable?
+- Does the response mention the correct entity name?
+
+These are instant, free, and should run on every change. Write them first.
+
+**2. Model-graded evals**
+
+Use a second LLM as a judge. Give it a rubric and ask it to score the output against criteria you define.
+
+```text
+Judge prompt:
+  Context: {context}
+  Question: {question}
+  Answer: {answer}
+
+  Score the answer on:
+  - Faithfulness (1–5): does it only use facts from the context?
+  - Completeness (1–5): does it address the full question?
+
+  Return JSON: {"faithfulness": <score>, "completeness": <score>}
+```
+
+LLM judges are good at rubric-driven scoring. They're not perfect — they have their own biases — but for "is this summary reasonable," they beat ad-hoc heuristics on accuracy and beat random human reviewers on consistency.
+
+**3. Human review**
+
+For anything that touches users directly — chatbot tone, safety-critical outputs, edge-case refusals — you need humans. Human review is the ground truth; the goal of the other two levels is to filter what actually *needs* it so you're not reviewing everything by hand.
+
+## What to actually measure
+
+The right metrics depend on your task, but a handful come up in almost every LLM system:
+
+| Metric | What it checks | Good for |
+|---|---|---|
+| Faithfulness | Does the answer only say what the source says? | RAG, summarization |
+| Relevance | Does the answer address the question asked? | Q&A, search |
+| Format compliance | Is the output in the required shape? | Structured outputs |
+| Groundedness | Can every claim be traced back to the context? | RAG |
+| Latency / cost | Is the model fast and cheap enough at scale? | Production |
+
+For a [RAG system](/blog/what-is-rag) specifically, you also want to eval the *retrieval* separately — did the right chunks even make it into the context? A model can't answer from a chunk it never saw.
+
+## Building your eval dataset
+
+An eval is only as good as its test cases. Here's a practical way to bootstrap one:
+
+1. **Start with edge cases, not easy cases.** Easy inputs pass anyway. You want the queries where you'd expect the model to struggle — ambiguous questions, missing context, adversarial phrasing.
+2. **Mine real traffic.** Once you have users, sample their actual queries — especially the ones that generated negative feedback or manual corrections.
+3. **Write golden answers.** For each test case, write (or collect) what a correct answer looks like. This is your ground truth.
+4. **Keep it small to start.** Twenty well-curated test cases beat two hundred vague ones.
+
+> Rule of thumb: if you can't tell by hand whether an answer passes your test, your test isn't specific enough yet.
+
+## Running evals like a CI pipeline
+
+Evals should run automatically — not just once before launch. Treat them like CI for your prompt. Every time you change a prompt, tweak a retrieval strategy, or upgrade a model, run your eval suite and compare scores.
+
+The workflow looks like this:
+
+1. Make a change — new prompt, new model, new chunk size.
+2. Run the eval suite against a fixed dataset.
+3. Compare scores to the last baseline.
+4. Only ship if scores are equal or better across the metrics that matter.
+
+This is what separates teams that iterate confidently from teams that are afraid to touch the prompt because "it might break something." Without evals, you're guessing. With them, you have evidence.
+
+---
+
+Most LLM features ship without a single eval — and that's exactly why they break in unexpected ways once real users arrive. If you want to build a full eval pipeline from scratch, including automated grading and the feedback loop that improves your outputs over time, that's the core of what our [AI Engineering courses](/pricing) cover.
