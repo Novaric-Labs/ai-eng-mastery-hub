@@ -1,0 +1,95 @@
+---
+title: "How to Evaluate LLM Outputs: A Beginner's Guide to Evals"
+description: "LLM evals are the difference between a demo and a production system. Here's what evals are, the three main approaches, and how to start building them without a big setup."
+date: "2026-08-25"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Quality"]
+draft: false
+---
+
+Shipping an LLM feature without evals is like releasing software without tests — and hoping users will tell you when it breaks. **Evals** (short for evaluations) are the discipline of measuring how well your LLM system is actually doing, before and after every change you make.
+
+Most teams skip evals early on. They push a new prompt, break something they didn't know was working, and spend two days tracing what changed. Evals are how you get out of that loop.
+
+## What an eval actually is
+
+An eval is a repeatable test that measures LLM output quality. Every eval has three parts:
+
+1. **An input** — a question, document, or task you hand the model.
+2. **An expected output** — what a correct or good response looks like.
+3. **A scorer** — something that compares actual output to expected and returns a result.
+
+The scorer is where most of the design work lives. "Correct" is easy when there's one right answer. It's much harder when the question is open-ended — "was that response helpful?" or "did it stay on topic?"
+
+## The three main approaches
+
+### 1. Assertion-based evals
+
+The simplest form: check that the output meets a rule you can express in code.
+
+```python
+def test_response_cites_source(response: str, retrieved_chunks: list[str]) -> bool:
+    # Fail if the answer references a fact not present in any retrieved chunk
+    return any(chunk.strip() in response for chunk in retrieved_chunks)
+```
+
+Assertion-based evals work well when:
+
+- You need a specific format (valid JSON, a number in a range, a URL that parses).
+- You can define "wrong" without ambiguity (contains forbidden words, exceeds a length limit, missing a required field).
+
+They're cheap, fast, and deterministic. The downside: they can't judge quality, helpfulness, or tone.
+
+### 2. Human evals
+
+A person — you, a teammate, or a hired rater — reads the output and scores it. This is the ground truth. Human judgment is the thing you're ultimately trying to approximate with automation.
+
+Human evals are:
+
+- **Expensive and slow** at any real scale.
+- **Essential early on** to build a labeled dataset you can learn from.
+- **The only reliable way** to catch subtle failures that automated scorers miss.
+
+A common pattern: run human evals once to label 50–100 examples, then use that labeled set to build and validate an automated scorer. You don't run human evals on every change — you use them to confirm that your automated scorer stays trustworthy.
+
+### 3. LLM-as-judge evals
+
+You use a second LLM call to grade the output. You pass the input, the response, and optionally a reference answer to a separate grading prompt. The judge returns a score and a brief explanation.
+
+| What to grade | Example judge prompt |
+|---|---|
+| Factual accuracy | "Does the answer contradict the source documents?" |
+| Relevance | "Does the answer actually address the user's question?" |
+| Tone | "Is this response professional and concise?" |
+
+LLM-as-judge handles open-ended quality dimensions that code can't. It's also noisier — judges hallucinate, too — which is why anchoring them to a clear rubric, and spot-checking with human evals, matters.
+
+> Rule of thumb: **use all three**. Assertions for format and safety, LLM-as-judge for open-ended quality, and human evals to calibrate and catch blind spots.
+
+## Why evals matter more than the model
+
+It's tempting to swap models and see if things "feel better." But without evals, you can't answer:
+
+- Did changing the model actually improve accuracy on real queries?
+- Did updating the prompt break something that was working?
+- Is retrieval finding the right chunks, or just *some* chunks?
+
+Evals turn those questions into numbers. That's the difference between tuning a system and guessing at one.
+
+## Where to start
+
+You don't need a full evaluation platform on day one. A minimal starting point:
+
+1. **Pick 20–30 real inputs** that represent what your system will actually see in production.
+2. **Label the expected outputs** yourself or with a teammate.
+3. **Write one assertion** — something that catches a clearly wrong answer.
+4. **Add one LLM-as-judge prompt** for the quality dimension that matters most to you.
+5. **Run this eval suite after every prompt or retrieval change** and track whether scores go up or down.
+
+Twenty examples won't catch everything. But a small test suite you actually run beats a comprehensive framework you never finish building.
+
+## The evals mindset
+
+Think of evals as the "this passed" signal that lets you ship with confidence — not a research project or a compliance checkbox. Start small, stay practical, and add coverage as your system grows.
+
+When you're building a [RAG](/blog/what-is-rag) pipeline or an [agent](/blog/agents-vs-workflows), evals are what separate a reliable feature from a demo that looked good last Tuesday. If you want to build end-to-end systems with proper evaluation at every step — retrieval quality, answer accuracy, and production monitoring — that's a core part of our [AI Engineering courses](/pricing).
