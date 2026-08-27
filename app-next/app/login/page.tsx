@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import NovaMark from "@/components/NovaMark";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { REMEMBER_COOKIE, REMEMBER_PREF_MAX_AGE } from "@/lib/supabase/remember";
@@ -12,11 +13,42 @@ function saveTrustedPref(trusted: boolean) {
   document.cookie = `${REMEMBER_COOKIE}=${trusted ? "1" : "0"}; Path=/; Max-Age=${REMEMBER_PREF_MAX_AGE}; SameSite=Lax${secure}`;
 }
 
+// Copy for the `?error=` reasons /auth/callback sends back. Without this the
+// callback's redirect landed on a clean login form with no explanation at all,
+// which is indistinguishable from "the link did nothing".
+const ERRORS: Record<string, string> = {
+  expired:
+    "That sign-in link is no longer valid — it may have expired or already been used. Enter your email below for a fresh one.",
+  verifier:
+    "Sign-in links only work in the browser that requested them. Open this page in the browser you used, or request a new link here and click it from this device.",
+  denied:
+    "That sign-in attempt was declined. Request a new link below, or try Continue with Google.",
+  auth: "Something went wrong finishing sign-in. Request a new link below and try again.",
+};
+
 export default function LoginPage() {
+  // useSearchParams needs a boundary; the layout is force-dynamic, so this only
+  // ever renders on the client anyway.
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
+  const params = useSearchParams();
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   const [trusted, setTrusted] = useState(true);
+
+  // A message from the user's own action wins; otherwise explain why they were
+  // bounced back here. Unknown reasons fall back to the generic copy.
+  const errorParam = params.get("error");
+  const errorMsg = errorParam ? (ERRORS[errorParam] ?? ERRORS.auth) : "";
+  const notice = msg || errorMsg;
+  const isError = !msg && !!errorMsg;
 
   async function magic() {
     if (!email) return;
@@ -55,9 +87,21 @@ export default function LoginPage() {
           Sign in to continue to your AI Engineering course. New here? This also creates your account.
         </p>
         <div className="authcard">
-          {msg && (
-            <div style={{ background: "var(--bg3)", border: "1px solid var(--border2)", borderRadius: "var(--r-md)", padding: "10px 12px", marginBottom: 14, fontSize: 13, color: "var(--dim2)" }}>
-              {msg}
+          {notice && (
+            <div
+              role={isError ? "alert" : "status"}
+              style={{
+                background: isError ? "rgba(229,99,95,.12)" : "var(--bg3)",
+                border: `1px solid ${isError ? "var(--red)" : "var(--border2)"}`,
+                borderRadius: "var(--r-md)",
+                padding: "10px 12px",
+                marginBottom: 14,
+                fontSize: 13,
+                lineHeight: 1.45,
+                color: "var(--dim2)",
+              }}
+            >
+              {notice}
             </div>
           )}
           <input
