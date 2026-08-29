@@ -19,6 +19,22 @@ export default function StartHere() {
         <Html as="p" style={{ marginTop: 6 }} html={L.startWhatBody} />
       </div>
       <h3>{L.startInteractionTitle}</h3>
+      {L.startInteraction ? (
+        <div className="card">
+          <Html as="p" html={L.startInteraction.lead} />
+          <Html
+            as="p"
+            style={{ background: "var(--bg3)", borderRadius: 8, padding: "12px 16px", fontFamily: "ui-monospace,monospace", fontSize: 13 }}
+            html={L.startInteraction.mono}
+          />
+          <Html as="p" html={L.startInteraction.body} />
+          <ul className="flat">
+            {L.startInteraction.items.map((html, i) => (
+              <li key={i}><Html as="span" html={html} /></li>
+            ))}
+          </ul>
+        </div>
+      ) : (
       <div className="card">
         <p>Every AI feature you&apos;ve ever used reduces to this exchange, repeated:</p>
         <p style={{ background: "var(--bg3)", borderRadius: 8, padding: "12px 16px", fontFamily: "ui-monospace,monospace", fontSize: 13 }}>
@@ -37,7 +53,17 @@ export default function StartHere() {
           <li><b>Probabilistic</b> — the same question can get different answers. This breaks normal testing, which is why this field invented its own (evals).</li>
         </ul>
       </div>
-      <h3>The cast of characters</h3>
+      )}
+      <h3>{L.startCast ? L.startCast.title : "The cast of characters"}</h3>
+      {L.startCast ? (
+        <div className="card">
+          <ul className="flat">
+            {L.startCast.items.map((html, i) => (
+              <li key={i}><Html as="span" html={html} /></li>
+            ))}
+          </ul>
+        </div>
+      ) : (
       <div className="card">
         <ul className="flat">
           <li><b>Products vs models:</b> ChatGPT, Claude.ai, and Gemini are apps. Underneath are models (GPT-5.5, Claude Opus 4.8, Gemini 3.1 Pro) that you can also call directly via API — that&apos;s what you&apos;ll do.</li>
@@ -46,6 +72,7 @@ export default function StartHere() {
           <li><b>The big shifts of 2025–26:</b> models became commodities that leapfrog quarterly; the differentiators moved to the scaffolding — context management, agents, harnesses, evals. That&apos;s why this curriculum spends most of its time there.</li>
         </ul>
       </div>
+      )}
       <h3>{L.startPathTitle}</h3>
       <div className="card">
         <ul className="flat checks">
@@ -54,10 +81,14 @@ export default function StartHere() {
           ))}
         </ul>
         <Html as="p" style={{ color: "var(--dim)", fontSize: 13.5 }} html={L.startPathNote} />
-        <p style={{ color: "var(--dim)", fontSize: 13.5 }}>
-          Helpful background: basic programming (any language) and what an API is. Not needed: machine
-          learning, math, or any prior AI experience.
-        </p>
+        {L.startPrereqNote ? (
+          <Html as="p" style={{ color: "var(--dim)", fontSize: 13.5 }} html={L.startPrereqNote} />
+        ) : (
+          <p style={{ color: "var(--dim)", fontSize: 13.5 }}>
+            Helpful background: basic programming (any language) and what an API is. Not needed: machine
+            learning, math, or any prior AI experience.
+          </p>
+        )}
       </div>
       <div className="actionbar">
         <button className="btn" onClick={() => go("mod", L.startBeginMod)}>{L.startBeginBtn}</button>

@@ -13,6 +13,7 @@ import fs from "fs";
 import { execSync } from "child_process";
 import { VIDEOS as AI_ENG_VIDEOS } from "../../content/videos.mjs";
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from "../../content/videos-ai-foundations.mjs";
+import { VIDEOS as AI_ARCHITECT_VIDEOS } from "../../content/videos-ai-architect.mjs";
 
 // Guardrail: refuse to build/seed if any quiz is unbalanced (correct option a
 // length outlier or always the longest). Mirrors content/seed.mjs so the prod
@@ -40,6 +41,7 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL("../../content/" + fil
 const ALL_COURSES = [
   { course: "ai-eng", json: "content.json", sample: "llm", videos: AI_ENG_VIDEOS },
   { course: "ai-foundations", json: "ai-foundations.json", sample: "whatai", videos: AI_FOUNDATIONS_VIDEOS },
+  { course: "ai-architect", json: "ai-architect.json", sample: "budgets", videos: AI_ARCHITECT_VIDEOS },
 ];
 
 // Optional: SEED_COURSE=<slug> limits the payload to a single course, so you can

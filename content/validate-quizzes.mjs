@@ -22,6 +22,7 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.me
 const COURSES = [
   { course: 'ai-eng', json: 'content.json' },
   { course: 'ai-foundations', json: 'ai-foundations.json' },
+  { course: 'ai-architect', json: 'ai-architect.json' },
 ];
 
 const LEN_RATIO = 1.15; // correct option may not exceed this x the longest distractor

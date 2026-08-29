@@ -1,2 +1,3 @@
 - [Course content schema](course-content-schema.md) — exact JSON shape + authoring conventions for content/*.json (matches ai-foundations.json); PATTERNS:{} hides code tab
 - [Claude, Actually course](using-claude-course.md) — content/using-claude.json: non-coder surface-picking course; scenarios-as-spine, evergreen fact constraints
+- [AI Architect course](ai-architect-course.md) — content/ai-architect.json: senior track; two hard rules, ai-eng non-overlap, quiz-length gate, worked-example arithmetic traps
