@@ -9,6 +9,7 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 import { VIDEOS as AI_ENG_VIDEOS } from './videos.mjs';
 import { VIDEOS as AI_FOUNDATIONS_VIDEOS } from './videos-ai-foundations.mjs';
+import { VIDEOS as AI_ARCHITECT_VIDEOS } from './videos-ai-architect.mjs';
 
 // Guardrail: refuse to regenerate the seed if any quiz is unbalanced (e.g. the
 // correct option is a length outlier or always the longest). Keeps the "you can
@@ -27,6 +28,7 @@ const read = (file) => JSON.parse(fs.readFileSync(new URL('./' + file, import.me
 const COURSES = [
   { course: 'ai-eng', json: 'content.json', sample: 'llm', videos: AI_ENG_VIDEOS },
   { course: 'ai-foundations', json: 'ai-foundations.json', sample: 'whatai', videos: AI_FOUNDATIONS_VIDEOS },
+  { course: 'ai-architect', json: 'ai-architect.json', sample: 'budgets', videos: AI_ARCHITECT_VIDEOS },
 ];
 
 // Build the flat (public/paid) row set for one course, same split the app's
