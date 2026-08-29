@@ -82,7 +82,7 @@ export default async function CoursesPage() {
 
         <div style={{ display: "grid", gap: 18 }}>
           {COURSES.map((c) => (
-            <CourseCard key={c.slug} course={c} access={hasAccess(c.slug)} member={isMember} />
+            <CourseCard key={c.slug} course={c} access={hasAccess(c.slug)} member={isMember} admin={admin} />
           ))}
         </div>
       </main>
@@ -94,13 +94,19 @@ function CourseCard({
   course: c,
   access,
   member,
+  admin,
 }: {
   course: CourseMeta;
   access: boolean;
   member: boolean;
+  admin: boolean;
 }) {
   const live = c.status === "live";
-  const accessible = live; // any signed-in user can open a live course (preview)
+  // Any signed-in user can open a live course (preview). A course that has not
+  // launched stays locked for everyone except the owner/admin: /learn/[course]
+  // already redirects a non-admin away from a non-live course, so this only
+  // gives that existing owner path a door in the catalog.
+  const accessible = live || admin;
 
   return (
     <div
@@ -125,9 +131,14 @@ function CourseCard({
             {live && !access && member === false && (
               <span className="pill" style={{ color: "var(--dim)" }}>Free preview</span>
             )}
-            {!live && (
+            {!live && !admin && (
               <span className="pill" style={{ color: "var(--dim)" }}>
                 <Lock size={11} strokeWidth={2} style={{ marginRight: 3 }} /> Coming soon
+              </span>
+            )}
+            {!live && admin && (
+              <span className="pill" style={{ color: "var(--accent)", borderColor: "var(--accent)" }}>
+                <Lock size={11} strokeWidth={2} style={{ marginRight: 3 }} /> Owner preview, not public yet
               </span>
             )}
           </div>
@@ -168,7 +179,7 @@ function CourseCard({
 
       {accessible ? (
         <Link href={`/learn/${c.slug}`} className="btn" style={{ margin: 0, background: c.accent }}>
-          {access ? "Continue" : "Start free preview"}{" "}
+          {!live ? "Open owner preview" : access ? "Continue" : "Start free preview"}{" "}
           <ArrowRight size={16} strokeWidth={1.75} />
         </Link>
       ) : (
