@@ -34,4 +34,23 @@ non-overlap with the existing 21-module `ai-eng` course, which is easy to violat
 - **Word budget.** Roughly 4,000-4,800 authored prose words per module *excluding*
   `PATTERNS.code`; the code adds another 1,000-1,600 word-equivalents on top.
 
+**Every composed number in a `DEEP.worked` must publish its inputs.** This course's
+worked examples quote root-sum-square latencies, blended costs and "total cost of being
+wrong" figures. An accuracy review (applied Aug 2026) flagged several as unreproducible
+because the p50s / component terms behind them were never stated. When you write a
+composed figure, state the per-stage inputs in the same paragraph, or cite the Patterns
+calculator that produces it.
+
+**When prose and `PATTERNS.code` disagree, the code is right.** The calculators carry
+terms the prose elides (additive hop constants, detection-lag costs). Run the script and
+quote its output rather than re-deriving in prose - and check whether an apparent prose
+error is really a missing term from the calculator before "fixing" the prose away from it.
+
+**Recurring arithmetic traps in this course's genre** (all found in one review pass):
+avoided-damage vs total-damage when pricing a control; catch-rate vs escape-rate stated
+as the same fraction; person-days added onto elapsed/calendar days; a peak multiplier
+applied to a monthly bill instead of to concurrency; and an overrun past a ceiling
+confused with the increase over current spend. Check each explicitly before shipping a
+module that prices anything.
+
 Related: [[course-content-schema]]
