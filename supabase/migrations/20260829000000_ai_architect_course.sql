@@ -9,5 +9,5 @@
 -- lib/courses.ts status, so flipping to live is a code change, not a data one.
 
 insert into public.courses (slug, title, status, sort_order)
-values ('ai-architect', 'AI Architect', 'coming_soon', 2)
+values ('ai-architect', 'AI Architect', 'coming_soon', 3)
 on conflict (slug) do nothing;
