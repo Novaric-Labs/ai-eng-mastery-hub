@@ -765,7 +765,7 @@
       "reqs"
     ],
     [
-      "Blast radius",
+      "Blast radius (spec-card field)",
       "The worst single wrong output, written as one concrete sentence about one specific user. It is the spec-card field that most often picks the architecture, because it decides whether you owe the system a verification seam, an abstention path, or a human in the loop.",
       "reqs"
     ],
@@ -3341,7 +3341,7 @@
           "It depends on the shape of the distribution across the four stages"
         ],
         "a": 0,
-        "exp": "Composed p95 is at least the sum of stage p95s and usually worse, so addition is the optimistic case and it already fails. It's true that percentiles don't add cleanly - that argument makes the finding stronger, not weaker. Ninety seconds of arithmetic, and it's the finding most reviews skip."
+        "exp": "Summing p95s over-states the real number, so compose it properly before anyone objects: p50s sum to 2,810ms and the root-sum-square of the four spreads adds 273ms, giving about 3,083ms. Over the 3,000ms budget either way, and that is before any queueing at the declared peak. Ninety seconds of arithmetic, and it's the finding most reviews skip."
       },
       {
         "q": "You are reviewing someone else's AI architecture with sixty minutes. What do you ask after \"which number forced this shape?\"",
@@ -3662,7 +3662,7 @@
     {
       "m": "review",
       "f": "Stage p95s: 300 + 2,100 + 700 + 190. Spec card says 3,000ms.",
-      "b": "3,290ms, over by 290 before any queueing at peak. Adding the column takes ninety seconds and is the finding most reviews never get to."
+      "b": "3,290ms naively summed, about 3,083ms composed properly (p50s plus the root-sum-square of the spreads) - over the 3,000ms budget either way, before any queueing at peak. Adding the column takes ninety seconds and is the finding most reviews never get to."
     },
     {
       "m": "review",
