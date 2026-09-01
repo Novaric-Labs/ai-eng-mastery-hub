@@ -1,0 +1,98 @@
+---
+title: "Chunking Strategies for RAG: How to Split Your Documents the Right Way"
+description: "Chunking is the most overlooked part of a RAG pipeline — and the most common reason retrieval fails. Here are the main strategies and how to choose between them."
+date: "2026-09-01"
+author: "Novacademy"
+tags: ["RAG", "LLM", "Embeddings"]
+draft: false
+---
+
+Bad chunking is the silent killer of RAG pipelines. The model, the embeddings, the vector database — none of that matters if the chunks you retrieve are too big, too small, or split at the wrong places.
+
+## Why chunking matters
+
+Most embedding models have a token limit. Documents are almost always longer than that. Chunking is how you break them into pieces that fit.
+
+But it's not just about fitting. The **chunk you retrieve is the chunk the model reads**. If a chunk buries the relevant sentence in three paragraphs of surrounding noise, the model may still miss it. If a chunk is a single sentence stripped of its context — "It was introduced to address this problem." — the model has no idea what "it" refers to.
+
+Every chunking decision is a tradeoff between two failure modes:
+
+- **Too large**: noisier chunks, lower retrieval precision, bloated prompts
+- **Too small**: lost context, broken sentences, retrieval that scores fragments rather than ideas
+
+## The main chunking strategies
+
+### 1. Fixed-size chunking
+
+Split every N tokens, with optional overlap between consecutive chunks.
+
+```text
+chunk_size = 512 tokens
+overlap    = 64 tokens   # last 64 tokens of chunk N repeat at the start of chunk N+1
+```
+
+This is the default in most tutorials because it's easy to implement and works well on clean, uniform text — product docs, knowledge bases, wiki pages.
+
+**When it breaks**: when sentences span chunk boundaries, or when each paragraph is a self-contained idea that a fixed window always splits in half.
+
+### 2. Sentence or paragraph splitting
+
+Split on natural language boundaries — periods, newlines, blank lines — rather than by token count.
+
+The chunks align with how people actually write, so embedding quality tends to be better. The downside: chunk length is unpredictable, and some chunks may be too long for your embedding model while others are nearly meaningless on their own.
+
+A common fix is a **two-pass approach**: split by sentence, then group adjacent sentences until you hit a token budget.
+
+### 3. Recursive character splitting
+
+A middle path: try splitting on paragraphs first (`\n\n`), then sentences, then spaces — shrinking the separator until you get chunks under your target size. This is the strategy behind tools like LangChain's `RecursiveCharacterTextSplitter`.
+
+Works well on mixed-format text where you don't know the structure in advance.
+
+### 4. Semantic chunking
+
+Embed each sentence, then group sentences that are close in meaning and start a new chunk when the topic shifts.
+
+This produces chunks that align with **meaning** rather than arbitrary boundaries. Retrieval precision can improve noticeably on heterogeneous documents — a long PDF that covers five different topics, for instance.
+
+The tradeoff: slower to index, more moving parts to debug.
+
+### 5. Structure-aware chunking
+
+If your documents have clear structure — headers, sections, code blocks — honor it. Split on `##` headings, keep the heading text inside the chunk, and treat each section as its own unit.
+
+This is the right move when documents are structured and that structure is informative: technical reference manuals, API docs, policy documents. The section boundaries are usually the most meaningful splits.
+
+## Choosing a strategy
+
+| Strategy | Best for | Watch out for |
+|---|---|---|
+| Fixed-size | Uniform prose, fast to ship | Splits sentences mid-thought |
+| Sentence / paragraph | Clean, well-written text | Unpredictable chunk lengths |
+| Recursive splitting | Mixed-format documents | Needs configuration tuning |
+| Semantic | Long, topically varied docs | Slower indexing |
+| Structure-aware | Docs with clear headers | Requires parsing the structure |
+
+## The overlap question
+
+Almost every strategy benefits from **chunk overlap** — repeating a small number of tokens from the end of one chunk at the start of the next. It prevents the retrieval system from missing a sentence that happens to straddle a boundary.
+
+A reasonable default is 10–20% of the chunk size. More than that and you're embedding redundant content; less and you risk dropped context at every seam.
+
+> Rule of thumb: **start with fixed-size plus overlap, evaluate retrieval quality, then switch strategies only when you can measure the improvement.** Don't optimize chunking before you have a way to score it.
+
+## How to tell if your chunks are hurting you
+
+Chunking failures show up as retrieval failures: the right information exists in your corpus, but the retrieved chunks don't contain it — or contain it buried in noise. To catch this:
+
+1. **Inspect chunks manually.** Pull a random sample and read them. Could you answer a question using only this text?
+2. **Build a small eval set.** Write 20 questions whose answers you know. See how often the correct chunk appears in the top three results.
+3. **Check similarity scores.** Low scores between a query and the chunk you'd expect to match often point to a chunking mismatch — the chunk text doesn't resemble how users phrase questions.
+
+If you're seeing answers that miss the point despite the right document being in your corpus, start with chunking and retrieval before you look at the model.
+
+---
+
+Chunking is unglamorous work — it's not the part of a RAG demo that impresses anyone. But it's often the biggest lever for improving real-world accuracy. If you want to build a retrieval pipeline that actually works in production, this is where to start.
+
+Our [AI Engineering course](/pricing) covers chunking, embedding, retrieval, and the evals that tell you when things go wrong. New to RAG? [Start here](/blog/what-is-rag) and come back once you have the basics.
