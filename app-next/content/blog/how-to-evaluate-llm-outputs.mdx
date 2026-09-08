@@ -1,0 +1,104 @@
+---
+title: "How to Evaluate LLM Outputs: A Practical Guide to Evals"
+description: "LLM evals are how you stop guessing and start measuring. Learn the core evaluation techniques — exact match, model-graded, and human review — and when to use each one."
+date: "2026-09-08"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Testing"]
+draft: false
+---
+
+Every LLM feature ships with the same validation strategy: the builder tries a few inputs, things look pretty good, and it goes live. Then real users arrive, and the cracks appear — outputs that are wrong, off-format, confidently hallucinated, or just inconsistent in ways that are hard to pin down. The pattern is so common it has a name: **vibes-based development**.
+
+**Evals** — short for evaluations — are the antidote. An eval is any structured, repeatable way to measure whether your LLM feature is doing what you want it to do. Not impressionistically. Not on the five examples you remember to check. Systematically, so you can tell whether a change made things better or worse — across the full range of inputs your feature actually sees.
+
+## What an eval actually is
+
+An eval is a function. It takes one input/output pair — the prompt plus whatever the model returned — and produces a judgment: pass/fail, a score, or a label.
+
+The simplest version looks like this:
+
+```python
+def eval_sentiment(prompt: str, output: str) -> bool:
+    # True if the model correctly labeled this input as positive sentiment
+    return output.strip().lower() == "positive"
+```
+
+That's it. The magic isn't in the function itself — it's in what happens when you run it across hundreds of examples and get a number back. A 91% pass rate tells you something. "It seems to be working" tells you nothing.
+
+## The three types of evals
+
+There's a spectrum from rigid to flexible. Match the type to the task.
+
+### 1. Deterministic (exact-match) evals
+
+When there's only one right answer, check for it directly. Classification tasks, structured output validation, entity extraction — anything where the expected output is unambiguous.
+
+| What to check | Example |
+| --- | --- |
+| Output equals expected string | Sentiment label is `"positive"` |
+| JSON parses without error | `json.loads(output)` succeeds |
+| Required keys are present | `"summary"` and `"confidence"` both exist |
+| Number is in expected range | Score is between 0.0 and 1.0 |
+
+Deterministic evals are fast, cheap, and perfectly reproducible. Build as many as you can, and run them on every change.
+
+### 2. Model-graded evals (LLM-as-judge)
+
+When outputs are long-form or subjective — a summary, a generated explanation, a customer-support response — exact match doesn't work. Two correct summaries don't look the same. Here, you write a second LLM prompt that grades the first model's output.
+
+```python
+GRADE_PROMPT = """
+You are evaluating an AI assistant's answer to a customer question.
+
+Question: {question}
+Answer: {answer}
+Reference answer: {reference}
+
+Is the answer correct and complete? Reply with only YES or NO.
+"""
+```
+
+The grader model reads the question, the answer, and a reference, then returns a verdict. This scales to things no human team could evaluate in bulk — and it correlates well with human judgment when the grading prompt is clear and specific.
+
+One caveat: the grader itself can be wrong, especially on edge cases. Spot-check its verdicts against your own judgment when you set it up, and recalibrate if the two diverge.
+
+### 3. Human review
+
+Sometimes the only ground truth is a person. Security-sensitive outputs, brand voice, nuanced advice — for these, route a sample of outputs to a human reviewer. A spreadsheet and a 1–5 rating scale is enough to start.
+
+Human review doesn't scale, but it sets the baseline everything else calibrates against. If your model-graded evals flag the same cases human reviewers flag, you can trust the automated eval to run unsupervised. If they diverge regularly, the grader needs fixing before you trust it.
+
+> Rule of thumb: **automate what you can measure deterministically, model-grade what you can express as a rubric, and keep humans in the loop for anything where a wrong judgment carries real consequences.**
+
+## Building your first eval set
+
+You don't need hundreds of examples to start. Ten to twenty diverse, representative inputs will surface most structural problems. As you find new failure modes in production, add them to the set — it should grow with the product.
+
+A useful eval set is:
+
+- **Representative of real inputs.** Inputs you hand-picked because they look easy will give you false confidence.
+- **Labeled with the expected output.** Every input needs a ground truth to compare against.
+- **Versioned alongside your prompts.** When the prompt changes, run the eval. When the eval drops, something broke.
+
+Run your evals before any prompt change ships. The point isn't to hit a perfect score — it's to avoid shipping regressions by accident.
+
+## Don't skip retrieval evals (RAG teams, this is for you)
+
+If you're building a RAG system, add a separate eval layer for the retrieval step before you evaluate generation quality at all. Most teams skip this — and it's where most RAG failures actually live.
+
+The question to answer first: "For this query, was the correct chunk actually retrieved?" Track that as a pass/fail metric across your eval set. If retrieval is failing, no amount of prompt work will fix your answers. For a full breakdown of where RAG pipelines break, see [what fails in production RAG](/blog/rag-what-breaks-in-production).
+
+## The pattern in teams that ship reliably
+
+Teams that ship reliable LLM features don't just prompt and hope. They:
+
+1. Write an eval set before touching the prompt.
+2. Run it after every change.
+3. Add new failing examples as they're discovered in production.
+4. Treat a drop in eval score like a failing test — it blocks the ship.
+
+Evals turn "I think it's better" into "it's better on 7 more examples than before." That's the difference between a demo and a feature you can iterate on confidently.
+
+---
+
+Building an eval suite from scratch — what to measure, how to write model-graded judges, and how to wire this into a real development loop — is something we cover end to end in our [courses](/pricing). Pair it with solid [prompt engineering](/blog/prompt-engineering-guide) and you have most of what separates demo-quality LLM features from production-ready ones.
