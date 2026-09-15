@@ -1,0 +1,81 @@
+---
+title: "What Are Vector Databases? The Storage Layer Behind AI Search"
+description: "Vector databases are what make RAG and semantic search fast at scale. Here's what they do, how they differ from regular databases, and when you actually need one."
+date: "2026-09-15"
+author: "Novacademy"
+tags: ["Vector Databases", "RAG", "Fundamentals"]
+draft: false
+---
+
+When you build a [RAG pipeline](/blog/what-is-rag), there's a step that often gets glossed over in tutorials: storing and searching embeddings at scale. That's what vector databases are for. They're the reason an AI app can search through hundreds of thousands of document chunks in milliseconds — not by keywords, but by *meaning*.
+
+## Why regular databases aren't enough
+
+A traditional database is great at exact matches. `WHERE name = 'refund-policy.pdf'` — no problem. But "find me the three chunks most relevant to the question about cancellation fees" is a completely different kind of query.
+
+Semantic search works by comparing *vectors* — long lists of numbers that encode meaning — and finding the ones that are closest together in that high-dimensional space. A regular SQL database has no efficient way to do this. You'd be computing distance between millions of pairs of numbers on every query, which collapses at any real scale.
+
+Vector databases are purpose-built for this: they store embeddings and ship with indexing structures that make nearest-neighbor search fast enough for production.
+
+## How the pieces fit together
+
+Every chunk of text in your knowledge base gets converted to an embedding — typically a list of 768 to 3,072 numbers produced by an embedding model. Chunks about similar topics end up near each other in this space; unrelated ones are far apart.
+
+When a user asks a question, that question is also embedded, and the vector database finds the stored chunks whose embeddings are closest.
+
+```text
+"What's the cancellation policy?" ──▶ embed ──▶ [0.23, -0.11, 0.88, ...]
+                                                         │
+                                               search vector DB (ANN)
+                                                         │
+                                            top-k matching chunks returned
+                                                         │
+                                         chunks + question ──▶ LLM ──▶ answer
+```
+
+The core operation is **approximate nearest-neighbor (ANN) search** — not an exact match, but close enough to be useful and fast enough to run in real time. The "approximate" part is a deliberate trade-off: near-perfect recall at a fraction of the compute cost.
+
+## Vector databases vs. vector libraries vs. vector extensions
+
+Not everything called a "vector solution" is the same thing:
+
+| Option | What it is | When to use it |
+| --- | --- | --- |
+| Vector library (e.g., FAISS) | In-memory search; no persistence layer | Prototyping, local experiments |
+| Vector extension (e.g., pgvector) | Adds vector search to existing Postgres | Already on Postgres; modest scale |
+| Dedicated vector DB (e.g., Qdrant, Weaviate, Chroma) | Purpose-built storage + search + metadata | Production; need filtering, scale, multi-tenancy |
+
+For most teams building their first RAG app, a Postgres extension like pgvector is the simplest starting point — no new infrastructure, no new deployment surface. Dedicated vector databases earn their complexity when you need advanced features at scale.
+
+## What you store alongside the vector
+
+Embeddings alone aren't enough. A production setup stores three things per chunk:
+
+- The **vector** itself (the embedding)
+- The **source text** (or a pointer to it), so you can pass the actual words to the model
+- **Metadata** — document ID, page number, upload date, user ID, category tag, etc.
+
+That metadata matters more than most people expect. Without it, you can't say "search only within documents the user owns" or "restrict results to content updated in the last 90 days." Metadata filters turn a semantic search into a *targeted* semantic search, and that's often what makes the difference between a useful product and a leaky one.
+
+## Common retrieval failures — and why they're not model problems
+
+> Rule of thumb: **if the right chunk isn't retrieved, the model cannot answer correctly — no matter how capable it is.**
+
+Vector databases are fast, but retrieval quality depends on more than raw similarity scores. The usual failure modes:
+
+- **Chunking mismatch** — chunks that are too long dilute the signal; too short and you lose the surrounding context the model needs. How you split documents matters as much as where you store them.
+- **Mismatched embedding models** — the model you use to embed queries must be the exact same one used to embed documents. Even a version bump can shift the embedding space and degrade results silently.
+- **Missing re-ranking** — the top results by vector similarity aren't always the top results by usefulness. A lightweight re-ranker (typically a cross-encoder) rescores candidates for the actual question, and a single re-ranking step can dramatically improve answer quality.
+- **No metadata filtering** — returning the most semantically similar chunks from the wrong document is worse than returning fewer chunks from the right one.
+
+For a deeper look at where RAG pipelines break — including retrieval failures — see [RAG, Explained by What Actually Breaks in Production](/blog/rag-what-breaks-in-production).
+
+## Do you need a vector database on day one?
+
+Probably not. The fastest way to validate a RAG prototype is often just embedding your documents into a Python list, serializing it to disk, and doing brute-force cosine similarity at query time. That won't scale, but it proves the pipeline before you add infrastructure.
+
+When you're ready to move toward production, the switch to a proper vector store is largely mechanical: swap out the search function, keep the chunking and embedding logic the same, and add metadata filtering as you need it. The hard part was never the storage — it was building retrieval that actually works.
+
+---
+
+Vector databases are one layer of the RAG stack, not the whole thing. The real craft is in chunking your documents well, picking an embedding model that matches how your users ask questions, and evaluating whether the chunks you retrieve are genuinely useful — not just geometrically close. If you want to understand the full picture end to end, that's exactly what the courses at [Novacademy](/pricing) are built around.
