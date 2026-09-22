@@ -1,0 +1,111 @@
+---
+title: "How to Evaluate LLM Outputs: A Practical Guide to Evals"
+description: "Most teams know when an LLM feels wrong — but feeling isn't a system. A practical intro to evals: what they are, the three types that cover most cases, and how to start running them today."
+date: "2026-09-22"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Testing"]
+draft: false
+---
+
+"It looks pretty good to me" is how most LLM features ship — and how most of them quietly regress when a prompt changes, a model is upgraded, or the input distribution shifts. **Evals** are the systematic alternative: repeatable tests that tell you, with numbers, whether your AI is working.
+
+Getting started doesn't require a research team. You need a test set, a way to score outputs, and the habit of running it before you change anything.
+
+## What is an eval?
+
+An eval is any structured test that measures the quality of a model's output against some expectation. The inputs are usually a list of questions or tasks; the outputs are scored on whatever dimension you care about — correctness, tone, safety, format, groundedness.
+
+The key word is **structured**. Looking at ten example outputs after a prompt change is a code review, not a test suite. An eval is runnable, version-controlled, and gives you a number (or a pass/fail) every time.
+
+## The three types of evals
+
+Most real-world evals fall into one of three categories, each with different tradeoffs:
+
+| Type | How it scores | Best for | Tradeoff |
+| --- | --- | --- | --- |
+| **Exact match** | String equality or regex | Classification, extraction, structured output | Brittle for open-ended text |
+| **Model-graded** | Another LLM judges the output | Tone, helpfulness, faithfulness | Requires a good judge prompt |
+| **Human review** | A person scores samples | Ground truth, edge cases | Slow and expensive at scale |
+
+You will almost always use all three at different stages. Exact match and model-graded evals run in CI; human review feeds the labeled data that makes both of those better.
+
+## Writing your first eval
+
+Start with the simplest thing that can tell you something useful: a list of questions with known answers, and a script that checks whether the model gets them right.
+
+```python
+import openai  # or any SDK
+
+cases = [
+    {"input": "What is RAG?", "expected_keyword": "retrieval"},
+    {"input": "What does LLM stand for?", "expected_keyword": "language model"},
+]
+
+def run_eval(cases):
+    passed = 0
+    for case in cases:
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": case["input"]}]
+        ).choices[0].message.content
+
+        if case["expected_keyword"].lower() in response.lower():
+            passed += 1
+        else:
+            print(f"FAIL: '{case['input']}'\n  Got: {response[:120]}")
+
+    print(f"\nScore: {passed}/{len(cases)}")
+
+run_eval(cases)
+```
+
+This is rough, but it's runnable. The moment you can run it twice and compare numbers, you have something worth iterating on.
+
+## What to evaluate
+
+Different features need different dimensions. Here are the most common:
+
+- **Correctness** — Is the factual content right? Best checked with exact match or a model judge that has access to a reference answer.
+- **Groundedness** — For RAG systems, does every claim in the answer appear in the retrieved context? Ungrounded answers are hallucinations waiting to be reported.
+- **Format** — Does the output follow the expected structure (valid JSON, the right number of items, correct headers)? Exact match or a parser test handles this cheaply.
+- **Refusal rate** — For safety, does the model decline when it should? And does it *not* decline when it shouldn't?
+- **Regression** — Did anything get worse after your last change? Running the same eval on consecutive versions is how you catch silent regressions.
+
+You don't need all of these on day one. Pick the one that matches your biggest current failure mode and build from there.
+
+## Building a model-graded judge
+
+Once exact match isn't enough — your outputs are conversational, or you care about tone — you need a judge prompt. The pattern is simple: give a second model the question, the answer, and the criteria, and ask it to score.
+
+```text
+You are evaluating a customer support response.
+Score the response from 1 to 5 on helpfulness.
+Return only a JSON object: {"score": <number>, "reason": "<brief reason>"}.
+
+Question: {{question}}
+Response: {{response}}
+```
+
+A few rules that make judge prompts more reliable:
+- Ask for a narrow, specific dimension per prompt (helpfulness ≠ accuracy).
+- Use a chain-of-thought step before the final score.
+- Validate the JSON output — a judge that sometimes returns prose instead of a score breaks your pipeline.
+
+> Rule of thumb: **never use the same model as both the generator and the judge.** A model grading its own outputs will almost always be too generous.
+
+## From eval to feedback loop
+
+An eval is most useful when it runs automatically. Wire it into your CI pipeline so every prompt change shows a before/after score. Build a small test set of known-hard cases — edge cases, adversarial inputs, the exact queries that burned you last time — and add to it every time something surprising happens in production.
+
+This is the feedback loop that turns an LLM feature from a demo into a product:
+
+1. Run the eval before changing anything.
+2. Make your change (prompt, model, retrieval logic).
+3. Run the eval again.
+4. Only ship if the score holds or improves.
+
+The first time this catches a silent regression — a prompt tweak that improved tone but broke accuracy on a subset of questions — it pays for all the setup time.
+
+---
+
+Evals are the part of AI engineering that most tutorials skip, and the part that separates teams who ship reliably from teams who are always firefighting. If you want to go deeper — writing judge prompts, integrating evals with [RAG pipelines](/blog/what-is-rag), and building the feedback loops that keep production systems honest — that's exactly what our [AI Engineering course](/pricing) covers end to end.
