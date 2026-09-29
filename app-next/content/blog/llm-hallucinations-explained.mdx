@@ -1,0 +1,100 @@
+---
+title: "LLM Hallucinations, Explained: Why Models Make Things Up (and How to Reduce It)"
+description: "LLMs sometimes state false information with total confidence. Here's why hallucinations happen, the three main types, and concrete techniques to reduce them in production."
+date: "2026-09-29"
+author: "Novacademy"
+tags: ["LLM", "Hallucinations", "Production"]
+draft: false
+---
+
+There's a specific kind of AI failure that trips people up the first time they see it: the model gives a fluent, confident, well-formatted answer that is completely wrong. No disclaimer. No "I'm not sure." Just wrong — with authority.
+
+This is called a **hallucination**, and once you understand *why* it happens, you can build systems that make it far less likely.
+
+## What is a hallucination?
+
+In the context of LLMs, a hallucination is any output that is factually incorrect, fabricated, or unsupported by the input — yet stated as if it were true.
+
+The word is borrowed loosely from psychology, but the mechanism is different. The model isn't confused or dreaming. It's doing exactly what it was designed to do: predict the most likely next token. The problem is that "likely next token" and "true statement" are not the same thing.
+
+## Why LLMs hallucinate
+
+LLMs are trained to predict text that looks like human writing. Human writing is mostly coherent and factually grounded, so models learn to produce coherent, factually-flavored output. But the model has no internal "truth meter." It has patterns.
+
+Three root causes explain most hallucinations:
+
+**1. Knowledge gaps.** The model wasn't trained on the right data, or the data has a cutoff date. It has to fill the gap somehow — and it fills it with plausible-sounding text.
+
+**2. The prompt pushes toward confidence.** If you ask "What is the GDP of [some place the model knows nothing about]?", the model may answer rather than say "I don't know." Completing the pattern feels natural; refusing feels out of character.
+
+**3. Long-context drift.** In a very long conversation or document, the model's attention becomes diffuse. It may contradict something it said earlier, or blend two facts together in a way that produces a new, wrong claim.
+
+## Three types of hallucination to watch for
+
+| Type | What it looks like | Example |
+| --- | --- | --- |
+| **Factual** | A confident wrong claim about the world | Incorrect dates, names, or specifications |
+| **Source fabrication** | Citations or quotes that don't exist | A paper title and author that sound real but aren't |
+| **Reasoning drift** | Correct facts, wrong conclusion | "Since A and B, therefore C" — but C doesn't follow |
+
+All three happen in real applications. Source fabrication is particularly costly in anything research-facing. Reasoning drift is the hardest to catch because each individual step can look fine in isolation.
+
+## How to reduce hallucinations
+
+You can't eliminate hallucinations entirely — but you can make them rare enough to ship a product you trust.
+
+### 1. Ground the model with retrieval (RAG)
+
+The single most effective technique. Instead of asking the model to answer from memory, you give it the relevant documents and tell it to answer *from those documents only*.
+
+```text
+System: You are a helpful assistant. Answer ONLY using the provided context.
+If the answer is not in the context, say "I don't have that information."
+
+Context: [your retrieved documents]
+
+User: [question]
+```
+
+A direct instruction to stay within the context, combined with real sources, dramatically cuts factual errors. This is the main reason [RAG](/blog/what-is-rag) was invented in the first place.
+
+### 2. Use structured outputs
+
+When you need specific fields filled in, ask for JSON (or another schema) and validate the result. A model that must output `{"confidence": "high" | "medium" | "low"}` is less likely to invent things than one writing free prose, because the structure constrains the output space.
+
+### 3. Write honest system prompts
+
+Tell the model explicitly what to do when it doesn't know:
+
+```text
+If you are not certain, say "I'm not sure" rather than guessing.
+Do not cite sources you cannot verify.
+```
+
+This sounds obvious, but the default behavior — without explicit instructions — is to fill silence with plausible-sounding text. A direct instruction changes that default.
+
+### 4. Chain-of-thought for reasoning tasks
+
+For tasks that involve multi-step logic, asking the model to reason step by step before giving a final answer forces it to surface its logic. This often catches reasoning drift before it reaches the conclusion. It also makes failures far easier to debug.
+
+### 5. Evaluate, don't just eyeball
+
+The most important technique is also the least glamorous: run evals. Pick a set of questions where you know the right answer, run your pipeline against them, and measure how often it gets things wrong. Without this, you have no idea whether a prompt change made things better or worse.
+
+> Rule of thumb: if you'd be embarrassed to show a user the wrong answer, build an eval that catches it before they see it.
+
+## What a high hallucination rate is telling you
+
+A system that hallucinates often is almost always a **retrieval or prompting problem**, not a model problem. Before switching models, ask:
+
+- Is the relevant information actually in the context? (Retrieval failure — see the [common RAG pitfalls](/blog/rag-what-breaks-in-production))
+- Did the prompt give the model an explicit out when it doesn't know? (Prompt design)
+- Is the task itself unanswerable from the available data? (Scope problem)
+
+Answering these three questions will fix most hallucination issues in production without touching the model at all.
+
+---
+
+Hallucinations aren't magic — they're a predictable behavior of probabilistic systems that have no built-in ground-truth check. Build the check in, and you get a system you can actually trust.
+
+If you want to learn how to build LLM applications that handle this well end-to-end — retrieval, prompting, structured outputs, and the evals that keep it honest — our [courses cover all of it](/pricing).
