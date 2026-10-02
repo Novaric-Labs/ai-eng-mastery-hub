@@ -196,6 +196,23 @@ export const PREFACES = {
     ],
   },
 
+  computer: {
+    title: "When the only interface is a screen",
+    caption: "A short preface — why agents that drive screens are useful, slow, and the most exposed to hijacking.",
+    segments: [
+      { say: "Some of the most valuable software in your company has no API. A twenty-year-old desktop app. A supplier portal. A form only a person can fill in.",
+        slide: { kicker: "The gap", lines: ["No API.", "Just a *screen*."] } },
+      { say: "Computer-use agents close that gap. The model looks at a screenshot, decides where to click or what to type, your code does it, and the model looks again.",
+        slide: { kicker: "The loop", lines: ["Look. Click. Type.", "*Look again.*"] } },
+      { say: "That same loop is the danger. Every page the agent reads may have been written by an attacker, and one hidden line of text can redirect it. Anthropic's own testing of its hardened browser agent still saw about one attack in a hundred get through.",
+        slide: { kicker: "The catch", lines: ["Every page is *untrusted*.", "About *1 in 100* attacks still land."] } },
+      { say: "So treat it like a new hire working your software over a video call: slow, literal, easily misled. Give it the narrowest machine, the shortest list of sites, no passwords, and a person who approves anything you can't undo.",
+        slide: { kicker: "The mental model", lines: ["Narrow machine. Short list of sites.", "*No keys.* A human on one-way doors."] } },
+      { say: "This module is how to build that agent: when pixels are worth it, how the loop really works, what it costs, and how to keep it on a leash.",
+        slide: { kicker: "Computer-Use & Browser Agents", lines: ["Useful. Slow. Exposed.", "*Keep it on a leash.*"] } },
+    ],
+  },
+
   multi: {
     title: "An org chart for context windows",
     caption: "A short preface — when adding more agents pays off, and when it just adds cost.",
@@ -298,6 +315,23 @@ export const PREFACES = {
     ],
   },
 
+  serving: {
+    title: "Weights are rent",
+    caption: "A short preface — why fitting a model on a GPU is the easy part, and what actually sets the bill.",
+    segments: [
+      { say: "Running an open model yourself sounds like the cheap option. No per-token bill, no rate limits, and your data stays home.",
+        slide: { kicker: "The pitch", lines: ["No per-token bill.", "Your data *stays home*."] } },
+      { say: "Then the invoice arrives. GPUs bill by the hour, busy or idle, and a model that fits on one card can still serve only a handful of people at once.",
+        slide: { kicker: "The catch", lines: ["GPUs bill *by the hour*.", "Fits on one card. Serves *a handful*."] } },
+      { say: "So think of a GPU as a memory budget with a compute engine attached. The weights are rent. Every live conversation adds a KV cache that grows with its length.",
+        slide: { kicker: "The mental model", lines: ["The weights are *rent*.", "Every conversation adds *KV cache*."] } },
+      { say: "The serving engine's job is to keep that memory full of useful work. Your job is to keep the GPU busy, because at fifteen percent utilization the same hardware costs almost seven times more per token.",
+        slide: { kicker: "Utilization is the bill", lines: ["Keep memory *full of useful work*.", "At *15%* busy: almost *7×* the cost per token."] } },
+      { say: "This module is the arithmetic you do before you rent a GPU: memory, throughput, quantization, and the unit cost that tells you whether it beats an API.",
+        slide: { kicker: "Serving & Self-Hosting", lines: ["Size it *before* you rent it.", "Then *measure* what it delivers."] } },
+    ],
+  },
+
   aisec: {
     title: "A new attack surface",
     caption: "A short preface — why every AI feature is a new attack surface.",
@@ -363,6 +397,23 @@ export const PREFACES = {
         slide: { kicker: "The discipline", lines: ["*Route* first.", "*Vision* second."] } },
       { say: "This module is when multimodal earns its cost, when it is expensive theater, and how to send each document down the right path.",
         slide: { kicker: "Multimodal Systems", lines: ["Value versus *expensive theater*.", "Route each document *right*."] } },
+    ],
+  },
+
+  voice: {
+    title: "The one-second conversation",
+    caption: "A short preface — why voice agents are a timing problem before they are a prompt problem.",
+    segments: [
+      { say: "A voice demo takes an afternoon. Speech in, a model in the middle, speech out, and it feels like magic the first time it answers you.",
+        slide: { kicker: "The demo", lines: ["Speech in. Model. Speech out.", "It feels like *magic*."] } },
+      { say: "Then real callers arrive. They pause mid-sentence, they interrupt, they call from a noisy street on an eight kilohertz phone line, and they will not sit through two seconds of silence.",
+        slide: { kicker: "The reality", lines: ["Pauses. Interruptions. Phone lines.", "No patience for *dead air*."] } },
+      { say: "That is the shift. A voice agent is a real-time system with a human on the other end who will not wait. Every stage streams, and every stage has a budget measured in milliseconds.",
+        slide: { kicker: "The mental model", lines: ["A *real-time system*", "with a human who won't wait."] } },
+      { say: "So you engineer the turn before you tune the prompt. When to speak, when to stop, and what the caller actually heard, because what you sent and what they heard are not the same thing.",
+        slide: { kicker: "Engineer the turn", lines: ["When to speak. When to *stop*.", "What they actually *heard*."] } },
+      { say: "This module is how to build that turn: the pipeline, the latency budget, barge-in, telephony, evals, and telling every caller up front that they are talking to an AI.",
+        slide: { kicker: "Voice & Realtime Agents", lines: ["Budget it. Stream it.", "*Disclose* it."] } },
     ],
   },
 };

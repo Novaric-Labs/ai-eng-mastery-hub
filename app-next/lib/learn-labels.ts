@@ -124,7 +124,7 @@ const DEFAULT_LABELS: LearnLabels = {
   tourOverallTitle: "Overall mastery",
   tourOverallDesc:
     "A module counts as <b>mastered</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
-  tourBlocksTitle: "21 modules, 5 blocks",
+  tourBlocksTitle: "24 modules, 5 blocks",
   tourBlocksDesc: (isMobile) =>
     isMobile
       ? "The course is grouped into 5 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
@@ -152,17 +152,18 @@ const DEFAULT_LABELS: LearnLabels = {
     "No AI background needed. Fifteen minutes of orientation, then the curriculum will make sense.",
   startWhatTitle: "What this field actually is",
   startWhatBody:
-    "Companies like Anthropic, OpenAI, and Google spend months and billions training <b>large language models</b> — programs that predict the next word so well they can write, reason, and code. You will never train one. <b>AI engineering is building products on top of finished models</b>: you send them text over the internet, get text back, and everything else — making answers accurate, fast, affordable, safe, and connected to your data — is your job. That 'everything else' is exactly what the 21 modules here teach.",
+    "Companies like Anthropic, OpenAI, and Google spend months and billions training <b>large language models</b> — programs that predict the next word so well they can write, reason, and code. You will never train one. <b>AI engineering is building products on top of finished models</b>: you send them text over the internet, get text back, and everything else — making answers accurate, fast, affordable, safe, and connected to your data — is your job. That 'everything else' is exactly what the 24 modules here teach.",
   startInteractionTitle: "The one interaction that underlies everything",
   startPathTitle: "Your path through this hub",
   startPathItems: [
     "<b>Block 1 (Foundations)</b> teaches the model itself: tokens and cost, writing instructions, managing the window, choosing models. Everything else builds on it.",
     "<b>Block 2 (RAG & Knowledge)</b> connects models to YOUR data — the most common real-world AI product.",
-    "<b>Block 3 (Agents & Harnesses)</b> gives models the ability to act, and the machinery that keeps them reliable.",
+    "<b>Block 3 (Agents & Harnesses)</b> gives models the ability to act: tools and MCP, agents that drive browsers and screens, multi-agent systems, and the harness machinery that keeps them reliable.",
     "<b>Block 4 (Production & Leadership)</b> is shipping for real: testing, safety, architecture, judgment.",
+    "<b>Block 5 (Advanced Engineering)</b> goes deeper: fine-tuning, serving open models on your own GPUs, security, observability, data pipelines, multimodal systems, and voice agents.",
   ],
   startPathNote:
-    "Each module starts with an <b style=\"color:var(--teal)\">In plain English</b> box — read just those across all 21 modules first if you want a fast aerial view. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a 'How it actually works' section feels deep on a first pass, skip it and return after the quiz — the layers are designed for multiple passes.",
+    "Each module starts with an <b style=\"color:var(--teal)\">In plain English</b> box — read just those across all 24 modules first if you want a fast aerial view. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a 'How it actually works' section feels deep on a first pass, skip it and return after the quiz — the layers are designed for multiple passes.",
   startBeginBtn: "Begin Block 1: LLM Fundamentals →",
   startBeginMod: "llm",
 
@@ -243,7 +244,7 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
 // Senior/architect reframes for 'ai-architect'. Voice: peer-to-peer, assumes the
 // component knowledge the Mastery Hub teaches, and talks in artifacts and numbers
 // rather than lessons (14 modules across 4 blocks). The DEFAULT copy above is
-// written for ai-eng and states facts that are wrong here — 21 modules, 5 blocks,
+// written for ai-eng and states facts that are wrong here — 24 modules, 5 blocks,
 // "no AI background needed", and a Begin button pointing at a module this course
 // does not have — so every one of those is overridden.
 const AI_ARCHITECT_LABELS: LearnLabels = {
