@@ -7,7 +7,11 @@
 //   - LENGTH OUTLIER: the correct option is substantially longer than the longest
 //     distractor (> LEN_RATIO x and >= MIN_GAP chars longer), or
 //   - MODULE SKEW: the correct option is the single longest in more than
-//     SKEW_RATE of a module's questions (a systematic "pick the longer one" tell).
+//     SKEW_RATE of a module's questions (a systematic "pick the longer one" tell),
+//   - LETTER REFERENCE: an explanation or option that names another option by
+//     letter ("(C)", "option B", "B and D", "A would…"). prepItems shuffles the
+//     options and the quiz re-letters them A–D, so a letter points at the wrong
+//     option about 75% of the time. Name the option by its content instead.
 //
 // Note we deliberately do NOT flag "correct happens to be the single longest" on
 // its own — with balanced options that occurs ~25% of the time by chance, so it
@@ -32,6 +36,20 @@ const SKEW_RATE = 0.6;  // correct may be the single longest in at most this sha
 // Strip inline HTML/markup so length compares the visible text, not tags.
 const visibleLen = (s) => String(s).replace(/<[^>]*>/g, '').trim().length;
 
+// Option references by letter. Written to catch the forms that appeared in practice
+// while leaving "A/B testing" and an article "A" followed by a noun alone.
+const LETTER_REF = new RegExp([
+  String.raw`\(([A-D])\)`,
+  String.raw`\b(option|answer|choice)s?\s+\(?[A-D]\)?(?![\w-])`,
+  String.raw`\b[A-D]\s*(and|or|,)\s*[A-D]\b`,
+  String.raw`\b(?!A\/B\b)[A-D]\/[A-D]\b`,
+  String.raw`(^|[.;:!?]\s+|—\s*|\(\s*)[BCD]\s+[a-z(~$]`,
+  String.raw`(^|[.;:!?]\s+|—\s*|\(\s*)A\s+(would|is|was|does|isn|wouldn|doesn|could|might|may|can|only|just|uses|pays|requires|costs|ignores|treats|confuses|assumes|mixes|picks|fails|solves|swaps|misreads|claims|says|gets|misses|overstates|understates|reverses|describes|names|adds|has|sounds|looks|conflates)\b`,
+  String.raw`\b[A-D]\s\(~`,
+  String.raw`\b(closest to|matches|than|unlike|versus|vs\.?)\s+[A-D]\b(?![\w'-])`,
+  String.raw`\b[A-D]'s\b`,
+].join('|'));
+
 let totalFail = 0;
 let totalQ = 0;
 
@@ -53,6 +71,11 @@ for (const { course, json } of COURSES) {
       if (o.length !== 4) { fails.push(`${where}: option count ${o.length} (must be 4)`); return; }
       if (typeof it.a !== 'number' || it.a < 0 || it.a >= o.length) {
         fails.push(`${where}: answer index ${it.a} out of range`); return;
+      }
+
+      for (const [field, txt] of [['exp', it.exp], ...o.map((t, k) => [`o[${k}]`, t])]) {
+        const hit = typeof txt === 'string' && txt.match(LETTER_REF);
+        if (hit) fails.push(`${where}: ${field} refers to an option by letter ("${hit[0].trim()}") — options are shuffled and re-lettered at runtime; name it by its content`);
       }
 
       const lens = o.map(visibleLen);
