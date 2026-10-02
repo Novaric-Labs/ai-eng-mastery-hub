@@ -54,3 +54,5 @@ confused with the increase over current spend. Check each explicitly before ship
 module that prices anything.
 
 Related: [[course-content-schema]]
+
+**Oct 2026:** course is now 14 modules / 13 artifacts — `runs` (b2) and `regarch` (b4) added, capstone linter R9 (run contracts; key HONOURED downstream + durability) and R10 (obligations; evidence window). New modules followed the same contract: stdlib seeded calculator that prints every number the prose quotes, 4 res with one "Use right now:", 9 quiz, no dates (regulatory dates as weeks-from-today parameters, statutory figures as labelled counsel inputs). Cite ai-eng for components in one clause (pass^k → evals, effort → llm, trifecta → aisec, durable execution → agents, audit logs → mlops). Python pitfall: inserting a top-level function between dataclass fields and a method silently ends the class — add helpers after the class. Recalibrate a plan's prototype to the module's own spec card before quoting numbers.

@@ -2,3 +2,5 @@
 - [Vendor doc URL currency](vendor-doc-urls.md) — known redirects/dead links for OpenAI + Anthropic docs cited in courses
 - [Using Claude course facts](using-claude-course.md) — verified source-of-truth for content/using-claude.json (Cowork/Code/Chat, plans, Chrome beta)
 - [AI Architect course facts](ai-architect-course.md) — design contract, verified/unverified arithmetic, and recurring error classes for content/ai-architect.json
+- [AI Engineering Mastery Hub facts](ai-eng-course.md) — 24-module course: recurring error classes (letter refs, extraction damage, unit errors), canonical Claude facts, ownership map
+- [Review environment](review-environment.md) — cloud-session limits: blocked vendor hosts, shared 200-search budget, GitHub/PyPI first-party fallbacks

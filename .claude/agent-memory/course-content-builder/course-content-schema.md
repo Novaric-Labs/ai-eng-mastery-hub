@@ -26,3 +26,10 @@ Rich text fields are trusted inline-HTML fragment strings: `<b>`, `<br><br>`, `<
 Validate after authoring: `node -e` parse + check every module id has MODULE/PLAIN/DEEP/DEPTH/QUIZ entries, quiz `a` indices in range, blocks valid, card/glossary moduleId refs valid.
 
 Related: [[using-claude-course]]
+
+**Render rules learned in the Oct 2026 review (binding for every course):**
+- Plain-text fields (rendered literally, no tags/entities): module `title`, `tag`, concept terms, `trade[i][0]`, `debug[i][0]`, `res[i][0]` label, glossary term, scenario `title`, and the **first 140 chars of `sit`** (Scenarios list preview). Everything else is HTML (`<b> <br> <code> <em> <a href="https://…">`); escape literal angle-bracket tokens as `&lt;…&gt;` or the browser swallows them. `PATTERNS.code` shows verbatim in a `<pre>`.
+- `res` notes are rendered as written (the UI's old hard-coded "Use when:" label was removed) — write each note as a self-contained "when to reach for it" line; url `"#"` renders a non-link label (never leave it empty).
+- Quiz options are shuffled and re-lettered A–D at runtime, so `exp` and options must NEVER refer to an option by letter — `content/validate-quizzes.mjs` rejects it (alongside the length-outlier and correct-is-longest skew rules). Answer position doesn't matter; answer length does.
+- `isNew`/`isUpd` are seeded but no app component renders them (harmless to leave both).
+- Adding modules changes copy outside the content file: `app-next/lib/courses.ts` (moduleCount, blurb, estHours), `app-next/lib/learn-labels.ts` (tour counts, start-page block paths, per-course lists), the tutor scope in `app-next/app/api/tutor/route.ts` (it declines off-scope topics), and preface scripts in `video/data/prefaces*.mjs`.

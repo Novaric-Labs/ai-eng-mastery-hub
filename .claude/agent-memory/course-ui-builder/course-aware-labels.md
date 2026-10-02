@@ -20,3 +20,6 @@ The same `app-next/components/learn/*` renders every course; copy was originally
 **Beginner voice:** warm, plain-English, no jargon. Established reframes: "module"→"lesson", "Mastery exam"→"Block review", "production judgment / senior-level skill"→ practical "make the call in a realistic situation", "21 modules, 5 blocks"→"8 lessons, 2 blocks". Mirror the ModuleView beginner mappings ("Explain it to a friend", "Questions to ask yourself", "Speed & cost notes", "Privacy & safety notes").
 
 **Why:** launching `ai-foundations` (beginner) alongside `ai-eng` (engineer) on shared rendering code; the two audiences need different framings for the same UI.
+
+**Oct 2026 additions:** `LearnLabels.flashLockedTagline(n)` (Flashcards paywall tagline now uses `course.catalog.length`; "lessons" for ai-foundations). ModuleView no longer prints a hard-coded "Use when:" before resource notes (notes are written to stand alone). Per-course AI configs live outside learn-labels: `app/api/tutor/route.ts` TUTORS (scope + persona — the tutor declines topics outside `scope`, so add new modules' topics there), `app/api/explain/route.ts` TONE, `app/api/grade/route.ts` GRADERS; all three now have an `ai-architect` entry (previously it silently fell back to ai-eng's).
+
