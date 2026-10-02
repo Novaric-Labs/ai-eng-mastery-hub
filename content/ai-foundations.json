@@ -502,7 +502,7 @@
       "title": "Using AI Responsibly",
       "tag": "Your data, your judgment, and the fakes: getting the benefits without getting burned",
       "isNew": true,
-      "why": "You know how AI works, where it goes wrong, and how it can even act for you. This lesson is about you: what happens to what you type, how to use AI at work without breaking rules you didn't know existed, why it flatters you, where bias creeps in, when to say AI helped, and how not to be fooled by AI-made fakes, which scammers have learned to use. None of it needs technical skill. A handful of simple habits prevents nearly every bad outcome, so you can use AI with confidence instead of worry.",
+      "why": "You know how AI works, where it goes wrong, and how it can even act for you. This lesson is about you: what happens to what you type, how to use AI at work without breaking rules you didn't know existed, why it flatters you, where bias creeps in, when to say AI helped, and how not to be fooled by AI-made fakes, which scammers have learned to use. None of it needs technical skill. A handful of simple habits prevents most of the common problems, so you can use AI with confidence instead of worry.",
       "mental": "Treat an AI app like <b>a brilliant helper who works for a company you've never met</b>. It's glad to help, and that one picture tells you how to stay safe. <b>You don't hand it secrets that aren't yours to share</b>: what you give it goes back to that company, where it's stored and, depending on your settings, may help train future models. <b>You don't let its compliments make your decisions</b>: it's inclined to agree with you, and its view of the world carries the stereotypes of the text it learned from. And <b>you check before believing anything surprising</b> that it, or someone using it, puts in front of you, because the technology that drafts your emails can also copy a voice you trust. Hold onto those three, and you keep nearly all the benefit with little of the risk.",
       "concepts": [
         [
@@ -995,7 +995,7 @@
         "Don't assume an answer is current just because the product can search; confirm a search actually ran (look for a source or link) before trusting fresh-sounding claims",
         "Files you upload are processed by the product and sent onward as text, so apply the same caution you would to pasting, don't hand over sensitive documents you wouldn't want stored"
       ],
-      "interview": "The friend-version: the core AI model only predicts text, so how can it look at photos, read your PDF, or search the web? Those are extras the product bundles around the engine. Think of the model as an engine and the app as a car built around it, reading files, browsing the internet, doing math, talking out loud, are features the car adds (and a few engines can also see images). When the model needs something beyond text, it calls a tool, a separate program that does the real work and hands the result back as text. So 'can this AI do X?' really means 'does this product give the model a tool for X?', which is exactly why two different AI apps can have very different abilities."
+      "interview": "The friend-version: the core AI model only predicts text, so how can it look at photos, read your PDF, or search the web? Those are extras the product bundles around the engine. Think of the model as an engine and the app as a car built around it, reading files, browsing the internet, doing math, talking out loud, are features the car adds (and many engines can also see images). When the model needs something beyond text, it calls a tool, a separate program that does the real work and hands the result back as text. So 'can this AI do X?' really means 'does this product give the model a tool for X?', which is exactly why two different AI apps can have very different abilities."
     },
     "actions": {
       "mech": "An agent adds no new kind of intelligence; it's the tools pattern from the last lesson, run in a loop. Remember the trick: the model can't do anything by itself, so it writes out a request ('search for X', 'click Sign up'), the app carries it out, and the result is pasted back in as text. An agent simply keeps going. The app gives the model your goal and a set of tools; the model picks a step; the app runs it; the result lands in the context window; the model rereads everything so far and picks the next step. That repeats until the model decides the goal is met, reaches a step it must ask you about, or runs out of room or time. A browser or computer agent uses the same loop with different tools: the app shows the model a <b>screenshot</b>, the model decides where to click or what to type, the app does it, and a fresh screenshot shows what changed.<br><br>Three things follow from that loop. First, <b>everything piles onto the desk</b>: every page, screenshot, and result takes up room in the context window, so long tasks get crowded and slow, and an early mistake stays there, steering every step after it. That's why errors compound and longer jobs fail more often. Second, <b>it's all words on the same desk</b>. Apps mark which words came from you and which came from a web page, and models are trained to treat pages as information rather than orders, but that training isn't airtight, so a cleverly worded planted line can still steer it. That's prompt injection, and the extra defenses makers add (safety checks, approval pauses) lower the risk without removing it. Third, <b>the final report is more predicted text</b>, written from the agent's own notes, so it can call a job finished when a click quietly failed. Hence the habits: narrow access, a pause before anything you can't undo, and a look at the real outcome.",
@@ -1037,7 +1037,7 @@
       ],
       "sec": [
         "Before you paste, ask two questions: is this mine to share, and would I be fine with someone at the company reading it? Passwords, ID and account numbers, health details, and other people's personal information usually fail that test",
-        "Check your app's privacy settings once; switching training off stops future use but can't undo training that already happened, and in some apps rating or reporting an answer can share that whole conversation with the company even with training off",
+        "Check your app's privacy settings once; switching training off stops future use but can't undo training that already happened, and in some apps rating or reporting an answer can let the company use that whole conversation to improve its models, even with training off",
         "Connectors to your email, calendar, or files let the app read whatever they can reach, so connect only what a task needs and disconnect what you no longer use; the agents lesson covers why this matters even more once AI can act",
         "Agree on a family code word, and treat any call or message that mixes urgency, secrecy, and an unusual way to pay (gift cards, cryptocurrency, wire transfers) as a scam until you've called back on a number you trust"
       ],
@@ -1199,7 +1199,7 @@
         "<b>Part 1</b> runs before anything leaves your hands, because once it's sent you can't take it back; the safest information is the information you never shared",
         "<b>belongs_to_someone_else</b> is the line people skip: a client's file or a coworker's details aren't yours to hand to any AI, so they go only into a tool your organization approved for that data, or nowhere",
         "<b>ask(\"what's wrong with this?\")</b> flips the flattery habit around: once you ask for problems, being helpful means finding them",
-        "<b>verify_through_second_channel</b> is the move that beats nearly every scam: a callback, or a look at the original source, through a route the scammer doesn't control"
+        "<b>verify_through_second_channel</b> is the move that beats most scams: a callback, or a look at the original source, through a route the scammer doesn't control"
       ],
       "debug": [
         ["It loved every idea I had", "Sycophancy: models lean toward agreeing and praising, partly because of how they were trained", "Ask for the three strongest objections, or have it argue the other side, then decide for yourself"],
@@ -1572,15 +1572,15 @@
     ],
     "tools": [
       {
-        "q": "The core language model only predicts text. So how can an AI app look at a photo or search the web?",
+        "q": "The core language model only predicts text. So how can an AI app read your files or search the web?",
         "o": [
           "The model secretly has every one of those abilities already built inside it",
           "Modern products bundle extra abilities (tools) around the text engine",
-          "It can't really, those photo and web features are just clever fakes",
+          "It can't really, those file and web features are just clever fakes",
           "It quietly downloads a fresh, more capable brain for each new task"
         ],
         "a": 1,
-        "exp": "Think of the model as an engine and the product as a car built around it. Seeing images, reading files, browsing the web, and doing math are features the product adds. When the model needs one, it calls a tool that does the real work and returns the result as text."
+        "exp": "Think of the model as an engine and the product as a car built around it. Reading files, browsing the web, and doing math are features the product adds. When the model needs one, it calls a tool that does the real work and returns the result as text."
       },
       {
         "q": "You attach a PDF and the AI summarizes it. What actually happened?",
@@ -1832,7 +1832,7 @@
     { "m": "limits", "f": "Which answers most deserve a double-check?", "b": "Specific, copyable details, exact statistics, named quotes, citations, links, on niche or recent topics. That's where hallucination is most likely and most tempting to copy. Confidence is never a safety check." },
     { "m": "limits", "f": "An answer came with source links. Is it safe now?", "b": "Safer, not safe. Search cuts down on made-up facts, but the model can misread a page or attach a real link to a claim the page doesn't make. For anything that matters, open the source and find the claim yourself." },
     { "m": "limits", "f": "What is grounding, and why does it help?", "b": "Giving the model the real source to answer from (paste the document, or use a search tool) instead of asking from memory. The answer is then anchored to actual material, so it's far less likely to be made up." },
-    { "m": "tools", "f": "The core model only predicts text, so how can it see images or search the web?", "b": "Products bundle extra abilities (tools) around the engine. Think of the model as an engine and the app as a car built around it, vision, search, file reading, and math are features the car adds and calls when needed." },
+    { "m": "tools", "f": "The core model only predicts text, so how can it read files or search the web?", "b": "Products bundle extra abilities (tools) around the engine. Think of the model as an engine and the app as a car built around it, search, file reading, and math are features the car adds and calls when needed." },
     { "m": "tools", "f": "What is a 'tool' in AI?", "b": "An outside helper the model can call when a task is beyond text prediction, a calculator, web search, file reader, code runner. The tool does the real work and hands the result back as text the model uses." },
     { "m": "tools", "f": "Is voice mode a different, smarter AI?", "b": "No. Some voice modes turn your speech into text and read the answer aloud; others hear audio directly and reply faster. Either way it's the same kind of assistant underneath, so it can be just as confidently wrong, only out loud." },
     { "m": "tools", "f": "Should you trust the AI summary at the top of search results?", "b": "Give it the same quick check as any AI answer. It's the same kind of engine with the same limits, so click through to the sources for anything that matters." },
