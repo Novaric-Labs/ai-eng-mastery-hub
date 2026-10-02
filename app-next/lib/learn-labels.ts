@@ -172,7 +172,7 @@ const DEFAULT_LABELS: LearnLabels = {
 
 // Beginner reframes for 'ai-foundations'. Voice: warm, plain-English, no jargon
 // (matches the ModuleView beginner mappings and the authored ai-foundations
-// content, which is 8 modules across 2 blocks).
+// content, which is 10 modules across 2 blocks).
 const AI_FOUNDATIONS_LABELS: LearnLabels = {
   dashNewBefore:
     "This course assumes no AI background at all. Take 15 minutes on",
@@ -196,7 +196,7 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
   tourOverallTitle: "Overall progress",
   tourOverallDesc:
     "A lesson counts as <b>done</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
-  tourBlocksTitle: "8 lessons, 2 blocks",
+  tourBlocksTitle: "10 lessons, 2 blocks",
   tourBlocksDesc: (isMobile) =>
     isMobile
       ? "The course is grouped into 2 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
@@ -228,8 +228,8 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
   startInteractionTitle: "The one interaction that underlies everything",
   startPathTitle: "Your path through this course",
   startPathItems: [
-    "<b>Block 1 (Getting Started)</b> covers the model itself: what tokens are, how to write a good prompt, and what the model can and can't remember. Everything else builds on it.",
-    "<b>Block 2 (Working With Models)</b> is about getting useful results: giving the model your own information, checking its answers, and knowing when to trust it.",
+    "<b>Block 1 (Getting Started)</b> covers how the model works and how to talk to it: what it really is, tokens, the context window, prompting, and how a chat fakes memory. Everything else builds on it.",
+    "<b>Block 2 (Working With Models)</b> is about using it well in the real world: spotting what it gets wrong, the extras like search and voice, agents that act for you, staying safe, and picking the right model for the job.",
   ],
   startPathNote:
     "Each lesson starts with an <b style=\"color:var(--teal)\">In plain English</b> box — read just those across all the lessons first if you want a fast overview. Any unfamiliar word lives in the <b>Glossary</b> (sidebar). When a section feels deep on a first pass, skip it and come back after the quiz — it's fine to read things more than once.",
@@ -237,7 +237,7 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
   startBeginMod: "whatai",
 
   tutorHint:
-    "Ask anything about the course — how LLMs work, tokens, prompts, what to trust… I only answer on course topics.",
+    "Ask anything about the course — how LLMs work, tokens, prompts, agents, staying safe, what to trust… I only answer on course topics.",
 };
 
 // Senior/architect reframes for 'ai-architect'. Voice: peer-to-peer, assumes the

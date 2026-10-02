@@ -53,6 +53,10 @@ export async function POST(req: Request) {
       persona: "a warm, encouraging tutor coaching a beginner",
       rubric: "clear thinking and grasp of the core idea",
     },
+    "ai-architect": {
+      persona: "a principal engineer chairing an architecture review",
+      rubric: "the decision committed to and whether the numbers justify it",
+    },
   };
   const grader = GRADERS[course] ?? GRADERS["ai-eng"];
 

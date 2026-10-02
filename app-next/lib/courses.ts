@@ -29,17 +29,17 @@ export const COURSES: CourseMeta[] = [
   {
     slug: "ai-foundations",
     title: "AI Foundations",
-    subtitle: "Zero to fluent — what LLMs, tokens, and prompts actually are, before the deep course.",
+    subtitle: "Zero to fluent — what LLMs, tokens, prompts, and agents actually are, and how to use them safely, before the deep course.",
     blurb:
-      "The gentle on-ramp for total beginners. Plain-English mental models for how LLMs work, what tokens and context windows are, and how to prompt well — so the Mastery Hub feels like the obvious next step.",
+      "The gentle on-ramp for total beginners. Plain-English mental models for how LLMs work, what tokens and context windows are, how to prompt well, what AI agents can do for you, and how to use AI safely — so the Mastery Hub feels like the obvious next step.",
     bestFor: [
       "Total beginners to AI",
       "Non-engineers who want to keep up",
       "A primer before the Mastery Hub",
     ],
     level: "Beginner",
-    estHours: "6–8 hrs",
-    moduleCount: 8,
+    estHours: "8–10 hrs",
+    moduleCount: 10,
     status: "live",
     accent: "#2dd4bf",
   },

@@ -12,6 +12,7 @@ export const runtime = "nodejs";
 const TONE: Record<string, string> = {
   "ai-eng": "Keep it sharp and technically precise.",
   "ai-foundations": "Keep it warm, plain-English, and free of jargon.",
+  "ai-architect": "Keep it precise and decision-oriented; show the numbers behind the call.",
 };
 
 export async function POST(req: Request) {
