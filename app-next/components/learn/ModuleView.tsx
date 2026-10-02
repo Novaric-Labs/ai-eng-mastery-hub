@@ -327,7 +327,7 @@ export default function ModuleView({ id }: { id: string }) {
             <a href={r[1]} target="_blank" rel="noopener noreferrer">{r[0]} ↗</a>
           )}
           <span className="when">
-            <b>Use when:</b> <Html as="span" html={r[2]} />
+            <Html as="span" html={r[2]} />
           </span>
         </div>
       ))}

@@ -4,17 +4,20 @@ import { useCallback, useEffect, useState } from "react";
 import { useCourseStore } from "./StoreProvider";
 import Html from "./Html";
 import Paywall from "./Paywall";
+import { learnLabelsFor } from "@/lib/learn-labels";
 import { dueCards, lockedCardCount, unlockedCards } from "@/lib/course";
 
 type QItem = { c: { m: string; f: string; b: string }; i: number };
 type Sess = { knew: number; missed: number; n: number; done: boolean };
 
 export default function Flashcards() {
-  const { course, S, gradeCard } = useCourseStore((s) => ({
+  const { course, courseSlug, S, gradeCard } = useCourseStore((s) => ({
     course: s.course,
+    courseSlug: s.courseSlug,
     S: s.S,
     gradeCard: s.gradeCard,
   }));
+  const L = learnLabelsFor(courseSlug);
 
   const [queue, setQueue] = useState<QItem[]>([]);
   const [flipped, setFlipped] = useState(false);
@@ -77,7 +80,7 @@ export default function Flashcards() {
     return (
       <div className="page">
         <h2>Flashcards</h2>
-        <p className="tagline">Spaced-repetition flashcards across all 21 modules.</p>
+        <p className="tagline">{L.flashLockedTagline(course.catalog.length)}</p>
         <Paywall heading="Flashcards are part of the full course" />
       </div>
     );

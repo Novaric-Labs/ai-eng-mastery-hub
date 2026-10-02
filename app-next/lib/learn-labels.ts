@@ -58,6 +58,10 @@ export type LearnLabels = {
   /** start tour description. */
   tourStartDesc: string;
 
+  // ---- Flashcards ----
+  /** Locked/paywall tagline under the Flashcards title (plain text; takes the module count). */
+  flashLockedTagline: (n: number) => string;
+
   // ---- Scenarios ----
   /** Locked/paywall tagline. */
   scenLockedTagline: string;
@@ -137,6 +141,7 @@ const DEFAULT_LABELS: LearnLabels = {
   tourStartDesc:
     "A ~15-minute orientation that gives you the mental model the rest of the course builds on. Worth doing first if you're newer to AI engineering.",
 
+  flashLockedTagline: (n) => `Spaced-repetition flashcards across all ${n} modules.`,
   scenLockedTagline: "Production-judgment challenges across all five blocks.",
   scenIntroTagline:
     "Production judgment under realistic conditions. Write or speak your answer BEFORE revealing the model answer — retrieval practice is where mastery forms. Then self-grade honestly against the key points.",
@@ -208,6 +213,7 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
   tourStartDesc:
     "A ~15-minute orientation that gives you the mental picture the rest of the course builds on. Worth doing first if you're brand new to AI.",
 
+  flashLockedTagline: (n) => `Spaced-repetition flashcards across all ${n} lessons.`,
   scenLockedTagline: "Real-world situations to practice on, across both blocks.",
   scenIntroTagline:
     "Realistic situations to think through. Write or speak your answer BEFORE revealing a strong answer — trying it yourself first is where it really sinks in. Then grade yourself honestly against the key points.",
@@ -280,6 +286,7 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   tourStartDesc:
     "A short orientation: what this course assumes you already know, and the six numbers the rest of it is built on.",
 
+  flashLockedTagline: (n) => `Spaced-repetition flashcards across all ${n} modules.`,
   scenLockedTagline: "Design-table decisions and architecture reviews across all four blocks.",
   scenIntroTagline:
     "Design decisions under realistic constraints. Write or speak your answer BEFORE revealing the model answer — retrieval practice is where judgment forms. A good answer names the number that forced the call, not just the choice.",
