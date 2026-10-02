@@ -242,7 +242,7 @@ const AI_FOUNDATIONS_LABELS: LearnLabels = {
 
 // Senior/architect reframes for 'ai-architect'. Voice: peer-to-peer, assumes the
 // component knowledge the Mastery Hub teaches, and talks in artifacts and numbers
-// rather than lessons (12 modules across 4 blocks). The DEFAULT copy above is
+// rather than lessons (14 modules across 4 blocks). The DEFAULT copy above is
 // written for ai-eng and states facts that are wrong here — 21 modules, 5 blocks,
 // "no AI background needed", and a Begin button pointing at a module this course
 // does not have — so every one of those is overridden.
@@ -260,7 +260,7 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   dashHowRead: (passQuiz) =>
     `<b>Read</b> each module's four tabs — <b>Learn</b> (the decision and its mechanism), <b>Apply</b> (a worked example with the arithmetic shown, and the artifact to build), <b>Resources</b> (curated, with when-to-use), <b>Patterns</b> (a calculator you can run) — then take its <b>quiz</b> (≥${passQuiz}% to master). Work block by block.`,
   dashHowBuild:
-    "Do the <b>Build it</b> exercise for each module against a system you actually own. Twelve modules produce twelve artifacts, and the capstone assembles them into one architecture document you can defend in review.",
+    "Do the <b>Build it</b> exercise for each module against a system you actually own. Thirteen modules each produce an artifact, and the capstone assembles all thirteen into one architecture document you can defend in review.",
   dashHowScenarios:
     "Do the <b>scenarios</b> once a block's modules are mastered — they put you at the design table with a decision to commit to, and one per block hands you someone else's architecture to review.",
   dashHowExam: (passExam) =>
@@ -269,7 +269,7 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   tourOverallTitle: "Overall mastery",
   tourOverallDesc:
     "A module counts as <b>mastered</b> once you've read it and scored ≥80% on its quiz. This bar tracks the whole course.",
-  tourBlocksTitle: "12 modules, 4 blocks",
+  tourBlocksTitle: "14 modules, 4 blocks",
   tourBlocksDesc: (isMobile) =>
     isMobile
       ? "The course is grouped into 4 blocks. Tap <b>Study</b> on a block to dive in, or use ☰ (top-left) to jump anywhere."
@@ -302,9 +302,9 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   startPathTitle: "Your path through this course",
   startPathItems: [
     "<b>Block 1 (From Requirements to Architecture)</b> turns a vague ask into six binding numbers, allocates them across the pipeline as budgets, and picks the cheapest system shape those numbers permit.",
-    "<b>Block 2 (Designing for Failure)</b> enumerates the failures a 200 OK hides, bounds what a compromised turn can reach, and writes the degradation ladder before the incident.",
+    "<b>Block 2 (Designing for Failure)</b> enumerates the failures a 200 OK hides, bounds what a compromised turn can reach, writes the degradation ladder before the incident, and decides where a run that lasts hours resumes after an interruption, without firing its side effects twice.",
     "<b>Block 3 (Architecture That Survives Change)</b> prices your exit from every vendor, writes the freshness contract for each derived copy of the truth, and makes changing the model a Tuesday.",
-    "<b>Block 4 (Governing the System)</b> places the control points that are allowed to say no, draws the ownership boundaries you will ship anyway, and assembles the whole thing into a document that survives a hostile review.",
+    "<b>Block 4 (Governing the System)</b> places the control points that are allowed to say no, draws the ownership boundaries you will ship anyway, turns regulatory obligations into evidence you can produce on request, and assembles the whole thing into a document that survives a hostile review.",
   ],
   startPathNote:
     "Each module starts with an <b style=\"color:var(--teal)\">In plain English</b> box, and ends with a <b>Patterns</b> tab holding a small program — a calculator, a register, or a linter — that takes your design facts and prints a number or a verdict. They are standard-library Python with no keys and no network, so you can run them against your own system today. Any unfamiliar term lives in the <b>Glossary</b> (sidebar).",
@@ -321,9 +321,9 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   startCast: {
     title: "What you will have at the end",
     items: [
-      "<b>Twelve artifacts, one per module</b> — a spec card, three budget tables, an FMEA, an action inventory, a degradation ladder, an exit memo, a derived-state register, a migration runbook, a control-point map and an ownership matrix.",
-      "<b>Twelve calculators</b> — each module's Patterns tab holds a small standard-library Python program (no keys, no network) that takes your design facts and prints a number or a verdict you can paste into a design doc.",
-      "<b>One architecture document</b> — the capstone assembles the other eleven artifacts and lints them against each other for contradictions, which is the thing you actually defend in review.",
+      "<b>Thirteen artifacts, one per module before the capstone</b> — a spec card, three budget tables, a shape decision with its rejected rungs, an FMEA, an action inventory, a degradation ladder, a run contract, an exit memo, a derived-state register, a migration runbook, a control-point plan, an ownership matrix and an obligation-evidence register.",
+      "<b>Fourteen calculators</b> — each module's Patterns tab holds a small standard-library Python program (no keys, no network) that takes your design facts and prints a number or a verdict you can paste into a design doc.",
+      "<b>One architecture document</b> — the capstone assembles the other thirteen artifacts and lints them against each other for contradictions, which is the thing you actually defend in review.",
       "<b>The habit of writing down the constraint, not the conclusion</b> — so that in twelve months someone can tell whether the reason you chose this has expired.",
     ],
   },
@@ -333,7 +333,7 @@ const AI_ARCHITECT_LABELS: LearnLabels = {
   startBeginMod: "reqs",
 
   tutorHint:
-    "Ask anything about architecting AI systems — budgets, failure modes, blast radius, capacity, migrations, control points… I only answer on course topics.",
+    "Ask anything about architecting AI systems — budgets, failure modes, blast radius, capacity, long-running runs, migrations, control points, compliance evidence… I only answer on course topics.",
 };
 
 const LABELS_BY_COURSE: Record<string, LearnLabels> = {

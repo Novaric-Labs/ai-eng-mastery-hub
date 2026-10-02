@@ -66,7 +66,7 @@ export const COURSES: CourseMeta[] = [
     subtitle:
       "Requirements to committed constraints — budgets, failure containment, and an architecture you can defend.",
     blurb:
-      "For engineers who already know how the pieces work and now have to decide which pieces exist. Twelve modules on turning a vague ask into six binding numbers, allocating cost/latency/reliability budgets across a pipeline, containing blast radius, sizing capacity, planning migrations, and writing an architecture document that survives a hostile review. Every module ends in one artifact with real numbers in it.",
+      "For engineers who already know how the pieces work and now have to decide which pieces exist. Fourteen modules on turning a vague ask into six binding numbers, allocating cost/latency/reliability budgets across a pipeline, containing blast radius, sizing capacity, making long-running agent runs survive interruption, planning migrations, turning regulatory obligations into evidence, and writing an architecture document that survives a hostile review. Every module ends in one artifact with real numbers in it.",
     bestFor: [
       "Staff & principal engineers",
       "Architects owning an AI system end-to-end",
@@ -74,8 +74,8 @@ export const COURSES: CourseMeta[] = [
       "Anyone who's shipped an LLM feature and now owns the next three",
     ],
     level: "Advanced",
-    estHours: "12–16 hrs",
-    moduleCount: 12,
+    estHours: "14–18 hrs",
+    moduleCount: 14,
     status: "coming_soon",
     accent: "#e3b341",
   },
