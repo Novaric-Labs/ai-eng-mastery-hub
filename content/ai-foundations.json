@@ -280,7 +280,7 @@
         ],
         [
           "Temporary (incognito) chats",
-          "Most apps offer a chat that isn't saved to your history, doesn't feed the memory feature, and isn't used to train future models, handy for one-off or sensitive questions. The company may still keep it for a short time for safety checks, so it's more private, not invisible."
+          "Many apps offer a chat that isn't saved to your history, doesn't feed the memory feature, and isn't used to train future models, handy for one-off or sensitive questions. The company may still keep it for a short time for safety checks, so it's more private, not invisible."
         ]
       ],
       "mistakes": [
@@ -1470,6 +1470,7 @@
     { "m": "using", "f": "What two questions decide how much care a task needs?", "b": "How capable does the model need to be, and how much does being wrong cost me? Cheap-and-fast for low stakes; stronger model, real sources, and verification for high stakes. That's the whole course as a quick habit." },
     { "m": "using", "f": "When should you trust the model versus verify it?", "b": "Trust it to draft, brainstorm, explain, and rephrase. Verify it on facts, numbers, recent events, and citations. This single split prevents most AI mishaps." },
     { "m": "using", "f": "When is a thinking mode worth it?", "b": "For genuinely hard, multi-step problems: math, planning, tricky analysis, code. It's slower and uses more of your budget or limits, so for a quick rewrite or a simple question, the fast mode is the better call." },
+    { "m": "using", "f": "What are the three ways to make an AI fit your needs, and in what order?", "b": "First, instructions: a clear prompt, or saved custom instructions. Second, your own material: attach documents or use a project so it answers from real sources. Last and rarely, retraining (fine-tuning), which is mostly for companies building products." },
     { "m": "using", "f": "How do you know if an AI tool is good for your task?", "b": "Test it on a few examples where you already know the right answer. Five minutes of that tells you more about how it handles your work than any leaderboard or ad." },
     { "m": "using", "f": "Where does most everyday AI cost come from, and what's next after Foundations?", "b": "Cost tracks tokens, so big pasted inputs and long answers are the expense, trim both (on a monthly plan, they're what use up your limits faster). When you're ready to build with these models, not just chat, the Engineering Mastery course picks up right where this ends." },
     { "m": "using", "f": "What is the chat app quietly doing for you that a builder does themselves?", "b": "Re-sending the whole conversation, adding the hidden system message, and picking and calling the model. Builders do all of it directly through an API, software that hands text to the model and gets text back. That shift, from using a chat app to making the call yourself, is where the Engineering Mastery course begins." }
