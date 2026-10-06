@@ -1,0 +1,80 @@
+---
+title: "What Are Vector Databases? The Storage Layer Behind Modern AI"
+description: "Vector databases power semantic search, RAG pipelines, and recommendation systems. Here's what they actually do, how they differ from regular databases, and when you need one."
+date: "2026-10-06"
+author: "Novacademy"
+tags: ["Vector Databases", "Embeddings", "RAG"]
+draft: false
+---
+
+Every modern RAG pipeline has a secret ingredient: a database that can answer the question "which of my million documents is *closest* in meaning to this user query?" Regular SQL databases can't do that. Vector databases can.
+
+## What makes a vector database different
+
+A traditional database stores rows and columns. You query it with exact matches: `WHERE user_id = 42` or `WHERE status = 'active'`.
+
+A vector database stores **embeddings** — lists of numbers (often 1,000+ long) that represent the *meaning* of a piece of content. You query it with a vector of your own, and it returns the items whose vectors are most similar to yours.
+
+That's called **nearest-neighbor search**, and it's what makes semantic search possible. "Best way to reduce latency" and "tips for making my app faster" don't share a keyword, but their embeddings land near each other in vector space — so a vector search finds both when you query with either one.
+
+## The core workflow
+
+Using a vector database follows a predictable pattern:
+
+1. **Embed your content.** Run each chunk of text (or image, audio, etc.) through an embedding model to get its vector.
+2. **Store the vectors.** Write those vectors — usually alongside the raw content and any metadata — into the database.
+3. **Query with a vector.** At search time, embed the user's query and ask for the top-k closest vectors in the database.
+4. **Use the results.** Feed the matching content into an LLM prompt, a recommendation engine, or whatever your product needs.
+
+```text
+user query ──▶ embedding model ──▶ query vector
+                                        │
+              vector database ──▶ top-k similar vectors
+                                        │
+                                 matching documents
+                                        │
+                                   LLM / product
+```
+
+Steps 1 and 2 happen during indexing (usually in a background job). Steps 3 and 4 happen at request time.
+
+## How similarity is measured
+
+The most common similarity metrics:
+
+| Metric | What it measures | Good for |
+| --- | --- | --- |
+| Cosine similarity | Angle between vectors | Text, most NLP tasks |
+| Dot product | Magnitude × direction | Ranking, normalized embeddings |
+| Euclidean distance | Straight-line distance | Image embeddings, spatial data |
+
+For text search, cosine similarity is usually the right default. Most embedding models are trained with it in mind.
+
+## Do you actually need a dedicated vector database?
+
+Not always. There are three common setups:
+
+- **In-process libraries** (like FAISS) — run entirely in memory inside your application. Fast and easy for prototypes, but you manage persistence and scaling yourself.
+- **Vector extensions for existing databases** — PostgreSQL with pgvector, for example. Good if you're already on Postgres and your scale is modest. Avoids adding a new system.
+- **Dedicated vector databases** — purpose-built for large-scale vector search with built-in indexing, filtering, persistence, and hosting. Designed for production workloads where your vector collection grows into the millions or billions.
+
+> Rule of thumb: **start with an extension or library.** Move to a dedicated database when you need filtering at scale, multi-tenancy, or more control over indexing algorithms.
+
+## Metadata filtering matters as much as similarity
+
+Pure semantic search has a problem: it returns the *most similar* results, but not necessarily the *relevant* ones for this user. You almost always want to combine similarity search with **metadata filters** — for example:
+
+- "Find the most similar support articles, **but only for this product tier**."
+- "Return semantically related emails, **from the last 30 days only**."
+
+Good vector databases handle hybrid queries natively, so the filter happens *inside* the vector search rather than as a slow post-processing step over thousands of results.
+
+## The connection to RAG
+
+If you've read our [introduction to RAG](/blog/what-is-rag), the vector database is the component that sits at the center of the retrieval step. When a user asks a question, your app embeds the question, searches the vector database for the closest document chunks, and feeds those chunks into the model's context.
+
+Without fast, accurate vector search, RAG either returns irrelevant context (and the model answers badly) or scans your entire document store on every request (and your users wait). The vector database is what makes retrieval production-grade.
+
+---
+
+Understanding embeddings and vector search is foundational to building anything serious with LLMs. If you want to go from theory to a working pipeline — chunking, embedding, storing, retrieving, and evaluating — our courses on [Novacademy](/pricing) cover it end to end.
