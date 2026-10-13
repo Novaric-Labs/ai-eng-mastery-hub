@@ -1,0 +1,88 @@
+---
+title: "What Are Vector Databases? (And Why Every AI App Needs One)"
+description: "Vector databases are the retrieval engine behind RAG, semantic search, and recommendation systems. Here's what they are, how they work, and when you actually need one."
+date: "2026-10-13"
+author: "Novacademy"
+tags: ["Vector Databases", "RAG", "Fundamentals"]
+draft: false
+---
+
+Vector databases show up in almost every AI app you'll build — but the name makes them sound more exotic than they are. Once you understand the one thing they're designed to do, the rest falls into place.
+
+## What a vector database actually is
+
+A regular database stores text, numbers, and dates and lets you find rows that match exactly: `WHERE name = 'Alice'` or `price < 50`. That works perfectly when you know exactly what you're looking for.
+
+An **embedding** is a different kind of data: a list of hundreds of floating-point numbers that captures the *meaning* of a piece of text. Two sentences that say the same thing in different words will have embeddings that are close to each other in high-dimensional space — even if they share zero words in common.
+
+A vector database is built to store embeddings and answer one question fast: **what stored vectors are closest to this query vector?** That's called a nearest-neighbor search, and a vector DB can do it across millions of vectors in milliseconds.
+
+## How vector search works
+
+When you ask "what's our refund policy?", your AI app does this:
+
+1. Converts that question into an embedding using an embedding model.
+2. Asks the vector database: "which stored vectors are closest to this one?"
+3. Gets back the top-k matching chunks — maybe passages from your documentation.
+4. Passes those chunks to the LLM as context.
+
+```text
+user question
+    │
+    ▼
+embedding model ──▶ query vector
+                          │
+                          ▼
+                  vector database
+                  (ANN search)
+                          │
+                          ▼
+                  top-k similar chunks
+                          │
+                          ▼
+                    LLM + context ──▶ answer
+```
+
+The underlying algorithm is called **approximate nearest neighbor (ANN)** search. "Approximate" is the key word — it trades a small chance of missing the mathematically closest result for a massive speed gain. In practice, the tradeoff is almost always worth it.
+
+## When you need a vector database
+
+You need one when:
+
+- You're building a RAG pipeline over a document set too large to fit in a single prompt.
+- You need to find semantically similar items at scale — product search, support ticket routing, recommendation systems.
+- You want fast retrieval at query time rather than a brute-force scan of every document on every request.
+
+You *don't* need a standalone vector database when:
+
+- Your document set is tiny (a few hundred chunks). A plain list in memory with brute-force cosine similarity works fine and has no infrastructure overhead.
+- You're already using PostgreSQL — the `pgvector` extension adds vector search without leaving your existing database.
+- You're prototyping and the goal is to validate the idea before committing to infrastructure.
+
+> Rule of thumb: if you're doing fewer than a million vectors and latency isn't critical, start with `pgvector` or in-memory search. Add a dedicated vector database when you hit real scale or need advanced filtering.
+
+## A quick comparison of popular options
+
+| Option | Good for | Notes |
+|---|---|---|
+| **pgvector** | Small–medium RAG, existing Postgres users | No new infra; supports hybrid search |
+| **Pinecone** | Managed, production scale | Fully hosted; easy to get started |
+| **Weaviate** | Self-hosted or cloud, rich filtering | Open-source; supports multi-modal |
+| **Qdrant** | High-performance, self-hosted | Rust-based; fast at scale |
+| **Chroma** | Local dev, prototyping | Easiest to get started with |
+
+None of these is universally "best." The right choice depends on whether you want managed infrastructure, how you're filtering results (by user, by date, by category), and where your data already lives.
+
+## Where vector databases fit in the bigger picture
+
+A vector database is just one component of a retrieval pipeline. You still need to:
+
+- **Chunk your documents** so each stored vector represents a coherent unit of information.
+- **Choose an embedding model** whose semantic understanding matches your domain.
+- **Evaluate retrieval quality** — not just final answers — so you catch when the wrong chunks come back.
+
+These are the places RAG actually breaks in production, and getting them right matters more than which vector database you pick.
+
+---
+
+If you want to build a complete retrieval pipeline — from chunking to embeddings to evals — our [AI Engineering course](/pricing) walks through each step hands-on. New to RAG? Start with [What Is RAG?](/blog/what-is-rag).
