@@ -28,6 +28,15 @@ Foundations also moved `chat` into Block 1 (5/5 split, so each block review samp
 ### Brought current (October 2026)
 Claude Fable 5.1 / Opus 5.5 / Sonnet 5.5 / Haiku 4.5 lineup, prices and API behaviour (no sampling params, forced tool_choice, prefill or budget_tokens on the 5.5 generation; adaptive thinking via effort; anthropic SDK 1.x); GPT-6 family, Responses API, Assistants shutdown; Gemini 3.8 / google-genai; open-weight leaders; MCP 2026-07-28 (stateless, authorization), A2A 1.0, Agent Skills; OWASP GenAI LLM Top 10 **2026** + Agentic Top 10; OTel `gen_ai.provider.name`; EU AI Act Digital Omnibus timeline (durable phrasing); canonical doc hosts.
 
+### Follow-up, 2026-10-15
+Claude Haiku 5.5 launched on 2026-10-07 and Sonnet 5.5's cache reads dropped to 0.05× the same day (see the addendum in
+`FACTS-models.md`). Updated: ai-eng `llm` (lineup, sampling, effort defaults, tiering worked example, quiz explanations, the
+tiered-routing code and its notes), `landscape` (lineup, prices, the 100K price step, cache multipliers, windows, tiers, card 14,
+the cost-reduction scenario), `context` (long-prompt surcharges), `tools` (forced tool_choice wording), and the `agents` and
+`mlops` code samples (now `claude-haiku-5-5`, with room for thinking); ai-architect's dated anchors table (long-context row).
+The app's tutor, explain and grader routes now call `claude-haiku-5-5` with thinking disabled and ~30% larger `max_tokens`
+(new tokenizer). Not live-tested: no API key in the review environment — smoke-test the three routes on the preview deploy.
+
 ## Deploying
 1. Merge the branch (Vercel deploys the app copy, tutor scopes and UI fixes).
 2. Apply `supabase/seed.sql` (regenerated; upserts only, no schema change). Preview and prod share one Supabase project, so the seed publishes content immediately — do it together with step 1.
@@ -40,7 +49,7 @@ Claude Fable 5.1 / Opus 5.5 / Sonnet 5.5 / Haiku 4.5 lineup, prices and API beha
 - **Other**: the FCC ruling that AI voices are "artificial" (voice); the AIAG-VDA 2019 Action Priority note (failure); Foundations' academy.claude.com AI Fluency URL, the 3Blue1Brown video length, and 8 OpenAI help-center articles; resource URLs on blocked hosts across all courses (kept as canonical — a blocked fetch is not a dead link).
 
 ## Watch list
-- Haiku 4.5: retirement "not sooner than 2026-10-15", no successor announced. The app's tutor, explain and grader routes use `claude-haiku-4-5`, and ai-eng's `llm` worked example and tiering use it.
+- Haiku 4.5 is legacy (successor Haiku 5.5 since 2026-10-07; retirement "not sooner than 2026-10-15", no deprecation notice yet). The courses now mention it only as legacy; the app no longer calls it.
 - Sonnet 4.5 retires 2026-11-30; OpenAI GPT-5/o3 shut down 2026-12-11 (stated in `landscape`).
 - Owner's calls left open: Foundations calls the next course "Engineering Mastery" (catalog: "AI Engineering Mastery Hub"); the two new Foundations prefaces run longer than the others; ai-architect modules are 5–18% over the word guideline (accepted).
 

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { hasFullAccess } from "@/lib/entitlement";
-import { anthropic, HAIKU, textOf } from "@/lib/anthropic";
+import { anthropic, HAIKU, NO_THINKING, textOf } from "@/lib/anthropic";
 import { rateLimit, tooManyRequests } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
@@ -103,7 +103,8 @@ export async function POST(req: Request) {
   try {
     const message = await client.messages.create({
       model: HAIKU,
-      max_tokens: 450,
+      max_tokens: 600,
+      thinking: NO_THINKING,
       system: SYSTEM,
       messages,
     });

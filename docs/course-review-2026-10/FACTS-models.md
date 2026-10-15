@@ -5,6 +5,26 @@ Known gaps (marked inline as NOT VERIFIED): Mistral, Amazon Nova, Microsoft, Coh
 media prices; benchmark leaderboard numbers. Cause: most vendor hosts are blocked by this environment's egress proxy and
 the session-wide WebSearch budget (200 calls, shared by all agents) ran out mid-research.
 
+## Addendum 2026-10-15 [V] — supersedes the Haiku and Sonnet cache facts below
+
+Fetched from platform.claude.com (release notes, model-deprecations, pricing, `/models/haiku-5-5/{overview,migration-guide,whats-new-haiku-5-5}`, effort, prompt-caching):
+- **Claude Haiku 5.5** (`claude-haiku-5-5`, no date suffix, no separate alias) launched **2026-10-07**. $0.10 / $0.50 per MTok for
+  prompts up to 100K tokens; **$0.50 / $2.50 above 100K** (whole request; cache reads count toward the threshold). Cache read
+  $0.01 (0.1×), 5m write $0.125, 1h write $0.20; Batch 50% off. 1M context, 128K output (300K on Batch with the beta header).
+  Retirement not sooner than 2027-10-07. Knowledge cutoff Jun 2026. Text and images in.
+- Haiku 5.5 behaviour: adaptive thinking **on by default**, default effort **`medium`**, all five effort levels.
+  `thinking: {"type": "disabled"}` is accepted at `high` effort or below (400 at `xhigh`/`max`). Rejects `budget_tokens`,
+  non-default `temperature`/`top_p`/`top_k`, and assistant prefill (400). **Accepts forced `tool_choice`** (no thinking block then),
+  unlike Opus 5.5 / Sonnet 5.5 / Fable 5.1. Thinking text omitted unless `display: "summarized"`. Newer tokenizer (~30% more
+  tokens than Haiku 4.5). Cache minimum 512 tokens (Haiku 4.5: 4,096). Computer use only via `computer_toolset_20260801`
+  (API/Google Cloud). No Priority Tier; no structured outputs on Bedrock.
+- **Haiku 4.5** is now listed as a legacy model: still Active, retirement "not sooner than October 15, 2026", no deprecation notice yet.
+- **Sonnet 5.5 cache reads cut to $0.10/MTok (0.05×)** on 2026-10-07. Current cache-read multipliers: 0.1× default; 0.05× Opus 5.5
+  and Sonnet 5.5; 0.025× Fable 5.1 / Mythos 5.1.
+- Anthropic flagship-to-cheapest spread is now **100×** (Fable 5.1 $10 vs Haiku 5.5 $0.10 input).
+- Also new since the review: OpenTelemetry export for Messages API and Managed Agents (beta, 2026-10-14); Managed Agents dynamic
+  workflows (beta, 2026-10-09). Not yet reflected in course content.
+
 Legend:
 - **[verified first-party]** / **[V]** = fetched directly from the vendor's own page, SDK repo, PyPI package, or installed
   SDK source (URL given). Safe to state as fact with an "as of October 2026" date.

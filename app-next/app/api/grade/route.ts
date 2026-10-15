@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { hasFullAccess } from "@/lib/entitlement";
-import { anthropic, HAIKU, textOf } from "@/lib/anthropic";
+import { anthropic, HAIKU, NO_THINKING, textOf } from "@/lib/anthropic";
 import { rateLimit, tooManyRequests } from "@/lib/ratelimit";
 import type { Scenario } from "@/lib/course";
 
@@ -77,7 +77,8 @@ export async function POST(req: Request) {
   try {
     const message = await client.messages.create({
       model: HAIKU,
-      max_tokens: 600,
+      max_tokens: 800,
+      thinking: NO_THINKING,
       system,
       messages: [{ role: "user", content: prompt }],
     });

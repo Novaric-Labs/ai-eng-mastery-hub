@@ -2,7 +2,13 @@ import Anthropic from "@anthropic-ai/sdk";
 
 // Cheap, fast model for grading + tutoring. Guardrails (entitled-only, tight
 // max_tokens, input truncation, per-user cooldown) keep cost bounded.
-export const HAIKU = "claude-haiku-4-5";
+export const HAIKU = "claude-haiku-5-5";
+
+// Haiku 5.5 thinks by default and thinking counts toward max_tokens, so these
+// short-form routes turn it off (allowed at the default effort) to keep the
+// whole budget for the answer. Its tokenizer also counts ~30% more tokens than
+// Haiku 4.5's, which the routes' max_tokens values already allow for.
+export const NO_THINKING = { type: "disabled" } as const;
 
 let client: Anthropic | null = null;
 
