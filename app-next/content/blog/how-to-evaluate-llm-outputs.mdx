@@ -1,0 +1,93 @@
+---
+title: "How to Evaluate LLM Outputs: A Practical Guide to Evals"
+description: "Shipping an LLM feature without evals is guesswork. A practical, plain-English guide to building the evaluation loop that tells you when your prompts and pipelines actually work."
+date: "2026-07-21"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Production"]
+draft: false
+---
+
+Your LLM feature works great on the five examples in front of you. Does it work on the next five hundred? That's the question evals answer — and without them, every prompt change, model upgrade, or RAG tweak is a guess.
+
+## What evals actually are
+
+An eval (short for evaluation) is just a test for LLM outputs. You give the model an input, collect its output, and check whether the output meets some standard. Do that repeatedly, on enough inputs, and "the prompt is working" stops being a feeling and starts being a number.
+
+That number is what separates an LLM demo from a product. Without it, you're tuning in the dark — and you'll break things you didn't know you fixed.
+
+## The three types of evals
+
+Not all LLM outputs can be judged the same way. There are three main approaches, and most real eval suites use all three.
+
+**1. Exact-match / rule-based evals**
+
+The output is deterministic enough to check with code. Does it contain a valid JSON object? Does it mention the right product name? Does the classification label match the expected label? These are the cheapest, fastest, and most reliable checks you can write. Start here whenever the task lets you.
+
+**2. Human evals**
+
+A person reads the output and rates it. Slow and expensive, but the ground truth for anything requiring human judgment — tone, helpfulness, coherence. Use human review to calibrate your other evals and to spot-check the edge cases that automated checks miss.
+
+**3. LLM-as-judge evals**
+
+You ask another LLM to grade the output. Surprisingly powerful for open-ended tasks: *"Rate this answer on helpfulness from 1–5 and explain why."* Scales better than human review, but the judge model has its own biases — your grade needs grading. Always use a different model as the judge, and validate its scores against human ratings on a sample before you trust it.
+
+## Building your first eval set
+
+You don't need thousands of examples. You need:
+
+- **20–50 real inputs** that cover the range of what users actually send — not your best cases, your representative ones
+- **The expected output or criteria** for each — either a reference answer, or a rubric ("should contain X", "should not say Y")
+- **A way to score** — pick the simplest scoring method that actually reflects what matters
+
+The biggest mistake teams make is seeding an eval set with easy cases. Real failures come from the messy middle of your input distribution — ambiguous requests, edge cases, inputs your prompt was never explicitly written for. As soon as you have real user traffic, sample from it.
+
+## A minimal eval loop
+
+```python
+results = []
+for example in eval_set:
+    output = llm(build_prompt(example["input"]))
+    passed = check(output, example["expected"])
+    results.append({"input": example["input"], "output": output, "passed": passed})
+
+pass_rate = sum(r["passed"] for r in results) / len(results)
+print(f"Pass rate: {pass_rate:.0%}")
+```
+
+This is intentionally simple. The discipline — running every candidate change through the same set and comparing before/after — is more valuable than a sophisticated scorer. Start here, then add complexity only where the simple check is genuinely insufficient.
+
+## What to measure
+
+| What you care about | How to measure it |
+| --- | --- |
+| Is the answer correct? | Exact match or reference answer diff |
+| Is it the right format? | JSON schema validation, regex |
+| Does it stay in scope? | Keyword or topic checks |
+| Is it helpful? | LLM-as-judge (1–5 scale with rubric) |
+| Is it safe / on-policy? | Rule-based checks + human review sample |
+
+Start with the row that matters most for your specific feature, not all of them at once. Adding more metrics too early makes it hard to know which one to act on.
+
+## Evaluating RAG pipelines: split retrieval from generation
+
+If you're building a RAG system, one of the most common mistakes is evaluating retrieval and generation as a single black box. If an answer is wrong, you need to know *why* — was the right information never retrieved, or was it retrieved and then mishandled?
+
+Build a retrieval eval alongside your answer eval: for each question, record which chunks were returned and whether the correct source document appeared in the top results. That number — retrieval recall — is the single most useful diagnostic for a misbehaving RAG system. Retrieval failures require different fixes than generation failures, and prompt engineering won't fix a chunking or search problem. [What breaks RAG in production](/blog/rag-what-breaks-in-production) goes deeper on this.
+
+> Rule of thumb: if your eval set has fewer than 20 examples, expand it before tuning anything. A 70% pass rate on 10 examples is statistically meaningless.
+
+## Evals and prompt changes
+
+Run your evals before and after every change — prompt edits, model upgrades, chunking adjustments, anything. Evals exist to catch regressions: the case where you fix one failure mode and silently break three others. Without a before/after comparison, you have no way of knowing whether a change was an improvement overall.
+
+This habit also gives you permission to move fast. When you can show that a change moved the pass rate from 72% to 81% without touching the already-passing cases, you can ship with confidence rather than anxiety.
+
+## The connection to prompt engineering
+
+Evals and [prompt engineering](/blog/prompt-engineering-guide) are two sides of the same coin. A well-crafted prompt is your hypothesis; an eval is how you test it. Teams that write prompts without evals iterate forever, never sure if they're improving. Teams with evals can iterate quickly, because every change either earns a better pass rate or doesn't, and the data tells them which.
+
+The practical sequence: write a prompt, build a small eval set, run it, look at the failures, fix the prompt, run it again. Repeat. That loop — not the quality of the first prompt — is what produces reliable LLM features.
+
+---
+
+Building, running, and iterating on evals is one of the core skills for anyone shipping LLM features in production. If you want to build that skill end to end — from your first eval set through the feedback loops that keep production stable — our [courses](/pricing) cover it in depth.
