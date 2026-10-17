@@ -1,0 +1,107 @@
+---
+title: "Structured Outputs: How to Get LLMs to Return Reliable JSON"
+description: "Parsing an LLM response shouldn't be a gamble. Here's how structured outputs work, why prompt-only JSON breaks under pressure, and how to make your LLM pipelines genuinely reliable."
+date: "2026-08-04"
+author: "Novacademy"
+tags: ["Structured Outputs", "LLM", "Prompt Engineering"]
+draft: false
+---
+
+The model writes great prose. Your code needs a JSON object. So you add "respond only with valid JSON" to the prompt and call it done. It works — right up until a user sends something unexpected, the model tacks on an apologetic sentence before the JSON, or it wraps the output in a markdown fence nobody asked for, and your `json.loads()` crashes in production.
+
+This is the most common "works until it doesn't" failure mode in LLM applications. The fix is **structured outputs**, and it's simpler than most teams think.
+
+## What "structured outputs" actually means
+
+When people say structured outputs, they usually mean one of two very different things:
+
+1. **Prompt-level**: you tell the model what format you want ("respond with JSON matching this schema") and trust it to comply.
+2. **Constrained generation**: the model's token sampling is constrained at the API or runtime level so it *physically cannot* produce tokens outside a valid, schema-matching structure.
+
+The first one is prompt engineering. The second is an infrastructure guarantee. They both look the same from the outside — you get JSON back — but only one of them can break in production.
+
+## Why prompt-only JSON fails under pressure
+
+Asking politely gets you most of the way there. It fails in predictable, frustrating patterns:
+
+- **Markdown leakage**: the model wraps the JSON in a code fence (`` ```json ... ``` ``). Your parser sees a backtick, not a `{`.
+- **Leading prose**: "Sure! Here's the JSON you asked for:" followed by the object. `json.loads()` sees a string, not valid JSON.
+- **Schema drift**: a field you defined as a number comes back as a string. Works in your tests; fails in the downstream function that tries to add it.
+- **Compounding failures**: a missing required key is fine until the code reading it has no fallback — which is three function calls downstream and a silent error.
+
+These failures are rare enough that tests miss them and common enough that production catches them. The result is hours of defensive parsing logic that exists only because the format is not actually guaranteed.
+
+> Rule of thumb: if code needs to parse the model's output, you need constrained generation — not a polite prompt.
+
+## The right approach: constrained generation
+
+The major API providers now offer native structured output modes. Instead of telling the model what format you want, you hand the API a schema, and the token sampler enforces it during generation. The model can't produce malformed JSON or deviate from your schema because the runtime won't allow it.
+
+Here's a simplified example using tool/function calling to enforce a specific schema:
+
+```python
+response = client.messages.create(
+    model="claude-opus-5",
+    max_tokens=1024,
+    tools=[{
+        "name": "extract_sentiment",
+        "description": "Extract structured sentiment fields from the input text.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "sentiment": {
+                    "type": "string",
+                    "enum": ["positive", "negative", "neutral"]
+                },
+                "confidence": {"type": "number"},
+                "key_phrase": {"type": "string"}
+            },
+            "required": ["sentiment", "confidence", "key_phrase"]
+        }
+    }],
+    tool_choice={"type": "tool", "name": "extract_sentiment"},
+    messages=[{"role": "user", "content": text}]
+)
+
+result = response.content[0].input  # already a dict, schema-validated
+```
+
+By forcing a specific tool call, the API ensures the response matches your schema — or fails fast with a clear error rather than silently handing your code something broken. You define the schema once and stop writing defensive parsing forever.
+
+## Where structured outputs pay off immediately
+
+The pattern applies anywhere your pipeline passes a model's output to code rather than a human:
+
+- **Classification** — routing a support ticket by category, with a confidence score your code can act on
+- **Extraction** — pulling names, dates, or amounts from unstructured text into typed fields
+- **Multi-step pipelines** — one LLM step produces an object the next step reads directly, no guessing about string formats
+- **Evals and scoring** — a judge model returns a score and a rationale as a typed struct, not a number buried somewhere in a paragraph
+
+Any time the next thing that reads the output is code, not a person, structured output pays back its setup cost on the first production incident it prevents.
+
+## What structured outputs don't fix
+
+Constrained generation guarantees the *shape* of the output, not the *quality*. The model can return perfectly valid JSON with a confidently wrong answer inside it. Structured outputs eliminate format failures; they don't eliminate hallucinations or reasoning errors.
+
+Catching those requires evaluation — testing a representative sample of real outputs against known-good answers. That's a separate layer of the system, and it's covered in detail in the [prompt engineering guide](/blog/prompt-engineering-guide).
+
+## Quick decision reference
+
+| Approach | Valid JSON? | Schema-enforced? | Good for |
+| --- | --- | --- | --- |
+| Prompt-only ("return JSON") | Usually | No | One-off scripts, experiments |
+| JSON mode (API flag) | Yes | No | Loose, flexible schemas |
+| Tool / function calling | Yes | Yes | Production pipelines |
+| Structured output + evals | Yes | Yes | Reliable, measurable systems |
+
+The practical rule: use tool or function calling with an explicit schema for anything in production. Prompt-only JSON is fine when you're going to eyeball the output yourself anyway — and nowhere else.
+
+## One thing to watch out for
+
+The tool-calling pattern works beautifully, but your schema design matters. Overly nested schemas, optional fields without defaults, and wide `enum` lists all give the model more room to behave unexpectedly within the valid structure. Keep schemas flat where you can, make required fields required, and test with adversarial inputs — edge cases the model has to interpret, not just standard examples.
+
+A schema that's too permissive is structurally valid and still wrong. Design it like you'd design a database table, not like a flexible notes field.
+
+---
+
+Structured outputs are one of those techniques that seem minor until you've traced a production incident back to a stray backtick. If you want to build reliable LLM pipelines — structured outputs, retrieval, and the evaluation loops that keep everything honest — that's exactly what our [courses](/pricing) walk through end to end.
