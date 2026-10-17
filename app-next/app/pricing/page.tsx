@@ -82,6 +82,9 @@ export default function Pricing() {
           full sample module free. Have an access code? Enter it on the course page.
         </p>
         <p style={{ color: "var(--faint)", fontSize: 12.5, marginTop: 10, textAlign: "center" }}>
+          Run a community or audience? Earn with our <Link href="/affiliates">affiliate program</Link>.
+        </p>
+        <p style={{ color: "var(--faint)", fontSize: 12.5, marginTop: 10, textAlign: "center" }}>
           {paymentsEnabled ? (
             <>
               Cancel anytime from your account — access runs to the end of the period you paid for. By
