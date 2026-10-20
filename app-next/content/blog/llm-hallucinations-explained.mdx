@@ -1,0 +1,82 @@
+---
+title: "LLM Hallucinations, Explained: Why AI Makes Things Up and How to Reduce Them"
+description: "LLMs confidently invent facts that don't exist. Here's why hallucinations happen at a technical level — and the practical techniques that reduce them."
+date: "2026-10-20"
+author: "Novacademy"
+tags: ["LLM", "Hallucinations", "Fundamentals"]
+draft: false
+---
+
+Large language models can write code, summarize documents, and answer questions with impressive fluency. They can also confidently tell you that a city is the capital of the wrong country, cite a paper that was never written, or explain a function that doesn't exist. This phenomenon is called **hallucination** — and understanding it is the first step to building AI systems that are actually reliable.
+
+## What is a hallucination?
+
+A hallucination is any model output that is plausible-sounding but factually wrong or made up. The term is a little misleading: the model isn't "seeing things" — it's producing statistically likely text based on patterns it learned during training.
+
+Three common types:
+
+- **Factual hallucinations** — wrong facts stated as true ("the Eiffel Tower was built in 1850").
+- **Source hallucinations** — invented citations, papers, or URLs that don't exist.
+- **Instruction hallucinations** — claiming to have done something it didn't (e.g., reading a URL you sent, saving a file, calling a tool that never ran).
+
+## Why do LLMs hallucinate?
+
+LLMs are trained to predict the next token — the most probable word given everything that came before it. They aren't retrieving facts from a database; they're generating text that *looks like* the kind of text that contains the right answer.
+
+This has a few practical consequences:
+
+1. **Confident tone is independent of accuracy.** The model produces fluent, assertive text whether the underlying information is solid or not. There's no built-in "I'm not sure" signal at the generation level.
+2. **Rare facts are harder.** The training corpus contains far more text about Paris than about an obscure technical standard. When a fact appears rarely, the model has fewer patterns to anchor on and is more likely to fill the gap with something plausible-but-wrong.
+3. **Long chains increase risk.** Multi-step reasoning, niche domains, and very long documents push the model further from its training distribution — and closer to interpolation territory.
+
+> Rule of thumb: **treat every model output as a first draft, not a source of truth.** The fluency is real; the accuracy requires verification.
+
+## The situations that make hallucination worse
+
+Not all tasks carry equal risk. These patterns reliably cause more failures:
+
+| Situation | Why it's risky |
+| --- | --- |
+| Asking for citations or URLs | Models generate what a citation *might* look like — they don't fetch |
+| Niche or proprietary knowledge | Sparse training signal forces more interpolation |
+| Multi-step reasoning with many facts | Each step can compound a small error into a larger one |
+| "Tell me everything about X" | Open-ended prompts leave room for the model to fill gaps |
+| Long conversations | Earlier context gets diluted; constraints you set early can fade |
+
+## Practical techniques that reduce hallucinations
+
+You can't eliminate hallucination entirely — but you can push it down to a manageable level with the right architecture and prompting choices.
+
+**1. Ground the model in retrieved context (RAG)**
+
+The single most reliable structural fix is [retrieval-augmented generation](/blog/what-is-rag): instead of relying on the model's memory, you fetch the relevant documents at question time and hand them to the model as context. A model reading the right paragraph almost never hallucinates the answer that paragraph contains. This doesn't eliminate all failures, but it removes the "making things up from sparse training data" failure mode cleanly.
+
+**2. Tell it what it doesn't know**
+
+Add an explicit constraint like: *"If the answer is not in the provided context, say 'I don't have enough information' — do not speculate."* Models follow these instructions better than most people expect. The key is making the boundary explicit rather than assuming the model will infer it on its own.
+
+**3. Use structured outputs for factual claims**
+
+Asking for a response in structured JSON — with a `confidence` field or a required `sources` array — forces the model to be explicit about what it knows. An empty `sources` array is a far clearer signal than confident prose with no backing.
+
+```json
+{
+  "answer": "The treaty was signed in 1648.",
+  "sources": ["document_chunk_17"],
+  "confidence": "high"
+}
+```
+
+**4. Break long chains into smaller steps**
+
+Multi-step reasoning is where errors compound. A chain that crosses six logical steps is more likely to drift than a two-step one. Where possible, break the task into verifiable sub-steps and check intermediate outputs before proceeding.
+
+**5. Evaluate, don't just eyeball**
+
+The most dangerous hallucinations are the ones that *look* right. Spot-checking a few outputs by hand will miss the systematic failures that only show up at scale. Even a small evaluation suite that checks model answers against a ground truth is the difference between a demo and something you can trust in production.
+
+---
+
+Hallucination is a property of how LLMs are built, not a bug that will be patched away in the next release. The engineers who build reliable AI systems aren't the ones who found a model that never hallucinates — they're the ones who designed architectures that catch, constrain, and recover from it.
+
+If you want to build those systems — RAG pipelines, structured output schemas, and the evals that verify they work — that's the core of what our [courses cover](/pricing). Already thinking about retrieval? Read about [what actually breaks in RAG deployments in production](/blog/rag-what-breaks-in-production).
