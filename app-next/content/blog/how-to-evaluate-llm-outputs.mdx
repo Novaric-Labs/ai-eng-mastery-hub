@@ -1,0 +1,84 @@
+---
+title: "How to Evaluate LLM Outputs: A Practical Guide to Evals"
+description: "Your AI feature works in demos — but is it actually reliable? Here's how to build LLM evaluations that give you real confidence, not just vibes."
+date: "2026-10-27"
+author: "Novacademy"
+tags: ["Evals", "LLM", "Testing"]
+draft: false
+---
+
+You built an AI feature. It looks great in demos, your team is impressed, and the first few users love it. Then a bug report arrives: the model confidently answered a question with completely wrong information — and nobody caught it until a customer did.
+
+This is what happens without evals. **Evaluations (evals)** are the testing infrastructure for LLM-powered features, and skipping them is the single most common reason promising AI products stay stuck in "it works most of the time" territory.
+
+Here's how to think about evals — and how to start building them without a PhD.
+
+## Why eyeballing outputs doesn't scale
+
+When your feature handles ten requests a day, you can read every output. When it handles ten thousand, you cannot. And even at ten, human review has a consistency problem: what you call "acceptable" on Monday morning after coffee and on Friday afternoon before a holiday are not the same standard.
+
+Evals replace intuition with a repeatable process. They let you answer, objectively and at any scale, questions like:
+
+- Did my prompt change make things better or worse?
+- What fraction of outputs have a factual error?
+- Is the new model I'm testing actually an improvement?
+
+Without evals, you're flying blind every time you ship a change.
+
+## The three types of evals
+
+Not all LLM behavior can be evaluated the same way. It helps to think in three categories:
+
+| Type | What you're checking | Example |
+| --- | --- | --- |
+| **Deterministic** | Exact output, format, or substring | Does the JSON parse? Is the required field present? |
+| **Rubric-based** | Quality along a defined dimension | Is the answer relevant? Is it factually grounded in the retrieved context? |
+| **LLM-as-judge** | Open-ended quality judgment | Ask a second model to rate the output on a scale and explain its reasoning |
+
+Start with deterministic checks — they're free and catch a lot. Add rubric-based evals for the things that matter most to your users. Save LLM-as-judge for hard cases where human-defined rubrics fall short.
+
+## Building a minimal eval suite
+
+A good eval suite has three parts:
+
+**1. A test dataset** — a set of inputs with known-good outputs (or known-bad ones you want to catch). Start small: 20–50 examples is enough to see a signal. Bias your examples toward edge cases, not easy ones.
+
+**2. An assertion** — the logic that checks whether a given output passes. Here's a simple Python example:
+
+```python
+def eval_grounded(output: str, context: str) -> bool:
+    # Check that key facts in the output are actually in the retrieved context
+    prompt = f"""
+    Context: {context}
+    
+    Output: {output}
+    
+    Does the output only make claims supported by the context above?
+    Answer YES or NO.
+    """
+    verdict = llm(prompt)
+    return verdict.strip().upper().startswith("YES")
+```
+
+**3. A score** — aggregate pass/fail across your dataset into a single number you can track over time. "This prompt scores 87% on groundedness" is actionable. "Looks pretty good" is not.
+
+## What to actually measure
+
+The right metrics depend on your feature, but a few are almost universally useful:
+
+- **Groundedness** — for RAG features, does the answer stick to what the retrieved documents actually say? This is the primary defense against hallucination.
+- **Refusal rate** — does your model refuse to answer when it should, and does it *not* refuse when it shouldn't?
+- **Format compliance** — if you asked for JSON or a bulleted list, did you get it?
+- **Task completion** — did the model actually do the thing the user asked for, in a way a human would accept?
+
+> Rule of thumb: **if a human reviewer would reject it, your eval should catch it.** Build evals by studying your failures, not by imagining them.
+
+## The eval mindset shift
+
+The most important thing about evals isn't the tooling — it's the habit. Before you ship any prompt change, run your evals. When a real-world failure appears, add a test case for it. Treat your eval suite like a test suite: it should grow over time, and a regression should block a release.
+
+This is the difference between teams that build reliable AI features and teams that are perpetually fighting fires. Reliability comes from measurement, not intuition.
+
+---
+
+Evals connect everything: your prompts, your retrieval quality, your choice of model. If you want to see how they fit into a full AI engineering stack — from [RAG pipelines](/blog/what-is-rag) to agent evaluation — that's exactly what we cover in our courses. Check out the [full curriculum](/pricing) to see what's inside.
