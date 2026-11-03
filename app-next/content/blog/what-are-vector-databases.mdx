@@ -1,0 +1,81 @@
+---
+title: "What Are Vector Databases? The Storage Layer Every RAG System Needs"
+description: "A plain-English guide to vector databases — what they are, how they find similar content fast, and which one to pick for your AI project."
+date: "2026-11-03"
+author: "Novacademy"
+tags: ["Vector Databases", "RAG", "Foundations"]
+draft: false
+---
+
+If you've read about RAG, you've seen the term "vector database" come up. It's not just a fancy name for a regular database with an AI layer on top. Vector databases do something fundamentally different — and understanding the difference explains why you can't always just use Postgres, and why sometimes you can.
+
+## What is a vector, and why store them?
+
+An embedding model takes a piece of text — a sentence, a paragraph, a whole document — and converts it into a list of numbers:
+
+```python
+# A typical text embedding: hundreds or thousands of floats
+[-0.023, 0.847, 0.012, -0.534, 0.301, ...]
+```
+
+These numbers aren't random. They're coordinates in a high-dimensional space where similar meanings land close together. "Dog" and "puppy" end up nearby. "Dog" and "quarterly earnings" end up far apart.
+
+When you build a RAG system, you convert your documents into these vectors and store them. When a question comes in, you embed the question and find the stored vectors nearest to it — those are your most relevant chunks. This is called **semantic search**: searching by meaning, not by matching keywords.
+
+## What makes a vector database different?
+
+A regular database is built for *exact* lookups: give me every row where `user_id = 42`. Fast, precise, predictable.
+
+A vector database is built for a completely different question: give me the *k* vectors most similar to this query vector. That's a **nearest-neighbor search**, and it's a much harder problem.
+
+The naive approach is brute-force: compare your query against every stored vector. That works fine for a few thousand documents. At millions, it's too slow to be useful.
+
+Vector databases solve this with specialized indexes — commonly HNSW (Hierarchical Navigable Small World) — that let the search skip most comparisons and still return accurate results. The tradeoff is that results are *approximate*, not mathematically guaranteed. In practice, the approximation is tight enough that it never matters for real-world search quality.
+
+> Rule of thumb: if you're storing vectors and expect more than a few hundred thousand of them, use a real vector database or a vector-capable extension — not a list you loop through on every query.
+
+## How the search looks in code
+
+Most vector database clients share a similar pattern: connect, upsert vectors with a metadata payload, query by vector.
+
+```python
+# Example shape — exact syntax varies by client library
+results = collection.query(
+    query_embeddings=[embed(user_question)],
+    n_results=5,
+    where={"source": "product-docs"}   # optional metadata filter
+)
+```
+
+The `where` filter matters. Semantic search finds similar chunks across your whole corpus, but you often want to restrict results to a specific data source, date range, or customer tenant. Good vector databases let you combine semantic search with exact metadata filters in a single query — no post-filtering required.
+
+## A quick look at the options
+
+| Option | Type | Best for |
+| --- | --- | --- |
+| Chroma | Open source, local | Prototypes and local dev |
+| Qdrant | Open source, self-hosted | Production with full control |
+| Weaviate | Open source, self-hosted | Hybrid search, multi-modal |
+| Pinecone | Managed cloud | Teams that don't want to operate infra |
+| pgvector | PostgreSQL extension | Already on Postgres, moderate scale |
+| Milvus | Open source, self-hosted | High-throughput, very large scale |
+
+None of these is universally best. The real split is **managed vs. self-hosted** and **dedicated vector store vs. SQL extension**.
+
+## Do you always need a dedicated vector database?
+
+No. For smaller projects — say, a few hundred thousand documents or fewer — the pgvector extension for PostgreSQL works well and keeps your stack simpler. You already know Postgres, your data lives there, and you avoid operating another service.
+
+Reach for a dedicated vector database when:
+
+- You're storing millions of vectors and query latency is a hard requirement.
+- You need horizontal scaling as your corpus grows over time.
+- You want built-in hybrid search (combining vector similarity with keyword BM25 scoring) or multi-tenancy out of the box.
+
+The common mistake is jumping straight to a managed dedicated service for a prototype with ten thousand documents. Start simple. Add infrastructure when the numbers actually demand it.
+
+---
+
+Vector databases are the storage and retrieval layer that makes RAG work at scale. Once you understand what's happening under the hood — embeddings representing meaning as coordinates, HNSW indexes enabling fast approximate search — the choice between options becomes much clearer.
+
+If you want to build a full RAG pipeline from scratch — chunking, embedding, indexing, retrieval, and the evals that tell you if it's working — that's exactly what our [AI engineering courses](/pricing) cover. New here? Start with [what RAG is and how the pieces fit together](/blog/what-is-rag).
