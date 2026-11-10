@@ -1,0 +1,89 @@
+---
+title: "What Are Embeddings? How LLMs Turn Text into Searchable Numbers"
+description: "Embeddings are the layer underneath RAG, semantic search, and most AI search features. Here's what they are, how they work, and why they matter — without the math."
+date: "2026-11-10"
+author: "Novacademy"
+tags: ["Embeddings", "RAG", "Fundamentals"]
+draft: false
+---
+
+The word "embedding" appears in almost every AI engineering tutorial — RAG pipelines, semantic search, vector databases, recommendation systems. But it's rarely explained on its own. If you've built a RAG demo by copy-pasting code without understanding what `embed()` is actually doing in the middle, this post is for you.
+
+## What an embedding actually is
+
+An embedding is a list of numbers that represents the *meaning* of a piece of text.
+
+That's it. The word "cat" becomes something like `[0.21, -0.45, 0.88, ...]`. The sentence "my cat knocked over the vase" becomes a different list, also hundreds of numbers long.
+
+The critical property: **similar meanings produce similar numbers**. "kitten" and "cat" end up close together in this numerical space. "kitten" and "quarterly earnings report" end up far apart.
+
+This is what lets a computer — which can't actually read — answer questions like "which documents are most relevant to this query?" It doesn't read them. It compares numbers.
+
+## Why this matters for semantic search
+
+Keyword search matches *exact words*. If a user types "vehicle" and your document says "automobile," keyword search misses it.
+
+Embedding-based search matches *meaning*. "vehicle" and "automobile" land close together in embedding space, so the right document surfaces even though the words don't match.
+
+This is why embeddings are the backbone of [RAG pipelines](/blog/what-is-rag): when you embed a user's question and retrieve the nearest document chunks, you're doing a semantic search, not a keyword one.
+
+> **Rule of thumb:** If your users phrase things differently than your documents do, keyword search will fail you. That's when embeddings become necessary.
+
+## How an embedding model works (the intuition)
+
+You don't build an embedding model yourself — you call one. Embedding models are trained specifically to encode meaning into fixed-length vectors. You pass in text; you get back a list of numbers.
+
+```python
+# The shape is always: text in, vector out
+def get_embedding(text: str, model) -> list[float]:
+    response = model.embed(text)
+    return response.vector  # e.g. 1536 floats
+
+query_vec = get_embedding("how do I reduce latency?", model)
+doc_vec   = get_embedding("tips for speeding up API calls", model)
+
+# These two vectors will be very close together
+# even though none of the words match
+```
+
+What makes a good embedding model:
+
+- **High dimensionality** — more numbers means more nuance captured. Common sizes: 768, 1,536, or 3,072 floats per text.
+- **Domain fit** — a model trained primarily on code clusters code better than one trained on news articles.
+- **Consistent size** — all embeddings from one model are the same length. This is required for comparison.
+
+## The vector space mental model
+
+Picture a city where every piece of text is a building. Nearby buildings share similar meaning. When you search for "how to fix a memory leak," you find the whole neighborhood of related content — not just the one building with that exact address.
+
+The number of dimensions in an embedding is like the number of axes on that map. With two axes you can only describe location as north/south and east/west. With 1,536 dimensions, the model can encode register, topic, sentiment, formality, and many subtler relationships — all at once.
+
+## Where embeddings show up in AI systems
+
+| Feature | How embeddings help |
+|---|---|
+| RAG / document Q&A | Find the chunks most relevant to a question |
+| Semantic search | Match meaning, not just keywords |
+| Duplicate detection | Surface near-identical content automatically |
+| Recommendations | "Similar to items you liked" |
+| Topic clustering | Group content by meaning without labels |
+
+Every one of these features depends on the same two-step pattern: **convert text to a vector, then find other vectors nearby**.
+
+## What goes wrong
+
+Embeddings are powerful but not magic. The most common failure modes:
+
+- **Model mismatch** — embedding your queries with one model and your documents with another produces nonsense comparisons. Always use the same model for both sides of a search.
+- **Language and domain drift** — a model trained mostly on general English works poorly on specialized jargon, code, or non-English text.
+- **Chunk size** — embedding a 10,000-word document as a single vector squashes its meaning into a useless average. Embedding a single sentence sometimes loses context. The right size is in between — often 200–500 tokens per chunk, though the best size depends on your content.
+
+If your RAG pipeline returns irrelevant results, the embedding step — model choice, chunk size, or a model mismatch — is usually where to look first. The [RAG in production post](/blog/rag-what-breaks-in-production) digs deeper into retrieval failures and how to diagnose them systematically.
+
+## The one-sentence summary
+
+An embedding is a list of numbers where closeness means similarity of meaning — and that single idea powers most of modern AI search and retrieval.
+
+---
+
+Embeddings are one of the few concepts in AI engineering that show up everywhere once you really understand them. If you want to go from understanding them conceptually to building and evaluating production RAG pipelines, that's exactly what our [courses](/pricing) cover.
