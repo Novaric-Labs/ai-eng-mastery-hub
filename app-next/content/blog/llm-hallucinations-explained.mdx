@@ -1,0 +1,87 @@
+---
+title: "LLM Hallucinations Explained: Why Models Make Things Up (and How to Reduce Them)"
+description: "LLMs sometimes state wrong things with complete confidence. Here's why hallucinations happen, the types that matter most, and practical techniques for reducing them in production."
+date: "2026-11-17"
+author: "Novacademy"
+tags: ["Hallucinations", "LLM", "Fundamentals"]
+draft: false
+---
+
+The model sounds completely certain. It cites a paper, quotes a statistic, names a specific API method — and every detail is wrong. This is an **LLM hallucination**: a confident output that isn't grounded in anything real. It's not a bug in the traditional sense, and it doesn't go away if you use a smarter model. Understanding *why* it happens is the first step to building systems that handle it.
+
+## What "hallucination" actually means
+
+The term gets used loosely. For practical purposes, there are two kinds worth distinguishing:
+
+- **Factual hallucinations** — the model states something false as fact (invents a date, a name, a citation, a function that doesn't exist).
+- **Faithfulness hallucinations** — the model contradicts or drifts from the source material you gave it (summarizes a document in ways the document doesn't support).
+
+Factual hallucinations tend to hurt more in production: users trust confident-sounding answers, and a wrong API method or a made-up policy number can cause real damage. Faithfulness failures are sneakier — they often survive a quick read but fail under scrutiny.
+
+## Why it happens
+
+LLMs don't retrieve facts from a database. They predict the most likely next token given everything before it. During training, the model learned patterns across a huge amount of text, and it generalizes from those patterns. When asked something outside its training data — or at the edge of it — it doesn't output "I don't know." It outputs something that *looks* like a confident answer, because confident answers are what filled its training data.
+
+The model has no internal signal that separates "this I know well" from "this is a gap I'm filling in." Confidence in the output is a function of token probability, not factual accuracy.
+
+A few specific causes compound this:
+
+- **Knowledge cutoffs** — anything after the training date doesn't exist to the model.
+- **Sparse coverage** — niche topics, recent events, and obscure APIs were underrepresented at training time.
+- **Instruction pressure** — if your prompt demands an answer and there isn't one, the model often invents rather than hedges.
+
+## The types that cause the most production pain
+
+| Type | Example | Why it's risky |
+| --- | --- | --- |
+| Citation fabrication | Invents a paper with a real-sounding author and DOI | Users assume citations are verifiable |
+| Code hallucination | Uses a method that doesn't exist in the library | Silent failures, hard to catch without tests |
+| Numerical drift | Gets dates, percentages, or counts slightly wrong | Plausible enough to bypass review |
+| Faithfulness drift | Summarizes a document in ways it doesn't support | Easy to miss on a quick skim |
+
+## How to reduce hallucinations
+
+No single technique eliminates hallucinations, but combining a few gets you to a production-acceptable level.
+
+**Ground the model in source material**
+
+The most effective lever is [RAG](/blog/what-is-rag): instead of asking the model to recall facts, you give it the facts in the prompt and instruct it to answer *only from that context*. When a question falls outside the retrieved documents, a well-prompted model will say so.
+
+**Constrain the prompt explicitly**
+
+Telling the model what it's *not* allowed to do helps more than you'd expect:
+
+```text
+Answer the question using ONLY the information in the passages below.
+If the answer isn't in the passages, say "I don't have enough information."
+Do not add facts from outside the provided context.
+```
+
+This isn't foolproof — a model under strong instruction pressure can still drift — but it moves the failure rate in the right direction.
+
+**Lower the temperature for factual tasks**
+
+Higher temperature increases diversity and creativity. For tasks where accuracy matters more than variety — Q&A over a document, extraction, structured output — a lower temperature keeps the model closer to the high-probability (and usually more grounded) outputs.
+
+**Add a verification step**
+
+For high-stakes outputs, a second model call can check the first:
+
+- Ask the model to list every factual claim in its answer, then verify each claim against the source.
+- Prompt it to find anything in the answer that contradicts the provided context.
+
+This is a lightweight form of evaluation and catches a surprising share of faithfulness failures.
+
+**Evaluate, don't just eyeball**
+
+Manual review doesn't scale. Building a small eval set — a set of questions with known correct answers — lets you measure your hallucination rate and track it as you change the system. This is how you know whether a prompt change actually helped.
+
+> Rule of thumb: **RAG reduces factual hallucinations; explicit constraints reduce faithfulness failures; evals are the only way to know if either intervention worked.**
+
+## What you can't fully prevent
+
+Some hallucination rate is unavoidable with today's models. The right goal isn't zero hallucinations — it's a rate low enough for your use case, with failure modes you can detect and recover from. That means building evaluation into the system from the start, not bolting it on after something goes wrong.
+
+---
+
+Hallucinations are the most common reason RAG systems that work in demos fail in production. If you want to learn how to build retrieval pipelines that stay grounded — with the evals to prove it — that's the core of what we teach in our [AI Engineering course](/pricing). Already familiar with RAG? A related deep dive is [what actually breaks in production RAG](/blog/rag-what-breaks-in-production).
